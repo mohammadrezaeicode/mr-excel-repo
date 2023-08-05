@@ -13,6 +13,15 @@ export interface ProtectionOption {
     pivotTables: "0" | "1";
 }
 export type ProtectionOptionKey = "sheet" | "formatCells" | "formatColumns" | "formatRows" | "insertColumns" | "insertRows" | "insertHyperlinks" | "deleteColumns" | "deleteRows" | "sort" | "autoFilter" | "pivotTables";
+export type AlignmentOptionKey = "horizontal" | "vertical" | "wrapText" | "shrinkToFit" | "readingOrder" | "textRotation";
+export interface AlignmentOption {
+    horizontal?: "center" | "left" | "right";
+    vertical?: "bottom" | "top" | "bottom";
+    wrapText?: "0" | "1";
+    shrinkToFit?: "0" | "1";
+    readingOrder?: number;
+    textRotation?: number;
+}
 export interface Header {
     label: string;
     text: string;
@@ -63,6 +72,7 @@ export interface Styles {
         fontFamily: string;
         size?: number;
         index?: number;
+        alignment?: AlignmentOption;
     };
 }
 export interface Formula {

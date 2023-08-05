@@ -1,5 +1,5 @@
 import JSZip from "jszip";
-import { ExcelTable, ProtectionOptionKey } from "./data-model/excel-table";
+import { AlignmentOptionKey, ExcelTable, ProtectionOptionKey } from "./data-model/excel-table";
 import { generateColumnName } from "./utils/generate-column-name";
 import { saveAs } from "file-saver";
 import { styleGenerator } from "./utils/content-generator/styles";
@@ -50,6 +50,8 @@ export function ExcelTable(data: ExcelTable) {
         fontIndex: 0,
         applyFill: 0,
       };
+      
+                let alignmentWithNewStyle = false;
       if (styl.fg) {
         indexes.fillIndex = res.fill.count;
         res.fill.count++;
@@ -76,15 +78,35 @@ export function ExcelTable(data: ExcelTable) {
           (styl.fontFamily ? '<name val="' + styl.fontFamily + '" />' : "") +
           "</font>";
       }
-      res.cell.value =
-        res.cell.value +
-        '<xf numFmtId="0" fontId="' +
-        indexes.fontIndex +
-        '" fillId="' +
-        indexes.fillIndex +
-        '" borderId="0" xfId="0" applyFill="' +
-        indexes.applyFill +
-        '" />';
+       let endPart = "/>";
+       if (styl.alignment) {
+         endPart =
+           ' applyAlignment="1">' +
+           "<alignment " +
+           Object.keys(styl.alignment).reduce((al, alignmentOption) => {
+             return (
+               al +
+               " " +
+               alignmentOption +
+               '="' +
+               styl.alignment![alignmentOption! as AlignmentOptionKey] +
+               '" '
+             );
+           }, "") +
+           " />" +
+           "</xf>";
+       }
+
+       res.cell.value =
+         res.cell.value +
+         '<xf numFmtId="0" fontId="' +
+         indexes.fontIndex +
+         '" fillId="' +
+         indexes.fillIndex +
+         '" borderId="0" xfId="0" ' +
+         (indexes.fillIndex > 0 ? 'applyFill="1" ' : "") +
+         (indexes.fontIndex >= 0 ? 'applyFont="1" ' : "") +
+         endPart;
       data.styles![cur].index = res.cell.count;
       res.cell.count++;
       return res;
@@ -333,13 +355,13 @@ export function ExcelTable(data: ExcelTable) {
       protectionOption: sheetData.protectionOption
         ? Object.keys(sheetData.protectionOption).reduce((res, cu) => {
             return (
-              res +
+              res +' '+
               cu +
               '="' +
               sheetData.protectionOption![cu as ProtectionOptionKey] +
               '" '
             );
-          }, "<sheetProtection") + "/>"
+          }, "<sheetProtection ") + "/>"
         : "",
       selectedView: sheetData.selected
         ? "<sheetViews>" +
