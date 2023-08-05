@@ -1,0 +1,27 @@
+{
+  "name": "exceltable",
+  "version": "1.0.0",
+  "description": "Client-side library for generate excel file",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "tsc",
+    "build": "webpack",
+    "dev": "tsc -w",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "M.R",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/file-saver": "^2.0.5",
+    "ts-loader": "^9.4.4",
+    "tsconfig-paths-webpack-plugin": "^4.1.0",
+    "typescript": "^5.1.6",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1"
+  },
+  "dependencies": {
+    "file-saver": "^2.0.5",
+    "jszip": "^3.10.1"
+  }
+}
