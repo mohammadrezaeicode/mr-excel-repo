@@ -1,5 +1,9 @@
 import JSZip from "jszip";
-import { AlignmentOptionKey, ExcelTable, ProtectionOptionKey } from "./data-model/excel-table";
+import {
+  AlignmentOptionKey,
+  ExcelTable,
+  ProtectionOptionKey,
+} from "./data-model/excel-table";
 import { generateColumnName } from "./utils/generate-column-name";
 import { saveAs } from "file-saver";
 import { styleGenerator } from "./utils/content-generator/styles";
@@ -50,8 +54,6 @@ export function ExcelTable(data: ExcelTable) {
         fontIndex: 0,
         applyFill: 0,
       };
-      
-                let alignmentWithNewStyle = false;
       if (styl.fg) {
         indexes.fillIndex = res.fill.count;
         res.fill.count++;
@@ -78,35 +80,35 @@ export function ExcelTable(data: ExcelTable) {
           (styl.fontFamily ? '<name val="' + styl.fontFamily + '" />' : "") +
           "</font>";
       }
-       let endPart = "/>";
-       if (styl.alignment) {
-         endPart =
-           ' applyAlignment="1">' +
-           "<alignment " +
-           Object.keys(styl.alignment).reduce((al, alignmentOption) => {
-             return (
-               al +
-               " " +
-               alignmentOption +
-               '="' +
-               styl.alignment![alignmentOption! as AlignmentOptionKey] +
-               '" '
-             );
-           }, "") +
-           " />" +
-           "</xf>";
-       }
+      let endPart = "/>";
+      if (styl.alignment) {
+        endPart =
+          ' applyAlignment="1">' +
+          "<alignment " +
+          Object.keys(styl.alignment).reduce((al, alignmentOption) => {
+            return (
+              al +
+              " " +
+              alignmentOption +
+              '="' +
+              styl.alignment![alignmentOption! as AlignmentOptionKey] +
+              '" '
+            );
+          }, "") +
+          " />" +
+          "</xf>";
+      }
 
-       res.cell.value =
-         res.cell.value +
-         '<xf numFmtId="0" fontId="' +
-         indexes.fontIndex +
-         '" fillId="' +
-         indexes.fillIndex +
-         '" borderId="0" xfId="0" ' +
-         (indexes.fillIndex > 0 ? 'applyFill="1" ' : "") +
-         (indexes.fontIndex >= 0 ? 'applyFont="1" ' : "") +
-         endPart;
+      res.cell.value =
+        res.cell.value +
+        '<xf numFmtId="0" fontId="' +
+        indexes.fontIndex +
+        '" fillId="' +
+        indexes.fillIndex +
+        '" borderId="0" xfId="0" ' +
+        (indexes.fillIndex > 0 ? 'applyFill="1" ' : "") +
+        (indexes.fontIndex >= 0 ? 'applyFont="1" ' : "") +
+        endPart;
       data.styles![cur].index = res.cell.count;
       res.cell.count++;
       return res;
@@ -155,6 +157,7 @@ export function ExcelTable(data: ExcelTable) {
     const sheetData = data.sheet[index];
     if (Array.isArray(sheetData.headers) && sheetData.headers.length) {
       sheetData.headers.forEach((v, innerIndex) => {
+        objKey.push(v.label);
         if (v.size && v.size > 0) {
           sheetSizeString +=
             '<col min="' +
@@ -165,6 +168,9 @@ export function ExcelTable(data: ExcelTable) {
             v.size +
             '" customWidth="1" />';
         }
+        if (data.withoutHeader) {
+          return;
+        }
         sheetDataString +=
           '<c r="' +
           cols[innerIndex] +
@@ -172,32 +178,38 @@ export function ExcelTable(data: ExcelTable) {
           '" t="s"><v>' +
           sharedStringIndex +
           "</v></c>";
-        objKey.push(v.label);
         sharedString += "<si><t>" + v.text + "</t></si>";
         sharedStringMap[v.text] = v.text;
         sharedStringIndex++;
       });
       const colsLength = cols.length;
-      sheetDataString =
-        '<row r="' +
-        rowCount +
-        '" spans="1:' +
-        colsLength +
-        '" ' +
-        (sheetData.headerHeight
-          ? 'ht="' + sheetData.headerHeight + '" customHeight="1"'
-          : "") +
-        (sheetData.headerRowOption
-          ? Object.keys(sheetData.headerRowOption).reduce((res, curr) => {
-              return (
-                res + " " + curr + '="' + sheetData.headerRowOption[curr] + '" '
-              );
-            }, "  ")
-          : "") +
-        ">" +
-        sheetDataString +
-        "</row>";
-      rowCount++;
+      if (!data.withoutHeader) {
+        sheetDataString =
+          '<row r="' +
+          rowCount +
+          '" spans="1:' +
+          colsLength +
+          '" ' +
+          (sheetData.headerHeight
+            ? 'ht="' + sheetData.headerHeight + '" customHeight="1"'
+            : "") +
+          (sheetData.headerRowOption
+            ? Object.keys(sheetData.headerRowOption).reduce((res, curr) => {
+                return (
+                  res +
+                  " " +
+                  curr +
+                  '="' +
+                  sheetData.headerRowOption[curr] +
+                  '" '
+                );
+              }, "  ")
+            : "") +
+          ">" +
+          sheetDataString +
+          "</row>";
+        rowCount++;
+      }
       if (Array.isArray(sheetData.data)) {
         let hasFurmul = data.formula?.useFormula;
         let cc = "";
@@ -355,13 +367,20 @@ export function ExcelTable(data: ExcelTable) {
       protectionOption: sheetData.protectionOption
         ? Object.keys(sheetData.protectionOption).reduce((res, cu) => {
             return (
-              res +' '+
+              res +
+              " " +
               cu +
               '="' +
               sheetData.protectionOption![cu as ProtectionOptionKey] +
               '" '
             );
           }, "<sheetProtection ") + "/>"
+        : "",
+      merges: sheetData.merges
+        ? sheetData.merges.reduce((mResult, currRef) => {
+            return (mResult += ' <mergeCell ref="' + currRef + '" />');
+          }, '<mergeCells count="' + sheetData.merges.length + '">') +
+          " </mergeCells>"
         : "",
       selectedView: sheetData.selected
         ? "<sheetViews>" +
@@ -524,6 +543,7 @@ export function ExcelTable(data: ExcelTable) {
         "<sheetData>" +
         sh.sheetDataString +
         "</sheetData>" +
+        sh.merges +
         sh.protectionOption +
         "</worksheet>"
     );

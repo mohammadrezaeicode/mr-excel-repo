@@ -41,6 +41,7 @@ export interface Sheet {
     name?: string;
     selected?: boolean;
     tabColor?: string;
+    merges: string[];
     state: "hidden" | "visible";
     headerRowOption?: any;
     protectionOption?: ProtectionOption;
@@ -84,6 +85,7 @@ export interface Formula {
     styleId: string;
 }
 export interface ExcelTable {
+    withoutHeader?: boolean;
     creator?: string;
     lastModifiedBy?: string;
     created?: string;
