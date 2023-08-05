@@ -61,7 +61,20 @@ export interface HeaderRowOption {
 //   headers: Header[];
 //   data: Data[];
 // }
-
+export interface StyleMapper {
+  fill: {
+    count: number;
+    value: string;
+  };
+  font: {
+    count: number;
+    value: string;
+  };
+  cell: {
+    count: number;
+    value: string;
+  };
+}
 export interface Styles {
   [key: string]: {
     fg?: string;
