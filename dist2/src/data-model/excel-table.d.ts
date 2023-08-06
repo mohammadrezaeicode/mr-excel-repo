@@ -37,11 +37,19 @@ export interface DataOptions {
     rowStyle?: string;
     height?: number;
 }
+export interface MergeRowConditionMap {
+    [columnKey: string]: {
+        inProgress: boolean;
+        start: number;
+    };
+}
+export type mergeRowDataConditionFunction = (data: Header | string | number | undefined, key: string | null, index: number, fromHeader: boolean) => boolean;
 export interface Sheet {
     name?: string;
     selected?: boolean;
     tabColor?: string;
-    merges: string[];
+    merges?: string[];
+    mergeRowDataCondition?: mergeRowDataConditionFunction;
     state: "hidden" | "visible";
     headerRowOption?: any;
     protectionOption?: ProtectionOption;

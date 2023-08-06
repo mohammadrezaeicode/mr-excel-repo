@@ -2,6 +2,7 @@ import JSZip from "jszip";
 import {
   AlignmentOptionKey,
   ExcelTable,
+  MergeRowConditionMap,
   ProtectionOptionKey,
 } from "./data-model/excel-table";
 import { generateColumnName } from "./utils/generate-column-name";
@@ -154,10 +155,23 @@ export function ExcelTable(data: ExcelTable) {
     let sheetDataString = "";
     let sheetSizeString = "";
     let objKey: string[] = [];
+    let mergeRowConditionMap: MergeRowConditionMap = {};
     const sheetData = data.sheet[index];
     if (Array.isArray(sheetData.headers) && sheetData.headers.length) {
       sheetData.headers.forEach((v, innerIndex) => {
         objKey.push(v.label);
+        if (
+          sheetData.mergeRowDataCondition &&
+          typeof sheetData.mergeRowDataCondition == "function"
+        ) {
+          let result = sheetData.mergeRowDataCondition(v, null, index, true);
+          if (result === true) {
+            mergeRowConditionMap[cols[innerIndex]] = {
+              inProgress: true,
+              start: rowCount,
+            };
+          }
+        }
         if (v.size && v.size > 0) {
           sheetSizeString +=
             '<col min="' +
@@ -211,13 +225,12 @@ export function ExcelTable(data: ExcelTable) {
         rowCount++;
       }
       if (Array.isArray(sheetData.data)) {
-        let hasFurmul = data.formula?.useFormula;
+        let hasFormula = data.formula?.useFormula;
         let cc = "";
         let cr = -1;
-        if (data.formula && hasFurmul) {
+        if (data.formula && hasFormula) {
           let cellColumn = data.formula.cell.replace(/[0-9]/g, "");
           let cellRow = parseInt(data.formula.cell.substr(cellColumn!.length));
-          console.log(cellColumn, cellRow);
           cc = cellColumn;
           cr = cellRow;
         }
@@ -233,6 +246,7 @@ export function ExcelTable(data: ExcelTable) {
           data.mapSheetDataOption && data.mapSheetDataOption.height
             ? data.mapSheetDataOption.height
             : "height";
+        const rowLength = sheetData.data.length;
         sheetData.data.forEach((mData, innerIndex) => {
           const rowStyle = mData.rowStyle;
           sheetDataString +=
@@ -251,6 +265,44 @@ export function ExcelTable(data: ExcelTable) {
             " >";
           objKey.forEach((key, keyIndex) => {
             const dataEl = mData[key];
+            if (
+              sheetData.mergeRowDataCondition &&
+              typeof sheetData.mergeRowDataCondition == "function"
+            ) {
+              let result = sheetData.mergeRowDataCondition(
+                dataEl,
+                key,
+                keyIndex,
+                false
+              );
+              const columnKey = cols[keyIndex];
+
+              let item = mergeRowConditionMap[columnKey];
+              if (result === true) {
+                if (!item || (item && !item.inProgress)) {
+                  mergeRowConditionMap[columnKey] = {
+                    inProgress: true,
+                    start: rowCount,
+                  };
+                }
+              } else {
+                if (item && item.inProgress) {
+                  if (!sheetData.merges) {
+                    sheetData.merges = [
+                      columnKey + item.start + ":" + columnKey + (rowCount - 1),
+                    ];
+                  } else {
+                    sheetData.merges.push(
+                      columnKey + item.start + ":" + columnKey + (rowCount - 1)
+                    );
+                  }
+                  mergeRowConditionMap[columnKey] = {
+                    inProgress: false,
+                    start: -1,
+                  };
+                }
+              }
+            }
             if (typeof dataEl != "undefined") {
               if (typeof dataEl == "string") {
                 sheetDataString +=
@@ -278,8 +330,23 @@ export function ExcelTable(data: ExcelTable) {
               }
             }
           });
+          if (rowLength - 1 == innerIndex) {
+            Object.keys(mergeRowConditionMap).forEach((v) => {
+              if (mergeRowConditionMap[v].inProgress) {
+                if (sheetData.merges) {
+                  sheetData.merges.push(
+                    v + mergeRowConditionMap[v].start + ":" + v + rowCount
+                  );
+                } else {
+                  sheetData.merges = [
+                    v + mergeRowConditionMap[v].start + ":" + v + rowCount,
+                  ];
+                }
+              }
+            });
+          }
           if (cr == rowCount) {
-            hasFurmul = false;
+            hasFormula = false;
             sheetDataString +=
               '<c r="' +
               cc +
@@ -297,7 +364,7 @@ export function ExcelTable(data: ExcelTable) {
           sheetDataString += "</row>";
         });
 
-        if (data.formula && hasFurmul) {
+        if (data.formula && hasFormula) {
           sheetDataString +=
             '<row r="' +
             cr +
