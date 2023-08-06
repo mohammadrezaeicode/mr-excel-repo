@@ -1,17 +1,6 @@
-export interface ProtectionOption {
-  sheet: "0" | "1";
-  formatCells: "0" | "1";
-  formatColumns: "0" | "1";
-  formatRows: "0" | "1";
-  insertColumns: "0" | "1";
-  insertRows: "0" | "1";
-  insertHyperlinks: "0" | "1";
-  deleteColumns: "0" | "1";
-  deleteRows: "0" | "1";
-  sort: "0" | "1";
-  autoFilter: "0" | "1";
-  pivotTables: "0" | "1";
-}
+export type ProtectionOption = {
+  [key in ProtectionOptionKey]: "0" | "1";
+};
 export type ProtectionOptionKey =
   | "sheet"
   | "formatCells"
@@ -41,6 +30,25 @@ export interface AlignmentOption {
   readingOrder?: number;
   textRotation?: number;
 }
+export type BorderDirection = "full" | "top" | "left" | "right" | "bottom";
+export type BorderOption = {
+  [key in BorderDirection]: {
+    color: string;
+    style:
+      | "slantDashDot"
+      | "dotted"
+      | "thick"
+      | "hair"
+      | "dashDot"
+      | "dashDotDot"
+      | "dashed"
+      | "thin"
+      | "mediumDashDot"
+      | "medium"
+      | "double"
+      | "mediumDashed";
+  };
+};
 export interface Header {
   label: string;
   text: string;
@@ -77,6 +85,10 @@ export type MergeRowDataConditionFunction = (
   index: number,
   fromHeader: boolean
 ) => boolean;
+export interface SortAndFilter {
+  mode: "all" | "ref";
+  ref: string;
+}
 export interface Sheet {
   name?: string;
   selected?: boolean;
@@ -85,6 +97,7 @@ export interface Sheet {
   headerStyleKey?: string;
   mergeRowDataCondition?: MergeRowDataConditionFunction;
   styleCellCondition?: StyleCellConditionFunction;
+  sortAndfilter: SortAndFilter;
   state: "hidden" | "visible";
   headerRowOption?: any; // Define the type if needed
   protectionOption?: ProtectionOption;
@@ -100,6 +113,10 @@ export interface HeaderRowOption {
 //   data: Data[];
 // }
 export interface StyleMapper {
+  border: {
+    count: number;
+    value: string;
+  };
   fill: {
     count: number;
     value: string;
@@ -117,10 +134,11 @@ export interface Styles {
   [key: string]: {
     fg?: string;
     fontColor?: string;
-    fontFamily: string;
+    fontFamily?: string;
     size?: number;
     index?: number;
     alignment?: AlignmentOption;
+    border?: BorderOption;
   };
 }
 
@@ -136,7 +154,6 @@ export interface Formula {
 export interface ExcelTable {
   withoutHeader?: boolean;
   creator?: string;
-  lastModifiedBy?: string;
   created?: string;
   modified?: string;
   numberOfColumn?: number;

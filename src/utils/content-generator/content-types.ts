@@ -25,6 +25,10 @@ export function contentTypeGenerator(
     "<Override" +
     ' ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"' +
     ' PartName="/xl/workbook.xml" />' +
+    ' <Override PartName="/docProps/core.xml" ' +
+    ' ContentType="application/vnd.openxmlformats-package.core-properties+xml" />' +
+    ' <Override PartName="/docProps/app.xml" ' +
+    ' ContentType="application/vnd.openxmlformats-officedocument.extended-properties+xml" />' +
     "</Types>"
   );
 }

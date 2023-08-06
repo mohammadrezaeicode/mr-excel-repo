@@ -53,7 +53,7 @@ export function ExcelTable(data: ExcelTable) {
       const indexes = {
         fillIndex: 0,
         fontIndex: 0,
-        applyFill: 0,
+        borderIndex: 0,
       };
       if (styl.fg) {
         indexes.fillIndex = res.fill.count;
@@ -99,6 +99,54 @@ export function ExcelTable(data: ExcelTable) {
           " />" +
           "</xf>";
       }
+      const borderObj = styl.border;
+      let borderStr = "";
+      if (borderObj) {
+        if (borderObj.left || borderObj.full) {
+          borderStr +=
+            '<left style="' +
+            (borderObj.left || borderObj.full).style +
+            '">' +
+            '<color rgb="' +
+            (borderObj.left || borderObj.full).color.replace("#", "") +
+            '" />' +
+            "</left>";
+        }
+        if (borderObj.right || borderObj.full) {
+          borderStr +=
+            '<right style="' +
+            (borderObj.right || borderObj.full).style +
+            '">' +
+            '<color rgb="' +
+            (borderObj.right || borderObj.full).color.replace("#", "") +
+            '" />' +
+            "</right>";
+        }
+        if (borderObj.top || borderObj.full) {
+          borderStr +=
+            '<top style="' +
+            (borderObj.top || borderObj.full).style +
+            '">' +
+            '<color rgb="' +
+            (borderObj.top || borderObj.full).color.replace("#", "") +
+            '" />' +
+            "</top>";
+        }
+        if (borderObj.bottom || borderObj.full) {
+          borderStr +=
+            '<bottom style="' +
+            (borderObj.bottom || borderObj.full).style +
+            '">' +
+            '<color rgb="' +
+            (borderObj.bottom || borderObj.full).color.replace("#", "") +
+            '" />' +
+            "</bottom>";
+        }
+        indexes.borderIndex = res.border.count;
+        res.border.count++;
+        res.border.value =
+          "<border>" + borderStr + "<diagonal />" + "</border>";
+      }
 
       res.cell.value =
         res.cell.value +
@@ -106,15 +154,22 @@ export function ExcelTable(data: ExcelTable) {
         indexes.fontIndex +
         '" fillId="' +
         indexes.fillIndex +
-        '" borderId="0" xfId="0" ' +
-        (indexes.fillIndex > 0 ? 'applyFill="1" ' : "") +
-        (indexes.fontIndex >= 0 ? 'applyFont="1" ' : "") +
+        '" borderId="' +
+        indexes.borderIndex +
+        '" xfId="0"' +
+        (indexes.borderIndex > 0 ? ' applyBorder="1" ' : "") +
+        (indexes.fillIndex > 0 ? ' applyFill="1" ' : "") +
+        (indexes.fontIndex >= 0 ? ' applyFont="1" ' : "") +
         endPart;
       data.styles![cur].index = res.cell.count;
       res.cell.count++;
       return res;
     },
     {
+      border: {
+        count: 1,
+        value: "",
+      },
       fill: {
         count: 2,
         value: "",
@@ -154,6 +209,7 @@ export function ExcelTable(data: ExcelTable) {
     let rowCount = 1;
     let sheetDataString = "";
     let sheetSizeString = "";
+    let sheetSortFilter = "";
     let objKey: string[] = [];
     let mergeRowConditionMap: MergeRowConditionMap = {};
     const sheetData = data.sheet[index];
@@ -224,7 +280,7 @@ export function ExcelTable(data: ExcelTable) {
         sharedStringMap[v.text] = v.text;
         sharedStringIndex++;
       });
-      const colsLength = cols.length;
+      const colsLength = sheetData.headers.length;
       if (!data.withoutHeader) {
         sheetDataString =
           '<row r="' +
@@ -410,7 +466,24 @@ export function ExcelTable(data: ExcelTable) {
           rowCount++;
           sheetDataString += "</row>";
         });
-
+        if (sheetData.sortAndfilter) {
+          if (sheetData.sortAndfilter.mode == "all") {
+            sheetSortFilter +=
+              '<autoFilter ref="A1:' +
+              cols[colsLength - 1] +
+              "" +
+              (rowCount - 1) +
+              '" />';
+          } else {
+            if (
+              typeof sheetData.sortAndfilter.ref == "string" &&
+              sheetData.sortAndfilter.ref.length > 0
+            ) {
+              sheetSortFilter +=
+                '<autoFilter ref="' + sheetData.sortAndfilter.ref + '" />';
+            }
+          }
+        }
         if (data.formula && hasFormula) {
           sheetDataString +=
             '<row r="' +
@@ -469,6 +542,8 @@ export function ExcelTable(data: ExcelTable) {
       '.xml" />';
     sheetNameApp += "<vt:lpstr>" + ("sheet" + (index + 1)) + "</vt:lpstr>";
     selectedAdded = selectedAdded || !!sheetData.selected;
+    const filterMode = sheetData.sortAndfilter ? 'filterMode="1"' : "";
+
     mapData["sheet" + (index + 1)] = {
       indexId: indexId + 1,
       key: "sheet" + (index + 1),
@@ -503,15 +578,21 @@ export function ExcelTable(data: ExcelTable) {
           "</sheetView>" +
           "</sheetViews>"
         : "<sheetViews>" + '<sheetView workbookViewId="0" />' + "</sheetViews>",
+
+      sheetSortFilter,
       tabColor: sheetData.tabColor
         ? '<sheetPr codeName="' +
           ("Sheet" + (index + 1)) +
-          '">' +
+          '" ' +
+          filterMode +
+          " >" +
           '<tabColor rgb="' +
           sheetData.tabColor.replace("#", "") +
           '" />' +
           "</sheetPr>"
-        : "<sheetPr>" +
+        : "<sheetPr " +
+          filterMode +
+          " >" +
           '<outlinePr summaryBelow="0" summaryRight="0" />' +
           "</sheetPr>",
     };
@@ -529,9 +610,15 @@ export function ExcelTable(data: ExcelTable) {
     ".rels",
     '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
       '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+      ' <Relationship Id="rId3"' +
+      '  Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties"' +
+      '  Target="docProps/app.xml" />' +
+      ' <Relationship Id="rId2"' +
+      '  Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties"' +
+      '  Target="docProps/core.xml" />' +
       ' <Relationship Id="rId1"' +
-      ' Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument"' +
-      ' Target="xl/workbook.xml" />' +
+      '  Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument"' +
+      '  Target="xl/workbook.xml" />' +
       "</Relationships>"
   );
 
@@ -542,18 +629,17 @@ export function ExcelTable(data: ExcelTable) {
       '<cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" ' +
       'xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" ' +
       'xmlns:dcmitype="http://purl.org/dc/dcmitype/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">' +
-      " <dc:creator>" +
-      data.creator +
-      "</dc:creator>" +
-      " <cp:lastModifiedBy>" +
-      data.lastModifiedBy +
-      "</cp:lastModifiedBy>" +
-      ' <dcterms:created xsi:type="dcterms:W3CDTF">' +
-      data.created +
-      "</dcterms:created>" +
-      ' <dcterms:modified xsi:type="dcterms:W3CDTF">' +
-      data.modified +
-      "</dcterms:modified>" +
+      (data.creator ? "<dc:creator>" + data.creator + "</dc:creator>" : "") +
+      (data.created
+        ? '<dcterms:created xsi:type="dcterms:W3CDTF">' +
+          data.created +
+          "</dcterms:created>"
+        : "") +
+      (data.modified
+        ? '<dcterms:modified xsi:type="dcterms:W3CDTF">' +
+          data.modified +
+          "</dcterms:modified>"
+        : "") +
       "</cp:coreProperties>"
   );
   docPropsFolder?.file("app.xml", appGenerator(sheetLength, sheetNameApp));
@@ -657,6 +743,7 @@ export function ExcelTable(data: ExcelTable) {
         "<sheetData>" +
         sh.sheetDataString +
         "</sheetData>" +
+        sh.sheetSortFilter +
         sh.merges +
         sh.protectionOption +
         "</worksheet>"
