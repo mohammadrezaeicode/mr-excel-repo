@@ -158,19 +158,42 @@ export function ExcelTable(data: ExcelTable) {
     let mergeRowConditionMap: MergeRowConditionMap = {};
     const sheetData = data.sheet[index];
     if (Array.isArray(sheetData.headers) && sheetData.headers.length) {
+      let headerStyleKey = sheetData.headerStyleKey
+        ? sheetData.headerStyleKey
+        : null;
+
       sheetData.headers.forEach((v, innerIndex) => {
         objKey.push(v.label);
         if (
           sheetData.mergeRowDataCondition &&
           typeof sheetData.mergeRowDataCondition == "function"
         ) {
-          let result = sheetData.mergeRowDataCondition(v, null, index, true);
+          let result = sheetData.mergeRowDataCondition(
+            v,
+            null,
+            innerIndex,
+            true
+          );
           if (result === true) {
             mergeRowConditionMap[cols[innerIndex]] = {
               inProgress: true,
               start: rowCount,
             };
           }
+        }
+        if (
+          sheetData.styleCellCondition &&
+          typeof sheetData.styleCellCondition == "function"
+        ) {
+          headerStyleKey =
+            sheetData.styleCellCondition(
+              v,
+              v,
+              innerIndex,
+              rowCount,
+              true,
+              styleKeys
+            ) || headerStyleKey;
         }
         if (v.size && v.size > 0) {
           sheetSizeString +=
@@ -189,7 +212,12 @@ export function ExcelTable(data: ExcelTable) {
           '<c r="' +
           cols[innerIndex] +
           rowCount +
-          '" t="s"><v>' +
+          '" ' +
+          (headerStyleKey && data.styles && data.styles[headerStyleKey]
+            ? ' s="' + data.styles[headerStyleKey].index + '" '
+            : "") +
+          " " +
+          't="s"><v>' +
           sharedStringIndex +
           "</v></c>";
         sharedString += "<si><t>" + v.text + "</t></si>";
@@ -265,6 +293,21 @@ export function ExcelTable(data: ExcelTable) {
             " >";
           objKey.forEach((key, keyIndex) => {
             const dataEl = mData[key];
+            let cellStyle = rowStyle;
+            if (
+              sheetData.styleCellCondition &&
+              typeof sheetData.styleCellCondition == "function"
+            ) {
+              cellStyle =
+                sheetData.styleCellCondition(
+                  dataEl,
+                  mData,
+                  keyIndex,
+                  rowCount,
+                  false,
+                  styleKeys
+                ) || rowStyle;
+            }
             if (
               sheetData.mergeRowDataCondition &&
               typeof sheetData.mergeRowDataCondition == "function"
@@ -310,7 +353,9 @@ export function ExcelTable(data: ExcelTable) {
                   cols[keyIndex] +
                   rowCount +
                   '" t="s" ' +
-                  (rowStyle ? 's="' + data.styles![rowStyle].index + '"' : "") +
+                  (cellStyle && data.styles && data.styles[cellStyle]
+                    ? 's="' + data.styles[cellStyle].index + '"'
+                    : "") +
                   "><v>" +
                   sharedStringIndex +
                   "</v></c>";
@@ -323,7 +368,9 @@ export function ExcelTable(data: ExcelTable) {
                   cols[keyIndex] +
                   rowCount +
                   '" ' +
-                  (rowStyle ? 's="' + data.styles![rowStyle].index + '"' : "") +
+                  (cellStyle && data.styles && data.styles[cellStyle]
+                    ? 's="' + data.styles[cellStyle].index + '"'
+                    : "") +
                   "><v>" +
                   dataEl +
                   "</v></c>";

@@ -43,13 +43,16 @@ export interface MergeRowConditionMap {
         start: number;
     };
 }
-export type mergeRowDataConditionFunction = (data: Header | string | number | undefined, key: string | null, index: number, fromHeader: boolean) => boolean;
+export type StyleCellConditionFunction = (data: Header | string | number | undefined, object: Header | Data, colIndex: number, rowIndex: number, fromHeader: boolean, stylekeys: string[]) => string;
+export type MergeRowDataConditionFunction = (data: Header | string | number | undefined, key: string | null, index: number, fromHeader: boolean) => boolean;
 export interface Sheet {
     name?: string;
     selected?: boolean;
     tabColor?: string;
     merges?: string[];
-    mergeRowDataCondition?: mergeRowDataConditionFunction;
+    headerStyleKey?: string;
+    mergeRowDataCondition?: MergeRowDataConditionFunction;
+    styleCellCondition?: StyleCellConditionFunction;
     state: "hidden" | "visible";
     headerRowOption?: any;
     protectionOption?: ProtectionOption;

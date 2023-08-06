@@ -63,7 +63,15 @@ export interface MergeRowConditionMap {
     start: number;
   };
 }
-export type mergeRowDataConditionFunction = (
+export type StyleCellConditionFunction = (
+  data: Header | string | number | undefined,
+  object: Header | Data,
+  colIndex: number,
+  rowIndex: number,
+  fromHeader: boolean,
+  stylekeys: string[]
+) => string;
+export type MergeRowDataConditionFunction = (
   data: Header | string | number | undefined,
   key: string | null,
   index: number,
@@ -74,7 +82,9 @@ export interface Sheet {
   selected?: boolean;
   tabColor?: string;
   merges?: string[];
-  mergeRowDataCondition?: mergeRowDataConditionFunction;
+  headerStyleKey?: string;
+  mergeRowDataCondition?: MergeRowDataConditionFunction;
+  styleCellCondition?: StyleCellConditionFunction;
   state: "hidden" | "visible";
   headerRowOption?: any; // Define the type if needed
   protectionOption?: ProtectionOption;
