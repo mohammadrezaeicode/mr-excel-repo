@@ -1,11 +1,19 @@
 import { StyleMapper } from "../../data-model/excel-table";
 
 export function styleGenerator(styles: StyleMapper) {
+  console.log(styles.format);
   return (
     '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
     '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"' +
     ' xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac"' +
     ' xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006">' +
+    (styles.format.count > 0
+      ? '<numFmts count="' +
+        styles.format.count +
+        '">' +
+        styles.format.value +
+        "</numFmts>"
+      : "") +
     ' <fonts count="' +
     styles.font.count +
     '">' +

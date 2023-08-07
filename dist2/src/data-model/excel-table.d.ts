@@ -65,6 +65,10 @@ export interface HeaderRowOption {
     outlineLevel: "string";
 }
 export interface StyleMapper {
+    format: {
+        count: number;
+        value: string;
+    };
     border: {
         count: number;
         value: string;
@@ -82,6 +86,7 @@ export interface StyleMapper {
         value: string;
     };
 }
+export type FormatKey = "time" | "float_1" | "float_3" | "$" | "£" | "€" | "¥" | "CHF" | "₽" | "֏" | "₼" | "₼1" | "₽1" | "₽2" | "₽3" | "ريال";
 export interface Styles {
     [key: string]: {
         fg?: string;
@@ -91,6 +96,7 @@ export interface Styles {
         index?: number;
         alignment?: AlignmentOption;
         border?: BorderOption;
+        format: FormatKey;
     };
 }
 export interface Formula {

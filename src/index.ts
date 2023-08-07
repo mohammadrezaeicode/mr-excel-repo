@@ -11,6 +11,82 @@ import { styleGenerator } from "./utils/content-generator/styles";
 import { contentTypeGenerator } from "./utils/content-generator/content-types";
 import { appGenerator } from "./utils/content-generator/app";
 export function ExcelTable(data: ExcelTable) {
+  let formatMap = {
+    time: {
+      key: 165,
+      value: '<numFmt numFmtId="165" formatCode="[$-F400]h:mm:ss\\ AM/PM" />',
+    },
+    float_1: { key: 2 },
+    float_3: {
+      key: 164,
+      value: '<numFmt numFmtId="164" formatCode="0.000" />',
+    },
+    $: {
+      key: 163,
+      value:
+        '<numFmt numFmtId="163" formatCode="_([$$-409]* #,##0.00_);_([$$-409]* \\(#,##0.00\\);_([$$-409]* &quot;-&quot;??_);_(@_)" />',
+    },
+    "£": {
+      key: 162,
+      value:
+        '<numFmt numFmtId="162" formatCode="_-[$£-809]* #,##0.00_-;\\-[$£-809]* #,##0.00_-;_-[$£-809]* &quot;-&quot;??_-;_-@_-" />',
+    },
+    "€": {
+      key: 161,
+      value:
+        '<numFmt numFmtId="161" formatCode="_([$€-2]\\ * #,##0.00_);_([$€-2]\\ * \\(#,##0.00\\);_([$€-2]\\ * &quot;-&quot;??_);_(@_)" />',
+    },
+    "¥": {
+      key: 160,
+      value:
+        '<numFmt numFmtId="160" formatCode="_ [$¥-804]* #,##0.00_ ;_ [$¥-804]* \\-#,##0.00_ ;_ [$¥-804]* &quot;-&quot;??_ ;_ @_ " />',
+    },
+    CHF: {
+      key: 179,
+      value:
+        '<numFmt numFmtId="179" formatCode="_-* #,##0.00\\ [$CHF-100C]_-;\\-* #,##0.00\\ [$CHF-100C]_-;_-* &quot;-&quot;??\\ [$CHF-100C]_-;_-@_-" />',
+    },
+    "₽": {
+      key: 178,
+      value:
+        '<numFmt numFmtId="178" formatCode="_-* #,##0.00\\ [$₽-419]_-;\\-* #,##0.00\\ [$₽-419]_-;_-* &quot;-&quot;??\\ [$₽-419]_-;_-@_-" />',
+    },
+    "֏": {
+      key: 177,
+      value:
+        '<numFmt numFmtId="177" formatCode="_-* #,##0.00\\ [$֏-42B]_-;\\-* #,##0.00\\ [$֏-42B]_-;_-* &quot;-&quot;??\\ [$֏-42B]_-;_-@_-" />',
+    },
+    "₼": {
+      key: 176,
+      value:
+        '<numFmt numFmtId="176" formatCode="_-* #,##0.00\\ [$₼-82C]_-;\\-* #,##0.00\\ [$₼-82C]_-;_-* &quot;-&quot;??\\ [$₼-82C]_-;_-@_-" />',
+    },
+    "₼1": {
+      key: 175,
+      value:
+        '<numFmt numFmtId="175" formatCode="_-* #,##0.00\\ [$₼-42C]_-;\\-* #,##0.00\\ [$₼-42C]_-;_-* &quot;-&quot;??\\ [$₼-42C]_-;_-@_-" />',
+    },
+    "₽1": {
+      key: 174,
+      value:
+        '<numFmt numFmtId="174" formatCode="_-* #,##0.00\\ [$₽-46D]_-;\\-* #,##0.00\\ [$₽-46D]_-;_-* &quot;-&quot;??\\ [$₽-46D]_-;_-@_-" />',
+    },
+    "₽2": {
+      key: 173,
+      value:
+        '<numFmt numFmtId="173" formatCode="_-* #,##0.00\\ [$₽-485]_-;\\-* #,##0.00\\ [$₽-485]_-;_-* &quot;-&quot;??\\ [$₽-485]_-;_-@_-" />',
+    },
+    "₽3": {
+      key: 172,
+      value:
+        '<numFmt numFmtId="172" formatCode="_-* #,##0.00\\ [$₽-444]_-;\\-* #,##0.00\\ [$₽-444]_-;_-* &quot;-&quot;??\\ [$₽-444]_-;_-@_-" />',
+    },
+    ريال: {
+      key: 171,
+      value:
+        '<numFmt numFmtId="171" formatCode="_ * #,##0.00_-[$ريال-429]_ ;_ * #,##0.00\\-[$ريال-429]_ ;_ * &quot;-&quot;??_-[$ريال-429]_ ;_ @_ " />',
+    },
+  };
   let cols = [
     "A",
     "B",
@@ -54,6 +130,7 @@ export function ExcelTable(data: ExcelTable) {
         fillIndex: 0,
         fontIndex: 0,
         borderIndex: 0,
+        formatIndex: 0,
       };
       if (styl.fg) {
         indexes.fillIndex = res.fill.count;
@@ -144,13 +221,27 @@ export function ExcelTable(data: ExcelTable) {
         }
         indexes.borderIndex = res.border.count;
         res.border.count++;
-        res.border.value =
+        res.border.value +=
           "<border>" + borderStr + "<diagonal />" + "</border>";
       }
-
+      if (styl.format) {
+        console.log("*****f");
+        const format = formatMap[styl.format];
+        if (format) {
+          indexes.formatIndex = format.key;
+          if ("value" in format) {
+            res.format.count++;
+            res.format.value += format.value;
+          }
+        }
+      }
+      console.log("**f", res.format.value);
       res.cell.value =
         res.cell.value +
-        '<xf numFmtId="0" fontId="' +
+        '<xf numFmtId="' +
+        indexes.formatIndex +
+        '"' +
+        ' fontId="' +
         indexes.fontIndex +
         '" fillId="' +
         indexes.fillIndex +
@@ -160,12 +251,17 @@ export function ExcelTable(data: ExcelTable) {
         (indexes.borderIndex > 0 ? ' applyBorder="1" ' : "") +
         (indexes.fillIndex > 0 ? ' applyFill="1" ' : "") +
         (indexes.fontIndex >= 0 ? ' applyFont="1" ' : "") +
+        (indexes.formatIndex > 0 ? ' applyNumberFormat="1" ' : "") +
         endPart;
       data.styles![cur].index = res.cell.count;
       res.cell.count++;
       return res;
     },
     {
+      format: {
+        count: 0,
+        value: "",
+      },
       border: {
         count: 1,
         value: "",
