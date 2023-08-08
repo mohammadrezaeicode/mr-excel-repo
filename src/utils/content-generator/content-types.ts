@@ -1,8 +1,7 @@
 import { Formula } from "../../data-model/excel-table";
 
 export function contentTypeGenerator(
-  sheetContentType: string,
-  formula?: Formula
+  sheetContentType: string
 ) {
   return (
     '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
@@ -11,10 +10,6 @@ export function contentTypeGenerator(
     ' <Default ContentType="application/vnd.openxmlformats-package.relationships+xml" Extension="rels" />' +
     sheetContentType +
     "" +
-    (formula?.useFormula && false
-      ? '<Override PartName="/xl/calcChain.xml"' +
-        ' ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.calcChain+xml"/>'
-      : "") +
     "<Override" +
     ' ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sharedStrings+xml"' +
     ' PartName="/xl/sharedStrings.xml" />' +

@@ -53,6 +53,10 @@ export interface Header {
   label: string;
   text: string;
   size?: number;
+  formula?: {
+    type: FormulaType;
+    styleId?: string;
+  };
 }
 
 export interface Data extends DataOptions {
@@ -90,6 +94,8 @@ export interface SortAndFilter {
   ref: string;
 }
 export interface Sheet {
+  withoutHeader?: boolean;
+  formula?: Formula;
   name?: string;
   selected?: boolean;
   tabColor?: string;
@@ -134,6 +140,7 @@ export interface StyleMapper {
     value: string;
   };
 }
+export type FormulaType = "AVERAGE" | "SUM" | "COUNT" | "MAX" | "MIN";
 export interface Styles {
   [key: string]: {
     fg?: string;
@@ -152,17 +159,17 @@ export interface FormatMap {
     value?: string;
   };
 }
+export interface FormulaSetting{
+    type: FormulaType;
+    start: string;
+    end: string;
+    styleId?: string;
+  }
 export interface Formula {
-  useFormula: boolean;
-  cell: string;
-  type?: string;
-  start?: string;
-  end?: string;
-  styleId: string;
+  [insertCell: string]: FormulaSetting;
 }
 
 export interface ExcelTable {
-  withoutHeader?: boolean;
   creator?: string;
   created?: string;
   modified?: string;
@@ -170,7 +177,6 @@ export interface ExcelTable {
   createType?: string;
   mapSheetDataOption?: any; // Define the type if needed
   styles?: Styles;
-  formula?: Formula;
   sheet: Sheet[];
 }
 

@@ -1,4 +1,4 @@
-import JSZip from "jszip";
+// import JSZip from "jszip";
 import {
   AlignmentOptionKey,
   ExcelTable,
@@ -7,11 +7,12 @@ import {
   ProtectionOptionKey,
 } from "./data-model/excel-table";
 import { generateColumnName } from "./utils/generate-column-name";
-import { saveAs } from "file-saver";
+
 import { styleGenerator } from "./utils/content-generator/styles";
 import { contentTypeGenerator } from "./utils/content-generator/content-types";
 import { appGenerator } from "./utils/content-generator/app";
-export function ExcelTable(data: ExcelTable) {
+import { generateCellRowCol } from "./utils/generate-formula-cell";
+export async function generateExcel(data: ExcelTable) {
   let formatMap: FormatMap = {
     time: {
       key: 165,
@@ -184,6 +185,8 @@ export function ExcelTable(data: ExcelTable) {
   if (data.numberOfColumn && data.numberOfColumn > 25) {
     cols = generateColumnName(cols, data.numberOfColumn);
   }
+  const module = await import("jszip");
+  const JSZip = module.default;
   var zip = new JSZip();
   const sheetLength = data.sheet.length;
   // xl
@@ -373,6 +376,7 @@ export function ExcelTable(data: ExcelTable) {
     let sheetSizeString = "";
     let sheetSortFilter = "";
     let objKey: string[] = [];
+    let headerFormula: number[] = [];
     let mergeRowConditionMap: MergeRowConditionMap = {};
     const sheetData = data.sheet[index];
     if (Array.isArray(sheetData.headers) && sheetData.headers.length) {
@@ -381,6 +385,9 @@ export function ExcelTable(data: ExcelTable) {
         : null;
 
       sheetData.headers.forEach((v, innerIndex) => {
+        if (v.formula) {
+          headerFormula.push(innerIndex);
+        }
         objKey.push(v.label);
         if (
           sheetData.mergeRowDataCondition &&
@@ -423,27 +430,38 @@ export function ExcelTable(data: ExcelTable) {
             v.size +
             '" customWidth="1" />';
         }
-        if (data.withoutHeader) {
+        if (sheetData.withoutHeader) {
           return;
         }
-        sheetDataString +=
-          '<c r="' +
-          cols[innerIndex] +
-          rowCount +
-          '" ' +
-          (headerStyleKey && data.styles && data.styles[headerStyleKey]
-            ? ' s="' + data.styles[headerStyleKey].index + '" '
-            : "") +
-          " " +
-          't="s"><v>' +
-          sharedStringIndex +
-          "</v></c>";
-        sharedString += "<si><t>" + v.text + "</t></si>";
-        sharedStringMap[v.text] = v.text;
-        sharedStringIndex++;
+        const refString = cols[innerIndex] + "" + rowCount;
+        const formula = sheetData.formula && sheetData.formula[refString];
+        if (formula) {
+          sheetDataString += generateCellRowCol(
+            refString,
+            formula,
+            data.styles
+          ).cell;
+          delete sheetData.formula![refString];
+        } else {
+          sheetDataString +=
+            '<c r="' +
+            cols[innerIndex] +
+            rowCount +
+            '" ' +
+            (headerStyleKey && data.styles && data.styles[headerStyleKey]
+              ? ' s="' + data.styles[headerStyleKey].index + '" '
+              : "") +
+            " " +
+            't="s"><v>' +
+            sharedStringIndex +
+            "</v></c>";
+          sharedString += "<si><t>" + v.text + "</t></si>";
+          sharedStringMap[v.text] = v.text;
+          sharedStringIndex++;
+        }
       });
       const colsLength = sheetData.headers.length;
-      if (!data.withoutHeader) {
+      if (!sheetData.withoutHeader) {
         sheetDataString =
           '<row r="' +
           rowCount +
@@ -471,15 +489,6 @@ export function ExcelTable(data: ExcelTable) {
         rowCount++;
       }
       if (Array.isArray(sheetData.data)) {
-        let hasFormula = data.formula?.useFormula;
-        let cc = "";
-        let cr = -1;
-        if (data.formula && hasFormula) {
-          let cellColumn = data.formula.cell.replace(/[0-9]/g, "");
-          let cellRow = parseInt(data.formula.cell.substr(cellColumn!.length));
-          cc = cellColumn;
-          cr = cellRow;
-        }
         const keyOutline =
           data.mapSheetDataOption && data.mapSheetDataOption.outlineLevel
             ? data.mapSheetDataOption.outlineLevel
@@ -565,33 +574,40 @@ export function ExcelTable(data: ExcelTable) {
               }
             }
             if (typeof dataEl != "undefined") {
-              if (typeof dataEl == "string") {
-                sheetDataString +=
-                  '<c r="' +
-                  cols[keyIndex] +
-                  rowCount +
-                  '" t="s" ' +
-                  (cellStyle && data.styles && data.styles[cellStyle]
-                    ? 's="' + data.styles[cellStyle].index + '"'
-                    : "") +
-                  "><v>" +
-                  sharedStringIndex +
-                  "</v></c>";
-                sharedString += "<si><t>" + dataEl + "</t></si>";
-                sharedStringMap[dataEl] = dataEl;
-                sharedStringIndex++;
+              const refString = cols[keyIndex] + "" + rowCount;
+              const formula = sheetData.formula && sheetData.formula[refString];
+              if (formula) {
+                sheetDataString += generateCellRowCol(refString, formula).cell;
+                delete sheetData.formula![refString];
               } else {
-                sheetDataString +=
-                  '<c r="' +
-                  cols[keyIndex] +
-                  rowCount +
-                  '" ' +
-                  (cellStyle && data.styles && data.styles[cellStyle]
-                    ? 's="' + data.styles[cellStyle].index + '"'
-                    : "") +
-                  "><v>" +
-                  dataEl +
-                  "</v></c>";
+                if (typeof dataEl == "string") {
+                  sheetDataString +=
+                    '<c r="' +
+                    cols[keyIndex] +
+                    rowCount +
+                    '" t="s" ' +
+                    (cellStyle && data.styles && data.styles[cellStyle]
+                      ? 's="' + data.styles[cellStyle].index + '"'
+                      : "") +
+                    "><v>" +
+                    sharedStringIndex +
+                    "</v></c>";
+                  sharedString += "<si><t>" + dataEl + "</t></si>";
+                  sharedStringMap[dataEl] = dataEl;
+                  sharedStringIndex++;
+                } else {
+                  sheetDataString +=
+                    '<c r="' +
+                    cols[keyIndex] +
+                    rowCount +
+                    '" ' +
+                    (cellStyle && data.styles && data.styles[cellStyle]
+                      ? 's="' + data.styles[cellStyle].index + '"'
+                      : "") +
+                    "><v>" +
+                    dataEl +
+                    "</v></c>";
+                }
               }
             }
           });
@@ -609,20 +625,6 @@ export function ExcelTable(data: ExcelTable) {
                 }
               }
             });
-          }
-          if (cr == rowCount) {
-            hasFormula = false;
-            sheetDataString +=
-              '<c r="' +
-              cc +
-              rowCount +
-              '"><f>' +
-              data.formula?.type +
-              "(" +
-              data.formula?.start +
-              ":" +
-              data.formula?.end +
-              ")</f></c>";
           }
 
           rowCount++;
@@ -646,30 +648,53 @@ export function ExcelTable(data: ExcelTable) {
             }
           }
         }
-        if (data.formula && hasFormula) {
-          sheetDataString +=
-            '<row r="' +
-            cr +
-            '" ' +
-            ("height" in data.formula
-              ? 'ht="' + data.formula.height + '" customHeight="1"'
-              : "") +
-            ">" +
-            '<c r="' +
-            cc +
-            cr +
-            '" ' +
-            ("styleId" in data.formula
-              ? 's="' + data.styles![data.formula.styleId].index + '"'
-              : "") +
-            "><f>" +
-            data.formula.type +
-            "(" +
-            data.formula.start +
-            ":" +
-            data.formula.end +
-            ")</f></c>" +
-            "</row>";
+      }
+      console.log("sheetData.formula", sheetData.formula);
+      if (headerFormula.length > 0) {
+        if (!sheetData.formula) {
+          sheetData.formula = {};
+        }
+        headerFormula.forEach((v) => {
+          const header = sheetData.headers[v];
+          sheetData.formula![cols[v] + "" + rowCount] = {
+            start: sheetData.withoutHeader ? cols[v] + "1" : cols[v] + "2",
+            end: cols[v] + "" + (rowCount - 1),
+            type: header.formula!.type,
+            ...(header.formula!.styleId
+              ? { styleId: header.formula!.styleId }
+              : {}),
+          };
+        });
+      }
+      if (sheetData.formula) {
+        const remindFormulaKey = Object.keys(sheetData.formula);
+        console.log(remindFormulaKey, "remindFormulaKey");
+        if (remindFormulaKey.length) {
+          let rF: {
+            [row: number]: string;
+          } = {};
+          remindFormulaKey.forEach((v) => {
+            const f = generateCellRowCol(v, sheetData.formula![v], data.styles);
+            console.log(f, "remindFormulaKey");
+            if (!rF[f.row]) {
+              rF[f.row] = f.cell;
+            } else {
+              rF[f.row] += f.cell;
+            }
+          });
+          console.log(rF, "remindFormulaKey");
+          Object.keys(rF).forEach((v) => {
+            const l = rF[v as keyof object];
+            console.log(l, "remindFormulaKey");
+            sheetDataString +=
+              '<row r="' +
+              v +
+              '" spans="1:' +
+              colsLength +
+              '"  >' +
+              l +
+              "</row>";
+          });
         }
       }
     }
@@ -762,10 +787,7 @@ export function ExcelTable(data: ExcelTable) {
   }
 
   let sheetKeys = Object.keys(mapData);
-  zip.file(
-    "[Content_Types].xml",
-    contentTypeGenerator(sheetContentType, data.formula)
-  );
+  zip.file("[Content_Types].xml", contentTypeGenerator(sheetContentType));
   // in _rels
   var relsFolder = zip.folder("_rels");
   relsFolder?.file(
@@ -863,13 +885,6 @@ export function ExcelTable(data: ExcelTable) {
       workbookRelString +
       "" +
       " " +
-      (data.formula?.useFormula && false
-        ? '<Relationship Id="rId' +
-          indexId +
-          '"' +
-          ' Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/calcChain"' +
-          ' Target="calcChain.xml" />'
-        : "") +
       "" +
       "</Relationships>"
   );
@@ -913,6 +928,10 @@ export function ExcelTable(data: ExcelTable) {
   });
   zip.generateAsync({ type: "blob" }).then(function (content) {
     // see FileSaver.js
-    saveAs(content, "Excel_File.xlsx");
+    import("file-saver").then((module) => {
+      const { saveAs } = module;
+      // Now you can use the saveAs function
+      saveAs(content, "Excel_File.xlsx");
+    });
   });
 }

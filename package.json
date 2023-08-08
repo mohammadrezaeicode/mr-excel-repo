@@ -2,10 +2,11 @@
   "name": "exceltable",
   "version": "1.0.0",
   "description": "Client-side library for generate excel file",
-  "main": "src/index.js",
+  "main": "src/ExcelTable.js",
   "scripts": {
     "start": "tsc",
     "build": "webpack",
+    "build1": "tsc && vite build",
     "dev": "tsc -w",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -13,10 +14,15 @@
   "license": "ISC",
   "devDependencies": {
     "@types/file-saver": "^2.0.5",
+    "compression-webpack-plugin": "^10.0.0",
+    "terser-webpack-plugin": "^5.3.9",
     "ts-loader": "^9.4.4",
     "tsconfig-paths-webpack-plugin": "^4.1.0",
     "typescript": "^5.1.6",
+    "vite": "^4.4.8",
+    "vite-plugin-dts": "^3.5.1",
     "webpack": "^5.88.2",
+    "webpack-bundle-analyzer": "^4.9.0",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^4.15.1"
   },

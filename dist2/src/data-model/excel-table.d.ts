@@ -22,6 +22,10 @@ export interface Header {
     label: string;
     text: string;
     size?: number;
+    formula?: {
+        type: FormulaType;
+        styleId?: string;
+    };
 }
 export interface Data extends DataOptions {
     [key: string]: string | number | undefined;
@@ -46,6 +50,8 @@ export interface SortAndFilter {
     ref: string;
 }
 export interface Sheet {
+    withoutHeader?: boolean;
+    formula?: Formula;
     name?: string;
     selected?: boolean;
     tabColor?: string;
@@ -86,7 +92,7 @@ export interface StyleMapper {
         value: string;
     };
 }
-export type FormatKey = "time" | "float_1" | "float_3" | "$" | "£" | "€" | "¥" | "CHF" | "₽" | "֏" | "₼" | "₼1" | "₽1" | "₽2" | "₽3" | "ريال";
+export type FormulaType = "AVERAGE" | "SUM" | "COUNT" | "MAX" | "MIN";
 export interface Styles {
     [key: string]: {
         fg?: string;
@@ -96,19 +102,25 @@ export interface Styles {
         index?: number;
         alignment?: AlignmentOption;
         border?: BorderOption;
-        format: FormatKey;
+        format: string;
     };
 }
+export interface FormatMap {
+    [format: string]: {
+        key: number;
+        value?: string;
+    };
+}
+export interface FormulaSetting {
+    type: FormulaType;
+    start: string;
+    end: string;
+    styleId?: string;
+}
 export interface Formula {
-    useFormula: boolean;
-    cell: string;
-    type?: string;
-    start?: string;
-    end?: string;
-    styleId: string;
+    [insertCell: string]: FormulaSetting;
 }
 export interface ExcelTable {
-    withoutHeader?: boolean;
     creator?: string;
     created?: string;
     modified?: string;
@@ -116,7 +128,6 @@ export interface ExcelTable {
     createType?: string;
     mapSheetDataOption?: any;
     styles?: Styles;
-    formula?: Formula;
     sheet: Sheet[];
 }
 //# sourceMappingURL=excel-table.d.ts.map
