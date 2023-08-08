@@ -3,8 +3,11 @@ declare interface AlignmentOption {
     vertical?: "bottom" | "top" | "bottom";
     wrapText?: "0" | "1";
     shrinkToFit?: "0" | "1";
-    readingOrder?: number;
+    readingOrder?: "1" | "2" | 2 | 1;
     textRotation?: number;
+    indent?: number;
+    rtl?: boolean;
+    ltr?: boolean;
 }
 
 declare type BorderDirection = "full" | "top" | "left" | "right" | "bottom";

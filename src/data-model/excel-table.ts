@@ -21,14 +21,18 @@ export type AlignmentOptionKey =
   | "wrapText"
   | "shrinkToFit"
   | "readingOrder"
-  | "textRotation";
+  | "textRotation"
+  | "indent";
 export interface AlignmentOption {
   horizontal?: "center" | "left" | "right";
   vertical?: "bottom" | "top" | "bottom";
   wrapText?: "0" | "1";
   shrinkToFit?: "0" | "1";
-  readingOrder?: number;
+  readingOrder?: "1" | "2" | 2 | 1;
   textRotation?: number;
+  indent?: number;
+  rtl?: boolean;
+  ltr?: boolean;
 }
 export type BorderDirection = "full" | "top" | "left" | "right" | "bottom";
 export type BorderOption = {
@@ -159,12 +163,12 @@ export interface FormatMap {
     value?: string;
   };
 }
-export interface FormulaSetting{
-    type: FormulaType;
-    start: string;
-    end: string;
-    styleId?: string;
-  }
+export interface FormulaSetting {
+  type: FormulaType;
+  start: string;
+  end: string;
+  styleId?: string;
+}
 export interface Formula {
   [insertCell: string]: FormulaSetting;
 }

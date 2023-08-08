@@ -187,20 +187,20 @@ async function re(t) {
   const P = Object.keys(t.styles ? t.styles : {});
   let Z = P.reduce(
     (a, o, f) => {
-      const n = t.styles[o], c = {
+      const r = t.styles[o], c = {
         fillIndex: 0,
         fontIndex: 0,
         borderIndex: 0,
         formatIndex: 0
       };
-      n.fg && (c.fillIndex = a.fill.count, a.fill.count++, a.fill.value = a.fill.value + '<fill><patternFill patternType="solid">' + (n.fg ? '<fgColor rgb="' + n.fg.replace("#", "") + '" />' : "") + "</patternFill></fill>"), (n.fontColor || n.fontFamily || n.size) && (c.fontIndex = a.font.count, a.font.count++, a.font.value = a.font.value + "<font>" + (n.size ? '<sz val="' + n.size + '" />' : "") + (n.fontColor ? '<color rgb="' + n.fontColor.replace("#", "") + '" />' : "") + (n.fontFamily ? '<name val="' + n.fontFamily + '" />' : "") + "</font>");
+      r.fg && (c.fillIndex = a.fill.count, a.fill.count++, a.fill.value = a.fill.value + '<fill><patternFill patternType="solid">' + (r.fg ? '<fgColor rgb="' + r.fg.replace("#", "") + '" />' : "") + "</patternFill></fill>"), (r.fontColor || r.fontFamily || r.size) && (c.fontIndex = a.font.count, a.font.count++, a.font.value = a.font.value + "<font>" + (r.size ? '<sz val="' + r.size + '" />' : "") + (r.fontColor ? '<color rgb="' + r.fontColor.replace("#", "") + '" />' : "") + (r.fontFamily ? '<name val="' + r.fontFamily + '" />' : "") + "</font>");
       let O = "/>";
-      n.alignment && (O = ' applyAlignment="1"><alignment ' + Object.keys(n.alignment).reduce((e, A) => e + " " + A + '="' + n.alignment[A] + '" ', "") + " /></xf>");
-      const l = n.border;
+      r.alignment && (r.alignment.rtl && (r.alignment.readingOrder = 2, delete r.alignment.rtl), r.alignment.ltr && (r.alignment.readingOrder = 1, delete r.alignment.ltr), O = ' applyAlignment="1"><alignment ' + Object.keys(r.alignment).reduce((e, A) => e + " " + A + '="' + r.alignment[A] + '" ', "") + " /></xf>");
+      const l = r.border;
       let p = "";
-      if (l && ((l.left || l.full) && (p += '<left style="' + (l.left || l.full).style + '"><color rgb="' + (l.left || l.full).color.replace("#", "") + '" /></left>'), (l.right || l.full) && (p += '<right style="' + (l.right || l.full).style + '"><color rgb="' + (l.right || l.full).color.replace("#", "") + '" /></right>'), (l.top || l.full) && (p += '<top style="' + (l.top || l.full).style + '"><color rgb="' + (l.top || l.full).color.replace("#", "") + '" /></top>'), (l.bottom || l.full) && (p += '<bottom style="' + (l.bottom || l.full).style + '"><color rgb="' + (l.bottom || l.full).color.replace("#", "") + '" /></bottom>'), c.borderIndex = a.border.count, a.border.count++, a.border.value += "<border>" + p + "<diagonal /></border>"), n.format) {
+      if (l && ((l.left || l.full) && (p += '<left style="' + (l.left || l.full).style + '"><color rgb="' + (l.left || l.full).color.replace("#", "") + '" /></left>'), (l.right || l.full) && (p += '<right style="' + (l.right || l.full).style + '"><color rgb="' + (l.right || l.full).color.replace("#", "") + '" /></right>'), (l.top || l.full) && (p += '<top style="' + (l.top || l.full).style + '"><color rgb="' + (l.top || l.full).color.replace("#", "") + '" /></top>'), (l.bottom || l.full) && (p += '<bottom style="' + (l.bottom || l.full).style + '"><color rgb="' + (l.bottom || l.full).color.replace("#", "") + '" /></bottom>'), c.borderIndex = a.border.count, a.border.count++, a.border.value += "<border>" + p + "<diagonal /></border>"), r.format) {
         console.log("*****f");
-        const e = d[n.format];
+        const e = d[r.format];
         e && (c.formatIndex = e.key, "value" in e && (a.format.count++, a.format.value += e.value));
       }
       return console.log("**f", a.format.value), a.cell.value = a.cell.value + '<xf numFmtId="' + c.formatIndex + '" fontId="' + c.fontIndex + '" fillId="' + c.fillIndex + '" borderId="' + c.borderIndex + '" xfId="0"' + (c.borderIndex > 0 ? ' applyBorder="1" ' : "") + (c.fillIndex > 0 ? ' applyFill="1" ' : "") + (c.fontIndex >= 0 ? ' applyFont="1" ' : "") + (c.formatIndex > 0 ? ' applyNumberFormat="1" ' : "") + O, t.styles[o].index = a.cell.count, a.cell.count++, a;
@@ -234,13 +234,13 @@ async function re(t) {
   const H = {};
   let G = "", q = 4, W = !1;
   for (let a = 0; a < w; a++) {
-    let o = 1, f = "", n = "", c = "", O = [], l = [], p = {};
+    let o = 1, f = "", r = "", c = "", O = [], l = [], p = {};
     const e = t.sheet[a];
     if (Array.isArray(e.headers) && e.headers.length) {
       let _ = e.headerStyleKey ? e.headerStyleKey : null;
-      e.headers.forEach((r, s) => {
-        if (r.formula && l.push(s), O.push(r.label), e.mergeRowDataCondition && typeof e.mergeRowDataCondition == "function" && e.mergeRowDataCondition(
-          r,
+      e.headers.forEach((n, s) => {
+        if (n.formula && l.push(s), O.push(n.label), e.mergeRowDataCondition && typeof e.mergeRowDataCondition == "function" && e.mergeRowDataCondition(
+          n,
           null,
           s,
           !0
@@ -248,27 +248,27 @@ async function re(t) {
           inProgress: !0,
           start: o
         }), e.styleCellCondition && typeof e.styleCellCondition == "function" && (_ = e.styleCellCondition(
-          r,
-          r,
+          n,
+          n,
           s,
           o,
           !0,
           P
-        ) || _), r.size && r.size > 0 && (n += '<col min="' + s + '" max="' + s + '" width="' + r.size + '" customWidth="1" />'), e.withoutHeader)
+        ) || _), n.size && n.size > 0 && (r += '<col min="' + s + '" max="' + s + '" width="' + n.size + '" customWidth="1" />'), e.withoutHeader)
           return;
         const u = i[s] + "" + o, h = e.formula && e.formula[u];
         h ? (f += V(
           u,
           h,
           t.styles
-        ).cell, delete e.formula[u]) : (f += '<c r="' + i[s] + o + '" ' + (_ && t.styles && t.styles[_] ? ' s="' + t.styles[_].index + '" ' : "") + ' t="s"><v>' + D + "</v></c>", L += "<si><t>" + r.text + "</t></si>", E[r.text] = r.text, D++);
+        ).cell, delete e.formula[u]) : (f += '<c r="' + i[s] + o + '" ' + (_ && t.styles && t.styles[_] ? ' s="' + t.styles[_].index + '" ' : "") + ' t="s"><v>' + D + "</v></c>", L += "<si><t>" + n.text + "</t></si>", E[n.text] = n.text, D++);
       });
       const F = e.headers.length;
-      if (e.withoutHeader || (f = '<row r="' + o + '" spans="1:' + F + '" ' + (e.headerHeight ? 'ht="' + e.headerHeight + '" customHeight="1"' : "") + (e.headerRowOption ? Object.keys(e.headerRowOption).reduce((r, s) => r + " " + s + '="' + e.headerRowOption[s] + '" ', "  ") : "") + ">" + f + "</row>", o++), Array.isArray(e.data)) {
-        const r = t.mapSheetDataOption && t.mapSheetDataOption.outlineLevel ? t.mapSheetDataOption.outlineLevel : "outlineLevel", s = t.mapSheetDataOption && t.mapSheetDataOption.hidden ? t.mapSheetDataOption.hidden : "hidden", u = t.mapSheetDataOption && t.mapSheetDataOption.height ? t.mapSheetDataOption.height : "height", h = e.data.length;
+      if (e.withoutHeader || (f = '<row r="' + o + '" spans="1:' + F + '" ' + (e.headerHeight ? 'ht="' + e.headerHeight + '" customHeight="1"' : "") + (e.headerRowOption ? Object.keys(e.headerRowOption).reduce((n, s) => n + " " + s + '="' + e.headerRowOption[s] + '" ', "  ") : "") + ">" + f + "</row>", o++), Array.isArray(e.data)) {
+        const n = t.mapSheetDataOption && t.mapSheetDataOption.outlineLevel ? t.mapSheetDataOption.outlineLevel : "outlineLevel", s = t.mapSheetDataOption && t.mapSheetDataOption.hidden ? t.mapSheetDataOption.hidden : "hidden", u = t.mapSheetDataOption && t.mapSheetDataOption.height ? t.mapSheetDataOption.height : "height", h = e.data.length;
         e.data.forEach((y, te) => {
           const Y = y.rowStyle;
-          f += '<row r="' + o + '" spans="1:' + F + '" ' + (u in y ? 'ht="' + y[u] + '" customHeight="1"' : "") + (r in y ? ' outlineLevel="' + y[r] + '"' : "") + (s in y ? ' hidden="' + y[s] + '"' : "") + " >", O.forEach((g, $) => {
+          f += '<row r="' + o + '" spans="1:' + F + '" ' + (u in y ? 'ht="' + y[u] + '" customHeight="1"' : "") + (n in y ? ' outlineLevel="' + y[n] + '"' : "") + (s in y ? ' hidden="' + y[s] + '"' : "") + " >", O.forEach((g, $) => {
             const b = y[g];
             let k = Y;
             if (e.styleCellCondition && typeof e.styleCellCondition == "function" && (k = e.styleCellCondition(
@@ -312,19 +312,19 @@ async function re(t) {
           }), o++, f += "</row>";
         }), e.sortAndfilter && (e.sortAndfilter.mode == "all" ? c += '<autoFilter ref="A1:' + i[F - 1] + (o - 1) + '" />' : typeof e.sortAndfilter.ref == "string" && e.sortAndfilter.ref.length > 0 && (c += '<autoFilter ref="' + e.sortAndfilter.ref + '" />'));
       }
-      if (console.log("sheetData.formula", e.formula), l.length > 0 && (e.formula || (e.formula = {}), l.forEach((r) => {
-        const s = e.headers[r];
-        e.formula[i[r] + "" + o] = {
-          start: e.withoutHeader ? i[r] + "1" : i[r] + "2",
-          end: i[r] + "" + (o - 1),
+      if (console.log("sheetData.formula", e.formula), l.length > 0 && (e.formula || (e.formula = {}), l.forEach((n) => {
+        const s = e.headers[n];
+        e.formula[i[n] + "" + o] = {
+          start: e.withoutHeader ? i[n] + "1" : i[n] + "2",
+          end: i[n] + "" + (o - 1),
           type: s.formula.type,
           ...s.formula.styleId ? { styleId: s.formula.styleId } : {}
         };
       })), e.formula) {
-        const r = Object.keys(e.formula);
-        if (console.log(r, "remindFormulaKey"), r.length) {
+        const n = Object.keys(e.formula);
+        if (console.log(n, "remindFormulaKey"), n.length) {
           let s = {};
-          r.forEach((u) => {
+          n.forEach((u) => {
             const h = V(u, e.formula[u], t.styles);
             console.log(h, "remindFormulaKey"), s[h.row] ? s[h.row] += h.cell : s[h.row] = h.cell;
           }), console.log(s, "remindFormulaKey"), Object.keys(s).forEach((u) => {
@@ -343,7 +343,7 @@ async function re(t) {
       key: "sheet" + (a + 1),
       sheetName: A,
       sheetDataString: f,
-      sheetSizeString: n.length > 0 ? "<cols>" + n + "</cols>" : "",
+      sheetSizeString: r.length > 0 ? "<cols>" + r + "</cols>" : "",
       protectionOption: e.protectionOption ? Object.keys(e.protectionOption).reduce((_, F) => _ + " " + F + '="' + e.protectionOption[F] + '" ', "<sheetProtection ") + "/>" : "",
       merges: e.merges ? e.merges.reduce((_, F) => _ += ' <mergeCell ref="' + F + '" />', '<mergeCells count="' + e.merges.length + '">') + " </mergeCells>" : "",
       selectedView: e.selected ? '<sheetViews><sheetView tabSelected="1" workbookViewId="0"><selection activeCell="A0" sqref="A0" /></sheetView></sheetViews>' : '<sheetViews><sheetView workbookViewId="0" /></sheetViews>',

@@ -2,14 +2,17 @@ export type ProtectionOption = {
     [key in ProtectionOptionKey]: "0" | "1";
 };
 export type ProtectionOptionKey = "sheet" | "formatCells" | "formatColumns" | "formatRows" | "insertColumns" | "insertRows" | "insertHyperlinks" | "deleteColumns" | "deleteRows" | "sort" | "autoFilter" | "pivotTables";
-export type AlignmentOptionKey = "horizontal" | "vertical" | "wrapText" | "shrinkToFit" | "readingOrder" | "textRotation";
+export type AlignmentOptionKey = "horizontal" | "vertical" | "wrapText" | "shrinkToFit" | "readingOrder" | "textRotation" | "indent";
 export interface AlignmentOption {
     horizontal?: "center" | "left" | "right";
     vertical?: "bottom" | "top" | "bottom";
     wrapText?: "0" | "1";
     shrinkToFit?: "0" | "1";
-    readingOrder?: number;
+    readingOrder?: "1" | "2" | 2 | 1;
     textRotation?: number;
+    indent?: number;
+    rtl?: boolean;
+    ltr?: boolean;
 }
 export type BorderDirection = "full" | "top" | "left" | "right" | "bottom";
 export type BorderOption = {

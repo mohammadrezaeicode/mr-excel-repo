@@ -229,6 +229,14 @@ export async function generateExcel(data: ExcelTable) {
       }
       let endPart = "/>";
       if (styl.alignment) {
+        if (styl.alignment.rtl) {
+          styl.alignment["readingOrder"] = 2;
+          delete styl.alignment.rtl;
+        }
+        if (styl.alignment.ltr) {
+          styl.alignment["readingOrder"] = 1;
+          delete styl.alignment.ltr;
+        }
         endPart =
           ' applyAlignment="1">' +
           "<alignment " +

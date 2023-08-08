@@ -1,15 +1,38 @@
 {
-  "name": "exceltable",
-  "version": "1.0.0",
-  "description": "Client-side library for generate excel file",
+  "name": "excel-table",
+  "version": "0.9.0",
   "main": "src/ExcelTable.js",
   "scripts": {
     "start": "tsc",
     "build": "webpack",
     "build1": "tsc && vite build",
-    "dev": "tsc -w",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "tsc -w"
   },
+  "description": "A versatile JavaScript library for effortlessly generating .xlsx files from input objects. Seamlessly create Excel spreadsheets with data, formatting, formulas, and more.",
+  "keywords": [
+    "xlsx",
+    "xlsx style",
+    "xlsx merge",
+    "xlsx format",
+    "excel style",
+    "excel merge",
+    "excel format",
+    "excel",
+    "multi-sheet-excel",
+    "xlsx-generation",
+    "excel-generation",
+    "spreadsheet",
+    "excel-export",
+    "data-to-xlsx",
+    "export-to-excel",
+    "data-conversion",
+    "excel-format",
+    "xlsx-creator",
+    "table-to-excel",
+    "object-to-xlsx",
+    "json-to-excel",
+    "excel-util"
+  ],
   "author": "M.R",
   "license": "ISC",
   "devDependencies": {
