@@ -934,12 +934,22 @@ export async function generateExcel(data: ExcelTable) {
         "</worksheet>"
     );
   });
-  zip.generateAsync({ type: "blob" }).then(function (content) {
-    // see FileSaver.js
-    import("file-saver").then((module) => {
-      const { saveAs } = module;
-      // Now you can use the saveAs function
-      saveAs(content, "Excel_File.xlsx");
+  if (data.notSave) {
+    return zip.generateAsync({ type: "blob" }).then((content) => {
+      return content.slice(
+        0,
+        content.size,
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      );
     });
-  });
+  } else {
+    zip.generateAsync({ type: "blob" }).then(function (content) {
+      // see FileSaver.js
+      import("file-saver").then((module) => {
+        const { saveAs } = module;
+        // Now you can use the saveAs function
+        saveAs(content, "Excel_File.xlsx");
+      });
+    });
+  }
 }

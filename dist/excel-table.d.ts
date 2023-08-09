@@ -32,6 +32,7 @@ declare interface DataOptions {
 }
 
 declare interface ExcelTable {
+    notSave?: boolean;
     creator?: string;
     created?: string;
     modified?: string;
@@ -55,7 +56,7 @@ declare interface FormulaSetting {
 
 declare type FormulaType = "AVERAGE" | "SUM" | "COUNT" | "MAX" | "MIN";
 
-export declare function generateExcel(data: ExcelTable): Promise<void>;
+export declare function generateExcel(data: ExcelTable): Promise<Blob | undefined>;
 
 declare interface Header {
     label: string;

@@ -124,6 +124,7 @@ export interface Formula {
     [insertCell: string]: FormulaSetting;
 }
 export interface ExcelTable {
+    notSave?: boolean;
     creator?: string;
     created?: string;
     modified?: string;

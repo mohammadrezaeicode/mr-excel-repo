@@ -174,6 +174,7 @@ export interface Formula {
 }
 
 export interface ExcelTable {
+  notSave?: boolean;
   creator?: string;
   created?: string;
   modified?: string;

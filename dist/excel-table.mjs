@@ -1,18 +1,18 @@
-function J(t, d, i = "", v = [], I = 0) {
-  const x = t.length;
-  for (let w = 0; w < x; w++)
-    v.push(i + t[w]);
-  return d < v.length ? v : J(
+function J(t, d, i = "", x = [], I = 0) {
+  const y = t.length;
+  for (let w = 0; w < y; w++)
+    x.push(i + t[w]);
+  return d < x.length ? x : J(
     t,
     d,
-    v[I + 1],
-    v,
+    x[I + 1],
+    x,
     I + 1
   );
 }
 function ae(t) {
   return console.log(t.format), `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006">` + (t.format.count > 0 ? '<numFmts count="' + t.format.count + '">' + t.format.value + "</numFmts>" : "") + ' <fonts count="' + t.font.count + '"> <font> <sz val="11" /> <color theme="1" /> <name val="Calibri" /> <family val="2" /> <scheme val="minor" /> </font> <font> <sz val="11" /> <color rgb="FFFF0000" /> <name val="Calibri" /> <family val="2" /> <scheme val="minor" /> </font> ' + t.font.value + ' </fonts> <fills count="' + t.fill.count + '"> <fill> <patternFill patternType="none" /> </fill> <fill> <patternFill patternType="lightGray" /> </fill> ' + t.fill.value + ' </fills> <borders count="' + t.border.count + '">' + t.border.value + ' <border /> </borders> <cellStyleXfs count="1"> <xf borderId="0" fillId="0" fontId="0" numFmtId="0" applyAlignment="1" applyFont="1" /> </cellStyleXfs> <cellXfs count="' + t.cell.count + '"> <xf borderId="0" fillId="0" fontId="0" numFmtId="0" xfId="0" applyAlignment="1" applyFont="1"> <alignment readingOrder="0" shrinkToFit="0" vertical="bottom" wrapText="0" /> </xf> <xf borderId="0" fillId="0" fontId="1" numFmtId="0" xfId="0" applyAlignment="1" applyFont="1"> <alignment readingOrder="0" /> </xf> ' + t.cell.value + ' </cellXfs> <cellStyles count="1"> <cellStyle xfId="0" name="Normal" builtinId="0" /> </cellStyles> <dxfs count="0" /></styleSheet>';
+<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006">` + (t.format.count > 0 ? '<numFmts count="' + t.format.count + '">' + t.format.value + "</numFmts>" : "") + ' <fonts count="' + t.font.count + '"> <font> <sz val="11" /> <color theme="1" /> <name val="Calibri" /> <family val="2" /> <scheme val="minor" /> </font> <font> <sz val="11" /> <color rgb="FFFF0000" /> <name val="Calibri" /> <family val="2" /> <scheme val="minor" /> </font> ' + t.font.value + ' </fonts> <fills count="' + t.fill.count + '"> <fill> <patternFill patternType="none" /> </fill> <fill> <patternFill patternType="lightGray" /> </fill> ' + t.fill.value + ' </fills> <borders count="' + t.border.count + '"> <border />' + t.border.value + ' </borders> <cellStyleXfs count="1"> <xf borderId="0" fillId="0" fontId="0" numFmtId="0" applyAlignment="1" applyFont="1" /> </cellStyleXfs> <cellXfs count="' + t.cell.count + '"> <xf borderId="0" fillId="0" fontId="0" numFmtId="0" xfId="0" applyAlignment="1" applyFont="1"> <alignment readingOrder="0" shrinkToFit="0" vertical="bottom" wrapText="0" /> </xf> <xf borderId="0" fillId="0" fontId="1" numFmtId="0" xfId="0" applyAlignment="1" applyFont="1"> <alignment readingOrder="0" /> </xf> ' + t.cell.value + ' </cellXfs> <cellStyles count="1"> <cellStyle xfId="0" name="Normal" builtinId="0" /> </cellStyles> <dxfs count="0" /></styleSheet>';
 }
 function oe(t) {
   return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -23,11 +23,11 @@ function le(t, d) {
 <Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties" xmlns:vt="http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes"> <Application>Microsoft Excel</Application> <DocSecurity>0</DocSecurity> <ScaleCrop>false</ScaleCrop> <HeadingPairs> <vt:vector size="2" baseType="variant"> <vt:variant> <vt:lpstr>Worksheets</vt:lpstr> </vt:variant> <vt:variant> <vt:i4>` + t + '</vt:i4> </vt:variant> </vt:vector> </HeadingPairs> <TitlesOfParts> <vt:vector size="' + t + '" baseType="lpstr"> ' + d + " </vt:vector> </TitlesOfParts> <Company></Company> <LinksUpToDate>false</LinksUpToDate> <SharedDoc>false</SharedDoc> <HyperlinksChanged>false</HyperlinksChanged> <AppVersion>16.0300</AppVersion></Properties>";
 }
 function V(t, d, i) {
-  let v = t.replace(/[0-9]/g, ""), I = parseInt(t.substr(v.length)), x = '<c r="' + t + '" ' + (i && typeof d.styleId == "string" && i[d.styleId] ? 's="' + i[d.styleId].index + '" ' : "") + ">     <f>" + d.type + "(" + d.start + ":" + d.end + ")</f> </c>";
+  let x = t.replace(/[0-9]/g, ""), I = parseInt(t.substr(x.length)), y = '<c r="' + t + '" ' + (i && typeof d.styleId == "string" && i[d.styleId] ? 's="' + i[d.styleId].index + '" ' : "") + ">     <f>" + d.type + "(" + d.start + ":" + d.end + ")</f> </c>";
   return {
-    column: v,
+    column: x,
     row: I,
-    cell: x
+    cell: y
   };
 }
 async function re(t) {
@@ -181,9 +181,9 @@ async function re(t) {
   ];
   t.numberOfColumn && t.numberOfColumn > 25 && (i = J(i, t.numberOfColumn));
   const I = (await import("./jszip.min-e651e8fb.mjs").then((a) => a.j)).default;
-  var x = new I();
+  var y = new I();
   const w = t.sheet.length;
-  var m = x.folder("xl");
+  var m = y.folder("xl");
   const P = Object.keys(t.styles ? t.styles : {});
   let Z = P.reduce(
     (a, o, f) => {
@@ -266,14 +266,14 @@ async function re(t) {
       const F = e.headers.length;
       if (e.withoutHeader || (f = '<row r="' + o + '" spans="1:' + F + '" ' + (e.headerHeight ? 'ht="' + e.headerHeight + '" customHeight="1"' : "") + (e.headerRowOption ? Object.keys(e.headerRowOption).reduce((n, s) => n + " " + s + '="' + e.headerRowOption[s] + '" ', "  ") : "") + ">" + f + "</row>", o++), Array.isArray(e.data)) {
         const n = t.mapSheetDataOption && t.mapSheetDataOption.outlineLevel ? t.mapSheetDataOption.outlineLevel : "outlineLevel", s = t.mapSheetDataOption && t.mapSheetDataOption.hidden ? t.mapSheetDataOption.hidden : "hidden", u = t.mapSheetDataOption && t.mapSheetDataOption.height ? t.mapSheetDataOption.height : "height", h = e.data.length;
-        e.data.forEach((y, te) => {
-          const Y = y.rowStyle;
-          f += '<row r="' + o + '" spans="1:' + F + '" ' + (u in y ? 'ht="' + y[u] + '" customHeight="1"' : "") + (n in y ? ' outlineLevel="' + y[n] + '"' : "") + (s in y ? ' hidden="' + y[s] + '"' : "") + " >", O.forEach((g, $) => {
-            const b = y[g];
+        e.data.forEach((g, te) => {
+          const Y = g.rowStyle;
+          f += '<row r="' + o + '" spans="1:' + F + '" ' + (u in g ? 'ht="' + g[u] + '" customHeight="1"' : "") + (n in g ? ' outlineLevel="' + g[n] + '"' : "") + (s in g ? ' hidden="' + g[s] + '"' : "") + " >", O.forEach((C, $) => {
+            const b = g[C];
             let k = Y;
             if (e.styleCellCondition && typeof e.styleCellCondition == "function" && (k = e.styleCellCondition(
               b,
-              y,
+              g,
               $,
               o,
               !1,
@@ -281,33 +281,33 @@ async function re(t) {
             ) || Y), e.mergeRowDataCondition && typeof e.mergeRowDataCondition == "function") {
               let M = e.mergeRowDataCondition(
                 b,
-                g,
+                C,
                 $,
                 !1
               );
-              const C = i[$];
-              let S = p[C];
-              M === !0 ? (!S || S && !S.inProgress) && (p[C] = {
+              const v = i[$];
+              let S = p[v];
+              M === !0 ? (!S || S && !S.inProgress) && (p[v] = {
                 inProgress: !0,
                 start: o
               }) : S && S.inProgress && (e.merges ? e.merges.push(
-                C + S.start + ":" + C + (o - 1)
+                v + S.start + ":" + v + (o - 1)
               ) : e.merges = [
-                C + S.start + ":" + C + (o - 1)
-              ], p[C] = {
+                v + S.start + ":" + v + (o - 1)
+              ], p[v] = {
                 inProgress: !1,
                 start: -1
               });
             }
             if (typeof b < "u") {
-              const M = i[$] + "" + o, C = e.formula && e.formula[M];
-              C ? (f += V(M, C).cell, delete e.formula[M]) : typeof b == "string" ? (f += '<c r="' + i[$] + o + '" t="s" ' + (k && t.styles && t.styles[k] ? 's="' + t.styles[k].index + '"' : "") + "><v>" + D + "</v></c>", L += "<si><t>" + b + "</t></si>", E[b] = b, D++) : f += '<c r="' + i[$] + o + '" ' + (k && t.styles && t.styles[k] ? 's="' + t.styles[k].index + '"' : "") + "><v>" + b + "</v></c>";
+              const M = i[$] + "" + o, v = e.formula && e.formula[M];
+              v ? (f += V(M, v).cell, delete e.formula[M]) : typeof b == "string" ? (f += '<c r="' + i[$] + o + '" t="s" ' + (k && t.styles && t.styles[k] ? 's="' + t.styles[k].index + '"' : "") + "><v>" + D + "</v></c>", L += "<si><t>" + b + "</t></si>", E[b] = b, D++) : f += '<c r="' + i[$] + o + '" ' + (k && t.styles && t.styles[k] ? 's="' + t.styles[k].index + '"' : "") + "><v>" + b + "</v></c>";
             }
-          }), h - 1 == te && Object.keys(p).forEach((g) => {
-            p[g].inProgress && (e.merges ? e.merges.push(
-              g + p[g].start + ":" + g + o
+          }), h - 1 == te && Object.keys(p).forEach((C) => {
+            p[C].inProgress && (e.merges ? e.merges.push(
+              C + p[C].start + ":" + C + o
             ) : e.merges = [
-              g + p[g].start + ":" + g + o
+              C + p[C].start + ":" + C + o
             ]);
           }), o++, f += "</row>";
         }), e.sortAndfilter && (e.sortAndfilter.mode == "all" ? c += '<autoFilter ref="A1:' + i[F - 1] + (o - 1) + '" />' : typeof e.sortAndfilter.ref == "string" && e.sortAndfilter.ref.length > 0 && (c += '<autoFilter ref="' + e.sortAndfilter.ref + '" />'));
@@ -352,14 +352,14 @@ async function re(t) {
     }, q++;
   }
   let Q = Object.keys(H);
-  x.file("[Content_Types].xml", oe(j));
-  var R = x.folder("_rels");
+  y.file("[Content_Types].xml", oe(j));
+  var R = y.folder("_rels");
   R == null || R.file(
     ".rels",
     `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"> <Relationship Id="rId3"  Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties"  Target="docProps/app.xml" /> <Relationship Id="rId2"  Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties"  Target="docProps/core.xml" /> <Relationship Id="rId1"  Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument"  Target="xl/workbook.xml" /></Relationships>`
   );
-  var T = x.folder("docProps");
+  var T = y.folder("docProps");
   T == null || T.file(
     "core.xml",
     `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -386,14 +386,20 @@ async function re(t) {
 <a:theme xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" name="Office Theme"><a:themeElements><a:clrScheme name="Office"><a:dk1><a:sysClr val="windowText" lastClr="000000"/></a:dk1><a:lt1><a:sysClr val="window" lastClr="FFFFFF"/></a:lt1><a:dk2><a:srgbClr val="44546A"/></a:dk2><a:lt2><a:srgbClr val="E7E6E6"/></a:lt2><a:accent1><a:srgbClr val="5B9BD5"/></a:accent1><a:accent2><a:srgbClr val="ED7D31"/></a:accent2><a:accent3><a:srgbClr val="A5A5A5"/></a:accent3><a:accent4><a:srgbClr val="FFC000"/></a:accent4><a:accent5><a:srgbClr val="4472C4"/></a:accent5><a:accent6><a:srgbClr val="70AD47"/></a:accent6><a:hlink><a:srgbClr val="0563C1"/></a:hlink><a:folHlink><a:srgbClr val="954F72"/></a:folHlink></a:clrScheme><a:fontScheme name="Office"><a:majorFont><a:latin typeface="Calibri Light" panose="020F0302020204030204"/><a:ea typeface=""/><a:cs typeface=""/><a:font script="Jpan" typeface="游ゴシック Light"/><a:font script="Hang" typeface="맑은 고딕"/><a:font script="Hans" typeface="等线 Light"/><a:font script="Hant" typeface="新細明體"/><a:font script="Arab" typeface="Times New Roman"/><a:font script="Hebr" typeface="Times New Roman"/><a:font script="Thai" typeface="Tahoma"/><a:font script="Ethi" typeface="Nyala"/><a:font script="Beng" typeface="Vrinda"/><a:font script="Gujr" typeface="Shruti"/><a:font script="Khmr" typeface="MoolBoran"/><a:font script="Knda" typeface="Tunga"/><a:font script="Guru" typeface="Raavi"/><a:font script="Cans" typeface="Euphemia"/><a:font script="Cher" typeface="Plantagenet Cherokee"/><a:font script="Yiii" typeface="Microsoft Yi Baiti"/><a:font script="Tibt" typeface="Microsoft Himalaya"/><a:font script="Thaa" typeface="MV Boli"/><a:font script="Deva" typeface="Mangal"/><a:font script="Telu" typeface="Gautami"/><a:font script="Taml" typeface="Latha"/><a:font script="Syrc" typeface="Estrangelo Edessa"/><a:font script="Orya" typeface="Kalinga"/><a:font script="Mlym" typeface="Kartika"/><a:font script="Laoo" typeface="DokChampa"/><a:font script="Sinh" typeface="Iskoola Pota"/><a:font script="Mong" typeface="Mongolian Baiti"/><a:font script="Viet" typeface="Times New Roman"/><a:font script="Uigh" typeface="Microsoft Uighur"/><a:font script="Geor" typeface="Sylfaen"/></a:majorFont><a:minorFont><a:latin typeface="Calibri" panose="020F0502020204030204"/><a:ea typeface=""/><a:cs typeface=""/><a:font script="Jpan" typeface="游ゴシック"/><a:font script="Hang" typeface="맑은 고딕"/><a:font script="Hans" typeface="等线"/><a:font script="Hant" typeface="新細明體"/><a:font script="Arab" typeface="Arial"/><a:font script="Hebr" typeface="Arial"/><a:font script="Thai" typeface="Tahoma"/><a:font script="Ethi" typeface="Nyala"/><a:font script="Beng" typeface="Vrinda"/><a:font script="Gujr" typeface="Shruti"/><a:font script="Khmr" typeface="DaunPenh"/><a:font script="Knda" typeface="Tunga"/><a:font script="Guru" typeface="Raavi"/><a:font script="Cans" typeface="Euphemia"/><a:font script="Cher" typeface="Plantagenet Cherokee"/><a:font script="Yiii" typeface="Microsoft Yi Baiti"/><a:font script="Tibt" typeface="Microsoft Himalaya"/><a:font script="Thaa" typeface="MV Boli"/><a:font script="Deva" typeface="Mangal"/><a:font script="Telu" typeface="Gautami"/><a:font script="Taml" typeface="Latha"/><a:font script="Syrc" typeface="Estrangelo Edessa"/><a:font script="Orya" typeface="Kalinga"/><a:font script="Mlym" typeface="Kartika"/><a:font script="Laoo" typeface="DokChampa"/><a:font script="Sinh" typeface="Iskoola Pota"/><a:font script="Mong" typeface="Mongolian Baiti"/><a:font script="Viet" typeface="Arial"/><a:font script="Uigh" typeface="Microsoft Uighur"/><a:font script="Geor" typeface="Sylfaen"/></a:minorFont></a:fontScheme><a:fmtScheme name="Office"><a:fillStyleLst><a:solidFill><a:schemeClr val="phClr"/></a:solidFill><a:gradFill rotWithShape="1"><a:gsLst><a:gs pos="0"><a:schemeClr val="phClr"><a:lumMod val="110000"/><a:satMod val="105000"/><a:tint val="67000"/></a:schemeClr></a:gs><a:gs pos="50000"><a:schemeClr val="phClr"><a:lumMod val="105000"/><a:satMod val="103000"/><a:tint val="73000"/></a:schemeClr></a:gs><a:gs pos="100000"><a:schemeClr val="phClr"><a:lumMod val="105000"/><a:satMod val="109000"/><a:tint val="81000"/></a:schemeClr></a:gs></a:gsLst><a:lin ang="5400000" scaled="0"/></a:gradFill><a:gradFill rotWithShape="1"><a:gsLst><a:gs pos="0"><a:schemeClr val="phClr"><a:satMod val="103000"/><a:lumMod val="102000"/><a:tint val="94000"/></a:schemeClr></a:gs><a:gs pos="50000"><a:schemeClr val="phClr"><a:satMod val="110000"/><a:lumMod val="100000"/><a:shade val="100000"/></a:schemeClr></a:gs><a:gs pos="100000"><a:schemeClr val="phClr"><a:lumMod val="99000"/><a:satMod val="120000"/><a:shade val="78000"/></a:schemeClr></a:gs></a:gsLst><a:lin ang="5400000" scaled="0"/></a:gradFill></a:fillStyleLst><a:lnStyleLst><a:ln w="6350" cap="flat" cmpd="sng" algn="ctr"><a:solidFill><a:schemeClr val="phClr"/></a:solidFill><a:prstDash val="solid"/><a:miter lim="800000"/></a:ln><a:ln w="12700" cap="flat" cmpd="sng" algn="ctr"><a:solidFill><a:schemeClr val="phClr"/></a:solidFill><a:prstDash val="solid"/><a:miter lim="800000"/></a:ln><a:ln w="19050" cap="flat" cmpd="sng" algn="ctr"><a:solidFill><a:schemeClr val="phClr"/></a:solidFill><a:prstDash val="solid"/><a:miter lim="800000"/></a:ln></a:lnStyleLst><a:effectStyleLst><a:effectStyle><a:effectLst/></a:effectStyle><a:effectStyle><a:effectLst/></a:effectStyle><a:effectStyle><a:effectLst><a:outerShdw blurRad="57150" dist="19050" dir="5400000" algn="ctr" rotWithShape="0"><a:srgbClr val="000000"><a:alpha val="63000"/></a:srgbClr></a:outerShdw></a:effectLst></a:effectStyle></a:effectStyleLst><a:bgFillStyleLst><a:solidFill><a:schemeClr val="phClr"/></a:solidFill><a:solidFill><a:schemeClr val="phClr"><a:tint val="95000"/><a:satMod val="170000"/></a:schemeClr></a:solidFill><a:gradFill rotWithShape="1"><a:gsLst><a:gs pos="0"><a:schemeClr val="phClr"><a:tint val="93000"/><a:satMod val="150000"/><a:shade val="98000"/><a:lumMod val="102000"/></a:schemeClr></a:gs><a:gs pos="50000"><a:schemeClr val="phClr"><a:tint val="98000"/><a:satMod val="130000"/><a:shade val="90000"/><a:lumMod val="103000"/></a:schemeClr></a:gs><a:gs pos="100000"><a:schemeClr val="phClr"><a:shade val="63000"/><a:satMod val="120000"/></a:schemeClr></a:gs></a:gsLst><a:lin ang="5400000" scaled="0"/></a:gradFill></a:bgFillStyleLst></a:fmtScheme></a:themeElements><a:objectDefaults/><a:extraClrSchemeLst/><a:extLst><a:ext uri="{05A4C25C-085E-4340-85A3-A5531E510DB2}"><thm15:themeFamily xmlns:thm15="http://schemas.microsoft.com/office/thememl/2012/main" name="Office Theme" id="{62F939B6-93AF-4DB8-9C6B-D6C7DFDC589F}" vid="{4A3C46E8-61CC-4603-A589-7422A47A8E4A}"/></a:ext></a:extLst></a:theme>`
   );
   var K = m == null ? void 0 : m.folder("worksheets");
-  Q.forEach((a) => {
+  if (Q.forEach((a) => {
     const o = H[a];
     K == null || K.file(
       o.key + ".xml",
       `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:mx="http://schemas.microsoft.com/office/mac/excel/2008/main" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mv="urn:schemas-microsoft-com:mac:vml" xmlns:x14="http://schemas.microsoft.com/office/spreadsheetml/2009/9/main" xmlns:x15="http://schemas.microsoft.com/office/spreadsheetml/2010/11/main" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac" xmlns:xm="http://schemas.microsoft.com/office/excel/2006/main">` + o.tabColor + o.selectedView + '<sheetFormatPr customHeight="1" defaultColWidth="12.63" defaultRowHeight="15.75" />' + o.sheetSizeString + "<sheetData>" + o.sheetDataString + "</sheetData>" + o.sheetSortFilter + o.merges + o.protectionOption + "</worksheet>"
     );
-  }), x.generateAsync({ type: "blob" }).then(function(a) {
+  }), t.notSave)
+    return y.generateAsync({ type: "blob" }).then((a) => a.slice(
+      0,
+      a.size,
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    ));
+  y.generateAsync({ type: "blob" }).then(function(a) {
     import("./FileSaver.min-3b84b3f2.mjs").then((o) => o.F).then((o) => {
       const { saveAs: f } = o;
       f(a, "Excel_File.xlsx");
