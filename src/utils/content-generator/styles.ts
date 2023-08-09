@@ -49,8 +49,8 @@ export function styleGenerator(styles: StyleMapper) {
     ' <borders count="' +
     styles.border.count +
     '">' +
-    styles.border.value +
     " <border />" +
+    styles.border.value +
     " </borders>" +
     ' <cellStyleXfs count="1">' +
     ' <xf borderId="0" fillId="0" fontId="0" numFmtId="0" applyAlignment="1" applyFont="1" />' +
