@@ -2179,7 +2179,7 @@ ExcelTable.generateExcel(data);
 
 # API
 
-Please refer to the main page for this section.[Home page](https://mohammadrezaeicode.github.io/mr-excel-page/)
+Please refer to the main page for this section. [Home page](https://mohammadrezaeicode.github.io/mr-excel-page/)
 
 | Property                   | Type                                      | Description                             |
 |---------------------------|-------------------------------------------|-----------------------------------------|
