@@ -97,7 +97,7 @@ declare interface Sheet {
 
 declare interface SortAndFilter {
     mode: "all" | "ref";
-    ref: string;
+    ref?: string;
 }
 
 declare type StyleCellConditionFunction = (data: Header | string | number | undefined, object: Header | Data, colIndex: number, rowIndex: number, fromHeader: boolean, stylekeys: string[]) => string;

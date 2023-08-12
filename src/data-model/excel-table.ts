@@ -95,7 +95,7 @@ export type MergeRowDataConditionFunction = (
 ) => boolean;
 export interface SortAndFilter {
   mode: "all" | "ref";
-  ref: string;
+  ref?: string;
 }
 export interface Sheet {
   withoutHeader?: boolean;

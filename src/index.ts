@@ -231,12 +231,12 @@ export async function generateExcel(data: ExcelTable) {
       if (styl.alignment) {
         if (styl.alignment.rtl) {
           styl.alignment["readingOrder"] = 2;
-          delete styl.alignment.rtl;
         }
+        delete styl.alignment.rtl;
         if (styl.alignment.ltr) {
           styl.alignment["readingOrder"] = 1;
-          delete styl.alignment.ltr;
         }
+        delete styl.alignment.ltr;
         endPart =
           ' applyAlignment="1">' +
           "<alignment " +
@@ -302,7 +302,6 @@ export async function generateExcel(data: ExcelTable) {
           "<border>" + borderStr + "<diagonal />" + "</border>";
       }
       if (styl.format) {
-        console.log("*****f");
         const format = formatMap[styl.format];
         if (format) {
           indexes.formatIndex = format.key;
@@ -312,7 +311,6 @@ export async function generateExcel(data: ExcelTable) {
           }
         }
       }
-      console.log("**f", res.format.value);
       res.cell.value =
         res.cell.value +
         '<xf numFmtId="' +
@@ -431,9 +429,9 @@ export async function generateExcel(data: ExcelTable) {
         if (v.size && v.size > 0) {
           sheetSizeString +=
             '<col min="' +
-            innerIndex +
+            (innerIndex + 1) +
             '" max="' +
-            innerIndex +
+            (innerIndex + 1) +
             '" width="' +
             v.size +
             '" customWidth="1" />';
@@ -657,7 +655,6 @@ export async function generateExcel(data: ExcelTable) {
           }
         }
       }
-      console.log("sheetData.formula", sheetData.formula);
       if (headerFormula.length > 0) {
         if (!sheetData.formula) {
           sheetData.formula = {};
@@ -676,24 +673,20 @@ export async function generateExcel(data: ExcelTable) {
       }
       if (sheetData.formula) {
         const remindFormulaKey = Object.keys(sheetData.formula);
-        console.log(remindFormulaKey, "remindFormulaKey");
         if (remindFormulaKey.length) {
           let rF: {
             [row: number]: string;
           } = {};
           remindFormulaKey.forEach((v) => {
             const f = generateCellRowCol(v, sheetData.formula![v], data.styles);
-            console.log(f, "remindFormulaKey");
             if (!rF[f.row]) {
               rF[f.row] = f.cell;
             } else {
               rF[f.row] += f.cell;
             }
           });
-          console.log(rF, "remindFormulaKey");
           Object.keys(rF).forEach((v) => {
             const l = rF[v as keyof object];
-            console.log(l, "remindFormulaKey");
             sheetDataString +=
               '<row r="' +
               v +
@@ -917,6 +910,9 @@ export async function generateExcel(data: ExcelTable) {
         ' xmlns:mx="http://schemas.microsoft.com/office/mac/excel/2008/main"' +
         ' xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"' +
         ' xmlns:mv="urn:schemas-microsoft-com:mac:vml"' +
+        ' xmlns:xr="http://schemas.microsoft.com/office/spreadsheetml/2014/revision"' +
+        ' xmlns:xr2="http://schemas.microsoft.com/office/spreadsheetml/2015/revision2"' +
+        ' xmlns:xr3="http://schemas.microsoft.com/office/spreadsheetml/2016/revision3"' +
         ' xmlns:x14="http://schemas.microsoft.com/office/spreadsheetml/2009/9/main"' +
         ' xmlns:x15="http://schemas.microsoft.com/office/spreadsheetml/2010/11/main"' +
         ' xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac"' +
@@ -928,9 +924,9 @@ export async function generateExcel(data: ExcelTable) {
         "<sheetData>" +
         sh.sheetDataString +
         "</sheetData>" +
+        sh.protectionOption +
         sh.sheetSortFilter +
         sh.merges +
-        sh.protectionOption +
         "</worksheet>"
     );
   });

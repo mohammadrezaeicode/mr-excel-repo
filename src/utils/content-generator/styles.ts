@@ -1,7 +1,6 @@
 import { StyleMapper } from "../../data-model/excel-table";
 
 export function styleGenerator(styles: StyleMapper) {
-  console.log(styles.format);
   return (
     '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
     '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"' +

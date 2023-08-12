@@ -50,7 +50,7 @@ export type StyleCellConditionFunction = (data: Header | string | number | undef
 export type MergeRowDataConditionFunction = (data: Header | string | number | undefined, key: string | null, index: number, fromHeader: boolean) => boolean;
 export interface SortAndFilter {
     mode: "all" | "ref";
-    ref: string;
+    ref?: string;
 }
 export interface Sheet {
     withoutHeader?: boolean;
