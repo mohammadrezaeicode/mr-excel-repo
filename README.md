@@ -1,4 +1,4 @@
-# Introduction
+## Introduction
 
 Welcome to our JavaScript library designed to effortlessly generate .xlsx files from input objects. This versatile library offers exceptional flexibility and can seamlessly operate on both the client and backend sides of applications.
 
