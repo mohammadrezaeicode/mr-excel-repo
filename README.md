@@ -216,7 +216,7 @@ const data = {
 };
 ExcelTable.generateExcel(data);
 ```
-## Installation
+## General option
 
 Each sheet has options for customization. You can change the sheet name using name, adjust the tab name color with tabColor, control visibility with state, add protection to a sheet via protectionOption, and implement sorting and filtering using sortAndfilter. In the example below, we will demonstrate how to utilize these properties. Additionally, for Excel file information, we offer options such as creator, created, notSave, and modified.
 
