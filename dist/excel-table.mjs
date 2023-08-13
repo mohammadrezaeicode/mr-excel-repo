@@ -245,10 +245,10 @@ async function ne(t) {
     if (Array.isArray(e.headers) && b) {
       let k = "";
       if (e.title) {
-        const l = e.title, s = l.shiftTop ? l.shiftTop : 0, h = e.shiftLeft ? e.shiftLeft : 0, f = l.shiftLeft ? l.shiftLeft + h : h, d = l.consommeRow ? l.consommeRow - 1 : 1, E = l.consommeCol ? l.consommeCol : b, H = d == 0 && typeof l.height == "number" ? ' ht="' + l.height + '" customHeight="1" ' : "", y = l.styleId ? l.styleId : "titleStyle", v = i[f] + "" + (n + s);
+        const l = e.title, s = l.shiftTop ? l.shiftTop : 0, h = e.shiftLeft ? e.shiftLeft : 0, f = l.shiftLeft ? l.shiftLeft + h : h, d = l.consommeRow ? l.consommeRow - 1 : 1, H = l.consommeCol ? l.consommeCol : b, E = d == 0 && typeof l.height == "number" ? ' ht="' + l.height + '" customHeight="1" ' : "", y = l.styleId ? l.styleId : "titleStyle", v = i[f] + "" + (n + s);
         e.merges || (e.merges = []), e.merges.push(
-          v + ":" + i[f + E - 1] + (n + d + s)
-        ), typeof l.text == "string" && (k += '<row r="' + (n + s) + '" ' + H + ' spans="1:' + (f + E - 1) + '">', k += '<c r="' + v + '" ' + (t.styles[y] ? ' s="' + t.styles[y].index + '" ' : "") + ' t="s"><v>' + w + "</v></c>", k += "</row>", w++, P[l.text] = l.text, q += "<si><t>" + l.text + "</t></si>"), n += s + d + 1;
+          v + ":" + i[f + H - 1] + (n + d + s)
+        ), typeof l.text == "string" && (k += '<row r="' + (n + s) + '" ' + E + ' spans="1:' + (f + H - 1) + '">', k += '<c r="' + v + '" ' + (t.styles[y] ? ' s="' + t.styles[y].index + '" ' : "") + ' t="s"><v>' + w + "</v></c>", k += "</row>", w++, P[l.text] = l.text, q += "<si><t>" + l.text + "</t></si>"), n += s + d + 1;
       }
       let C = e.headerStyleKey ? e.headerStyleKey : null, M = 0;
       if (typeof e.shiftLeft == "number" && (M = e.shiftLeft), e.headers.forEach((l, s) => {
@@ -277,12 +277,12 @@ async function ne(t) {
         ).cell, delete e.formula[h]) : (a += '<c r="' + i[s] + n + '" ' + (C && t.styles && t.styles[C] ? ' s="' + t.styles[C].index + '" ' : "") + ' t="s"><v>' + w + "</v></c>", q += "<si><t>" + l.text + "</t></si>", P[l.text] = l.text, w++);
       }), e.withoutHeader ? a += k : (a = k + '<row r="' + n + '" spans="1:' + b + '" ' + (e.headerHeight ? 'ht="' + e.headerHeight + '" customHeight="1"' : "") + (e.headerRowOption ? Object.keys(e.headerRowOption).reduce((l, s) => l + " " + s + '="' + e.headerRowOption[s] + '" ', "  ") : "") + ">" + a + "</row>", n++), Array.isArray(e.data)) {
         const l = t.mapSheetDataOption && t.mapSheetDataOption.outlineLevel ? t.mapSheetDataOption.outlineLevel : "outlineLevel", s = t.mapSheetDataOption && t.mapSheetDataOption.hidden ? t.mapSheetDataOption.hidden : "hidden", h = t.mapSheetDataOption && t.mapSheetDataOption.height ? t.mapSheetDataOption.height : "height", f = e.data.length;
-        e.data.forEach((d, E) => {
-          const H = d.rowStyle;
+        e.data.forEach((d, H) => {
+          const E = d.rowStyle;
           a += '<row r="' + n + '" spans="1:' + b + '" ' + (h in d ? 'ht="' + d[h] + '" customHeight="1"' : "") + (l in d ? ' outlineLevel="' + d[l] + '"' : "") + (s in d ? ' hidden="' + d[s] + '"' : "") + " >", r.forEach((y, v) => {
             M && (v += M);
             const S = d[y];
-            let I = H;
+            let I = E;
             if (e.styleCellCondition && typeof e.styleCellCondition == "function" && (I = e.styleCellCondition(
               S,
               d,
@@ -290,7 +290,7 @@ async function ne(t) {
               n,
               !1,
               N
-            ) || H), e.mergeRowDataCondition && typeof e.mergeRowDataCondition == "function") {
+            ) || E), e.mergeRowDataCondition && typeof e.mergeRowDataCondition == "function") {
               let L = e.mergeRowDataCondition(
                 S,
                 y,
@@ -315,7 +315,7 @@ async function ne(t) {
               const L = i[v] + "" + n, x = e.formula && e.formula[L];
               x ? (a += K(L, x).cell, delete e.formula[L]) : typeof S == "string" ? (a += '<c r="' + i[v] + n + '" t="s" ' + (I && t.styles && t.styles[I] ? 's="' + t.styles[I].index + '"' : "") + "><v>" + w + "</v></c>", q += "<si><t>" + S + "</t></si>", P[S] = S, w++) : a += '<c r="' + i[v] + n + '" ' + (I && t.styles && t.styles[I] ? 's="' + t.styles[I].index + '"' : "") + "><v>" + S + "</v></c>";
             }
-          }), f - 1 == E && Object.keys(p).forEach((y) => {
+          }), f - 1 == H && Object.keys(p).forEach((y) => {
             p[y].inProgress && (e.merges ? e.merges.push(
               y + p[y].start + ":" + y + n
             ) : e.merges = [
@@ -418,7 +418,10 @@ async function ne(t) {
   g.generateAsync({ type: "blob" }).then(function(o) {
     import("./FileSaver.min-3b84b3f2.mjs").then((e) => e.F).then((e) => {
       const { saveAs: n } = e;
-      n(o, "Excel_File.xlsx");
+      n(
+        o,
+        (t.fileName ? t.fileName : "tableRecord") + ".xlsx"
+      );
     });
   });
 }

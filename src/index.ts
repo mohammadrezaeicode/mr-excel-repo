@@ -282,7 +282,7 @@ export async function generateExcel(data: ExcelTable) {
       }
       const borderObj = styl.border;
       let borderStr = "";
-      if (typeof borderObj=='object') {
+      if (typeof borderObj == "object") {
         if (borderObj.left || borderObj.full) {
           borderStr +=
             '<left style="' +
@@ -419,12 +419,8 @@ export async function generateExcel(data: ExcelTable) {
         // debugger;
         const title = sheetData.title;
         const top = title.shiftTop ? title.shiftTop : 0;
-        const sL=sheetData.shiftLeft
-          ? sheetData.shiftLeft
-          : 0
-        const left = title.shiftLeft
-          ? title.shiftLeft + sL
-          : sL;
+        const sL = sheetData.shiftLeft ? sheetData.shiftLeft : 0;
+        const left = title.shiftLeft ? title.shiftLeft + sL : sL;
         const consommeRow = title.consommeRow ? title.consommeRow - 1 : 1;
         const consommeCol = title.consommeCol ? title.consommeCol : colsLength;
         const height =
@@ -1046,7 +1042,10 @@ export async function generateExcel(data: ExcelTable) {
         import("file-saver").then((module) => {
           const { saveAs } = module;
           // Now you can use the saveAs function
-          saveAs(content, "Excel_File.xlsx");
+          saveAs(
+            content,
+            (data.fileName ? data.fileName : "tableRecord") + ".xlsx"
+          );
         });
       });
     }

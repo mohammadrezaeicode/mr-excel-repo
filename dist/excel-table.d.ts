@@ -37,6 +37,7 @@ declare interface ExcelTable {
     notSave?: boolean;
     creator?: string;
     backend?: boolean;
+    fileName?: string;
     generateType?: "nodebuffer" | "array" | "binarystring" | "base64";
     addDefaultTitleStyle?: boolean;
     created?: string;
