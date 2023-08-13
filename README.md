@@ -2,7 +2,7 @@
 
 Welcome to our JavaScript library designed to effortlessly generate .xlsx files from input objects. This versatile library offers exceptional flexibility and can seamlessly operate on both the client and backend sides of applications.
 
-Our library offers comprehensive support for a wide range of features, including data formatting, formulas, styles, merged cells, and grouped rows.[more info](https://mohammadrezaeicode.github.io/mr-excel-page/)
+Our library offers comprehensive support for a wide range of features, including data formatting, formulas, styles, merged cells, and grouped rows.[more info](https://mohammadrezaeicode.github.io/mr-excel-page/), [Express/backend example](https://github.com/mohammadrezaeicode/mr-excel-repo/tree/main/example/express), [TypeScript example](https://github.com/mohammadrezaeicode/mr-excel-repo/tree/main/example/typescript)
 
 ## Installation
 
@@ -2205,3 +2205,35 @@ Please refer to the main page for this section. [Home page](https://mohammadreza
 | FormulaSetting            | { type: FormulaType; start: string; end: string; styleId?: string; } | Formula settings              |
 | Formula                   | { [insertCell: string]: FormulaSetting; }  | Formulas for cells                      |
 | ExcelTable                | ExcelTable                                | Properties of an Excel table            |
+
+## Version 1.1.0
+### bug Fixed 
+
+* backend
+* typecript type and interface
+
+### Feature
+
+* bold, italic, etc to style
+* shift top and shift left
+* title option
+
+## Example result
+
+![ex](https://github.com/mohammadrezaeicode/mr-excel-page-repo/blob/main/public/img/ex1.PNG?raw=true)
+
+![ex](https://github.com/mohammadrezaeicode/mr-excel-page-repo/blob/main/public/img/ex2.PNG?raw=true)
+
+![ex](https://github.com/mohammadrezaeicode/mr-excel-page-repo/blob/main/public/img/ex3.PNG?raw=true)
+
+![ex](https://github.com/mohammadrezaeicode/mr-excel-page-repo/blob/main/public/img/ex4.PNG?raw=true)
+
+![ex](https://github.com/mohammadrezaeicode/mr-excel-page-repo/blob/main/public/img/ex5.PNG?raw=true)
+
+![ex](https://github.com/mohammadrezaeicode/mr-excel-page-repo/blob/main/public/img/ex6.PNG?raw=true)
+
+![ex](https://github.com/mohammadrezaeicode/mr-excel-page-repo/blob/main/public/img/ex7.PNG?raw=true)
+
+![ex](https://github.com/mohammadrezaeicode/mr-excel-page-repo/blob/main/public/img/ex8.PNG?raw=true)
+
+![ex](https://github.com/mohammadrezaeicode/mr-excel-page-repo/blob/main/public/img/ex9.PNG?raw=true)
