@@ -407,7 +407,7 @@ async function ne(t) {
     );
   }), t.backend)
     return g.generateAsync({
-      type: t.generateType ? t.generateType : "binarystring"
+      type: t.generateType ? t.generateType : "nodebuffer"
     }).then((o) => o);
   if (t.notSave)
     return g.generateAsync({ type: "blob" }).then((o) => o.slice(

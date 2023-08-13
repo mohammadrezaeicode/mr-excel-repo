@@ -925,7 +925,7 @@ function generateExcel(data) {
         if (data.backend) {
             return zip
                 .generateAsync({
-                type: data.generateType ? data.generateType : "binarystring",
+                type: data.generateType ? data.generateType : "nodebuffer",
             })
                 .then((content) => {
                 return content;
