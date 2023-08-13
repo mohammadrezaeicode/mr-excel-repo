@@ -191,7 +191,19 @@ export async function generateExcel(data: ExcelTable) {
   const sheetLength = data.sheet.length;
   // xl
   var xlFolder = zip.folder("xl");
-  const styleKeys = Object.keys(data.styles ? data.styles : {});
+  if (!data.styles) {
+    data.styles = {};
+  }
+  if (data.addDefaultTitleStyle) {
+    data.styles["titleStyle"] = {
+      alignment: {
+        horizontal: "center",
+        vertical: "center",
+      },
+    };
+  }
+  const styleKeys = Object.keys(data.styles);
+
   let styleMapper = styleKeys.reduce(
     (res, cur, index) => {
       const styl = data.styles![cur];
@@ -214,12 +226,27 @@ export async function generateExcel(data: ExcelTable) {
           "</patternFill>" +
           "</fill>";
       }
-      if (styl.fontColor || styl.fontFamily || styl.size) {
+      if (
+        styl.fontColor ||
+        styl.fontFamily ||
+        styl.size ||
+        styl.bold ||
+        styl.italic ||
+        styl.underline ||
+        styl.doubleUnderline
+      ) {
         indexes.fontIndex = res.font.count;
         res.font.count++;
         res.font.value =
           res.font.value +
           "<font>" +
+          (styl.bold ? "<b/>" : "") +
+          (styl.italic ? "<i />" : "") +
+          `${
+            styl.underline || styl.doubleUnderline
+              ? `<u ${styl.doubleUnderline ? ' val="double" ' : ""}/>`
+              : ""
+          }` +
           (styl.size ? '<sz val="' + styl.size + '" />' : "") +
           (styl.fontColor
             ? '<color rgb="' + styl.fontColor.replace("#", "") + '" />'
@@ -255,44 +282,44 @@ export async function generateExcel(data: ExcelTable) {
       }
       const borderObj = styl.border;
       let borderStr = "";
-      if (borderObj) {
+      if (typeof borderObj=='object') {
         if (borderObj.left || borderObj.full) {
           borderStr +=
             '<left style="' +
-            (borderObj.left || borderObj.full).style +
+            (borderObj.left || borderObj.full)!.style +
             '">' +
             '<color rgb="' +
-            (borderObj.left || borderObj.full).color.replace("#", "") +
+            (borderObj.left || borderObj.full)!.color.replace("#", "") +
             '" />' +
             "</left>";
         }
         if (borderObj.right || borderObj.full) {
           borderStr +=
             '<right style="' +
-            (borderObj.right || borderObj.full).style +
+            (borderObj.right || borderObj.full)!.style +
             '">' +
             '<color rgb="' +
-            (borderObj.right || borderObj.full).color.replace("#", "") +
+            (borderObj.right || borderObj.full)!.color.replace("#", "") +
             '" />' +
             "</right>";
         }
         if (borderObj.top || borderObj.full) {
           borderStr +=
             '<top style="' +
-            (borderObj.top || borderObj.full).style +
+            (borderObj.top || borderObj.full)!.style +
             '">' +
             '<color rgb="' +
-            (borderObj.top || borderObj.full).color.replace("#", "") +
+            (borderObj.top || borderObj.full)!.color.replace("#", "") +
             '" />' +
             "</top>";
         }
         if (borderObj.bottom || borderObj.full) {
           borderStr +=
             '<bottom style="' +
-            (borderObj.bottom || borderObj.full).style +
+            (borderObj.bottom || borderObj.full)!.style +
             '">' +
             '<color rgb="' +
-            (borderObj.bottom || borderObj.full).color.replace("#", "") +
+            (borderObj.bottom || borderObj.full)!.color.replace("#", "") +
             '" />' +
             "</bottom>";
         }
@@ -377,20 +404,81 @@ export async function generateExcel(data: ExcelTable) {
   let selectedAdded = false;
 
   for (let index = 0; index < sheetLength; index++) {
-    let rowCount = 1;
+    const sheetData = data.sheet[index];
+    let rowCount = sheetData.shiftTop ? sheetData.shiftTop : 1;
     let sheetDataString = "";
     let sheetSizeString = "";
     let sheetSortFilter = "";
     let objKey: string[] = [];
     let headerFormula: number[] = [];
     let mergeRowConditionMap: MergeRowConditionMap = {};
-    const sheetData = data.sheet[index];
-    if (Array.isArray(sheetData.headers) && sheetData.headers.length) {
+    const colsLength = sheetData.headers.length;
+    if (Array.isArray(sheetData.headers) && colsLength) {
+      let titleRow = "";
+      if (sheetData.title) {
+        // debugger;
+        const title = sheetData.title;
+        const top = title.shiftTop ? title.shiftTop : 0;
+        const sL=sheetData.shiftLeft
+          ? sheetData.shiftLeft
+          : 0
+        const left = title.shiftLeft
+          ? title.shiftLeft + sL
+          : sL;
+        const consommeRow = title.consommeRow ? title.consommeRow - 1 : 1;
+        const consommeCol = title.consommeCol ? title.consommeCol : colsLength;
+        const height =
+          consommeRow == 0 && typeof title.height == "number"
+            ? ' ht="' + title.height + '" customHeight="1" '
+            : "";
+        const tStyle = title.styleId ? title.styleId : "titleStyle";
+        const refString = cols[left] + "" + (rowCount + top);
+        if (!sheetData.merges) {
+          sheetData.merges = [];
+        }
+        sheetData.merges.push(
+          refString +
+            ":" +
+            cols[left + consommeCol - 1] +
+            (rowCount + consommeRow + top)
+        );
+        if (typeof title.text == "string") {
+          titleRow +=
+            '<row r="' +
+            (rowCount + top) +
+            '" ' +
+            height +
+            ' spans="1:' +
+            (left + consommeCol - 1) +
+            '">';
+          titleRow +=
+            '<c r="' +
+            refString +
+            '" ' +
+            (data.styles[tStyle]
+              ? ' s="' + data.styles[tStyle].index + '" '
+              : "") +
+            ' t="s"><v>' +
+            sharedStringIndex +
+            "</v></c>";
+          titleRow += "</row>";
+          sharedStringIndex++;
+          sharedStringMap[title.text] = title.text;
+          sharedString += "<si><t>" + title.text + "</t></si>";
+        }
+        rowCount += top + consommeRow + 1;
+      }
       let headerStyleKey = sheetData.headerStyleKey
         ? sheetData.headerStyleKey
         : null;
-
+      let shiftCount = 0;
+      if (typeof sheetData.shiftLeft == "number") {
+        shiftCount = sheetData.shiftLeft;
+      }
       sheetData.headers.forEach((v, innerIndex) => {
+        if (shiftCount) {
+          innerIndex += shiftCount;
+        }
         if (v.formula) {
           headerFormula.push(innerIndex);
         }
@@ -466,9 +554,9 @@ export async function generateExcel(data: ExcelTable) {
           sharedStringIndex++;
         }
       });
-      const colsLength = sheetData.headers.length;
       if (!sheetData.withoutHeader) {
         sheetDataString =
+          titleRow +
           '<row r="' +
           rowCount +
           '" spans="1:' +
@@ -493,6 +581,8 @@ export async function generateExcel(data: ExcelTable) {
           sheetDataString +
           "</row>";
         rowCount++;
+      } else {
+        sheetDataString += titleRow;
       }
       if (Array.isArray(sheetData.data)) {
         const keyOutline =
@@ -525,6 +615,9 @@ export async function generateExcel(data: ExcelTable) {
             (keyHidden in mData ? ' hidden="' + mData[keyHidden] + '"' : "") +
             " >";
           objKey.forEach((key, keyIndex) => {
+            if (shiftCount) {
+              keyIndex += shiftCount;
+            }
             const dataEl = mData[key];
             let cellStyle = rowStyle;
             if (
@@ -930,22 +1023,32 @@ export async function generateExcel(data: ExcelTable) {
         "</worksheet>"
     );
   });
-  if (data.notSave) {
-    return zip.generateAsync({ type: "blob" }).then((content) => {
-      return content.slice(
-        0,
-        content.size,
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-      );
-    });
-  } else {
-    zip.generateAsync({ type: "blob" }).then(function (content) {
-      // see FileSaver.js
-      import("file-saver").then((module) => {
-        const { saveAs } = module;
-        // Now you can use the saveAs function
-        saveAs(content, "Excel_File.xlsx");
+  if (data.backend) {
+    return zip
+      .generateAsync({
+        type: data.generateType ? data.generateType : "binarystring",
+      })
+      .then((content) => {
+        return content;
       });
-    });
+  } else {
+    if (data.notSave) {
+      return zip.generateAsync({ type: "blob" }).then((content) => {
+        return content.slice(
+          0,
+          content.size,
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        );
+      });
+    } else {
+      zip.generateAsync({ type: "blob" }).then(function (content) {
+        // see FileSaver.js
+        import("file-saver").then((module) => {
+          const { saveAs } = module;
+          // Now you can use the saveAs function
+          saveAs(content, "Excel_File.xlsx");
+        });
+      });
+    }
   }
 }

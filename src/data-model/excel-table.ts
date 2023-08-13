@@ -1,5 +1,5 @@
 export type ProtectionOption = {
-  [key in ProtectionOptionKey]: "0" | "1";
+  [key in ProtectionOptionKey]: "0" | "1" | 0 | 1;
 };
 export type ProtectionOptionKey =
   | "sheet"
@@ -25,9 +25,9 @@ export type AlignmentOptionKey =
   | "indent";
 export interface AlignmentOption {
   horizontal?: "center" | "left" | "right";
-  vertical?: "bottom" | "top" | "bottom";
-  wrapText?: "0" | "1";
-  shrinkToFit?: "0" | "1";
+  vertical?: "center" | "top" | "bottom";
+  wrapText?: "0" | "1" | 2 | 1;
+  shrinkToFit?: "0" | "1" | 2 | 1;
   readingOrder?: "1" | "2" | 2 | 1;
   textRotation?: number;
   indent?: number;
@@ -36,7 +36,7 @@ export interface AlignmentOption {
 }
 export type BorderDirection = "full" | "top" | "left" | "right" | "bottom";
 export type BorderOption = {
-  [key in BorderDirection]: {
+  [key in BorderDirection]?: {
     color: string;
     style:
       | "slantDashDot"
@@ -69,7 +69,7 @@ export interface Data extends DataOptions {
 export interface DataOptions {
   [key: string]: "0" | "1" | number | string | undefined;
   outlineLevel?: number;
-  hidden?: "0" | "1";
+  hidden?: "0" | "1" | number;
   rowStyle?: string;
   height?: number;
 }
@@ -97,18 +97,30 @@ export interface SortAndFilter {
   mode: "all" | "ref";
   ref?: string;
 }
+export interface Title {
+  shiftTop?: number;
+  shiftLeft?: number;
+  consommeRow?: number;
+  consommeCol?: number;
+  height?: number;
+  styleId?: string;
+  text?: string;
+}
 export interface Sheet {
   withoutHeader?: boolean;
   formula?: Formula;
   name?: string;
+  title?: Title;
+  shiftTop?: number;
+  shiftLeft?: number;
   selected?: boolean;
   tabColor?: string;
   merges?: string[];
   headerStyleKey?: string;
   mergeRowDataCondition?: MergeRowDataConditionFunction;
   styleCellCondition?: StyleCellConditionFunction;
-  sortAndfilter: SortAndFilter;
-  state: "hidden" | "visible";
+  sortAndfilter?: SortAndFilter;
+  state?: "hidden" | "visible";
   headerRowOption?: any; // Define the type if needed
   protectionOption?: ProtectionOption;
   headerHeight?: number;
@@ -145,17 +157,22 @@ export interface StyleMapper {
   };
 }
 export type FormulaType = "AVERAGE" | "SUM" | "COUNT" | "MAX" | "MIN";
+export interface StyleBody {
+  fg?: string;
+  fontColor?: string;
+  fontFamily?: string;
+  size?: number;
+  index?: number;
+  alignment?: AlignmentOption;
+  border?: BorderOption;
+  format?: string;
+  bold?: boolean;
+  underline?: boolean;
+  italic?: boolean;
+  doubleUnderline?: boolean;
+}
 export interface Styles {
-  [key: string]: {
-    fg?: string;
-    fontColor?: string;
-    fontFamily?: string;
-    size?: number;
-    index?: number;
-    alignment?: AlignmentOption;
-    border?: BorderOption;
-    format: string;
-  };
+  [key: string]: StyleBody;
 }
 export interface FormatMap {
   [format: string]: {
@@ -176,6 +193,9 @@ export interface Formula {
 export interface ExcelTable {
   notSave?: boolean;
   creator?: string;
+  backend?: boolean;
+  generateType?: "nodebuffer" | "array" | "binarystring" | "base64";
+  addDefaultTitleStyle?: boolean;
   created?: string;
   modified?: string;
   numberOfColumn?: number;
