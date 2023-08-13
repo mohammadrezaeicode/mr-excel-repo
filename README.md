@@ -2495,6 +2495,7 @@ export interface ExcelTable {
 ```
 
 </details>
+
 ### ExcelTable Object
 
 In the ExcelTable object, you'll find various properties that allow you to customize the behavior and appearance of the generated Excel file through the `generateExcel` function.
