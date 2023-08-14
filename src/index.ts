@@ -12,6 +12,7 @@ import { styleGenerator } from "./utils/content-generator/styles";
 import { contentTypeGenerator } from "./utils/content-generator/content-types";
 import { appGenerator } from "./utils/content-generator/app";
 import { generateCellRowCol } from "./utils/generate-formula-cell";
+import { createExcelTabelBaseOnDomElement } from "./utils/create-excel-data";
 export async function generateExcel(data: ExcelTable) {
   let formatMap: FormatMap = {
     time: {
@@ -595,6 +596,48 @@ export async function generateExcel(data: ExcelTable) {
             : "height";
         const rowLength = sheetData.data.length;
         sheetData.data.forEach((mData, innerIndex) => {
+          if (mData.mergeType) {
+            for (let iindex = 0; iindex < mData.mergeType.length; iindex++) {
+              const mergeType = mData.mergeType[iindex];
+              const mergeStart = mData.mergeStart[iindex];
+              const mergeValue = mData.mergeValue[index];
+              let mergeStr = "";
+              if (mergeType == "both") {
+                mergeStr =
+                  cols[mergeStart] +
+                  "" +
+                  rowCount +
+                  ":" +
+                  cols[mergeStart + mergeValue[1]] +
+                  "" +
+                  (rowCount + mergeValue[0]);
+              } else {
+                if (mergeType == "col") {
+                  mergeStr =
+                    cols[mergeStart] +
+                    "" +
+                    rowCount +
+                    ":" +
+                    cols[mergeStart + mergeValue[0]] +
+                    "" +
+                    rowCount;
+                } else {
+                  mergeStr =
+                    cols[mergeStart] +
+                    "" +
+                    rowCount +
+                    ":" +
+                    cols[mergeStart] +
+                    "" +
+                    (rowCount + mergeValue[0]);
+                }
+              }
+              if (!sheetData.merges) {
+                sheetData.merges = [];
+              }
+              sheetData.merges.push(mergeStr);
+            }
+          }
           const rowStyle = mData.rowStyle;
           sheetDataString +=
             '<row r="' +
@@ -1050,4 +1093,17 @@ export async function generateExcel(data: ExcelTable) {
       });
     }
   }
+}
+
+export function convertTableToExcel(
+  queryForTable?: string,
+  table?: HTMLTableElement,
+  keepStyle?: boolean
+) {
+  const data = createExcelTabelBaseOnDomElement(
+    queryForTable,
+    table,
+    keepStyle
+  );
+  return generateExcel(data);
 }

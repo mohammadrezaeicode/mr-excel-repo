@@ -1,12 +1,18 @@
 # Changelog
 
-### Version 2.0.0 (2023-08-13)
+## Version 2.1.0 (2023-08-14)
 
-#### Bug Fixes
+### New Features
+
+- Introducing the ability to convert tables into Excel format.
+
+## Version 2.0.0 (2023-08-13)
+
+### Bug Fixes
 
 - Fixed issue with incorrect CDN address.
 
-#### New Features
+### New Features
 
 - Added the ability to set the generated file name via the `fileName` property.
 

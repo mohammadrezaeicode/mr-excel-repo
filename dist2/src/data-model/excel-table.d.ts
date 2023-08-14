@@ -31,7 +31,7 @@ export interface Header {
     };
 }
 export interface Data extends DataOptions {
-    [key: string]: string | number | undefined;
+    [key: string]: string | number | any | undefined;
 }
 export interface DataOptions {
     [key: string]: "0" | "1" | number | string | undefined;
@@ -46,7 +46,7 @@ export interface MergeRowConditionMap {
         start: number;
     };
 }
-export type StyleCellConditionFunction = (data: Header | string | number | undefined, object: Header | Data, colIndex: number, rowIndex: number, fromHeader: boolean, stylekeys: string[]) => string;
+export type StyleCellConditionFunction = (data: Header | string | number | undefined, object: Header | Data, colIndex: number, rowIndex: number, fromHeader: boolean, stylekeys: string[]) => string | null;
 export type MergeRowDataConditionFunction = (data: Header | string | number | undefined, key: string | null, index: number, fromHeader: boolean) => boolean;
 export interface SortAndFilter {
     mode: "all" | "ref";

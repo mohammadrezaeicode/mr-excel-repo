@@ -64,7 +64,7 @@ export interface Header {
 }
 
 export interface Data extends DataOptions {
-  [key: string]: string | number | undefined;
+  [key: string]: string | number | any | undefined;
 }
 export interface DataOptions {
   [key: string]: "0" | "1" | number | string | undefined;
@@ -86,7 +86,7 @@ export type StyleCellConditionFunction = (
   rowIndex: number,
   fromHeader: boolean,
   stylekeys: string[]
-) => string;
+) => string | null;
 export type MergeRowDataConditionFunction = (
   data: Header | string | number | undefined,
   key: string | null,
@@ -194,7 +194,7 @@ export interface ExcelTable {
   notSave?: boolean;
   creator?: string;
   backend?: boolean;
-  fileName?:string;
+  fileName?: string;
   generateType?: "nodebuffer" | "array" | "binarystring" | "base64";
   addDefaultTitleStyle?: boolean;
   created?: string;

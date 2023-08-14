@@ -1,9 +1,12 @@
 # MR Excel
+
 ## Introduction
 
 Welcome to our JavaScript library designed to effortlessly generate .xlsx files from input objects. This versatile library offers exceptional flexibility and can seamlessly operate on both the client and backend sides of applications.
 
 Our library offers comprehensive support for a wide range of features, including data formatting, formulas, styles, merged cells, and grouped rows.[more info](https://mohammadrezaeicode.github.io/mr-excel-page/), [Express/backend example](https://github.com/mohammadrezaeicode/mr-excel-repo/tree/main/example/express), [TypeScript example](https://github.com/mohammadrezaeicode/mr-excel-repo/tree/main/example/typescript)
+
+In version 2.1.0, we introduced a new feature called "convertTableToExcel," which enables the generation of an Excel file from a specified table or DOM element (table). The provided query is expected to be a valid input for the querySelector method. This enhancement allows for greater flexibility and convenience when creating Excel files directly from HTML tables.
 
 ## Installation
 
@@ -216,6 +219,17 @@ const data = {
   ],
 };
 ExcelTable.generateExcel(data);
+```
+
+or you can use convertTableToExcel
+
+```javascript
+ExcelTable.convertTableToExcel("#table");
+```
+
+```javascript
+let element = document.querySelector("#table");
+ExcelTable.convertTableToExcel(null, element, true);
 ```
 
 ## General option
@@ -1302,7 +1316,6 @@ ExcelTable.generateExcel(data);
 
 </details>
 
-
 ## Formula Option
 
 We provide two distinct methods for defining formulas: customization and column type. In the customization approach, if you employ a cell containing data that is used within the formula, the formula will display an instance of the formula. When using the customization type, it's important to specify the formula type, which can be any of the following: AVERAGE, SUM, COUNT, MAX, or MIN.
@@ -1636,7 +1649,6 @@ ExcelTable.generateExcel(data);
 ![ex](https://github.com/mohammadrezaeicode/mr-excel-page-repo/blob/main/public/img/ex5.PNG?raw=true)
 
 </details>
-
 
 ## Merging Cells Options
 
@@ -2278,10 +2290,11 @@ ExcelTable.generateExcel(data);
 ## API
 
 In the API section, you will discover various options and configurations that you can utilize within the library.
+
 <details>
 <summary>Typescript interface and type</summary>
 
-``` typescript
+```typescript
 export type ProtectionOption = {
   [key in ProtectionOptionKey]: "0" | "1" | 0 | 1;
 };
@@ -2478,7 +2491,7 @@ export interface ExcelTable {
   notSave?: boolean;
   creator?: string;
   backend?: boolean;
-  fileName?:string;
+  fileName?: string;
   generateType?: "nodebuffer" | "array" | "binarystring" | "base64";
   addDefaultTitleStyle?: boolean;
   created?: string;
@@ -2491,7 +2504,6 @@ export interface ExcelTable {
 }
 
 // Now you can use 'YourObject' as the type for your data.
-
 ```
 
 </details>
@@ -2500,24 +2512,23 @@ export interface ExcelTable {
 
 In the ExcelTable object, you'll find various properties that allow you to customize the behavior and appearance of the generated Excel file through the `generateExcel` function.
 
-| Name                  | Type             | Description                                                                                     |
-|-----------------------|------------------|-------------------------------------------------------------------------------------------------|
-| notSave?               | boolean          | Controls whether the generated Excel file should be saved.                                    |
-| backend?               | boolean          | For backend use cases, set to true.                                                             |
-| addDefaultTitleStyle?  | boolean          | If set to true, generates default style for the title option.                                  |
-| fileName?              | string           | Name of the file that will be generated.                                                        |
-| generateType?          | string           | For backend use, specifies the type of generated file ("nodebuffer" triggers only if backend is true). |
-| creator?               | string           | Specifies the creator of the Excel file.                                                        |
-| created?               | string           | Sets the creation date of the Excel file.                                                       |
-| modified?              | string           | Sets the modification date of the Excel file.                                                   |
-| numberOfColumn?        | number           | Specifies the number of columns in the Excel file.                                              |
-| createType?            | string           | Specifies the type of creation for the Excel file.                                              |
-| mapSheetDataOption?    | any              | An option to define the type if needed for mapping sheet data.                                 |
-| styles?                | Styles           | Defines the styles to be applied to the Excel cells.                                            |
-| sheet                  | Sheet[]          | An array of sheets containing data and configuration settings.                                 |
+| Name                  | Type    | Description                                                                                            |
+| --------------------- | ------- | ------------------------------------------------------------------------------------------------------ |
+| notSave?              | boolean | Controls whether the generated Excel file should be saved.                                             |
+| backend?              | boolean | For backend use cases, set to true.                                                                    |
+| addDefaultTitleStyle? | boolean | If set to true, generates default style for the title option.                                          |
+| fileName?             | string  | Name of the file that will be generated.                                                               |
+| generateType?         | string  | For backend use, specifies the type of generated file ("nodebuffer" triggers only if backend is true). |
+| creator?              | string  | Specifies the creator of the Excel file.                                                               |
+| created?              | string  | Sets the creation date of the Excel file.                                                              |
+| modified?             | string  | Sets the modification date of the Excel file.                                                          |
+| numberOfColumn?       | number  | Specifies the number of columns in the Excel file.                                                     |
+| createType?           | string  | Specifies the type of creation for the Excel file.                                                     |
+| mapSheetDataOption?   | any     | An option to define the type if needed for mapping sheet data.                                         |
+| styles?               | Styles  | Defines the styles to be applied to the Excel cells.                                                   |
+| sheet                 | Sheet[] | An array of sheets containing data and configuration settings.                                         |
 
 These properties provide you with the flexibility to customize various aspects of the Excel file generated by the `generateExcel` function.
-
 
 ### Styles Object
 
@@ -2539,24 +2550,25 @@ To define the styling for your Excel file, you should utilize this option. The S
   doubleUnderline?: boolean;
 }
 ```
+
 ## Styles Object
 
 To define the styling for your Excel file, you should utilize this option. The Styles object allows you to specify various formatting properties that will be applied to cells in the generated Excel file. Each property in the object corresponds to a specific style element, such as foreground color, font color, font family, size, alignment, border, and format. You can customize these properties according to your preferences to achieve the desired visual appearance for your Excel document.
 
-| Name              | Type             | Description                                                 |
-|-------------------|------------------|-------------------------------------------------------------|
-| fg?               | string           | Specifies the foreground color of the cell text.            |
-| fontColor?        | string           | Defines the font color of the cell text.                    |
-| fontFamily?       | string           | Sets the font family for the cell text.                     |
-| size?             | number           | Specifies the font size of the cell text.                   |
-| index?            | number           | Specifies the index of the style.                           |
-| alignment?        | AlignmentOption  | Defines the cell alignment properties (horizontal and vertical). |
-| border?           | BorderOption     | Specifies the border style for the cell.                   |
-| bold?             | boolean          | Defines whether the cell text should be bold.              |
-| underline?        | boolean          | Defines whether the cell text should be underlined.        |
-| italic?           | boolean          | Defines whether the cell text should be italic.            |
-| doubleUnderline?  | boolean          | Defines whether the cell text should have double underline. |
-| format            | string           | Determines the format of the cell content, such as date, time, currency, etc. |
+| Name             | Type            | Description                                                                   |
+| ---------------- | --------------- | ----------------------------------------------------------------------------- |
+| fg?              | string          | Specifies the foreground color of the cell text.                              |
+| fontColor?       | string          | Defines the font color of the cell text.                                      |
+| fontFamily?      | string          | Sets the font family for the cell text.                                       |
+| size?            | number          | Specifies the font size of the cell text.                                     |
+| index?           | number          | Specifies the index of the style.                                             |
+| alignment?       | AlignmentOption | Defines the cell alignment properties (horizontal and vertical).              |
+| border?          | BorderOption    | Specifies the border style for the cell.                                      |
+| bold?            | boolean         | Defines whether the cell text should be bold.                                 |
+| underline?       | boolean         | Defines whether the cell text should be underlined.                           |
+| italic?          | boolean         | Defines whether the cell text should be italic.                               |
+| doubleUnderline? | boolean         | Defines whether the cell text should have double underline.                   |
+| format           | string          | Determines the format of the cell content, such as date, time, currency, etc. |
 
 These properties allow you to customize the appearance of cells in your Excel document by applying various formatting styles.
 
@@ -2564,42 +2576,43 @@ These properties allow you to customize the appearance of cells in your Excel do
 
 The Sheet object is used to define various options related to a specific sheet within the Excel file. It holds a significant role and can be considered one of the most crucial options.
 
-| Name                      | Type                           | Description                                                                                      |
-|---------------------------|--------------------------------|--------------------------------------------------------------------------------------------------|
-| withoutHeader?            | boolean                        | Specifies whether the sheet should be generated without a header row.                           |
-| formula?                  | Formula                        | Defines formulas to be applied to the sheet.                                                      |
-| name?                     | string                         | Sets the name of the sheet.                                                                      |
-| shiftTop?                 | number                         | Shifts the start point from the top.                                                             |
-| shiftLeft?                | number                         | Shifts the start point from the left.                                                            |
-| title?                    | Title                          | Sets a title for the generated table (default; title consumes 2 rows and columns equal to header array length). |
-| selected?                 | boolean                        | Determines if the sheet is selected when the Excel file is opened.                               |
-| tabColor?                 | string                         | Specifies the tab color of the sheet.                                                            |
-| merges?                   | string[]                       | Defines merged cell ranges within the sheet.                                                     |
-| headerStyleKey?           | string                         | Sets the style for the header cells using a style ID.                                           |
-| mergeRowDataCondition?    | MergeRowDataConditionFunction | Defines a condition for merging rows.                                                            |
-| styleCellCondition?       | StyleCellConditionFunction    | Sets styling conditions for individual cells.                                                   |
-| sortAndfilter?            | SortAndFilter                  | Defines sorting and filtering options for the sheet.                                             |
-| state?                    | "hidden" \| "visible"          | Determines the visibility of the sheet.                                                          |
-| headerRowOption?          | any                            | Allows the definition of header row options (type to be defined if needed).                      |
-| protectionOption?         | ProtectionOption               | Specifies protection options for the sheet.                                                      |
-| headerHeight?             | number                         | Sets the height of the header row.                                                               |
-| headers                   | Header[]                       | Defines the headers for the sheet columns.                                                       |
-| data                      | Data[]                         | Provides the data entries for the sheet.                                                         |
+| Name                   | Type                          | Description                                                                                                     |
+| ---------------------- | ----------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| withoutHeader?         | boolean                       | Specifies whether the sheet should be generated without a header row.                                           |
+| formula?               | Formula                       | Defines formulas to be applied to the sheet.                                                                    |
+| name?                  | string                        | Sets the name of the sheet.                                                                                     |
+| shiftTop?              | number                        | Shifts the start point from the top.                                                                            |
+| shiftLeft?             | number                        | Shifts the start point from the left.                                                                           |
+| title?                 | Title                         | Sets a title for the generated table (default; title consumes 2 rows and columns equal to header array length). |
+| selected?              | boolean                       | Determines if the sheet is selected when the Excel file is opened.                                              |
+| tabColor?              | string                        | Specifies the tab color of the sheet.                                                                           |
+| merges?                | string[]                      | Defines merged cell ranges within the sheet.                                                                    |
+| headerStyleKey?        | string                        | Sets the style for the header cells using a style ID.                                                           |
+| mergeRowDataCondition? | MergeRowDataConditionFunction | Defines a condition for merging rows.                                                                           |
+| styleCellCondition?    | StyleCellConditionFunction    | Sets styling conditions for individual cells.                                                                   |
+| sortAndfilter?         | SortAndFilter                 | Defines sorting and filtering options for the sheet.                                                            |
+| state?                 | "hidden" \| "visible"         | Determines the visibility of the sheet.                                                                         |
+| headerRowOption?       | any                           | Allows the definition of header row options (type to be defined if needed).                                     |
+| protectionOption?      | ProtectionOption              | Specifies protection options for the sheet.                                                                     |
+| headerHeight?          | number                        | Sets the height of the header row.                                                                              |
+| headers                | Header[]                      | Defines the headers for the sheet columns.                                                                      |
+| data                   | Data[]                        | Provides the data entries for the sheet.                                                                        |
 
 These properties allow you to customize the behavior and appearance of individual sheets within the Excel file generated using the library. You can set headers, apply formulas, define styles, manage merging cells, specify visibility, and much more to create Excel sheets that match your specific requirements.
+
 ### Title
 
 The title option allows you to add a title at the starting point of the generated table.
 
-| Property      | Type    | Description                                                  |
-|---------------|---------|--------------------------------------------------------------|
-| shiftTop?     | number  | Shifts the title vertically from the top.                   |
-| shiftLeft?    | number  | Shifts the title horizontally from the left.                |
-| consommeRow?  | number  | Specifies the number of rows consumed by the title.         |
-| consommeCol?  | number  | Specifies the number of columns consumed by the title.      |
-| height?       | number  | Sets the height of the title row.                           |
-| styleId?      | string  | Applies a style to the title using a style ID.              |
-| text?         | string  | Specifies the text content of the title.                    |
+| Property     | Type   | Description                                            |
+| ------------ | ------ | ------------------------------------------------------ |
+| shiftTop?    | number | Shifts the title vertically from the top.              |
+| shiftLeft?   | number | Shifts the title horizontally from the left.           |
+| consommeRow? | number | Specifies the number of rows consumed by the title.    |
+| consommeCol? | number | Specifies the number of columns consumed by the title. |
+| height?      | number | Sets the height of the title row.                      |
+| styleId?     | string | Applies a style to the title using a style ID.         |
+| text?        | string | Specifies the text content of the title.               |
 
 By using the `Title` interface and its properties, you can customize the appearance and positioning of titles within your generated Excel tables.
 
@@ -2607,12 +2620,11 @@ By using the `Title` interface and its properties, you can customize the appeara
 
 The `BorderOption` object enables you to add borders to your Excel cells conveniently. It provides a way to define border properties for various border directions.
 
-
-| Property  | Type  | Description                                                |
-|-----------|-------|------------------------------------------------------------|
-| key       | string| A `BorderDirection` value indicating the border direction. Possible values: "full", "top", "left", "right", "bottom". |
-| color     | string| The color of the border. Use a valid color code or name.   |
-| style     | string| The style of the border. Choose from predefined styles such as "slantDashDot", "dotted", "thick", and more. |
+| Property | Type   | Description                                                                                                           |
+| -------- | ------ | --------------------------------------------------------------------------------------------------------------------- |
+| key      | string | A `BorderDirection` value indicating the border direction. Possible values: "full", "top", "left", "right", "bottom". |
+| color    | string | The color of the border. Use a valid color code or name.                                                              |
+| style    | string | The style of the border. Choose from predefined styles such as "slantDashDot", "dotted", "thick", and more.           |
 
 By utilizing the `BorderOption` object, you can specify border color and style for different directions, enhancing the visual appearance of your Excel tables with well-defined cell borders.
 
@@ -2620,13 +2632,13 @@ By utilizing the `BorderOption` object, you can specify border color and style f
 
 The `Formula` object provides a way to define formulas for Excel cells. It comprises the following properties:
 
-| Property    | Type             | Description                                               |
-|-------------|------------------|-----------------------------------------------------------|
-| insertCell  | string           | The cell where the formula will be inserted.              |
-| type        | "AVERAGE" \| "SUM" \| "COUNT" \| "MAX" \| "MIN" | The type of formula to apply. Choose from options such as "AVERAGE", "SUM", "COUNT", "MAX", and "MIN". |
-| start       | string           | The starting cell for the formula range.                 |
-| end         | string           | The ending cell for the formula range.                   |
-| styleId     | string (Optional)| The style ID to apply to cells with the formula. Use if you want to style formula cells. |
+| Property   | Type                                            | Description                                                                                            |
+| ---------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| insertCell | string                                          | The cell where the formula will be inserted.                                                           |
+| type       | "AVERAGE" \| "SUM" \| "COUNT" \| "MAX" \| "MIN" | The type of formula to apply. Choose from options such as "AVERAGE", "SUM", "COUNT", "MAX", and "MIN". |
+| start      | string                                          | The starting cell for the formula range.                                                               |
+| end        | string                                          | The ending cell for the formula range.                                                                 |
+| styleId    | string (Optional)                               | The style ID to apply to cells with the formula. Use if you want to style formula cells.               |
 
 In the provided example, we've demonstrated how to define formulas for various cells using the `Formula` object. You can specify the formula type, range, and even apply specific styles to formula cells if desired.
 
@@ -2634,22 +2646,27 @@ In the provided example, we've demonstrated how to define formulas for various c
 
 The library offers multiple options for aligning cells, giving you control over how content is displayed within cells. These alignment options can be configured using the following properties:
 
-| Property       | Type             | Description                                                    |
-|----------------|------------------|----------------------------------------------------------------|
-| horizontal     | "center" \| "left" \| "right" | The horizontal alignment of cell content. Choose from "center", "left", or "right". |
-| vertical       | "bottom" \| "top" \| "bottom" | The vertical alignment of cell content. Choose from "bottom", "top", or "bottom". |
-| wrapText       | "0" \| "1"       | Whether to wrap text within cells. Use "0" for false or "1" for true. |
-| shrinkToFit    | "0" \| "1"       | Whether to shrink cell content to fit within the cell. Use "0" for false or "1" for true. |
-| readingOrder   | "1" \| "2" \| 2 \| 1 | The reading order of cell content. Choose from "1" (left to right) or "2" (right to left). |
-| textRotation   | number           | The degree of text rotation within cells. Use a number to represent the rotation angle. |
-| indent         | number           | The indentation level of cell content. Use a number to specify the indent. |
-| rtl            | boolean          | Whether the cell content should be displayed right-to-left. Use "true" for right-to-left alignment. |
-| ltr            | boolean          | Whether the cell content should be displayed left-to-right. Use "true" for left-to-right alignment. |
+| Property     | Type                          | Description                                                                                         |
+| ------------ | ----------------------------- | --------------------------------------------------------------------------------------------------- |
+| horizontal   | "center" \| "left" \| "right" | The horizontal alignment of cell content. Choose from "center", "left", or "right".                 |
+| vertical     | "bottom" \| "top" \| "bottom" | The vertical alignment of cell content. Choose from "bottom", "top", or "bottom".                   |
+| wrapText     | "0" \| "1"                    | Whether to wrap text within cells. Use "0" for false or "1" for true.                               |
+| shrinkToFit  | "0" \| "1"                    | Whether to shrink cell content to fit within the cell. Use "0" for false or "1" for true.           |
+| readingOrder | "1" \| "2" \| 2 \| 1          | The reading order of cell content. Choose from "1" (left to right) or "2" (right to left).          |
+| textRotation | number                        | The degree of text rotation within cells. Use a number to represent the rotation angle.             |
+| indent       | number                        | The indentation level of cell content. Use a number to specify the indent.                          |
+| rtl          | boolean                       | Whether the cell content should be displayed right-to-left. Use "true" for right-to-left alignment. |
+| ltr          | boolean                       | Whether the cell content should be displayed left-to-right. Use "true" for left-to-right alignment. |
 
 These alignment options empower you to customize the appearance of cell content in your Excel sheets. By adjusting these properties, you can control the positioning, orientation, and overall style of data within your cells.
 
-
 ## Release Notes
+
+### Version 2.1.0 (2023-08-14)
+
+#### New Features
+
+- Introducing the ability to convert tables into Excel format.
 
 ### Version 2.0.0 (2023-08-13)
 
@@ -2664,7 +2681,6 @@ These alignment options empower you to customize the appearance of cell content 
 ### Changes
 
 - Updated the default value of the `generateType` property.
-
 
 ### Version 1.1.0 (2023-08-12)
 

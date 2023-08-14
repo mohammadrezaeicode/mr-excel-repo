@@ -32,12 +32,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.generateExcel = void 0;
+exports.convertTableToExcel = exports.generateExcel = void 0;
 const generate_column_name_1 = require("./utils/generate-column-name");
 const styles_1 = require("./utils/content-generator/styles");
 const content_types_1 = require("./utils/content-generator/content-types");
 const app_1 = require("./utils/content-generator/app");
 const generate_formula_cell_1 = require("./utils/generate-formula-cell");
+const create_excel_data_1 = require("./utils/create-excel-data");
 function generateExcel(data) {
     return __awaiter(this, void 0, void 0, function* () {
         let formatMap = {
@@ -556,6 +557,50 @@ function generateExcel(data) {
                         : "height";
                     const rowLength = sheetData.data.length;
                     sheetData.data.forEach((mData, innerIndex) => {
+                        if (mData.mergeType) {
+                            for (let iindex = 0; iindex < mData.mergeType.length; iindex++) {
+                                const mergeType = mData.mergeType[iindex];
+                                const mergeStart = mData.mergeStart[iindex];
+                                const mergeValue = mData.mergeValue[index];
+                                let mergeStr = "";
+                                if (mergeType == "both") {
+                                    mergeStr =
+                                        cols[mergeStart] +
+                                            "" +
+                                            rowCount +
+                                            ":" +
+                                            cols[mergeStart + mergeValue[1]] +
+                                            "" +
+                                            (rowCount + mergeValue[0]);
+                                }
+                                else {
+                                    if (mergeType == "col") {
+                                        mergeStr =
+                                            cols[mergeStart] +
+                                                "" +
+                                                rowCount +
+                                                ":" +
+                                                cols[mergeStart + mergeValue[0]] +
+                                                "" +
+                                                rowCount;
+                                    }
+                                    else {
+                                        mergeStr =
+                                            cols[mergeStart] +
+                                                "" +
+                                                rowCount +
+                                                ":" +
+                                                cols[mergeStart] +
+                                                "" +
+                                                (rowCount + mergeValue[0]);
+                                    }
+                                }
+                                if (!sheetData.merges) {
+                                    sheetData.merges = [];
+                                }
+                                sheetData.merges.push(mergeStr);
+                            }
+                        }
                         const rowStyle = mData.rowStyle;
                         sheetDataString +=
                             '<row r="' +
@@ -951,4 +996,9 @@ function generateExcel(data) {
     });
 }
 exports.generateExcel = generateExcel;
+function convertTableToExcel(queryForTable, table, keepStyle) {
+    const data = (0, create_excel_data_1.createExcelTabelBaseOnDomElement)(queryForTable, table, keepStyle);
+    return generateExcel(data);
+}
+exports.convertTableToExcel = convertTableToExcel;
 //# sourceMappingURL=index.js.map

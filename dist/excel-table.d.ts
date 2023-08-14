@@ -21,8 +21,10 @@ declare type BorderOption = {
     };
 };
 
+export declare function convertTableToExcel(queryForTable?: string, table?: HTMLTableElement, keepStyle?: boolean): Promise<string | number[] | Blob | Buffer | undefined>;
+
 declare interface Data extends DataOptions {
-    [key: string]: string | number | undefined;
+    [key: string]: string | number | any | undefined;
 }
 
 declare interface DataOptions {
@@ -124,7 +126,7 @@ declare interface StyleBody {
     doubleUnderline?: boolean;
 }
 
-declare type StyleCellConditionFunction = (data: Header | string | number | undefined, object: Header | Data, colIndex: number, rowIndex: number, fromHeader: boolean, stylekeys: string[]) => string;
+declare type StyleCellConditionFunction = (data: Header | string | number | undefined, object: Header | Data, colIndex: number, rowIndex: number, fromHeader: boolean, stylekeys: string[]) => string | null;
 
 declare interface Styles {
     [key: string]: StyleBody;
