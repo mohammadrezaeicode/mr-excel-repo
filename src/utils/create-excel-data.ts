@@ -11,7 +11,10 @@ function valueToHex(c: number): string {
   return hex.length == 1 ? "0" + hex : hex;
 }
 function rgbToHex(rgb: string): string {
-  let sp = rgb.substring(4, rgb.length - 1).split(", ");
+  let sp =
+    rgb.indexOf("rgba") >= 0
+      ? rgb.substring(5, rgb.length - 1).split(", ")
+      : rgb.substring(4, rgb.length - 1).split(", ");
   if (sp.length == 3) {
     return (
       valueToHex(parseInt(sp[0])) +

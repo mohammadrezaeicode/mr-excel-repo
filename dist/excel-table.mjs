@@ -1,6 +1,6 @@
 function re(t, n, s = "", b = [], A = 0) {
-  const f = t.length;
-  for (let _ = 0; _ < f; _++)
+  const c = t.length;
+  for (let _ = 0; _ < c; _++)
     b.push(s + t[_]);
   return n < b.length ? b : re(
     t,
@@ -23,11 +23,11 @@ function ie(t, n) {
 <Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties" xmlns:vt="http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes"> <Application>Microsoft Excel</Application> <DocSecurity>0</DocSecurity> <ScaleCrop>false</ScaleCrop> <HeadingPairs> <vt:vector size="2" baseType="variant"> <vt:variant> <vt:lpstr>Worksheets</vt:lpstr> </vt:variant> <vt:variant> <vt:i4>` + t + '</vt:i4> </vt:variant> </vt:vector> </HeadingPairs> <TitlesOfParts> <vt:vector size="' + t + '" baseType="lpstr"> ' + n + " </vt:vector> </TitlesOfParts> <Company></Company> <LinksUpToDate>false</LinksUpToDate> <SharedDoc>false</SharedDoc> <HyperlinksChanged>false</HyperlinksChanged> <AppVersion>16.0300</AppVersion></Properties>";
 }
 function ee(t, n, s) {
-  let b = t.replace(/[0-9]/g, ""), A = parseInt(t.substr(b.length)), f = '<c r="' + t + '" ' + (s && typeof n.styleId == "string" && s[n.styleId] ? 's="' + s[n.styleId].index + '" ' : "") + ">     <f>" + n.type + "(" + n.start + ":" + n.end + ")</f> </c>";
+  let b = t.replace(/[0-9]/g, ""), A = parseInt(t.substr(b.length)), c = '<c r="' + t + '" ' + (s && typeof n.styleId == "string" && s[n.styleId] ? 's="' + s[n.styleId].index + '" ' : "") + ">     <f>" + n.type + "(" + n.start + ":" + n.end + ")</f> </c>";
   return {
     column: b,
     row: A,
-    cell: f
+    cell: c
   };
 }
 function te(t) {
@@ -36,10 +36,10 @@ function te(t) {
   return n.length == 1 ? "0" + n : n;
 }
 function Y(t) {
-  let n = t.substring(4, t.length - 1).split(", ");
+  let n = t.indexOf("rgba") >= 0 ? t.substring(5, t.length - 1).split(", ") : t.substring(4, t.length - 1).split(", ");
   return n.length == 3 ? (te(parseInt(n[0])) + te(parseInt(n[1])) + te(parseInt(n[2]))).toUpperCase() : "";
 }
-function me(t, n, s, b, A, f, _, p) {
+function me(t, n, s, b, A, c, _, p) {
   let B = [], q = "both", O = [];
   !n || n === 0 ? (n = 1, q = "col") : O.push(n - 1), !t || t === 0 ? (t = 0, q = "row") : O.push(t - 1);
   let y = A || {};
@@ -47,7 +47,7 @@ function me(t, n, s, b, A, f, _, p) {
   for (let u = 0; u < n; u++) {
     let M = t;
     for (let h = 0; h < b; h++)
-      s <= h ? M >= 1 ? (y["c" + h] = f, f = "", _ += "*", M--) : n >= 2 && s == h ? (y["c" + h] = f, f = "", _ += "+") : _ += "-" : u > 0 && (_ += "-");
+      s <= h ? M >= 1 ? (y["c" + h] = c, c = "", _ += "*", M--) : n >= 2 && s == h ? (y["c" + h] = c, c = "", _ += "+") : _ += "-" : u > 0 && (_ += "-");
     B.push({
       ...y,
       mergeString: _
@@ -61,7 +61,7 @@ function fe(t, n, s) {
     throw "Error: One of the function inputs is required.";
   let b;
   t ? b = (B = document.querySelector(t)) == null ? void 0 : B.querySelectorAll("tr") : b = n == null ? void 0 : n.querySelectorAll("tr");
-  let A = [], f = [], _ = {
+  let A = [], c = [], _ = {
     header: {},
     rows: []
   };
@@ -110,7 +110,7 @@ function fe(t, n, s) {
         });
       else {
         let h = {}, D = "", r = !1;
-        f.length >= u && (h = f[u - 1], D = "mergeString" in h ? h.mergeString : "", r = !0);
+        c.length >= u && (h = c[u - 1], D = "mergeString" in h ? h.mergeString : "", r = !0);
         let g = 0;
         M.forEach((I, H) => {
           if ("c" + (H + g) in h)
@@ -129,12 +129,12 @@ function fe(t, n, s) {
               D,
               h
             );
-            f.length < u ? f.push(...$) : $.forEach((G, j) => {
-              f.length < u + j ? f.push(...$) : f[u + j] = {
-                ...f[u + j],
+            c.length < u ? c.push(...$) : $.forEach((G, j) => {
+              c.length < u + j ? c.push(...$) : c[u + j] = {
+                ...c[u + j],
                 ...G
               };
-            }), h = $[0], D = $[0].mergeString, r = !0, console.log("*-/", [...f], $);
+            }), h = $[0], D = $[0].mergeString, r = !0;
           } else
             r || (D += "-");
           Y(i.backgroundColor), i.textAlign, Y(i.color), i.borderTopStyle, i.borderTopColor, i.borderTopWidth, i.borderRightStyle, i.borderRightColor, i.borderRightWidth, i.borderLeftStyle, i.borderLeftColor, i.borderLeftWidth, i.borderBottomStyle, i.borderBottomColor, i.borderBottomWidth, i.fontFamily, i.fontWeight;
@@ -169,7 +169,7 @@ function fe(t, n, s) {
             }
           };
           _.header[u + "-" + H] = U, h["c" + H] = I.textContent;
-        }), f.length < u ? (console.log("pushed"), f.push(h)) : (console.log("change data"), f[u - 1] = h);
+        }), c.length < u ? c.push(h) : c[u - 1] = h;
       }
     });
   } else
@@ -181,7 +181,7 @@ function fe(t, n, s) {
         styleCellCondition: function(q, O, y, u, M, h) {
           return s ? h.includes(u - 1 + "-" + y) ? u - 1 + "-" + y : "" : null;
         },
-        data: f,
+        data: c,
         headers: A
       }
     ]
@@ -338,9 +338,9 @@ async function ce(t) {
   ];
   t.numberOfColumn && t.numberOfColumn > 25 && (s = re(s, t.numberOfColumn));
   const A = (await import("./jszip.min-e651e8fb.mjs").then((l) => l.j)).default;
-  var f = new A();
+  var c = new A();
   const _ = t.sheet.length;
-  var p = f.folder("xl");
+  var p = c.folder("xl");
   t.styles || (t.styles = {}), t.addDefaultTitleStyle && (t.styles.titleStyle = {
     alignment: {
       horizontal: "center",
@@ -402,38 +402,38 @@ async function ce(t) {
     if (Array.isArray(e.headers) && V) {
       let N = "";
       if (e.title) {
-        const a = e.title, c = a.shiftTop ? a.shiftTop : 0, T = e.shiftLeft ? e.shiftLeft : 0, S = a.shiftLeft ? a.shiftLeft + T : T, C = a.consommeRow ? a.consommeRow - 1 : 1, Z = a.consommeCol ? a.consommeCol : V, Q = C == 0 && typeof a.height == "number" ? ' ht="' + a.height + '" customHeight="1" ' : "", x = a.styleId ? a.styleId : "titleStyle", L = s[S] + "" + (m + c);
+        const a = e.title, f = a.shiftTop ? a.shiftTop : 0, T = e.shiftLeft ? e.shiftLeft : 0, S = a.shiftLeft ? a.shiftLeft + T : T, C = a.consommeRow ? a.consommeRow - 1 : 1, Z = a.consommeCol ? a.consommeCol : V, Q = C == 0 && typeof a.height == "number" ? ' ht="' + a.height + '" customHeight="1" ' : "", x = a.styleId ? a.styleId : "titleStyle", L = s[S] + "" + (m + f);
         e.merges || (e.merges = []), e.merges.push(
-          L + ":" + s[S + Z - 1] + (m + C + c)
-        ), typeof a.text == "string" && (N += '<row r="' + (m + c) + '" ' + Q + ' spans="1:' + (S + Z - 1) + '">', N += '<c r="' + L + '" ' + (t.styles[x] ? ' s="' + t.styles[x].index + '" ' : "") + ' t="s"><v>' + u + "</v></c>", N += "</row>", u++, D[a.text] = a.text, y += "<si><t>" + a.text + "</t></si>"), m += c + C + 1;
+          L + ":" + s[S + Z - 1] + (m + C + f)
+        ), typeof a.text == "string" && (N += '<row r="' + (m + f) + '" ' + Q + ' spans="1:' + (S + Z - 1) + '">', N += '<c r="' + L + '" ' + (t.styles[x] ? ' s="' + t.styles[x].index + '" ' : "") + ' t="s"><v>' + u + "</v></c>", N += "</row>", u++, D[a.text] = a.text, y += "<si><t>" + a.text + "</t></si>"), m += f + C + 1;
       }
       let E = e.headerStyleKey ? e.headerStyleKey : null, J = 0;
-      if (typeof e.shiftLeft == "number" && (J = e.shiftLeft), e.headers.forEach((a, c) => {
-        if (J && (c += J), a.formula && z.push(c), d.push(a.label), e.mergeRowDataCondition && typeof e.mergeRowDataCondition == "function" && e.mergeRowDataCondition(
+      if (typeof e.shiftLeft == "number" && (J = e.shiftLeft), e.headers.forEach((a, f) => {
+        if (J && (f += J), a.formula && z.push(f), d.push(a.label), e.mergeRowDataCondition && typeof e.mergeRowDataCondition == "function" && e.mergeRowDataCondition(
           a,
           null,
-          c,
+          f,
           !0
-        ) === !0 && (k[s[c]] = {
+        ) === !0 && (k[s[f]] = {
           inProgress: !0,
           start: m
         }), e.styleCellCondition && typeof e.styleCellCondition == "function" && (E = e.styleCellCondition(
           a,
           a,
-          c,
+          f,
           m,
           !0,
           B
-        ) || E), a.size && a.size > 0 && (F += '<col min="' + (c + 1) + '" max="' + (c + 1) + '" width="' + a.size + '" customWidth="1" />'), e.withoutHeader)
+        ) || E), a.size && a.size > 0 && (F += '<col min="' + (f + 1) + '" max="' + (f + 1) + '" width="' + a.size + '" customWidth="1" />'), e.withoutHeader)
           return;
-        const T = s[c] + "" + m, S = e.formula && e.formula[T];
+        const T = s[f] + "" + m, S = e.formula && e.formula[T];
         S ? (o += ee(
           T,
           S,
           t.styles
-        ).cell, delete e.formula[T]) : (o += '<c r="' + s[c] + m + '" ' + (E && t.styles && t.styles[E] ? ' s="' + t.styles[E].index + '" ' : "") + ' t="s"><v>' + u + "</v></c>", y += "<si><t>" + a.text + "</t></si>", D[a.text] = a.text, u++);
-      }), e.withoutHeader ? o += N : (o = N + '<row r="' + m + '" spans="1:' + V + '" ' + (e.headerHeight ? 'ht="' + e.headerHeight + '" customHeight="1"' : "") + (e.headerRowOption ? Object.keys(e.headerRowOption).reduce((a, c) => a + " " + c + '="' + e.headerRowOption[c] + '" ', "  ") : "") + ">" + o + "</row>", m++), Array.isArray(e.data)) {
-        const a = t.mapSheetDataOption && t.mapSheetDataOption.outlineLevel ? t.mapSheetDataOption.outlineLevel : "outlineLevel", c = t.mapSheetDataOption && t.mapSheetDataOption.hidden ? t.mapSheetDataOption.hidden : "hidden", T = t.mapSheetDataOption && t.mapSheetDataOption.height ? t.mapSheetDataOption.height : "height", S = e.data.length;
+        ).cell, delete e.formula[T]) : (o += '<c r="' + s[f] + m + '" ' + (E && t.styles && t.styles[E] ? ' s="' + t.styles[E].index + '" ' : "") + ' t="s"><v>' + u + "</v></c>", y += "<si><t>" + a.text + "</t></si>", D[a.text] = a.text, u++);
+      }), e.withoutHeader ? o += N : (o = N + '<row r="' + m + '" spans="1:' + V + '" ' + (e.headerHeight ? 'ht="' + e.headerHeight + '" customHeight="1"' : "") + (e.headerRowOption ? Object.keys(e.headerRowOption).reduce((a, f) => a + " " + f + '="' + e.headerRowOption[f] + '" ', "  ") : "") + ">" + o + "</row>", m++), Array.isArray(e.data)) {
+        const a = t.mapSheetDataOption && t.mapSheetDataOption.outlineLevel ? t.mapSheetDataOption.outlineLevel : "outlineLevel", f = t.mapSheetDataOption && t.mapSheetDataOption.hidden ? t.mapSheetDataOption.hidden : "hidden", T = t.mapSheetDataOption && t.mapSheetDataOption.height ? t.mapSheetDataOption.height : "height", S = e.data.length;
         e.data.forEach((C, Z) => {
           if (C.mergeType)
             for (let x = 0; x < C.mergeType.length; x++) {
@@ -442,7 +442,7 @@ async function ce(t) {
               L == "both" ? P = s[w] + "" + m + ":" + s[w + R[1]] + (m + R[0]) : L == "col" ? P = s[w] + "" + m + ":" + s[w + R[0]] + m : P = s[w] + "" + m + ":" + s[w] + (m + R[0]), e.merges || (e.merges = []), e.merges.push(P);
             }
           const Q = C.rowStyle;
-          o += '<row r="' + m + '" spans="1:' + V + '" ' + (T in C ? 'ht="' + C[T] + '" customHeight="1"' : "") + (a in C ? ' outlineLevel="' + C[a] + '"' : "") + (c in C ? ' hidden="' + C[c] + '"' : "") + " >", d.forEach((x, L) => {
+          o += '<row r="' + m + '" spans="1:' + V + '" ' + (T in C ? 'ht="' + C[T] + '" customHeight="1"' : "") + (a in C ? ' outlineLevel="' + C[a] + '"' : "") + (f in C ? ' hidden="' + C[f] + '"' : "") + " >", d.forEach((x, L) => {
             J && (L += J);
             const w = C[x];
             let R = Q;
@@ -488,22 +488,22 @@ async function ce(t) {
         }), e.sortAndfilter && (e.sortAndfilter.mode == "all" ? X += '<autoFilter ref="A1:' + s[V - 1] + (m - 1) + '" />' : typeof e.sortAndfilter.ref == "string" && e.sortAndfilter.ref.length > 0 && (X += '<autoFilter ref="' + e.sortAndfilter.ref + '" />'));
       }
       if (z.length > 0 && (e.formula || (e.formula = {}), z.forEach((a) => {
-        const c = e.headers[a];
+        const f = e.headers[a];
         e.formula[s[a] + "" + m] = {
           start: e.withoutHeader ? s[a] + "1" : s[a] + "2",
           end: s[a] + "" + (m - 1),
-          type: c.formula.type,
-          ...c.formula.styleId ? { styleId: c.formula.styleId } : {}
+          type: f.formula.type,
+          ...f.formula.styleId ? { styleId: f.formula.styleId } : {}
         };
       })), e.formula) {
         const a = Object.keys(e.formula);
         if (a.length) {
-          let c = {};
+          let f = {};
           a.forEach((T) => {
             const S = ee(T, e.formula[T], t.styles);
-            c[S.row] ? c[S.row] += S.cell : c[S.row] = S.cell;
-          }), Object.keys(c).forEach((T) => {
-            const S = c[T];
+            f[S.row] ? f[S.row] += S.cell : f[S.row] = S.cell;
+          }), Object.keys(f).forEach((T) => {
+            const S = f[T];
             o += '<row r="' + T + '" spans="1:' + V + '"  >' + S + "</row>";
           });
         }
@@ -527,14 +527,14 @@ async function ce(t) {
     }, I++;
   }
   let i = Object.keys(r);
-  f.file("[Content_Types].xml", ne(O));
-  var v = f.folder("_rels");
+  c.file("[Content_Types].xml", ne(O));
+  var v = c.folder("_rels");
   v == null || v.file(
     ".rels",
     `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"> <Relationship Id="rId3"  Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties"  Target="docProps/app.xml" /> <Relationship Id="rId2"  Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties"  Target="docProps/core.xml" /> <Relationship Id="rId1"  Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument"  Target="xl/workbook.xml" /></Relationships>`
   );
-  var U = f.folder("docProps");
+  var U = c.folder("docProps");
   U == null || U.file(
     "core.xml",
     `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -569,16 +569,16 @@ async function ce(t) {
 <worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:mx="http://schemas.microsoft.com/office/mac/excel/2008/main" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mv="urn:schemas-microsoft-com:mac:vml" xmlns:xr="http://schemas.microsoft.com/office/spreadsheetml/2014/revision" xmlns:xr2="http://schemas.microsoft.com/office/spreadsheetml/2015/revision2" xmlns:xr3="http://schemas.microsoft.com/office/spreadsheetml/2016/revision3" xmlns:x14="http://schemas.microsoft.com/office/spreadsheetml/2009/9/main" xmlns:x15="http://schemas.microsoft.com/office/spreadsheetml/2010/11/main" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac" xmlns:xm="http://schemas.microsoft.com/office/excel/2006/main">` + e.tabColor + e.selectedView + '<sheetFormatPr customHeight="1" defaultColWidth="12.63" defaultRowHeight="15.75" />' + e.sheetSizeString + "<sheetData>" + e.sheetDataString + "</sheetData>" + e.protectionOption + e.sheetSortFilter + e.merges + "</worksheet>"
     );
   }), t.backend)
-    return f.generateAsync({
+    return c.generateAsync({
       type: t.generateType ? t.generateType : "nodebuffer"
     }).then((l) => l);
   if (t.notSave)
-    return f.generateAsync({ type: "blob" }).then((l) => l.slice(
+    return c.generateAsync({ type: "blob" }).then((l) => l.slice(
       0,
       l.size,
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     ));
-  f.generateAsync({ type: "blob" }).then(function(l) {
+  c.generateAsync({ type: "blob" }).then(function(l) {
     import("./FileSaver.min-3b84b3f2.mjs").then((e) => e.F).then((e) => {
       const { saveAs: m } = e;
       m(

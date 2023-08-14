@@ -7,7 +7,9 @@ function valueToHex(c) {
     return hex.length == 1 ? "0" + hex : hex;
 }
 function rgbToHex(rgb) {
-    let sp = rgb.substring(4, rgb.length - 1).split(", ");
+    let sp = rgb.indexOf("rgba") >= 0
+        ? rgb.substring(5, rgb.length - 1).split(", ")
+        : rgb.substring(4, rgb.length - 1).split(", ");
     if (sp.length == 3) {
         return (valueToHex(parseInt(sp[0])) +
             valueToHex(parseInt(sp[1])) +
@@ -238,7 +240,7 @@ function createExcelTabelBaseOnDomElement(queryForTable, table, keepStyle) {
                         data = mergeData[0];
                         mergeString = mergeData[0].mergeString;
                         inMergeMode = true;
-                        console.log("*-/", [...datas], mergeData);
+                        // console.log("*-/", [...datas], mergeData);
                     }
                     else {
                         if (!inMergeMode) {
@@ -316,11 +318,11 @@ function createExcelTabelBaseOnDomElement(queryForTable, table, keepStyle) {
                     // })
                 });
                 if (datas.length < rowIndex) {
-                    console.log("pushed");
+                    // console.log("pushed");
                     datas.push(data);
                 }
                 else {
-                    console.log("change data");
+                    // console.log("change data");
                     datas[rowIndex - 1] = data;
                 }
             }
