@@ -15,13 +15,13 @@ Via CDN
 You can utilize our library, which comes bundled with Vite, by including the following link:
 
 ```html
-<script src="https://unpkg.com/mr-excel@1.1.1/dist/excel-table.umd.js"></script>
+<script src="https://unpkg.com/mr-excel@@latest/dist/excel-table.umd.js"></script>
 ```
 
 Alternatively, you have the option to use the bundle with Webpack by incorporating the link provided below:
 
 ```html
-<script src="https://unpkg.com/mr-excel@latest/dist/excel-table.js"></script>
+<script src="https://unpkg.com/mr-excel@latest/dist2/excel-table.js"></script>
 ```
 
 Easily integrate our library into your project using either of these methods, and unlock efficient generation of Excel tables with exceptional flexibility.
