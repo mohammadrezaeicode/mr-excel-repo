@@ -996,8 +996,8 @@ function generateExcel(data) {
     });
 }
 exports.generateExcel = generateExcel;
-function convertTableToExcel(queryForTable, table, keepStyle) {
-    const data = (0, create_excel_data_1.createExcelTabelBaseOnDomElement)(queryForTable, table, keepStyle);
+function convertTableToExcel(queryForTable, table, keepStyle, rowHeightScaleFunction, colWidthScaleFunction) {
+    const data = (0, create_excel_data_1.createExcelTabelBaseOnDomElement)(queryForTable, table, keepStyle, rowHeightScaleFunction, colWidthScaleFunction);
     return generateExcel(data);
 }
 exports.convertTableToExcel = convertTableToExcel;

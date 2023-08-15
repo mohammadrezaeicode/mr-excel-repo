@@ -12,7 +12,11 @@ import { styleGenerator } from "./utils/content-generator/styles";
 import { contentTypeGenerator } from "./utils/content-generator/content-types";
 import { appGenerator } from "./utils/content-generator/app";
 import { generateCellRowCol } from "./utils/generate-formula-cell";
-import { createExcelTabelBaseOnDomElement } from "./utils/create-excel-data";
+import {
+  ColWidthScaleFunction,
+  RowHeightScaleFunction,
+  createExcelTabelBaseOnDomElement,
+} from "./utils/create-excel-data";
 export async function generateExcel(data: ExcelTable) {
   let formatMap: FormatMap = {
     time: {
@@ -1098,12 +1102,16 @@ export async function generateExcel(data: ExcelTable) {
 export function convertTableToExcel(
   queryForTable?: string,
   table?: HTMLTableElement,
-  keepStyle?: boolean
+  keepStyle?: boolean,
+  rowHeightScaleFunction?: RowHeightScaleFunction,
+  colWidthScaleFunction?: ColWidthScaleFunction
 ) {
   const data = createExcelTabelBaseOnDomElement(
     queryForTable,
     table,
-    keepStyle
+    keepStyle,
+    rowHeightScaleFunction,
+    colWidthScaleFunction
   );
   return generateExcel(data);
 }

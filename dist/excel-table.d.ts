@@ -21,7 +21,9 @@ declare type BorderOption = {
     };
 };
 
-export declare function convertTableToExcel(queryForTable?: string, table?: HTMLTableElement, keepStyle?: boolean): Promise<string | number[] | Blob | Buffer | undefined>;
+declare type ColWidthScaleFunction = (data: number, colIndex: number) => number;
+
+export declare function convertTableToExcel(queryForTable?: string, table?: HTMLTableElement, keepStyle?: boolean, rowHeightScaleFunction?: RowHeightScaleFunction, colWidthScaleFunction?: ColWidthScaleFunction): Promise<string | number[] | Blob | Buffer | undefined>;
 
 declare interface Data extends DataOptions {
     [key: string]: string | number | any | undefined;
@@ -83,6 +85,8 @@ declare type ProtectionOption = {
 };
 
 declare type ProtectionOptionKey = "sheet" | "formatCells" | "formatColumns" | "formatRows" | "insertColumns" | "insertRows" | "insertHyperlinks" | "deleteColumns" | "deleteRows" | "sort" | "autoFilter" | "pivotTables";
+
+declare type RowHeightScaleFunction = (data: number, rowIndex: number, fromHeader: boolean) => number;
 
 declare interface Sheet {
     withoutHeader?: boolean;

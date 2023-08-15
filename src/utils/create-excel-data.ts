@@ -4,28 +4,25 @@ import {
   ExcelTable,
   Header,
 } from "../data-model/excel-table";
-
-function valueToHex(c: number): string {
-  c = c * 1;
+function valueToHex(c: number | string): string {
+  c = Number(c);
   var hex = c.toString(16);
   return hex.length == 1 ? "0" + hex : hex;
 }
-function rgbToHex(rgb: string): string {
-  let sp =
+function rgbToHex(rgb: string): string | null {
+  let spResult =
     rgb.indexOf("rgba") >= 0
       ? rgb.substring(5, rgb.length - 1).split(", ")
       : rgb.substring(4, rgb.length - 1).split(", ");
-  if (sp.length == 3) {
-    return (
-      valueToHex(parseInt(sp[0])) +
-      valueToHex(parseInt(sp[1])) +
-      valueToHex(parseInt(sp[2]))
-    ).toUpperCase();
-  } else {
-    return "";
+  if (spResult.length == 4 && spResult[3] == "0") {
+    return null;
   }
+  return (
+    valueToHex(spResult[0]) +
+    valueToHex(spResult[1]) +
+    valueToHex(spResult[2])
+  ).toUpperCase();
 }
-
 function generatRowsBaseOnColAndRowSpan(
   col: number,
   row: number,
@@ -54,13 +51,11 @@ function generatRowsBaseOnColAndRowSpan(
     mergeValue.push(col - 1);
   }
   let rowEl = rowV ? rowV : {};
-
   rowEl.mergeType = data && data.mergeType ? [...data.mergeType, type] : [type];
   rowEl.mergeValue =
     data && data.mergeValue ? [...data.mergeValue, mergeValue] : [mergeValue];
   rowEl.mergeStart =
     data && data.mergeStart ? [...data.mergeStart, start] : [start];
-
   for (let index = 0; index < row; index++) {
     let countCol = col;
     for (let colI = 0; colI < length; colI++) {
@@ -92,14 +87,22 @@ function generatRowsBaseOnColAndRowSpan(
     rowEl = {};
     mergeString = "";
   }
-
   return rows;
 }
+export type RowHeightScaleFunction = (
+  data: number,
+  rowIndex: number,
+  fromHeader: boolean
+) => number;
+export type ColWidthScaleFunction = (data: number, colIndex: number) => number;
 export function createExcelTabelBaseOnDomElement(
   queryForTable?: string,
   table?: HTMLTableElement,
-  keepStyle?: boolean
+  keepStyle?: boolean,
+  rowHeightScaleFunction?: RowHeightScaleFunction,
+  colWidthScaleFunction?: ColWidthScaleFunction
 ): ExcelTable {
+    console.log(arguments);
   if (!queryForTable && !table) {
     throw "Error: One of the function inputs is required.";
   }
@@ -115,10 +118,10 @@ export function createExcelTabelBaseOnDomElement(
     header: {},
     rows: [],
   };
+  let headerHeight = 40;
   if (nodes) {
     // let header = []
     // let data = []
-
     let headerSet = false;
     let mergeMap = {};
     // let headerLength = 0
@@ -126,45 +129,27 @@ export function createExcelTabelBaseOnDomElement(
     // let datas = []
     let cellStyleMap: any = {};
     let headerLength = 0;
-
     nodes.forEach((tr, rowIndex) => {
       var a = [].slice.call(tr.children);
-
+      const trEl = window.getComputedStyle(tr, null);
+      let bgTr = rgbToHex(trEl.backgroundColor);
       if (!headerSet) {
         headerLength = a.length;
         headerSet = true;
+        console.log(rowHeightScaleFunction, typeof rowHeightScaleFunction);
+        if (typeof rowHeightScaleFunction == "function") {
+          headerHeight = rowHeightScaleFunction(
+            Number(trEl.height.substring(0, trEl.height.length - 2)),
+            rowIndex,
+            true
+          );
+        } else {
+          headerHeight = Number(
+            trEl.height.substring(0, trEl.height.length - 2)
+          );
+        }
         a.forEach((n, index) => {
           let styles = window.getComputedStyle(n, null);
-          // let colspan = n.getAttribute("colspan")
-          // if (colspan) {
-          //     headerLength += colspan
-          // } else {
-          //     headerLength++
-          // }
-
-          // console.log(n.textContent, colspan, n.getAttribute("rowspan"))
-          let neededStyle = {
-            fg: rgbToHex(styles.backgroundColor),
-            textDir: styles.textAlign,
-            color: rgbToHex(styles.color),
-            borderTopStyle: styles.borderTopStyle,
-            borderTopColor: styles.borderTopColor,
-            borderTopWidth: styles.borderTopWidth,
-            borderRightStyle: styles.borderRightStyle,
-            borderRightColor: styles.borderRightColor,
-            borderRightWidth: styles.borderRightWidth,
-            borderLeftStyle: styles.borderLeftStyle,
-            borderLeftColor: styles.borderLeftColor,
-            borderLeftWidth: styles.borderLeftWidth,
-            borderBottomStyle: styles.borderBottomStyle,
-            borderBottomColor: styles.borderBottomColor,
-            borderBottomWidth: styles.borderBottomWidth,
-            fontFamily: styles.fontFamily,
-            fontWeight: styles.fontWeight,
-            size: styles.fontSize,
-            font: styles.fontPalette,
-            direction: styles.direction,
-          };
           let border: BorderOption | null = null;
           if (styles.borderBottomWidth !== "0px") {
             if (!border) {
@@ -172,7 +157,7 @@ export function createExcelTabelBaseOnDomElement(
             }
             border["bottom"] = {
               style: "thin",
-              color: styles.borderBottomColor,
+              color: rgbToHex(styles.borderBottomColor)!,
             };
           }
           if (styles.borderTopWidth !== "0px") {
@@ -181,7 +166,7 @@ export function createExcelTabelBaseOnDomElement(
             }
             border["top"] = {
               style: "thin",
-              color: styles.borderTopColor,
+              color: rgbToHex(styles.borderTopColor)!,
             };
           }
           if (styles.borderLeftWidth !== "0px") {
@@ -190,7 +175,7 @@ export function createExcelTabelBaseOnDomElement(
             }
             border["left"] = {
               style: "thin",
-              color: styles.borderLeftColor,
+              color: rgbToHex(styles.borderLeftColor)!,
             };
           }
           if (styles.borderRightWidth !== "0px") {
@@ -199,16 +184,20 @@ export function createExcelTabelBaseOnDomElement(
             }
             border["right"] = {
               style: "thin",
-              color: styles.borderRightColor,
+              color: rgbToHex(styles.borderRightColor)!,
             };
           }
+          let fg = rgbToHex(styles.backgroundColor);
+          if (!fg) {
+            fg = bgTr;
+          }
           let style = {
+            ...(fg ? { fg } : {}),
             bold: parseInt(styles.fontWeight) > 500,
             size: parseInt(
               styles.fontSize.substring(0, styles.fontSize.indexOf("p"))
             ),
             ...(border ? { border } : {}),
-            fg: rgbToHex(styles.backgroundColor),
             alignment: {
               horizontal: styles.textAlign,
               vertical: "center",
@@ -216,26 +205,29 @@ export function createExcelTabelBaseOnDomElement(
             },
           };
           styleMap.header[rowIndex + "-" + index] = style;
-          // if (n.getAttribute("colspan")) {
-          //     mergeMap[__idTableExcel]
-          // }
-          // if (n.getAttribute("rowspan")) {
-
-          // }
           cellStyleMap[rowIndex + "-" + index] = rowIndex + "-" + index;
+          let headWidth;
+          if (typeof colWidthScaleFunction == "function") {
+            headWidth = colWidthScaleFunction(
+              Number(styles.width.substring(0, styles.width.length - 2)),
+              index
+            );
+          } else {
+            headWidth =
+              Number(styles.width.substring(0, styles.width.length - 2)) * 0.15;
+          }
           head.push({
-            // __idTableExcel: "uniqeId" + _idConter,
             label: "c" + index,
             colspan: (n as any).getAttribute("colspan"),
             rowspan: (n as any).getAttribute("rowspan"),
             text: (n as any).textContent,
+            size: headWidth,
           });
         });
       } else {
         let data: any = {};
         let mergeString = "";
         let inMergeMode = false;
-
         if (datas.length >= rowIndex) {
           data = datas[rowIndex - 1];
           mergeString =
@@ -293,25 +285,6 @@ export function createExcelTabelBaseOnDomElement(
               mergeString += "-";
             }
           }
-          let neededStyle = {
-            fg: rgbToHex(styles.backgroundColor),
-            textDir: styles.textAlign,
-            color: rgbToHex(styles.color),
-            borderTopStyle: styles.borderTopStyle,
-            borderTopColor: styles.borderTopColor,
-            borderTopWidth: styles.borderTopWidth,
-            borderRightStyle: styles.borderRightStyle,
-            borderRightColor: styles.borderRightColor,
-            borderRightWidth: styles.borderRightWidth,
-            borderLeftStyle: styles.borderLeftStyle,
-            borderLeftColor: styles.borderLeftColor,
-            borderLeftWidth: styles.borderLeftWidth,
-            borderBottomStyle: styles.borderBottomStyle,
-            borderBottomColor: styles.borderBottomColor,
-            borderBottomWidth: styles.borderBottomWidth,
-            fontFamily: styles.fontFamily,
-            fontWeight: styles.fontWeight,
-          };
           let border: BorderOption | null = null;
           if (styles.borderBottomWidth !== "0px") {
             if (!border) {
@@ -319,7 +292,7 @@ export function createExcelTabelBaseOnDomElement(
             }
             border["bottom"] = {
               style: "thin",
-              color: styles.borderBottomColor,
+              color: rgbToHex(styles.borderBottomColor)!,
             };
           }
           if (styles.borderTopWidth !== "0px") {
@@ -328,7 +301,7 @@ export function createExcelTabelBaseOnDomElement(
             }
             border["top"] = {
               style: "thin",
-              color: styles.borderTopColor,
+              color: rgbToHex(styles.borderTopColor)!,
             };
           }
           if (styles.borderLeftWidth !== "0px") {
@@ -337,7 +310,7 @@ export function createExcelTabelBaseOnDomElement(
             }
             border["left"] = {
               style: "thin",
-              color: styles.borderLeftColor,
+              color: rgbToHex(styles.borderLeftColor)!,
             };
           }
           if (styles.borderRightWidth !== "0px") {
@@ -346,16 +319,21 @@ export function createExcelTabelBaseOnDomElement(
             }
             border["right"] = {
               style: "thin",
-              color: styles.borderRightColor,
+              color: rgbToHex(styles.borderRightColor)!,
             };
           }
+          let fg = rgbToHex(styles.backgroundColor);
+          if (!fg) {
+            fg = bgTr;
+          }
           let style = {
+            ...(fg ? { fg } : {}),
             bold: parseInt(styles.fontWeight) > 500,
             size: parseInt(
               styles.fontSize.substring(0, styles.fontSize.indexOf("p"))
             ),
             ...(border ? { border } : {}),
-            fg: rgbToHex(styles.backgroundColor),
+            // fg: rgbToHex(styles.backgroundColor),
             // colspan: n.getAttribute("colspan"),
             // rowspan: n.getAttribute("rowspan"),
             alignment: {
@@ -368,7 +346,6 @@ export function createExcelTabelBaseOnDomElement(
           // data.rowStyle = "s" + st
           styleMap.header[rowIndex + "-" + index] = style;
           data["c" + index] = (n as any).textContent;
-
           cellStyleMap[rowIndex + "-" + index] = rowIndex + "-" + index;
           // head.push({
           //     label: 'c' + index,
@@ -376,6 +353,16 @@ export function createExcelTabelBaseOnDomElement(
           //     styleId: "s" + st
           // })
         });
+        console.log(rowHeightScaleFunction, typeof rowHeightScaleFunction);
+        if (typeof rowHeightScaleFunction == "function") {
+          data.height = rowHeightScaleFunction(
+            Number(trEl.height.substring(0, trEl.height.length - 2)),
+            rowIndex,
+            false
+          );
+        } else {
+          data.height = trEl.height.substring(0, trEl.height.length - 2);
+        }
         if (datas.length < rowIndex) {
           // console.log("pushed");
           datas.push(data);
@@ -392,6 +379,7 @@ export function createExcelTabelBaseOnDomElement(
     styles: styleMap.header,
     sheet: [
       {
+        headerHeight,
         styleCellCondition: function (
           data: Header | string | number | undefined,
           object: Header | Data,
