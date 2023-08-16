@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 2.3.0 (2023-08-16)
+
+### Improvement
+
+- capability to use var and rgb for fg, border color and font color
+
 ## Version 2.2.2 (2023-08-15)
 
 ### Improvement

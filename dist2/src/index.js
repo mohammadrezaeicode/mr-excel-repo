@@ -39,6 +39,7 @@ const content_types_1 = require("./utils/content-generator/content-types");
 const app_1 = require("./utils/content-generator/app");
 const generate_formula_cell_1 = require("./utils/generate-formula-cell");
 const create_excel_data_1 = require("./utils/create-excel-data");
+const color_1 = require("./utils/color");
 function generateExcel(data) {
     return __awaiter(this, void 0, void 0, function* () {
         let formatMap = {
@@ -220,14 +221,15 @@ function generateExcel(data) {
                 formatIndex: 0,
             };
             if (styl.fg) {
+                let fgConvertor = (0, color_1.convertToHex)(styl.fg, data.backend);
                 indexes.fillIndex = res.fill.count;
                 res.fill.count++;
                 res.fill.value =
                     res.fill.value +
                         "<fill>" +
                         '<patternFill patternType="solid">' +
-                        (styl.fg
-                            ? '<fgColor rgb="' + styl.fg.replace("#", "") + '" />'
+                        (fgConvertor
+                            ? '<fgColor rgb="' + fgConvertor.replace("#", "") + '" />'
                             : "") +
                         "</patternFill>" +
                         "</fill>";
@@ -239,6 +241,7 @@ function generateExcel(data) {
                 styl.italic ||
                 styl.underline ||
                 styl.doubleUnderline) {
+                const colors = (0, color_1.convertToHex)(styl.fontColor, data.backend);
                 indexes.fontIndex = res.font.count;
                 res.font.count++;
                 res.font.value =
@@ -250,9 +253,7 @@ function generateExcel(data) {
                             ? `<u ${styl.doubleUnderline ? ' val="double" ' : ""}/>`
                             : ""}` +
                         (styl.size ? '<sz val="' + styl.size + '" />' : "") +
-                        (styl.fontColor
-                            ? '<color rgb="' + styl.fontColor.replace("#", "") + '" />'
-                            : "") +
+                        (colors ? '<color rgb="' + colors.replace("#", "") + '" />' : "") +
                         (styl.fontFamily ? '<name val="' + styl.fontFamily + '" />' : "") +
                         "</font>";
             }
@@ -289,7 +290,7 @@ function generateExcel(data) {
                             (borderObj.left || borderObj.full).style +
                             '">' +
                             '<color rgb="' +
-                            (borderObj.left || borderObj.full).color.replace("#", "") +
+                            (0, color_1.convertToHex)((borderObj.left || borderObj.full).color, data.backend).replace("#", "") +
                             '" />' +
                             "</left>";
                 }
@@ -299,7 +300,7 @@ function generateExcel(data) {
                             (borderObj.right || borderObj.full).style +
                             '">' +
                             '<color rgb="' +
-                            (borderObj.right || borderObj.full).color.replace("#", "") +
+                            (0, color_1.convertToHex)((borderObj.right || borderObj.full).color, data.backend).replace("#", "") +
                             '" />' +
                             "</right>";
                 }
@@ -309,7 +310,7 @@ function generateExcel(data) {
                             (borderObj.top || borderObj.full).style +
                             '">' +
                             '<color rgb="' +
-                            (borderObj.top || borderObj.full).color.replace("#", "") +
+                            (0, color_1.convertToHex)((borderObj.top || borderObj.full).color, data.backend).replace("#", "") +
                             '" />' +
                             "</top>";
                 }
@@ -319,7 +320,7 @@ function generateExcel(data) {
                             (borderObj.bottom || borderObj.full).style +
                             '">' +
                             '<color rgb="' +
-                            (borderObj.bottom || borderObj.full).color.replace("#", "") +
+                            (0, color_1.convertToHex)((borderObj.bottom || borderObj.full).color, data.backend).replace("#", "") +
                             '" />' +
                             "</bottom>";
                 }

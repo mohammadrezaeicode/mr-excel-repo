@@ -4,25 +4,8 @@ import {
   ExcelTable,
   Header,
 } from "../data-model/excel-table";
-function valueToHex(c: number | string): string {
-  c = Number(c);
-  var hex = c.toString(16);
-  return hex.length == 1 ? "0" + hex : hex;
-}
-function rgbToHex(rgb: string): string | null {
-  let spResult =
-    rgb.indexOf("rgba") >= 0
-      ? rgb.substring(5, rgb.length - 1).split(", ")
-      : rgb.substring(4, rgb.length - 1).split(", ");
-  if (spResult.length == 4 && spResult[3] == "0") {
-    return null;
-  }
-  return (
-    valueToHex(spResult[0]) +
-    valueToHex(spResult[1]) +
-    valueToHex(spResult[2])
-  ).toUpperCase();
-}
+import { rgbToHex } from "./color";
+
 function generatRowsBaseOnColAndRowSpan(
   col: number,
   row: number,

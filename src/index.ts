@@ -17,6 +17,7 @@ import {
   RowHeightScaleFunction,
   createExcelTabelBaseOnDomElement,
 } from "./utils/create-excel-data";
+import { convertToHex } from "./utils/color";
 export async function generateExcel(data: ExcelTable) {
   let formatMap: FormatMap = {
     time: {
@@ -219,14 +220,15 @@ export async function generateExcel(data: ExcelTable) {
         formatIndex: 0,
       };
       if (styl.fg) {
+        let fgConvertor = convertToHex(styl.fg, data.backend);
         indexes.fillIndex = res.fill.count;
         res.fill.count++;
         res.fill.value =
           res.fill.value +
           "<fill>" +
           '<patternFill patternType="solid">' +
-          (styl.fg
-            ? '<fgColor rgb="' + styl.fg.replace("#", "") + '" />'
+          (fgConvertor
+            ? '<fgColor rgb="' + fgConvertor.replace("#", "") + '" />'
             : "") +
           "</patternFill>" +
           "</fill>";
@@ -240,6 +242,8 @@ export async function generateExcel(data: ExcelTable) {
         styl.underline ||
         styl.doubleUnderline
       ) {
+        const colors = convertToHex(styl.fontColor, data.backend);
+
         indexes.fontIndex = res.font.count;
         res.font.count++;
         res.font.value =
@@ -253,9 +257,7 @@ export async function generateExcel(data: ExcelTable) {
               : ""
           }` +
           (styl.size ? '<sz val="' + styl.size + '" />' : "") +
-          (styl.fontColor
-            ? '<color rgb="' + styl.fontColor.replace("#", "") + '" />'
-            : "") +
+          (colors ? '<color rgb="' + colors.replace("#", "") + '" />' : "") +
           (styl.fontFamily ? '<name val="' + styl.fontFamily + '" />' : "") +
           "</font>";
       }
@@ -294,7 +296,10 @@ export async function generateExcel(data: ExcelTable) {
             (borderObj.left || borderObj.full)!.style +
             '">' +
             '<color rgb="' +
-            (borderObj.left || borderObj.full)!.color.replace("#", "") +
+            convertToHex(
+              (borderObj.left || borderObj.full)!.color,
+              data.backend
+            )!.replace("#", "") +
             '" />' +
             "</left>";
         }
@@ -304,7 +309,10 @@ export async function generateExcel(data: ExcelTable) {
             (borderObj.right || borderObj.full)!.style +
             '">' +
             '<color rgb="' +
-            (borderObj.right || borderObj.full)!.color.replace("#", "") +
+            convertToHex(
+              (borderObj.right || borderObj.full)!.color,
+              data.backend
+            )!.replace("#", "") +
             '" />' +
             "</right>";
         }
@@ -314,7 +322,10 @@ export async function generateExcel(data: ExcelTable) {
             (borderObj.top || borderObj.full)!.style +
             '">' +
             '<color rgb="' +
-            (borderObj.top || borderObj.full)!.color.replace("#", "") +
+            convertToHex(
+              (borderObj.top || borderObj.full)!.color,
+              data.backend
+            )!.replace("#", "") +
             '" />' +
             "</top>";
         }
@@ -324,7 +335,10 @@ export async function generateExcel(data: ExcelTable) {
             (borderObj.bottom || borderObj.full)!.style +
             '">' +
             '<color rgb="' +
-            (borderObj.bottom || borderObj.full)!.color.replace("#", "") +
+            convertToHex(
+              (borderObj.bottom || borderObj.full)!.color,
+              data.backend
+            )!.replace("#", "") +
             '" />' +
             "</bottom>";
         }

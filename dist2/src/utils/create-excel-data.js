@@ -1,22 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createExcelTabelBaseOnDomElement = void 0;
-function valueToHex(c) {
-    c = Number(c);
-    var hex = c.toString(16);
-    return hex.length == 1 ? "0" + hex : hex;
-}
-function rgbToHex(rgb) {
-    let spResult = rgb.indexOf("rgba") >= 0
-        ? rgb.substring(5, rgb.length - 1).split(", ")
-        : rgb.substring(4, rgb.length - 1).split(", ");
-    if (spResult.length == 4 && spResult[3] == "0") {
-        return null;
-    }
-    return (valueToHex(spResult[0]) +
-        valueToHex(spResult[1]) +
-        valueToHex(spResult[2])).toUpperCase();
-}
+const color_1 = require("./color");
 function generatRowsBaseOnColAndRowSpan(col, row, start, length, rowV, text, mergeString, data) {
     let rows = [];
     let hasCol = true;
@@ -109,7 +94,7 @@ function createExcelTabelBaseOnDomElement(queryForTable, table, keepStyle, rowHe
         nodes.forEach((tr, rowIndex) => {
             var a = [].slice.call(tr.children);
             const trEl = window.getComputedStyle(tr, null);
-            let bgTr = rgbToHex(trEl.backgroundColor);
+            let bgTr = (0, color_1.rgbToHex)(trEl.backgroundColor);
             if (!headerSet) {
                 headerLength = a.length;
                 headerSet = true;
@@ -129,7 +114,7 @@ function createExcelTabelBaseOnDomElement(queryForTable, table, keepStyle, rowHe
                         }
                         border["bottom"] = {
                             style: "thin",
-                            color: rgbToHex(styles.borderBottomColor),
+                            color: (0, color_1.rgbToHex)(styles.borderBottomColor),
                         };
                     }
                     if (styles.borderTopWidth !== "0px") {
@@ -138,7 +123,7 @@ function createExcelTabelBaseOnDomElement(queryForTable, table, keepStyle, rowHe
                         }
                         border["top"] = {
                             style: "thin",
-                            color: rgbToHex(styles.borderTopColor),
+                            color: (0, color_1.rgbToHex)(styles.borderTopColor),
                         };
                     }
                     if (styles.borderLeftWidth !== "0px") {
@@ -147,7 +132,7 @@ function createExcelTabelBaseOnDomElement(queryForTable, table, keepStyle, rowHe
                         }
                         border["left"] = {
                             style: "thin",
-                            color: rgbToHex(styles.borderLeftColor),
+                            color: (0, color_1.rgbToHex)(styles.borderLeftColor),
                         };
                     }
                     if (styles.borderRightWidth !== "0px") {
@@ -156,10 +141,10 @@ function createExcelTabelBaseOnDomElement(queryForTable, table, keepStyle, rowHe
                         }
                         border["right"] = {
                             style: "thin",
-                            color: rgbToHex(styles.borderRightColor),
+                            color: (0, color_1.rgbToHex)(styles.borderRightColor),
                         };
                     }
-                    let fg = rgbToHex(styles.backgroundColor);
+                    let fg = (0, color_1.rgbToHex)(styles.backgroundColor);
                     if (!fg) {
                         fg = bgTr;
                     }
@@ -241,7 +226,7 @@ function createExcelTabelBaseOnDomElement(queryForTable, table, keepStyle, rowHe
                         }
                         border["bottom"] = {
                             style: "thin",
-                            color: rgbToHex(styles.borderBottomColor),
+                            color: (0, color_1.rgbToHex)(styles.borderBottomColor),
                         };
                     }
                     if (styles.borderTopWidth !== "0px") {
@@ -250,7 +235,7 @@ function createExcelTabelBaseOnDomElement(queryForTable, table, keepStyle, rowHe
                         }
                         border["top"] = {
                             style: "thin",
-                            color: rgbToHex(styles.borderTopColor),
+                            color: (0, color_1.rgbToHex)(styles.borderTopColor),
                         };
                     }
                     if (styles.borderLeftWidth !== "0px") {
@@ -259,7 +244,7 @@ function createExcelTabelBaseOnDomElement(queryForTable, table, keepStyle, rowHe
                         }
                         border["left"] = {
                             style: "thin",
-                            color: rgbToHex(styles.borderLeftColor),
+                            color: (0, color_1.rgbToHex)(styles.borderLeftColor),
                         };
                     }
                     if (styles.borderRightWidth !== "0px") {
@@ -268,10 +253,10 @@ function createExcelTabelBaseOnDomElement(queryForTable, table, keepStyle, rowHe
                         }
                         border["right"] = {
                             style: "thin",
-                            color: rgbToHex(styles.borderRightColor),
+                            color: (0, color_1.rgbToHex)(styles.borderRightColor),
                         };
                     }
-                    let fg = rgbToHex(styles.backgroundColor);
+                    let fg = (0, color_1.rgbToHex)(styles.backgroundColor);
                     if (!fg) {
                         fg = bgTr;
                     }
