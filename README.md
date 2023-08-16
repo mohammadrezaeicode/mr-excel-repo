@@ -72,7 +72,7 @@ ExcelTable.convertTableToExcel("#table", null, true, rowF, colF)
 
 <details>
 
-<summary>result of Example in ./example/conv1.html</summary>
+<summary>result of Example in https://github.com/mohammadrezaeicode/mr-excel-repo/blob/main/example/conv1.html</summary>
 
 ![ex](./example/ex13.PNG)
 
