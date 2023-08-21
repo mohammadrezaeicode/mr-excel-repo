@@ -63,7 +63,6 @@ function generatRowsBaseOnColAndRowSpan(col, row, start, length, rowV, text, mer
 }
 function createExcelTabelBaseOnDomElement(queryForTable, table, keepStyle, rowHeightScaleFunction, colWidthScaleFunction) {
     var _a;
-    console.log(arguments);
     if (!queryForTable && !table) {
         throw "Error: One of the function inputs is required.";
     }
@@ -98,7 +97,6 @@ function createExcelTabelBaseOnDomElement(queryForTable, table, keepStyle, rowHe
             if (!headerSet) {
                 headerLength = a.length;
                 headerSet = true;
-                console.log(rowHeightScaleFunction, typeof rowHeightScaleFunction);
                 if (typeof rowHeightScaleFunction == "function") {
                     headerHeight = rowHeightScaleFunction(Number(trEl.height.substring(0, trEl.height.length - 2)), rowIndex, true);
                 }
@@ -145,7 +143,7 @@ function createExcelTabelBaseOnDomElement(queryForTable, table, keepStyle, rowHe
                         };
                     }
                     let fg = (0, color_1.rgbToHex)(styles.backgroundColor);
-                    if (!fg) {
+                    if (!fg && bgTr) {
                         fg = bgTr;
                     }
                     let style = Object.assign(Object.assign(Object.assign(Object.assign({}, (fg ? { fg } : {})), { bold: parseInt(styles.fontWeight) > 500, size: parseInt(styles.fontSize.substring(0, styles.fontSize.indexOf("p"))) }), (border ? { border } : {})), { alignment: Object.assign({ horizontal: styles.textAlign, vertical: "center" }, (styles.direction == "rtl" ? { rtl: true } : { ltr: true })) });
@@ -212,7 +210,6 @@ function createExcelTabelBaseOnDomElement(queryForTable, table, keepStyle, rowHe
                         data = mergeData[0];
                         mergeString = mergeData[0].mergeString;
                         inMergeMode = true;
-                        // console.log("*-/", [...datas], mergeData);
                     }
                     else {
                         if (!inMergeMode) {
@@ -257,7 +254,7 @@ function createExcelTabelBaseOnDomElement(queryForTable, table, keepStyle, rowHe
                         };
                     }
                     let fg = (0, color_1.rgbToHex)(styles.backgroundColor);
-                    if (!fg) {
+                    if (!fg && bgTr) {
                         fg = bgTr;
                     }
                     let style = Object.assign(Object.assign(Object.assign(Object.assign({}, (fg ? { fg } : {})), { bold: parseInt(styles.fontWeight) > 500, size: parseInt(styles.fontSize.substring(0, styles.fontSize.indexOf("p"))) }), (border ? { border } : {})), { 
@@ -275,7 +272,6 @@ function createExcelTabelBaseOnDomElement(queryForTable, table, keepStyle, rowHe
                     //     styleId: "s" + st
                     // })
                 });
-                console.log(rowHeightScaleFunction, typeof rowHeightScaleFunction);
                 if (typeof rowHeightScaleFunction == "function") {
                     data.height = rowHeightScaleFunction(Number(trEl.height.substring(0, trEl.height.length - 2)), rowIndex, false);
                 }
@@ -283,11 +279,9 @@ function createExcelTabelBaseOnDomElement(queryForTable, table, keepStyle, rowHe
                     data.height = trEl.height.substring(0, trEl.height.length - 2);
                 }
                 if (datas.length < rowIndex) {
-                    // console.log("pushed");
                     datas.push(data);
                 }
                 else {
-                    // console.log("change data");
                     datas[rowIndex - 1] = data;
                 }
             }

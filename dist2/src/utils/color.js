@@ -17,7 +17,7 @@ function rgbToHex(rgb) {
     let validate = spResult.reduce((r, c) => {
         return r && !Number.isNaN(Number(c));
     }, true);
-    if (spResult.length == 4 && spResult[3] == "0" && !validate) {
+    if ((spResult.length == 4 && spResult[3] == "0") || !validate) {
         return null;
     }
     return (valueToHex(spResult[0]) +
@@ -33,7 +33,6 @@ function convertToHex(fgConvertor, backend) {
         let noSpace = removeSpace(fgConvertor);
         if (noSpace.indexOf("var(") == 0 &&
             noSpace.lastIndexOf(")") == noSpace.length - 1) {
-            console.log("in");
             noSpace = noSpace.substring(4, noSpace.length - 1);
             fgConvertor = getComputedStyle(document.documentElement).getPropertyValue(noSpace);
         }

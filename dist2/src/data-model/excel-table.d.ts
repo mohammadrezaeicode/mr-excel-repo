@@ -69,6 +69,7 @@ export interface MergeRowConditionMap {
         start: number;
     };
 }
+export type CommentConditionFunction = (data: Header | string | number | undefined, object: null | Data, headerKey: string, rowIndex: number, colIndex: number, fromHeader: boolean) => Comment | string | false | undefined | null;
 export type StyleCellConditionFunction = (data: Header | string | number | undefined, object: Header | Data, colIndex: number, rowIndex: number, fromHeader: boolean, stylekeys: string[]) => string | null;
 export type MergeRowDataConditionFunction = (data: Header | string | number | undefined, key: string | null, index: number, fromHeader: boolean) => boolean;
 export interface SortAndFilter {
@@ -99,6 +100,7 @@ export interface Sheet {
     headerStyleKey?: string;
     mergeRowDataCondition?: MergeRowDataConditionFunction;
     styleCellCondition?: StyleCellConditionFunction;
+    commentCodition?: CommentConditionFunction;
     sortAndfilter?: SortAndFilter;
     state?: "hidden" | "visible";
     headerRowOption?: any;

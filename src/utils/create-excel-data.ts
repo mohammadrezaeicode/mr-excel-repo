@@ -85,7 +85,6 @@ export function createExcelTabelBaseOnDomElement(
   rowHeightScaleFunction?: RowHeightScaleFunction,
   colWidthScaleFunction?: ColWidthScaleFunction
 ): ExcelTable {
-    console.log(arguments);
   if (!queryForTable && !table) {
     throw "Error: One of the function inputs is required.";
   }
@@ -119,7 +118,7 @@ export function createExcelTabelBaseOnDomElement(
       if (!headerSet) {
         headerLength = a.length;
         headerSet = true;
-        console.log(rowHeightScaleFunction, typeof rowHeightScaleFunction);
+
         if (typeof rowHeightScaleFunction == "function") {
           headerHeight = rowHeightScaleFunction(
             Number(trEl.height.substring(0, trEl.height.length - 2)),
@@ -171,7 +170,7 @@ export function createExcelTabelBaseOnDomElement(
             };
           }
           let fg = rgbToHex(styles.backgroundColor);
-          if (!fg) {
+          if (!fg && bgTr) {
             fg = bgTr;
           }
           let style = {
@@ -262,7 +261,6 @@ export function createExcelTabelBaseOnDomElement(
             data = mergeData[0];
             mergeString = mergeData[0].mergeString;
             inMergeMode = true;
-            // console.log("*-/", [...datas], mergeData);
           } else {
             if (!inMergeMode) {
               mergeString += "-";
@@ -306,7 +304,7 @@ export function createExcelTabelBaseOnDomElement(
             };
           }
           let fg = rgbToHex(styles.backgroundColor);
-          if (!fg) {
+          if (!fg && bgTr) {
             fg = bgTr;
           }
           let style = {
@@ -336,7 +334,6 @@ export function createExcelTabelBaseOnDomElement(
           //     styleId: "s" + st
           // })
         });
-        console.log(rowHeightScaleFunction, typeof rowHeightScaleFunction);
         if (typeof rowHeightScaleFunction == "function") {
           data.height = rowHeightScaleFunction(
             Number(trEl.height.substring(0, trEl.height.length - 2)),
@@ -347,10 +344,8 @@ export function createExcelTabelBaseOnDomElement(
           data.height = trEl.height.substring(0, trEl.height.length - 2);
         }
         if (datas.length < rowIndex) {
-          // console.log("pushed");
           datas.push(data);
         } else {
-          // console.log("change data");
           datas[rowIndex - 1] = data;
         }
       }

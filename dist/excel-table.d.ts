@@ -29,6 +29,8 @@ declare interface Comment_2 {
     author?: string;
 }
 
+declare type CommentConditionFunction = (data: Header | string | number | undefined, object: null | Data, headerKey: string, rowIndex: number, colIndex: number, fromHeader: boolean) => Comment_2 | string | false | undefined | null;
+
 export declare function convertTableToExcel(queryForTable?: string, table?: HTMLTableElement, keepStyle?: boolean, rowHeightScaleFunction?: RowHeightScaleFunction, colWidthScaleFunction?: ColWidthScaleFunction): Promise<string | number[] | Blob | Buffer | undefined>;
 
 declare interface Data extends DataOptions {
@@ -129,6 +131,7 @@ declare interface Sheet {
     headerStyleKey?: string;
     mergeRowDataCondition?: MergeRowDataConditionFunction;
     styleCellCondition?: StyleCellConditionFunction;
+    commentCodition?: CommentConditionFunction;
     sortAndfilter?: SortAndFilter;
     state?: "hidden" | "visible";
     headerRowOption?: any;

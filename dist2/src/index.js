@@ -448,15 +448,23 @@ function generateExcel(data) {
                     if (typeof commentTitle != "undefined") {
                         hasComment = true;
                         const commentObj = (0, comment_1.commentConvertor)(commentTitle, styleMapper.commentSintax.value, defaultCommentStyle);
+                        let authorId = commentAuthor.length;
                         if (commentObj.hasAuthour &&
                             typeof commentObj.author != "undefined") {
-                            commentAuthor.push(commentObj.author.toString());
+                            let auth = commentObj.author.toString();
+                            const index = commentAuthor.indexOf(auth);
+                            if (index < 0) {
+                                commentAuthor.push(auth);
+                            }
+                            else {
+                                authorId = index;
+                            }
                         }
                         shapeCommentRowCol.push({
                             row: rowCount + top - 1,
                             col: left,
                         });
-                        commentString += (0, comment_1.generateCommentTag)(refString, commentObj.commentStr, commentObj.commentStyl, commentAuthor.length);
+                        commentString += (0, comment_1.generateCommentTag)(refString, commentObj.commentStr, commentObj.commentStyl, authorId);
                     }
                     if (typeof title.text == "string") {
                         titleRow +=
@@ -533,18 +541,32 @@ function generateExcel(data) {
                         return;
                     }
                     const refString = cols[innerIndex] + "" + rowCount;
+                    if (typeof sheetData.commentCodition == "function") {
+                        const checkCommentCondition = sheetData.commentCodition(v, null, v.label, rowCount, innerIndex, true);
+                        if (checkCommentCondition) {
+                            v.comment = checkCommentCondition;
+                        }
+                    }
                     if (v.comment) {
                         hasComment = true;
                         const commentObj = (0, comment_1.commentConvertor)(v.comment, styleMapper.commentSintax.value, defaultCommentStyle);
+                        let authorId = commentAuthor.length;
                         if (commentObj.hasAuthour &&
                             typeof commentObj.author != "undefined") {
-                            commentAuthor.push(commentObj.author.toString());
+                            let auth = commentObj.author.toString();
+                            const index = commentAuthor.indexOf(auth);
+                            if (index < 0) {
+                                commentAuthor.push(auth);
+                            }
+                            else {
+                                authorId = index;
+                            }
                         }
                         shapeCommentRowCol.push({
                             row: rowCount - 1,
                             col: innerIndex,
                         });
-                        commentString += (0, comment_1.generateCommentTag)(refString, commentObj.commentStr, commentObj.commentStyl, commentAuthor.length);
+                        commentString += (0, comment_1.generateCommentTag)(refString, commentObj.commentStr, commentObj.commentStyl, authorId);
                     }
                     const formula = sheetData.formula && sheetData.formula[refString];
                     if (formula) {
@@ -717,6 +739,15 @@ function generateExcel(data) {
                             }
                             if (typeof dataEl != "undefined") {
                                 const refString = cols[keyIndex] + "" + rowCount;
+                                if (typeof sheetData.commentCodition == "function") {
+                                    const checkCommentCondition = sheetData.commentCodition(dataEl, mData, key, rowCount, keyIndex, false);
+                                    if (checkCommentCondition) {
+                                        if (typeof mData.comment !== "object") {
+                                            mData.comment = {};
+                                        }
+                                        mData.comment[key] = checkCommentCondition;
+                                    }
+                                }
                                 if (typeof mData.comment == "object" && key in mData.comment) {
                                     const cellComment = mData.comment[key];
                                     hasComment = true;
@@ -729,7 +760,19 @@ function generateExcel(data) {
                                         row: rowCount - 1,
                                         col: keyIndex,
                                     });
-                                    commentString += (0, comment_1.generateCommentTag)(refString, commentObj.commentStr, commentObj.commentStyl, commentAuthor.length);
+                                    let authorId = commentAuthor.length;
+                                    if (commentObj.hasAuthour &&
+                                        typeof commentObj.author != "undefined") {
+                                        let auth = commentObj.author.toString();
+                                        const index = commentAuthor.indexOf(auth);
+                                        if (index < 0) {
+                                            commentAuthor.push(auth);
+                                        }
+                                        else {
+                                            authorId = index;
+                                        }
+                                    }
+                                    commentString += (0, comment_1.generateCommentTag)(refString, commentObj.commentStr, commentObj.commentStyl, authorId);
                                 }
                                 const formula = sheetData.formula && sheetData.formula[refString];
                                 if (formula) {
