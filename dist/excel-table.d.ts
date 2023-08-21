@@ -23,6 +23,12 @@ declare type BorderOption = {
 
 declare type ColWidthScaleFunction = (data: number, colIndex: number) => number;
 
+declare interface Comment_2 {
+    comment?: string;
+    styleId?: string;
+    author?: string;
+}
+
 export declare function convertTableToExcel(queryForTable?: string, table?: HTMLTableElement, keepStyle?: boolean, rowHeightScaleFunction?: RowHeightScaleFunction, colWidthScaleFunction?: ColWidthScaleFunction): Promise<string | number[] | Blob | Buffer | undefined>;
 
 declare interface Data extends DataOptions {
@@ -30,11 +36,13 @@ declare interface Data extends DataOptions {
 }
 
 declare interface DataOptions {
-    [key: string]: "0" | "1" | number | string | undefined;
+    [key: string]: "0" | "1" | number | string | undefined | MapComment | MapMultiStyleValue;
     outlineLevel?: number;
     hidden?: "0" | "1" | number;
     rowStyle?: string;
     height?: number;
+    multiStyleValue?: MapMultiStyleValue;
+    comment?: MapComment;
 }
 
 declare interface ExcelTable {
@@ -72,13 +80,33 @@ declare interface Header {
     label: string;
     text: string;
     size?: number;
+    multiStyleValue?: MultiStyleValue;
+    comment?: Comment_2 | string;
     formula?: {
         type: FormulaType;
         styleId?: string;
     };
 }
 
+declare interface MapComment {
+    [key: string]: Comment_2 | string;
+}
+
+declare interface MapMultiStyleValue {
+    [key: string]: MultiStyleValue;
+}
+
 declare type MergeRowDataConditionFunction = (data: Header | string | number | undefined, key: string | null, index: number, fromHeader: boolean) => boolean;
+
+declare interface MultiStyleRexValue {
+    reg: RegExp | string;
+    styleId: string;
+}
+
+declare interface MultiStyleValue {
+    [key: string]: string | undefined | MultiStyleRexValue[];
+    reg?: MultiStyleRexValue[];
+}
 
 declare type ProtectionOption = {
     [key in ProtectionOptionKey]: "0" | "1" | 0 | 1;
@@ -144,6 +172,8 @@ declare interface Title {
     height?: number;
     styleId?: string;
     text?: string;
+    multiStyleValue?: MultiStyleValue;
+    comment?: Comment_2 | string;
 }
 
 export { }

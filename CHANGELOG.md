@@ -1,5 +1,13 @@
 # Changelog
 
+### Version 2.4.0 (2023-08-20)
+
+#### Improvement
+
+- Added the ability to add comments to cells
+- Conditional ability to comment on cells
+- Ability to change the style of each character of cells. (only text value)
+
 ## Version 2.3.0 (2023-08-16)
 
 ### Improvement

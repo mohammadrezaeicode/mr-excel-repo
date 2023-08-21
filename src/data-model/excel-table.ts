@@ -57,6 +57,8 @@ export interface Header {
   label: string;
   text: string;
   size?: number;
+  multiStyleValue?: MultiStyleValue;
+  comment?: Comment | string;
   formula?: {
     type: FormulaType;
     styleId?: string;
@@ -66,12 +68,40 @@ export interface Header {
 export interface Data extends DataOptions {
   [key: string]: string | number | any | undefined;
 }
+export interface MultiStyleRexValue {
+  reg: RegExp | string;
+  styleId: string;
+}
+export interface Comment {
+  comment?: string;
+  styleId?: string;
+  author?: string;
+}
+export interface MultiStyleValue {
+  [key: string]: string | undefined | MultiStyleRexValue[];
+  reg?: MultiStyleRexValue[];
+}
+export interface MapMultiStyleValue {
+  [key: string]: MultiStyleValue;
+}
+export interface MapComment {
+  [key: string]: Comment | string;
+}
 export interface DataOptions {
-  [key: string]: "0" | "1" | number | string | undefined;
+  [key: string]:
+    | "0"
+    | "1"
+    | number
+    | string
+    | undefined
+    | MapComment
+    | MapMultiStyleValue;
   outlineLevel?: number;
   hidden?: "0" | "1" | number;
   rowStyle?: string;
   height?: number;
+  multiStyleValue?: MapMultiStyleValue;
+  comment?: MapComment;
 }
 export interface MergeRowConditionMap {
   [columnKey: string]: {
@@ -79,6 +109,14 @@ export interface MergeRowConditionMap {
     start: number;
   };
 }
+export type CommentConditionFunction = (
+  data: Header | string | number | undefined,
+  object: null | Data,
+  headerKey: string,
+  rowIndex: number,
+  colIndex: number,
+  fromHeader: boolean
+) => Comment | string | false | undefined | null;
 export type StyleCellConditionFunction = (
   data: Header | string | number | undefined,
   object: Header | Data,
@@ -105,6 +143,8 @@ export interface Title {
   height?: number;
   styleId?: string;
   text?: string;
+  multiStyleValue?: MultiStyleValue;
+  comment?: Comment | string;
 }
 export interface Sheet {
   withoutHeader?: boolean;
@@ -119,6 +159,7 @@ export interface Sheet {
   headerStyleKey?: string;
   mergeRowDataCondition?: MergeRowDataConditionFunction;
   styleCellCondition?: StyleCellConditionFunction;
+  commentCodition?: CommentConditionFunction;
   sortAndfilter?: SortAndFilter;
   state?: "hidden" | "visible";
   headerRowOption?: any; // Define the type if needed
@@ -135,6 +176,11 @@ export interface HeaderRowOption {
 //   data: Data[];
 // }
 export interface StyleMapper {
+  commentSintax: {
+    value: {
+      [key: string]: string;
+    };
+  };
   format: {
     count: number;
     value: string;

@@ -40,6 +40,8 @@ const app_1 = require("./utils/content-generator/app");
 const generate_formula_cell_1 = require("./utils/generate-formula-cell");
 const create_excel_data_1 = require("./utils/create-excel-data");
 const color_1 = require("./utils/color");
+const comment_1 = require("./utils/comment");
+const multi_value_1 = require("./utils/multi-value");
 function generateExcel(data) {
     return __awaiter(this, void 0, void 0, function* () {
         let formatMap = {
@@ -212,6 +214,7 @@ function generateExcel(data) {
             };
         }
         const styleKeys = Object.keys(data.styles);
+        const defaultCommentStyle = comment_1.defaultCellCommentStyle;
         let styleMapper = styleKeys.reduce((res, cur, index) => {
             const styl = data.styles[cur];
             const indexes = {
@@ -256,6 +259,17 @@ function generateExcel(data) {
                         (colors ? '<color rgb="' + colors.replace("#", "") + '" />' : "") +
                         (styl.fontFamily ? '<name val="' + styl.fontFamily + '" />' : "") +
                         "</font>";
+                res.commentSintax.value[cur] = `<rPr>
+            ${styl.bold ? `<b/>` : ""}
+            ${styl.italic ? `<i />` : ""}
+            ${styl.underline || styl.doubleUnderline
+                    ? `<u ${styl.doubleUnderline ? ' val="double" ' : ""}/>`
+                    : ""}
+            <sz val="${styl.size ? `${styl.size}` : "9"}" />
+            ${colors ? `<color rgb="${colors.replace("#", "")}" />` : ""}
+            <rFont val="${styl.fontFamily ? `${styl.fontFamily}` : "Tahoma"}" />
+        </rPr>
+        `;
             }
             let endPart = "/>";
             if (styl.alignment) {
@@ -360,6 +374,9 @@ function generateExcel(data) {
             res.cell.count++;
             return res;
         }, {
+            commentSintax: {
+                value: {},
+            },
             format: {
                 count: 0,
                 value: "",
@@ -398,6 +415,10 @@ function generateExcel(data) {
             let sheetDataString = "";
             let sheetSizeString = "";
             let sheetSortFilter = "";
+            let hasComment = false;
+            let commentAuthor = [];
+            let commentString = "";
+            let shapeCommentRowCol = [];
             let objKey = [];
             let headerFormula = [];
             let mergeRowConditionMap = {};
@@ -405,8 +426,8 @@ function generateExcel(data) {
             if (Array.isArray(sheetData.headers) && colsLength) {
                 let titleRow = "";
                 if (sheetData.title) {
-                    // debugger;
                     const title = sheetData.title;
+                    const commentTitle = title.comment;
                     const top = title.shiftTop ? title.shiftTop : 0;
                     const sL = sheetData.shiftLeft ? sheetData.shiftLeft : 0;
                     const left = title.shiftLeft ? title.shiftLeft + sL : sL;
@@ -424,6 +445,19 @@ function generateExcel(data) {
                         ":" +
                         cols[left + consommeCol - 1] +
                         (rowCount + consommeRow + top));
+                    if (typeof commentTitle != "undefined") {
+                        hasComment = true;
+                        const commentObj = (0, comment_1.commentConvertor)(commentTitle, styleMapper.commentSintax.value, defaultCommentStyle);
+                        if (commentObj.hasAuthour &&
+                            typeof commentObj.author != "undefined") {
+                            commentAuthor.push(commentObj.author.toString());
+                        }
+                        shapeCommentRowCol.push({
+                            row: rowCount + top - 1,
+                            col: left,
+                        });
+                        commentString += (0, comment_1.generateCommentTag)(refString, commentObj.commentStr, commentObj.commentStyl, commentAuthor.length);
+                    }
                     if (typeof title.text == "string") {
                         titleRow +=
                             '<row r="' +
@@ -446,7 +480,12 @@ function generateExcel(data) {
                         titleRow += "</row>";
                         sharedStringIndex++;
                         sharedStringMap[title.text] = title.text;
-                        sharedString += "<si><t>" + title.text + "</t></si>";
+                        if (title.multiStyleValue) {
+                            sharedString += (0, multi_value_1.generateMultiStyleValue)(title.multiStyleValue, title.text, styleMapper.commentSintax.value);
+                        }
+                        else {
+                            sharedString += "<si><t>" + title.text + "</t></si>";
+                        }
                     }
                     rowCount += top + consommeRow + 1;
                 }
@@ -494,6 +533,19 @@ function generateExcel(data) {
                         return;
                     }
                     const refString = cols[innerIndex] + "" + rowCount;
+                    if (v.comment) {
+                        hasComment = true;
+                        const commentObj = (0, comment_1.commentConvertor)(v.comment, styleMapper.commentSintax.value, defaultCommentStyle);
+                        if (commentObj.hasAuthour &&
+                            typeof commentObj.author != "undefined") {
+                            commentAuthor.push(commentObj.author.toString());
+                        }
+                        shapeCommentRowCol.push({
+                            row: rowCount - 1,
+                            col: innerIndex,
+                        });
+                        commentString += (0, comment_1.generateCommentTag)(refString, commentObj.commentStr, commentObj.commentStyl, commentAuthor.length);
+                    }
                     const formula = sheetData.formula && sheetData.formula[refString];
                     if (formula) {
                         sheetDataString += (0, generate_formula_cell_1.generateCellRowCol)(refString, formula, data.styles).cell;
@@ -512,7 +564,12 @@ function generateExcel(data) {
                                 't="s"><v>' +
                                 sharedStringIndex +
                                 "</v></c>";
-                        sharedString += "<si><t>" + v.text + "</t></si>";
+                        if (v.multiStyleValue) {
+                            sharedString += (0, multi_value_1.generateMultiStyleValue)(v.multiStyleValue, v.text, styleMapper.commentSintax.value);
+                        }
+                        else {
+                            sharedString += "<si><t>" + v.text + "</t></si>";
+                        }
                         sharedStringMap[v.text] = v.text;
                         sharedStringIndex++;
                     }
@@ -660,6 +717,20 @@ function generateExcel(data) {
                             }
                             if (typeof dataEl != "undefined") {
                                 const refString = cols[keyIndex] + "" + rowCount;
+                                if (typeof mData.comment == "object" && key in mData.comment) {
+                                    const cellComment = mData.comment[key];
+                                    hasComment = true;
+                                    const commentObj = (0, comment_1.commentConvertor)(cellComment, styleMapper.commentSintax.value, defaultCommentStyle);
+                                    if (commentObj.hasAuthour &&
+                                        typeof commentObj.author != "undefined") {
+                                        commentAuthor.push(commentObj.author.toString());
+                                    }
+                                    shapeCommentRowCol.push({
+                                        row: rowCount - 1,
+                                        col: keyIndex,
+                                    });
+                                    commentString += (0, comment_1.generateCommentTag)(refString, commentObj.commentStr, commentObj.commentStyl, commentAuthor.length);
+                                }
                                 const formula = sheetData.formula && sheetData.formula[refString];
                                 if (formula) {
                                     sheetDataString += (0, generate_formula_cell_1.generateCellRowCol)(refString, formula).cell;
@@ -678,7 +749,14 @@ function generateExcel(data) {
                                                 "><v>" +
                                                 sharedStringIndex +
                                                 "</v></c>";
-                                        sharedString += "<si><t>" + dataEl + "</t></si>";
+                                        if ("multiStyleValue" in mData &&
+                                            mData.multiStyleValue &&
+                                            key in mData.multiStyleValue) {
+                                            sharedString += (0, multi_value_1.generateMultiStyleValue)(mData.multiStyleValue[key], dataEl, styleMapper.commentSintax.value);
+                                        }
+                                        else {
+                                            sharedString += "<si><t>" + dataEl + "</t></si>";
+                                        }
                                         sharedStringMap[dataEl] = dataEl;
                                         sharedStringIndex++;
                                     }
@@ -807,6 +885,10 @@ function generateExcel(data) {
                 key: "sheet" + (index + 1),
                 sheetName: shName,
                 sheetDataString,
+                hasComment,
+                commentString,
+                commentAuthor,
+                shapeCommentRowCol,
                 sheetSizeString: sheetSizeString.length > 0
                     ? "<cols>" + sheetSizeString + "</cols>"
                     : "",
@@ -853,7 +935,6 @@ function generateExcel(data) {
             indexId++;
         }
         let sheetKeys = Object.keys(mapData);
-        zip.file("[Content_Types].xml", (0, content_types_1.contentTypeGenerator)(sheetContentType));
         // in _rels
         var relsFolder = zip.folder("_rels");
         relsFolder === null || relsFolder === void 0 ? void 0 : relsFolder.file(".rels", '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
@@ -938,15 +1019,81 @@ function generateExcel(data) {
         //xl/theme
         var xl_themeFolder = xlFolder === null || xlFolder === void 0 ? void 0 : xlFolder.folder("theme");
         xl_themeFolder === null || xl_themeFolder === void 0 ? void 0 : xl_themeFolder.file("theme1.xml", '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
-            '<a:theme xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" name="Office Theme"><a:themeElements><a:clrScheme name="Office"><a:dk1><a:sysClr val="windowText" lastClr="000000"/></a:dk1><a:lt1><a:sysClr val="window" lastClr="FFFFFF"/></a:lt1><a:dk2><a:srgbClr val="44546A"/></a:dk2><a:lt2><a:srgbClr val="E7E6E6"/></a:lt2><a:accent1><a:srgbClr val="5B9BD5"/></a:accent1><a:accent2><a:srgbClr val="ED7D31"/></a:accent2><a:accent3><a:srgbClr val="A5A5A5"/></a:accent3><a:accent4><a:srgbClr val="FFC000"/></a:accent4><a:accent5><a:srgbClr val="4472C4"/></a:accent5><a:accent6><a:srgbClr val="70AD47"/></a:accent6><a:hlink><a:srgbClr val="0563C1"/></a:hlink><a:folHlink><a:srgbClr val="954F72"/></a:folHlink></a:clrScheme><a:fontScheme name="Office"><a:majorFont><a:latin typeface="Calibri Light" panose="020F0302020204030204"/><a:ea typeface=""/><a:cs typeface=""/><a:font script="Jpan" typeface="游ゴシック Light"/><a:font script="Hang" typeface="맑은 고딕"/><a:font script="Hans" typeface="等线 Light"/><a:font script="Hant" typeface="新細明體"/><a:font script="Arab" typeface="Times New Roman"/><a:font script="Hebr" typeface="Times New Roman"/><a:font script="Thai" typeface="Tahoma"/><a:font script="Ethi" typeface="Nyala"/><a:font script="Beng" typeface="Vrinda"/><a:font script="Gujr" typeface="Shruti"/><a:font script="Khmr" typeface="MoolBoran"/><a:font script="Knda" typeface="Tunga"/><a:font script="Guru" typeface="Raavi"/><a:font script="Cans" typeface="Euphemia"/><a:font script="Cher" typeface="Plantagenet Cherokee"/><a:font script="Yiii" typeface="Microsoft Yi Baiti"/><a:font script="Tibt" typeface="Microsoft Himalaya"/><a:font script="Thaa" typeface="MV Boli"/><a:font script="Deva" typeface="Mangal"/><a:font script="Telu" typeface="Gautami"/><a:font script="Taml" typeface="Latha"/><a:font script="Syrc" typeface="Estrangelo Edessa"/><a:font script="Orya" typeface="Kalinga"/><a:font script="Mlym" typeface="Kartika"/><a:font script="Laoo" typeface="DokChampa"/><a:font script="Sinh" typeface="Iskoola Pota"/><a:font script="Mong" typeface="Mongolian Baiti"/><a:font script="Viet" typeface="Times New Roman"/><a:font script="Uigh" typeface="Microsoft Uighur"/><a:font script="Geor" typeface="Sylfaen"/></a:majorFont><a:minorFont><a:latin typeface="Calibri" panose="020F0502020204030204"/><a:ea typeface=""/><a:cs typeface=""/><a:font script="Jpan" typeface="游ゴシック"/><a:font script="Hang" typeface="맑은 고딕"/><a:font script="Hans" typeface="等线"/><a:font script="Hant" typeface="新細明體"/><a:font script="Arab" typeface="Arial"/><a:font script="Hebr" typeface="Arial"/><a:font script="Thai" typeface="Tahoma"/><a:font script="Ethi" typeface="Nyala"/><a:font script="Beng" typeface="Vrinda"/><a:font script="Gujr" typeface="Shruti"/><a:font script="Khmr" typeface="DaunPenh"/><a:font script="Knda" typeface="Tunga"/><a:font script="Guru" typeface="Raavi"/><a:font script="Cans" typeface="Euphemia"/><a:font script="Cher" typeface="Plantagenet Cherokee"/><a:font script="Yiii" typeface="Microsoft Yi Baiti"/><a:font script="Tibt" typeface="Microsoft Himalaya"/><a:font script="Thaa" typeface="MV Boli"/><a:font script="Deva" typeface="Mangal"/><a:font script="Telu" typeface="Gautami"/><a:font script="Taml" typeface="Latha"/><a:font script="Syrc" typeface="Estrangelo Edessa"/><a:font script="Orya" typeface="Kalinga"/><a:font script="Mlym" typeface="Kartika"/><a:font script="Laoo" typeface="DokChampa"/><a:font script="Sinh" typeface="Iskoola Pota"/><a:font script="Mong" typeface="Mongolian Baiti"/><a:font script="Viet" typeface="Arial"/><a:font script="Uigh" typeface="Microsoft Uighur"/><a:font script="Geor" typeface="Sylfaen"/></a:minorFont></a:fontScheme><a:fmtScheme name="Office"><a:fillStyleLst><a:solidFill><a:schemeClr val="phClr"/></a:solidFill><a:gradFill rotWithShape="1"><a:gsLst><a:gs pos="0"><a:schemeClr val="phClr"><a:lumMod val="110000"/><a:satMod val="105000"/><a:tint val="67000"/></a:schemeClr></a:gs><a:gs pos="50000"><a:schemeClr val="phClr"><a:lumMod val="105000"/><a:satMod val="103000"/><a:tint val="73000"/></a:schemeClr></a:gs><a:gs pos="100000"><a:schemeClr val="phClr"><a:lumMod val="105000"/><a:satMod val="109000"/><a:tint val="81000"/></a:schemeClr></a:gs></a:gsLst><a:lin ang="5400000" scaled="0"/></a:gradFill><a:gradFill rotWithShape="1"><a:gsLst><a:gs pos="0"><a:schemeClr val="phClr"><a:satMod val="103000"/><a:lumMod val="102000"/><a:tint val="94000"/></a:schemeClr></a:gs><a:gs pos="50000"><a:schemeClr val="phClr"><a:satMod val="110000"/><a:lumMod val="100000"/><a:shade val="100000"/></a:schemeClr></a:gs><a:gs pos="100000"><a:schemeClr val="phClr"><a:lumMod val="99000"/><a:satMod val="120000"/><a:shade val="78000"/></a:schemeClr></a:gs></a:gsLst><a:lin ang="5400000" scaled="0"/></a:gradFill></a:fillStyleLst><a:lnStyleLst><a:ln w="6350" cap="flat" cmpd="sng" algn="ctr"><a:solidFill><a:schemeClr val="phClr"/></a:solidFill><a:prstDash val="solid"/><a:miter lim="800000"/></a:ln><a:ln w="12700" cap="flat" cmpd="sng" algn="ctr"><a:solidFill><a:schemeClr val="phClr"/></a:solidFill><a:prstDash val="solid"/><a:miter lim="800000"/></a:ln><a:ln w="19050" cap="flat" cmpd="sng" algn="ctr"><a:solidFill><a:schemeClr val="phClr"/></a:solidFill><a:prstDash val="solid"/><a:miter lim="800000"/></a:ln></a:lnStyleLst><a:effectStyleLst><a:effectStyle><a:effectLst/></a:effectStyle><a:effectStyle><a:effectLst/></a:effectStyle><a:effectStyle><a:effectLst><a:outerShdw blurRad="57150" dist="19050" dir="5400000" algn="ctr" rotWithShape="0"><a:srgbClr val="000000"><a:alpha val="63000"/></a:srgbClr></a:outerShdw></a:effectLst></a:effectStyle></a:effectStyleLst><a:bgFillStyleLst><a:solidFill><a:schemeClr val="phClr"/></a:solidFill><a:solidFill><a:schemeClr val="phClr"><a:tint val="95000"/><a:satMod val="170000"/></a:schemeClr></a:solidFill><a:gradFill rotWithShape="1"><a:gsLst><a:gs pos="0"><a:schemeClr val="phClr"><a:tint val="93000"/><a:satMod val="150000"/><a:shade val="98000"/><a:lumMod val="102000"/></a:schemeClr></a:gs><a:gs pos="50000"><a:schemeClr val="phClr"><a:tint val="98000"/><a:satMod val="130000"/><a:shade val="90000"/><a:lumMod val="103000"/></a:schemeClr></a:gs><a:gs pos="100000"><a:schemeClr val="phClr"><a:shade val="63000"/><a:satMod val="120000"/></a:schemeClr></a:gs></a:gsLst><a:lin ang="5400000" scaled="0"/></a:gradFill></a:bgFillStyleLst></a:fmtScheme></a:themeElements><a:objectDefaults/><a:extraClrSchemeLst/><a:extLst><a:ext uri="{05A4C25C-085E-4340-85A3-A5531E510DB2}"><thm15:themeFamily xmlns:thm15="http://schemas.microsoft.com/office/thememl/2012/main" name="Office Theme" id="{62F939B6-93AF-4DB8-9C6B-D6C7DFDC589F}" vid="{4A3C46E8-61CC-4603-A589-7422A47A8E4A}"/></a:ext></a:extLst></a:theme>');
+            '<a:theme xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"  name="Office Theme"><a:themeElements><a:clrScheme name="Office"><a:dk1><a:sysClr val="windowText" lastClr="000000"/></a:dk1><a:lt1><a:sysClr val="window" lastClr="FFFFFF"/></a:lt1><a:dk2><a:srgbClr val="44546A"/></a:dk2><a:lt2><a:srgbClr val="E7E6E6"/></a:lt2><a:accent1><a:srgbClr val="5B9BD5"/></a:accent1><a:accent2><a:srgbClr val="ED7D31"/></a:accent2><a:accent3><a:srgbClr val="A5A5A5"/></a:accent3><a:accent4><a:srgbClr val="FFC000"/></a:accent4><a:accent5><a:srgbClr val="4472C4"/></a:accent5><a:accent6><a:srgbClr val="70AD47"/></a:accent6><a:hlink><a:srgbClr val="0563C1"/></a:hlink><a:folHlink><a:srgbClr val="954F72"/></a:folHlink></a:clrScheme><a:fontScheme name="Office"><a:majorFont><a:latin typeface="Calibri Light" panose="020F0302020204030204"/><a:ea typeface=""/><a:cs typeface=""/><a:font script="Jpan" typeface="游ゴシック Light"/><a:font script="Hang" typeface="맑은 고딕"/><a:font script="Hans" typeface="等线 Light"/><a:font script="Hant" typeface="新細明體"/><a:font script="Arab" typeface="Times New Roman"/><a:font script="Hebr" typeface="Times New Roman"/><a:font script="Thai" typeface="Tahoma"/><a:font script="Ethi" typeface="Nyala"/><a:font script="Beng" typeface="Vrinda"/><a:font script="Gujr" typeface="Shruti"/><a:font script="Khmr" typeface="MoolBoran"/><a:font script="Knda" typeface="Tunga"/><a:font script="Guru" typeface="Raavi"/><a:font script="Cans" typeface="Euphemia"/><a:font script="Cher" typeface="Plantagenet Cherokee"/><a:font script="Yiii" typeface="Microsoft Yi Baiti"/><a:font script="Tibt" typeface="Microsoft Himalaya"/><a:font script="Thaa" typeface="MV Boli"/><a:font script="Deva" typeface="Mangal"/><a:font script="Telu" typeface="Gautami"/><a:font script="Taml" typeface="Latha"/><a:font script="Syrc" typeface="Estrangelo Edessa"/><a:font script="Orya" typeface="Kalinga"/><a:font script="Mlym" typeface="Kartika"/><a:font script="Laoo" typeface="DokChampa"/><a:font script="Sinh" typeface="Iskoola Pota"/><a:font script="Mong" typeface="Mongolian Baiti"/><a:font script="Viet" typeface="Times New Roman"/><a:font script="Uigh" typeface="Microsoft Uighur"/><a:font script="Geor" typeface="Sylfaen"/></a:majorFont><a:minorFont><a:latin typeface="Calibri" panose="020F0502020204030204"/><a:ea typeface=""/><a:cs typeface=""/><a:font script="Jpan" typeface="游ゴシック"/><a:font script="Hang" typeface="맑은 고딕"/><a:font script="Hans" typeface="等线"/><a:font script="Hant" typeface="新細明體"/><a:font script="Arab" typeface="Arial"/><a:font script="Hebr" typeface="Arial"/><a:font script="Thai" typeface="Tahoma"/><a:font script="Ethi" typeface="Nyala"/><a:font script="Beng" typeface="Vrinda"/><a:font script="Gujr" typeface="Shruti"/><a:font script="Khmr" typeface="DaunPenh"/><a:font script="Knda" typeface="Tunga"/><a:font script="Guru" typeface="Raavi"/><a:font script="Cans" typeface="Euphemia"/><a:font script="Cher" typeface="Plantagenet Cherokee"/><a:font script="Yiii" typeface="Microsoft Yi Baiti"/><a:font script="Tibt" typeface="Microsoft Himalaya"/><a:font script="Thaa" typeface="MV Boli"/><a:font script="Deva" typeface="Mangal"/><a:font script="Telu" typeface="Gautami"/><a:font script="Taml" typeface="Latha"/><a:font script="Syrc" typeface="Estrangelo Edessa"/><a:font script="Orya" typeface="Kalinga"/><a:font script="Mlym" typeface="Kartika"/><a:font script="Laoo" typeface="DokChampa"/><a:font script="Sinh" typeface="Iskoola Pota"/><a:font script="Mong" typeface="Mongolian Baiti"/><a:font script="Viet" typeface="Arial"/><a:font script="Uigh" typeface="Microsoft Uighur"/><a:font script="Geor" typeface="Sylfaen"/></a:minorFont></a:fontScheme><a:fmtScheme name="Office"><a:fillStyleLst><a:solidFill><a:schemeClr val="phClr"/></a:solidFill><a:gradFill rotWithShape="1"><a:gsLst><a:gs pos="0"><a:schemeClr val="phClr"><a:lumMod val="110000"/><a:satMod val="105000"/><a:tint val="67000"/></a:schemeClr></a:gs><a:gs pos="50000"><a:schemeClr val="phClr"><a:lumMod val="105000"/><a:satMod val="103000"/><a:tint val="73000"/></a:schemeClr></a:gs><a:gs pos="100000"><a:schemeClr val="phClr"><a:lumMod val="105000"/><a:satMod val="109000"/><a:tint val="81000"/></a:schemeClr></a:gs></a:gsLst><a:lin ang="5400000" scaled="0"/></a:gradFill><a:gradFill rotWithShape="1"><a:gsLst><a:gs pos="0"><a:schemeClr val="phClr"><a:satMod val="103000"/><a:lumMod val="102000"/><a:tint val="94000"/></a:schemeClr></a:gs><a:gs pos="50000"><a:schemeClr val="phClr"><a:satMod val="110000"/><a:lumMod val="100000"/><a:shade val="100000"/></a:schemeClr></a:gs><a:gs pos="100000"><a:schemeClr val="phClr"><a:lumMod val="99000"/><a:satMod val="120000"/><a:shade val="78000"/></a:schemeClr></a:gs></a:gsLst><a:lin ang="5400000" scaled="0"/></a:gradFill></a:fillStyleLst><a:lnStyleLst><a:ln w="6350" cap="flat" cmpd="sng" algn="ctr"><a:solidFill><a:schemeClr val="phClr"/></a:solidFill><a:prstDash val="solid"/><a:miter lim="800000"/></a:ln><a:ln w="12700" cap="flat" cmpd="sng" algn="ctr"><a:solidFill><a:schemeClr val="phClr"/></a:solidFill><a:prstDash val="solid"/><a:miter lim="800000"/></a:ln><a:ln w="19050" cap="flat" cmpd="sng" algn="ctr"><a:solidFill><a:schemeClr val="phClr"/></a:solidFill><a:prstDash val="solid"/><a:miter lim="800000"/></a:ln></a:lnStyleLst><a:effectStyleLst><a:effectStyle><a:effectLst/></a:effectStyle><a:effectStyle><a:effectLst/></a:effectStyle><a:effectStyle><a:effectLst><a:outerShdw blurRad="57150" dist="19050" dir="5400000" algn="ctr" rotWithShape="0"><a:srgbClr val="000000"><a:alpha val="63000"/></a:srgbClr></a:outerShdw></a:effectLst></a:effectStyle></a:effectStyleLst><a:bgFillStyleLst><a:solidFill><a:schemeClr val="phClr"/></a:solidFill><a:solidFill><a:schemeClr val="phClr"><a:tint val="95000"/><a:satMod val="170000"/></a:schemeClr></a:solidFill><a:gradFill rotWithShape="1"><a:gsLst><a:gs pos="0"><a:schemeClr val="phClr"><a:tint val="93000"/><a:satMod val="150000"/><a:shade val="98000"/><a:lumMod val="102000"/></a:schemeClr></a:gs><a:gs pos="50000"><a:schemeClr val="phClr"><a:tint val="98000"/><a:satMod val="130000"/><a:shade val="90000"/><a:lumMod val="103000"/></a:schemeClr></a:gs><a:gs pos="100000"><a:schemeClr val="phClr"><a:shade val="63000"/><a:satMod val="120000"/></a:schemeClr></a:gs></a:gsLst><a:lin ang="5400000" scaled="0"/></a:gradFill></a:bgFillStyleLst></a:fmtScheme></a:themeElements><a:objectDefaults/><a:extraClrSchemeLst/><a:extLst><a:ext uri="{05A4C25C-085E-4340-85A3-A5531E510DB2}"><thm15:themeFamily xmlns:thm15="http://schemas.microsoft.com/office/thememl/2012/main" name="Office Theme" id="{62F939B6-93AF-4DB8-9C6B-D6C7DFDC589F}" vid="{4A3C46E8-61CC-4603-A589-7422A47A8E4A}"/></a:ext></a:extLst></a:theme>');
         // xl/worksheets
         var xl_worksheetsFolder = xlFolder === null || xlFolder === void 0 ? void 0 : xlFolder.folder("worksheets");
-        sheetKeys.forEach((k) => {
+        let commentId = [];
+        const xl_drawingsFolder = xlFolder === null || xlFolder === void 0 ? void 0 : xlFolder.folder("drawings");
+        const xl_worksheets_relsFolder = xl_worksheetsFolder === null || xl_worksheetsFolder === void 0 ? void 0 : xl_worksheetsFolder.folder("_rels");
+        sheetKeys.forEach((k, iCo) => {
             const sh = mapData[k];
+            if (sh.hasComment) {
+                commentId.push(iCo + 1);
+                let aurt = sh.commentAuthor;
+                xlFolder === null || xlFolder === void 0 ? void 0 : xlFolder.file(`comments${iCo + 1}.xml`, `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<comments xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+     xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
+	<authors>
+        ${Array.isArray(aurt) && aurt.length > 0
+                    ? aurt.reduce((res, currr) => res + "<author>" + currr + "</author>", "")
+                    : `<author></author>`}
+	</authors>
+	<commentList>
+		${sh.commentString}
+	</commentList>
+</comments>`);
+                xl_worksheets_relsFolder === null || xl_worksheets_relsFolder === void 0 ? void 0 : xl_worksheets_relsFolder.file("sheet" + (iCo + 1) + ".xml.rels", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+    <Relationship Id="rId1"
+        Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments"
+        Target="../comments${iCo + 1}.xml" />
+    ${true
+                    ? ""
+                    : `<Relationship Id="rId2"
+        Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing"
+        Target="../drawings/drawing${iCo + 1}.xml" />`}
+    <Relationship Id="rId3"
+        Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing"
+        Target="../drawings/vmlDrawing${iCo + 1}.vml" />
+</Relationships>`);
+                xl_drawingsFolder === null || xl_drawingsFolder === void 0 ? void 0 : xl_drawingsFolder.file("vmlDrawing" + (iCo + 1) + ".vml", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xml xmlns:p="http://schemas.openxmlformats.org/presentationml/2006/main" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:oa="urn:schemas-microsoft-com:office:activation" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:pvml="urn:schemas-microsoft-com:office:powerpoint">
+ <o:shapelayout v:ext="edit">
+  <o:idmap v:ext="edit" data="1"/>
+ </o:shapelayout><v:shapetype id="_x0000_t202" coordsize="21600,21600" o:spt="202"
+  path="m,l,21600r21600,l21600,xe">
+  <v:stroke joinstyle="miter"/>
+  <v:path gradientshapeok="t" o:connecttype="rect"/>
+ </v:shapetype>${sh.shapeCommentRowCol.reduce((res, curr) => {
+                    return (res +
+                        `<v:shape id="_x0000_s1025" type="#_x0000_t202" style='position:absolute;
+  margin-left:77.25pt;margin-top:23.25pt;width:264pt;height:42.75pt;z-index:1;
+  visibility:hidden' fillcolor="#ffffe1">
+  <v:fill color2="#ffffe1"/>
+  <v:shadow on="t" color="black" obscured="t"/>
+  <v:path o:connecttype="none"/>
+  <v:textbox>
+   <div style='text-align:left'></div>
+  </v:textbox>
+  <x:ClientData ObjectType="Note">
+   <x:MoveWithCells/>
+   <x:SizeWithCells/>
+   <x:Anchor>
+    1, 15, 1, 10, 5, 15, 4, 4</x:Anchor>
+   <x:AutoFill>False</x:AutoFill>
+   <x:Row>${curr.row}</x:Row>
+   <x:Column>${curr.col}</x:Column>
+  </x:ClientData>
+ </v:shape>`);
+                }, "")}
+ </xml>`);
+            }
             xl_worksheetsFolder === null || xl_worksheetsFolder === void 0 ? void 0 : xl_worksheetsFolder.file(sh.key + ".xml", '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
                 '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"' +
                 ' xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"' +
                 ' xmlns:mx="http://schemas.microsoft.com/office/mac/excel/2008/main"' +
+                ' xmlns:xdr="http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing" ' +
                 ' xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"' +
                 ' xmlns:mv="urn:schemas-microsoft-com:mac:vml"' +
                 ' xmlns:xr="http://schemas.microsoft.com/office/spreadsheetml/2014/revision"' +
@@ -966,8 +1113,11 @@ function generateExcel(data) {
                 sh.protectionOption +
                 sh.sheetSortFilter +
                 sh.merges +
+                (true ? "" : '<drawing r:id="rId2" />') +
+                (sh.hasComment ? '<legacyDrawing r:id="rId3" />' : "") +
                 "</worksheet>");
         });
+        zip.file("[Content_Types].xml", (0, content_types_1.contentTypeGenerator)(sheetContentType, commentId));
         if (data.backend) {
             return zip
                 .generateAsync({
