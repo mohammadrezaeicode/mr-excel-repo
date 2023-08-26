@@ -3,6 +3,7 @@ import {
   AlignmentOptionKey,
   ExcelTable,
   FormatMap,
+  Formula,
   MergeRowConditionMap,
   ProtectionOptionKey,
   StyleMapper,
@@ -25,176 +26,12 @@ import {
   generateCommentTag,
 } from "./utils/comment";
 import { generateMultiStyleValue } from "./utils/multi-value";
+import {
+  cols as colsDef,
+  formatMap,
+} from "./utils/content-generator/const-data";
 export async function generateExcel(data: ExcelTable) {
-  let formatMap: FormatMap = {
-    time: {
-      key: 165,
-      value: '<numFmt numFmtId="165" formatCode="[$-F400]h:mm:ss\\ AM/PM" />',
-    },
-    date: {
-      key: 187,
-      value:
-        '<numFmt numFmtId="187" formatCode="[$-F800]dddd\\,\\ mmmm\\ dd\\,\\ yyyy" />',
-    },
-    short_date: {
-      key: 14,
-    },
-    fraction: {
-      key: 13,
-    },
-    percentage: {
-      key: 9,
-    },
-    float_1: { key: 180, value: '<numFmt numFmtId="180" formatCode="0.0" />' },
-    float_2: { key: 181, value: '<numFmt numFmtId="181" formatCode="0.00" />' },
-    float_3: {
-      key: 164,
-      value: '<numFmt numFmtId="164" formatCode="0.000" />',
-    },
-    float_4: {
-      key: 182,
-      value: '<numFmt numFmtId="182" formatCode="0.0000" />',
-    },
-    dollar_2: {
-      key: 183,
-      value: '<numFmt numFmtId="183" formatCode="&quot;$&quot;#,##0.00" />',
-    },
-    num_sep: {
-      key: 184,
-      value: '<numFmt numFmtId="184" formatCode="#,##0" />',
-    },
-    num_sep_1: {
-      key: 185,
-      value: '<numFmt numFmtId="185" formatCode="#,##0.0" />',
-    },
-    num_sep_2: {
-      key: 186,
-      value: '<numFmt numFmtId="186" formatCode="#,##0.00" />',
-    },
-    dollar: {
-      key: 163,
-      value:
-        '<numFmt numFmtId="163" formatCode="_([$$-409]* #,##0.00_);_([$$-409]* \\(#,##0.00\\);_([$$-409]* &quot;-&quot;??_);_(@_)" />',
-    },
-    $: {
-      key: 163,
-      value:
-        '<numFmt numFmtId="163" formatCode="_([$$-409]* #,##0.00_);_([$$-409]* \\(#,##0.00\\);_([$$-409]* &quot;-&quot;??_);_(@_)" />',
-    },
-    pound: {
-      key: 162,
-      value:
-        '<numFmt numFmtId="162" formatCode="_-[$£-809]* #,##0.00_-;\\-[$£-809]* #,##0.00_-;_-[$£-809]* &quot;-&quot;??_-;_-@_-" />',
-    },
-    "£": {
-      key: 162,
-      value:
-        '<numFmt numFmtId="162" formatCode="_-[$£-809]* #,##0.00_-;\\-[$£-809]* #,##0.00_-;_-[$£-809]* &quot;-&quot;??_-;_-@_-" />',
-    },
-    euro: {
-      key: 161,
-      value:
-        '<numFmt numFmtId="161" formatCode="_([$€-2]\\ * #,##0.00_);_([$€-2]\\ * \\(#,##0.00\\);_([$€-2]\\ * &quot;-&quot;??_);_(@_)" />',
-    },
-    "€": {
-      key: 161,
-      value:
-        '<numFmt numFmtId="161" formatCode="_([$€-2]\\ * #,##0.00_);_([$€-2]\\ * \\(#,##0.00\\);_([$€-2]\\ * &quot;-&quot;??_);_(@_)" />',
-    },
-    yen: {
-      key: 160,
-      value:
-        '<numFmt numFmtId="160" formatCode="_ [$¥-804]* #,##0.00_ ;_ [$¥-804]* \\-#,##0.00_ ;_ [$¥-804]* &quot;-&quot;??_ ;_ @_ " />',
-    },
-    "¥": {
-      key: 160,
-      value:
-        '<numFmt numFmtId="160" formatCode="_ [$¥-804]* #,##0.00_ ;_ [$¥-804]* \\-#,##0.00_ ;_ [$¥-804]* &quot;-&quot;??_ ;_ @_ " />',
-    },
-    CHF: {
-      key: 179,
-      value:
-        '<numFmt numFmtId="179" formatCode="_-* #,##0.00\\ [$CHF-100C]_-;\\-* #,##0.00\\ [$CHF-100C]_-;_-* &quot;-&quot;??\\ [$CHF-100C]_-;_-@_-" />',
-    },
-    ruble: {
-      key: 178,
-      value:
-        '<numFmt numFmtId="178" formatCode="_-* #,##0.00\\ [$₽-419]_-;\\-* #,##0.00\\ [$₽-419]_-;_-* &quot;-&quot;??\\ [$₽-419]_-;_-@_-" />',
-    },
-    "₽": {
-      key: 178,
-      value:
-        '<numFmt numFmtId="178" formatCode="_-* #,##0.00\\ [$₽-419]_-;\\-* #,##0.00\\ [$₽-419]_-;_-* &quot;-&quot;??\\ [$₽-419]_-;_-@_-" />',
-    },
-    "֏": {
-      key: 177,
-      value:
-        '<numFmt numFmtId="177" formatCode="_-* #,##0.00\\ [$֏-42B]_-;\\-* #,##0.00\\ [$֏-42B]_-;_-* &quot;-&quot;??\\ [$֏-42B]_-;_-@_-" />',
-    },
-    manat: {
-      key: 176,
-      value:
-        '<numFmt numFmtId="176" formatCode="_-* #,##0.00\\ [$₼-82C]_-;\\-* #,##0.00\\ [$₼-82C]_-;_-* &quot;-&quot;??\\ [$₼-82C]_-;_-@_-" />',
-    },
-    "₼": {
-      key: 176,
-      value:
-        '<numFmt numFmtId="176" formatCode="_-* #,##0.00\\ [$₼-82C]_-;\\-* #,##0.00\\ [$₼-82C]_-;_-* &quot;-&quot;??\\ [$₼-82C]_-;_-@_-" />',
-    },
-    "₼1": {
-      key: 175,
-      value:
-        '<numFmt numFmtId="175" formatCode="_-* #,##0.00\\ [$₼-42C]_-;\\-* #,##0.00\\ [$₼-42C]_-;_-* &quot;-&quot;??\\ [$₼-42C]_-;_-@_-" />',
-    },
-    "₽1": {
-      key: 174,
-      value:
-        '<numFmt numFmtId="174" formatCode="_-* #,##0.00\\ [$₽-46D]_-;\\-* #,##0.00\\ [$₽-46D]_-;_-* &quot;-&quot;??\\ [$₽-46D]_-;_-@_-" />',
-    },
-    "₽2": {
-      key: 173,
-      value:
-        '<numFmt numFmtId="173" formatCode="_-* #,##0.00\\ [$₽-485]_-;\\-* #,##0.00\\ [$₽-485]_-;_-* &quot;-&quot;??\\ [$₽-485]_-;_-@_-" />',
-    },
-    "₽3": {
-      key: 172,
-      value:
-        '<numFmt numFmtId="172" formatCode="_-* #,##0.00\\ [$₽-444]_-;\\-* #,##0.00\\ [$₽-444]_-;_-* &quot;-&quot;??\\ [$₽-444]_-;_-@_-" />',
-    },
-    ريال: {
-      key: 171,
-      value:
-        '<numFmt numFmtId="171" formatCode="_ * #,##0.00_-[$ريال-429]_ ;_ * #,##0.00\\-[$ريال-429]_ ;_ * &quot;-&quot;??_-[$ريال-429]_ ;_ @_ " />',
-    },
-  };
-  let cols = [
-    "A",
-    "B",
-    "C",
-    "D",
-    "E",
-    "F",
-    "G",
-    "H",
-    "I",
-    "J",
-    "K",
-    "L",
-    "M",
-    "N",
-    "O",
-    "P",
-    "Q",
-    "R",
-    "S",
-    "T",
-    "U",
-    "V",
-    "W",
-    "X",
-    "Y",
-    "Z",
-  ];
+  let cols: string[] = [...colsDef];
   if (data.numberOfColumn && data.numberOfColumn > 25) {
     cols = generateColumnName(cols, data.numberOfColumn);
   }
@@ -454,7 +291,8 @@ export async function generateExcel(data: ExcelTable) {
     let sheetDataString = "";
     let sheetSizeString = "";
     let sheetSortFilter = "";
-
+    let mergesCellArray: string[] = Object.assign([], sheetData.merges);
+    let formulaSheetObj: Formula = Object.assign({}, sheetData.formula);
     let hasComment = false;
     let commentAuthor: string[] = [];
     let commentString = "";
@@ -480,10 +318,7 @@ export async function generateExcel(data: ExcelTable) {
             : "";
         const tStyle = title.styleId ? title.styleId : "titleStyle";
         const refString = cols[left] + "" + (rowCount + top);
-        if (!sheetData.merges) {
-          sheetData.merges = [];
-        }
-        sheetData.merges.push(
+        mergesCellArray.push(
           refString +
             ":" +
             cols[left + consommeCol - 1] +
@@ -546,7 +381,8 @@ export async function generateExcel(data: ExcelTable) {
             sharedString += generateMultiStyleValue(
               title.multiStyleValue,
               title.text,
-              styleMapper.commentSintax.value
+              styleMapper.commentSintax.value,
+              tStyle
             );
           } else {
             sharedString += "<si><t>" + title.text + "</t></si>";
@@ -658,14 +494,14 @@ export async function generateExcel(data: ExcelTable) {
             authorId
           );
         }
-        const formula = sheetData.formula && sheetData.formula[refString];
+        const formula = formulaSheetObj && formulaSheetObj[refString];
         if (formula) {
           sheetDataString += generateCellRowCol(
             refString,
             formula,
             data.styles
           ).cell;
-          delete sheetData.formula![refString];
+          delete formulaSheetObj![refString];
         } else {
           sheetDataString +=
             '<c r="' +
@@ -683,7 +519,8 @@ export async function generateExcel(data: ExcelTable) {
             sharedString += generateMultiStyleValue(
               v.multiStyleValue,
               v.text,
-              styleMapper.commentSintax.value
+              styleMapper.commentSintax.value,
+              headerStyleKey ? headerStyleKey : ""
             );
           } else {
             sharedString += "<si><t>" + v.text + "</t></si>";
@@ -774,10 +611,8 @@ export async function generateExcel(data: ExcelTable) {
                     (rowCount + mergeValue[0]);
                 }
               }
-              if (!sheetData.merges) {
-                sheetData.merges = [];
-              }
-              sheetData.merges.push(mergeStr);
+
+              mergesCellArray.push(mergeStr);
             }
           }
           const rowStyle = mData.rowStyle;
@@ -837,15 +672,10 @@ export async function generateExcel(data: ExcelTable) {
                 }
               } else {
                 if (item && item.inProgress) {
-                  if (!sheetData.merges) {
-                    sheetData.merges = [
-                      columnKey + item.start + ":" + columnKey + (rowCount - 1),
-                    ];
-                  } else {
-                    sheetData.merges.push(
-                      columnKey + item.start + ":" + columnKey + (rowCount - 1)
-                    );
-                  }
+                  mergesCellArray.push(
+                    columnKey + item.start + ":" + columnKey + (rowCount - 1)
+                  );
+
                   mergeRowConditionMap[columnKey] = {
                     inProgress: false,
                     start: -1,
@@ -909,10 +739,10 @@ export async function generateExcel(data: ExcelTable) {
                   authorId
                 );
               }
-              const formula = sheetData.formula && sheetData.formula[refString];
+              const formula = formulaSheetObj && formulaSheetObj[refString];
               if (formula) {
                 sheetDataString += generateCellRowCol(refString, formula).cell;
-                delete sheetData.formula![refString];
+                delete formulaSheetObj![refString];
               } else {
                 if (typeof dataEl == "string") {
                   sheetDataString +=
@@ -934,7 +764,8 @@ export async function generateExcel(data: ExcelTable) {
                     sharedString += generateMultiStyleValue(
                       mData.multiStyleValue[key],
                       dataEl,
-                      styleMapper.commentSintax.value
+                      styleMapper.commentSintax.value,
+                      cellStyle ? cellStyle : ""
                     );
                   } else {
                     sharedString += "<si><t>" + dataEl + "</t></si>";
@@ -960,15 +791,9 @@ export async function generateExcel(data: ExcelTable) {
           if (rowLength - 1 == innerIndex) {
             Object.keys(mergeRowConditionMap).forEach((v) => {
               if (mergeRowConditionMap[v].inProgress) {
-                if (sheetData.merges) {
-                  sheetData.merges.push(
-                    v + mergeRowConditionMap[v].start + ":" + v + rowCount
-                  );
-                } else {
-                  sheetData.merges = [
-                    v + mergeRowConditionMap[v].start + ":" + v + rowCount,
-                  ];
-                }
+                mergesCellArray.push(
+                  v + mergeRowConditionMap[v].start + ":" + v + rowCount
+                );
               }
             });
           }
@@ -996,12 +821,9 @@ export async function generateExcel(data: ExcelTable) {
         }
       }
       if (headerFormula.length > 0) {
-        if (!sheetData.formula) {
-          sheetData.formula = {};
-        }
         headerFormula.forEach((v) => {
           const header = sheetData.headers[v];
-          sheetData.formula![cols[v] + "" + rowCount] = {
+          formulaSheetObj![cols[v] + "" + rowCount] = {
             start: sheetData.withoutHeader ? cols[v] + "1" : cols[v] + "2",
             end: cols[v] + "" + (rowCount - 1),
             type: header.formula!.type,
@@ -1011,14 +833,14 @@ export async function generateExcel(data: ExcelTable) {
           };
         });
       }
-      if (sheetData.formula) {
-        const remindFormulaKey = Object.keys(sheetData.formula);
+      if (formulaSheetObj) {
+        const remindFormulaKey = Object.keys(formulaSheetObj);
         if (remindFormulaKey.length) {
           let rF: {
             [row: number]: string;
           } = {};
           remindFormulaKey.forEach((v) => {
-            const f = generateCellRowCol(v, sheetData.formula![v], data.styles);
+            const f = generateCellRowCol(v, formulaSheetObj![v], data.styles);
             if (!rF[f.row]) {
               rF[f.row] = f.cell;
             } else {
@@ -1071,7 +893,7 @@ export async function generateExcel(data: ExcelTable) {
     sheetNameApp += "<vt:lpstr>" + ("sheet" + (index + 1)) + "</vt:lpstr>";
     selectedAdded = selectedAdded || !!sheetData.selected;
     const filterMode = sheetData.sortAndfilter ? 'filterMode="1"' : "";
-
+    mergesCellArray = [...new Set(mergesCellArray)];
     mapData["sheet" + (index + 1)] = {
       indexId: indexId + 1,
       key: "sheet" + (index + 1),
@@ -1097,12 +919,13 @@ export async function generateExcel(data: ExcelTable) {
             );
           }, "<sheetProtection ") + "/>"
         : "",
-      merges: sheetData.merges
-        ? sheetData.merges.reduce((mResult, currRef) => {
-            return (mResult += ' <mergeCell ref="' + currRef + '" />');
-          }, '<mergeCells count="' + sheetData.merges.length + '">') +
-          " </mergeCells>"
-        : "",
+      merges:
+        mergesCellArray.length > 0
+          ? mergesCellArray.reduce((mResult, currRef) => {
+              return mResult + ' <mergeCell ref="' + currRef + '" />';
+            }, '<mergeCells count="' + mergesCellArray.length + '">') +
+            " </mergeCells>"
+          : "",
       selectedView: sheetData.selected
         ? "<sheetViews>" +
           '<sheetView tabSelected="1" workbookViewId="0">' +

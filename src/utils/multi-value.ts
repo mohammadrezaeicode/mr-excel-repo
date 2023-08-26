@@ -11,7 +11,16 @@ function splitAndMatching(
   multiMode: boolean
 ) {
   if (!textSplited) {
-    const matchV = text.match(v);
+    let matchV;
+    try {
+      matchV = text.match(v);
+    } catch (error) {
+      if (typeof v == "string") {
+        matchV = text.match("\\" + v);
+      } else {
+        throw error;
+      }
+    }
     if (matchV) {
       if (!multiMode) {
         matchValue.push(v.toString());
@@ -41,7 +50,16 @@ function splitAndMatching(
     let newStyleValue: string[] = [];
     const mLength = matchValue.length;
     splitValue.forEach((sp, index) => {
-      const match = sp.match(v);
+      let match;
+      try {
+        match = sp.match(v);
+      } catch (error) {
+        if (typeof v == "string") {
+          match = sp.match("\\" + v);
+        } else {
+          throw error;
+        }
+      }
       if (match) {
         if (!multiMode) {
           const splitV = sp.split(v).reduce((res: string[], curr, index) => {
@@ -89,7 +107,8 @@ export function generateMultiStyleValue(
   text: string,
   styles: {
     [key: string]: string;
-  }
+  },
+  defStyleId: string
 ) {
   if (typeof multiStyle == "object") {
     let result = "";
@@ -145,12 +164,15 @@ export function generateMultiStyleValue(
       }
     }
     const length = splitValue.length - 1;
+    const elementStyle = defStyleId in styles ? styles[defStyleId] : "";
+
     for (let index = 0; index < length; index++) {
       const element = splitValue[index];
       const matchElement = matchValue[index];
       const styleID = styleMatchValue[index];
       if (element.length > 0) {
         result += `<r>
+        ${elementStyle}
             <t xml:space="preserve" >${element}</t>
         </r>`;
       }
@@ -166,6 +188,7 @@ export function generateMultiStyleValue(
     result = `<si>
                     ${result}
                     <r>
+        ${elementStyle}
             <t>${splitValue[length]}</t>
         </r>
                     </si>`;

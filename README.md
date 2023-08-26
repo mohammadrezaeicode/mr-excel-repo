@@ -36,7 +36,6 @@
 
 ![ex](https://github.com/mohammadrezaeicode/mr-excel-page-repo/blob/main/public/img/ex15.PNG?raw=true)
 
-
 </details>
 
 ## Introduction
@@ -2369,7 +2368,6 @@ function generateData() {
 }
 const { data } = generateData();
 ExcelTable.generateExcel(data);
-
 ```
 
 ## Comment Option
@@ -2449,7 +2447,7 @@ function generateData() {
             headerKey,
             rowIndex,
             colIndex,
-            fromHeader,
+            fromHeader
           ) {
             console.log("called");
             if (fromHeader) {
@@ -2516,7 +2514,6 @@ Header should start with ${textDataC0.toUpperCase()}`,
 }
 const { data } = generateData();
 ExcelTable.generateExcel(data);
-
 ```
 
 ## Multi Style value Option
@@ -2618,7 +2615,7 @@ function generateData() {
             headerKey,
             rowIndex,
             colIndex,
-            fromHeader,
+            fromHeader
           ) {
             console.log("called");
             if (fromHeader) {
@@ -2695,7 +2692,6 @@ Header should start with ${textDataC0.toUpperCase()}`,
 }
 const { data } = generateData();
 ExcelTable.generateExcel(data);
-
 ```
 
 ## Conditional Styling
@@ -2835,6 +2831,8 @@ export interface Header {
   label: string;
   text: string;
   size?: number;
+  multiStyleValue?: MultiStyleValue;
+  comment?: Comment | string;
   formula?: {
     type: FormulaType;
     styleId?: string;
@@ -2842,14 +2840,42 @@ export interface Header {
 }
 
 export interface Data extends DataOptions {
-  [key: string]: string | number | undefined;
+  [key: string]: string | number | any | undefined;
+}
+export interface MultiStyleRexValue {
+  reg: RegExp | string;
+  styleId: string;
+}
+export interface Comment {
+  comment?: string;
+  styleId?: string;
+  author?: string;
+}
+export interface MultiStyleValue {
+  [key: string]: string | undefined | MultiStyleRexValue[];
+  reg?: MultiStyleRexValue[];
+}
+export interface MapMultiStyleValue {
+  [key: string]: MultiStyleValue;
+}
+export interface MapComment {
+  [key: string]: Comment | string;
 }
 export interface DataOptions {
-  [key: string]: "0" | "1" | number | string | undefined;
+  [key: string]:
+    | "0"
+    | "1"
+    | number
+    | string
+    | undefined
+    | MapComment
+    | MapMultiStyleValue;
   outlineLevel?: number;
   hidden?: "0" | "1" | number;
   rowStyle?: string;
   height?: number;
+  multiStyleValue?: MapMultiStyleValue;
+  comment?: MapComment;
 }
 export interface MergeRowConditionMap {
   [columnKey: string]: {
@@ -2857,6 +2883,14 @@ export interface MergeRowConditionMap {
     start: number;
   };
 }
+export type CommentConditionFunction = (
+  data: Header | string | number | undefined,
+  object: null | Data,
+  headerKey: string,
+  rowIndex: number,
+  colIndex: number,
+  fromHeader: boolean
+) => Comment | string | false | undefined | null;
 export type StyleCellConditionFunction = (
   data: Header | string | number | undefined,
   object: Header | Data,
@@ -2864,7 +2898,7 @@ export type StyleCellConditionFunction = (
   rowIndex: number,
   fromHeader: boolean,
   stylekeys: string[]
-) => string;
+) => string | null;
 export type MergeRowDataConditionFunction = (
   data: Header | string | number | undefined,
   key: string | null,
@@ -2883,6 +2917,8 @@ export interface Title {
   height?: number;
   styleId?: string;
   text?: string;
+  multiStyleValue?: MultiStyleValue;
+  comment?: Comment | string;
 }
 export interface Sheet {
   withoutHeader?: boolean;
@@ -2897,9 +2933,10 @@ export interface Sheet {
   headerStyleKey?: string;
   mergeRowDataCondition?: MergeRowDataConditionFunction;
   styleCellCondition?: StyleCellConditionFunction;
+  commentCodition?: CommentConditionFunction;
   sortAndfilter?: SortAndFilter;
   state?: "hidden" | "visible";
-  headerRowOption?: any; // Define the type if needed
+  headerRowOption?: any;
   protectionOption?: ProtectionOption;
   headerHeight?: number;
   headers: Header[];
@@ -2908,11 +2945,12 @@ export interface Sheet {
 export interface HeaderRowOption {
   outlineLevel: "string";
 }
-// export interface Tab {
-//   headers: Header[];
-//   data: Data[];
-// }
 export interface StyleMapper {
+  commentSintax: {
+    value: {
+      [key: string]: string;
+    };
+  };
   format: {
     count: number;
     value: string;
@@ -2979,12 +3017,10 @@ export interface ExcelTable {
   modified?: string;
   numberOfColumn?: number;
   createType?: string;
-  mapSheetDataOption?: any; // Define the type if needed
+  mapSheetDataOption?: any;
   styles?: Styles;
   sheet: Sheet[];
 }
-
-// Now you can use 'YourObject' as the type for your data.
 ```
 
 </details>
@@ -3143,9 +3179,21 @@ These alignment options empower you to customize the appearance of cell content 
 
 ## Release Notes
 
+### Version 2.5.0 (2023-08-26)
+
+#### Improvement
+
+- keep cell style for not match in multi style cell
+
+### Version 2.4.2 (2023-08-24)
+
+#### Bug Fixes
+
+- Error in Merge cell after try multi time
+
 ### Version 2.4.1 (2023-08-20)
 
-####  Bug Fixes
+#### Bug Fixes
 
 - black background in convertTableToExcel
 
@@ -3254,4 +3302,3 @@ Thank you for choosing our library! We greatly value your feedback and suggestio
 ![ex](https://github.com/mohammadrezaeicode/mr-excel-page-repo/blob/main/public/img/ex14.PNG?raw=true)
 
 ![ex](https://github.com/mohammadrezaeicode/mr-excel-page-repo/blob/main/public/img/ex15.PNG?raw=true)
-

@@ -162,7 +162,7 @@ export interface Sheet {
   commentCodition?: CommentConditionFunction;
   sortAndfilter?: SortAndFilter;
   state?: "hidden" | "visible";
-  headerRowOption?: any; // Define the type if needed
+  headerRowOption?: any; 
   protectionOption?: ProtectionOption;
   headerHeight?: number;
   headers: Header[];
@@ -171,10 +171,6 @@ export interface Sheet {
 export interface HeaderRowOption {
   outlineLevel: "string";
 }
-// export interface Tab {
-//   headers: Header[];
-//   data: Data[];
-// }
 export interface StyleMapper {
   commentSintax: {
     value: {
@@ -247,9 +243,7 @@ export interface ExcelTable {
   modified?: string;
   numberOfColumn?: number;
   createType?: string;
-  mapSheetDataOption?: any; // Define the type if needed
+  mapSheetDataOption?: any;
   styles?: Styles;
   sheet: Sheet[];
 }
-
-// Now you can use 'YourObject' as the type for your data.

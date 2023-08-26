@@ -1,5 +1,27 @@
 # Changelog
 
+## Version 2.5.0 (2023-08-26)
+
+### Improvement
+
+- keep cell style for not match in multi style cell
+
+## Version 2.4.2 (2023-08-24)
+
+###  Bug Fixes
+
+- Error in Merge cell after try multi time
+
+## Version 2.4.1 (2023-08-20)
+
+###  Bug Fixes
+
+- black background in convertTableToExcel
+
+### Improvement
+
+- Added 2.4.0 Feature example
+
 ### Version 2.4.0 (2023-08-20)
 
 #### Improvement
