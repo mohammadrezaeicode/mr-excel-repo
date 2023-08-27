@@ -1,5 +1,12 @@
 # Changelog
 
+## Version 2.6.0 (2023-08-27)
+
+### Improvement
+
+- add mode("useSplitBaseOnMatch") that helps multi-style better performance in unexpected results.
+- condition function for multi style feature
+
 ## Version 2.5.0 (2023-08-26)
 
 ### Improvement
@@ -8,13 +15,13 @@
 
 ## Version 2.4.2 (2023-08-24)
 
-###  Bug Fixes
+### Bug Fixes
 
 - Error in Merge cell after try multi time
 
 ## Version 2.4.1 (2023-08-20)
 
-###  Bug Fixes
+### Bug Fixes
 
 - black background in convertTableToExcel
 
@@ -47,7 +54,7 @@
 
 ### Bug Fixes
 
--  Fixed issue with incorrect CDN address.
+- Fixed issue with incorrect CDN address.
 
 ## Version 2.1.0 (2023-08-14)
 

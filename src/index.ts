@@ -382,7 +382,8 @@ export async function generateExcel(data: ExcelTable) {
               title.multiStyleValue,
               title.text,
               styleMapper.commentSintax.value,
-              tStyle
+              tStyle,
+              sheetData.useSplitBaseOnMatch
             );
           } else {
             sharedString += "<si><t>" + title.text + "</t></si>";
@@ -515,12 +516,26 @@ export async function generateExcel(data: ExcelTable) {
             't="s"><v>' +
             sharedStringIndex +
             "</v></c>";
+          if (typeof sheetData.multiStyleConditin == "function") {
+            const multi = sheetData.multiStyleConditin(
+              v,
+              null,
+              v.label,
+              rowCount,
+              innerIndex,
+              true
+            );
+            if (multi) {
+              v.multiStyleValue = multi;
+            }
+          }
           if (v.multiStyleValue) {
             sharedString += generateMultiStyleValue(
               v.multiStyleValue,
               v.text,
               styleMapper.commentSintax.value,
-              headerStyleKey ? headerStyleKey : ""
+              headerStyleKey ? headerStyleKey : "",
+              sheetData.useSplitBaseOnMatch
             );
           } else {
             sharedString += "<si><t>" + v.text + "</t></si>";
@@ -756,6 +771,25 @@ export async function generateExcel(data: ExcelTable) {
                     "><v>" +
                     sharedStringIndex +
                     "</v></c>";
+                  if (typeof sheetData.multiStyleConditin == "function") {
+                    const multi = sheetData.multiStyleConditin(
+                      dataEl,
+                      mData,
+                      key,
+                      rowCount,
+                      keyIndex,
+                      false
+                    );
+                    if (multi) {
+                      if (
+                        !("multiStyleValue" in mData) ||
+                        typeof mData.multiStyleValue == "undefined"
+                      ) {
+                        mData.multiStyleValue = {};
+                      }
+                      mData.multiStyleValue[key] = multi;
+                    }
+                  }
                   if (
                     "multiStyleValue" in mData &&
                     mData.multiStyleValue &&
@@ -765,7 +799,8 @@ export async function generateExcel(data: ExcelTable) {
                       mData.multiStyleValue[key],
                       dataEl,
                       styleMapper.commentSintax.value,
-                      cellStyle ? cellStyle : ""
+                      cellStyle ? cellStyle : "",
+                      sheetData.useSplitBaseOnMatch
                     );
                   } else {
                     sharedString += "<si><t>" + dataEl + "</t></si>";

@@ -1,5 +1,22 @@
 import { MultiStyleRexValue, MultiStyleValue } from "../data-model/excel-table";
 
+function splitBaseOnMatch(matchResult: string[], str: string) {
+  let reduceDefault: {
+    result: string[];
+    str: string;
+  } = {
+    result: [],
+    str: str,
+  };
+  let res = matchResult.reduce((result, current) => {
+    let index = result.str.indexOf(current);
+    result.result.push(result.str.substring(0, index));
+    result.str = result.str.substring(index + current.length);
+    return result;
+  }, reduceDefault);
+  res.result.push(res.str);
+  return res.result;
+}
 function splitAndMatching(
   v: string | RegExp,
   val: string,
@@ -8,7 +25,8 @@ function splitAndMatching(
   splitValue: string[],
   matchValue: string[],
   styleMatchValue: string[],
-  multiMode: boolean
+  multiMode: boolean,
+  useSplitBaseOnMatch?: boolean
 ) {
   if (!textSplited) {
     let matchV;
@@ -25,20 +43,28 @@ function splitAndMatching(
       if (!multiMode) {
         matchValue.push(v.toString());
         styleMatchValue.push(val);
-        splitValue = text.split(v).reduce((res: string[], curr, index) => {
-          if (index >= 2) {
-            res[1] += v + curr;
-            return res;
-          } else {
-            return [...res, curr];
-          }
-        }, []);
+        if (useSplitBaseOnMatch) {
+          splitValue = splitBaseOnMatch(matchV, text);
+        } else {
+          splitValue = text.split(v).reduce((res: string[], curr, index) => {
+            if (index >= 2) {
+              res[1] += v + curr;
+              return res;
+            } else {
+              return [...res, curr];
+            }
+          }, []);
+        }
       } else {
         matchValue.push(...matchV);
         styleMatchValue.push(
           ...matchV.reduce((res: string[], curr) => [...res, val], [])
         );
-        splitValue = text.split(v);
+        if (useSplitBaseOnMatch) {
+          splitValue = splitBaseOnMatch(matchV, text);
+        } else {
+          splitValue = text.split(v);
+        }
       }
     } else {
       splitValue.push(text);
@@ -62,19 +88,29 @@ function splitAndMatching(
       }
       if (match) {
         if (!multiMode) {
-          const splitV = sp.split(v).reduce((res: string[], curr, index) => {
-            if (index >= 2) {
-              res[1] += v + curr;
-              return res;
-            } else {
-              return [...res, curr];
-            }
-          }, []);
+          let splitV;
+          if (useSplitBaseOnMatch) {
+            splitV = splitBaseOnMatch(match, sp);
+          } else {
+            splitV = sp.split(v).reduce((res: string[], curr, index) => {
+              if (index >= 2) {
+                res[1] += v + curr;
+                return res;
+              } else {
+                return [...res, curr];
+              }
+            }, []);
+          }
           newSplit.push(...splitV);
           newStyleValue.push(val);
           newMatchValue.push(v.toString());
         } else {
-          const splitV = sp.split(v);
+          let splitV;
+          if (useSplitBaseOnMatch) {
+            splitV = splitBaseOnMatch(match, sp);
+          } else {
+            splitV = sp.split(v);
+          }
           newSplit.push(...splitV);
           newMatchValue.push(...match);
           newStyleValue.push(
@@ -108,7 +144,8 @@ export function generateMultiStyleValue(
   styles: {
     [key: string]: string;
   },
-  defStyleId: string
+  defStyleId: string,
+  useSplitBaseOnMatch?: boolean
 ) {
   if (typeof multiStyle == "object") {
     let result = "";
@@ -130,7 +167,8 @@ export function generateMultiStyleValue(
           splitValue,
           matchValue,
           styleMatchValue,
-          false
+          false,
+          useSplitBaseOnMatch
         );
         textSplited = result.textSplited;
         splitValue = result.splitValue;
@@ -154,7 +192,8 @@ export function generateMultiStyleValue(
             splitValue,
             matchValue,
             styleMatchValue,
-            true
+            true,
+            useSplitBaseOnMatch
           );
           textSplited = result.textSplited;
           splitValue = result.splitValue;
@@ -176,22 +215,28 @@ export function generateMultiStyleValue(
             <t xml:space="preserve" >${element}</t>
         </r>`;
       }
-      result += `
+      if (matchElement.length > 0) {
+        result += `
                             <r>
            ${styles[styleID]}
             <t xml:space="preserve" >${matchElement}</t>
         </r>
                     `;
-      // result += element + matchElement;
+      }
     }
-    // result += splitValue[length];
-    result = `<si>
+    if (splitValue[length].length > 0) {
+      result = `<si>
                     ${result}
                     <r>
         ${elementStyle}
             <t>${splitValue[length]}</t>
         </r>
                     </si>`;
+    } else {
+      result = `<si>
+                    ${result}
+                    </si>`;
+    }
     return result;
   } else {
     return `

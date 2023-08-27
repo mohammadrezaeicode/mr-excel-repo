@@ -69,6 +69,7 @@ export interface MergeRowConditionMap {
         start: number;
     };
 }
+export type MultiStyleConditinFunction = (data: Header | string | number | undefined, object: null | Data, headerKey: string, rowIndex: number, colIndex: number, fromHeader: boolean) => MultiStyleValue | null;
 export type CommentConditionFunction = (data: Header | string | number | undefined, object: null | Data, headerKey: string, rowIndex: number, colIndex: number, fromHeader: boolean) => Comment | string | false | undefined | null;
 export type StyleCellConditionFunction = (data: Header | string | number | undefined, object: Header | Data, colIndex: number, rowIndex: number, fromHeader: boolean, stylekeys: string[]) => string | null;
 export type MergeRowDataConditionFunction = (data: Header | string | number | undefined, key: string | null, index: number, fromHeader: boolean) => boolean;
@@ -89,6 +90,8 @@ export interface Title {
 }
 export interface Sheet {
     withoutHeader?: boolean;
+    multiStyleConditin?: MultiStyleConditinFunction;
+    useSplitBaseOnMatch?: boolean;
     formula?: Formula;
     name?: string;
     title?: Title;

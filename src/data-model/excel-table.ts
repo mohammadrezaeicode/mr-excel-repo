@@ -109,6 +109,15 @@ export interface MergeRowConditionMap {
     start: number;
   };
 }
+export type MultiStyleConditinFunction = (
+  data: Header | string | number | undefined,
+  object: null | Data,
+  headerKey: string,
+  rowIndex: number,
+  colIndex: number,
+  fromHeader: boolean
+) => MultiStyleValue | null;
+
 export type CommentConditionFunction = (
   data: Header | string | number | undefined,
   object: null | Data,
@@ -148,6 +157,8 @@ export interface Title {
 }
 export interface Sheet {
   withoutHeader?: boolean;
+  multiStyleConditin?: MultiStyleConditinFunction;
+  useSplitBaseOnMatch?: boolean;
   formula?: Formula;
   name?: string;
   title?: Title;
@@ -162,7 +173,7 @@ export interface Sheet {
   commentCodition?: CommentConditionFunction;
   sortAndfilter?: SortAndFilter;
   state?: "hidden" | "visible";
-  headerRowOption?: any; 
+  headerRowOption?: any;
   protectionOption?: ProtectionOption;
   headerHeight?: number;
   headers: Header[];

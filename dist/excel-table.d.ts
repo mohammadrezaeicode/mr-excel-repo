@@ -100,6 +100,8 @@ declare interface MapMultiStyleValue {
 
 declare type MergeRowDataConditionFunction = (data: Header | string | number | undefined, key: string | null, index: number, fromHeader: boolean) => boolean;
 
+declare type MultiStyleConditinFunction = (data: Header | string | number | undefined, object: null | Data, headerKey: string, rowIndex: number, colIndex: number, fromHeader: boolean) => MultiStyleValue | null;
+
 declare interface MultiStyleRexValue {
     reg: RegExp | string;
     styleId: string;
@@ -120,6 +122,8 @@ declare type RowHeightScaleFunction = (data: number, rowIndex: number, fromHeade
 
 declare interface Sheet {
     withoutHeader?: boolean;
+    multiStyleConditin?: MultiStyleConditinFunction;
+    useSplitBaseOnMatch?: boolean;
     formula?: Formula;
     name?: string;
     title?: Title;

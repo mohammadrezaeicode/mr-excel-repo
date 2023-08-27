@@ -341,7 +341,7 @@ function generateExcel(data) {
                         sharedStringIndex++;
                         sharedStringMap[title.text] = title.text;
                         if (title.multiStyleValue) {
-                            sharedString += (0, multi_value_1.generateMultiStyleValue)(title.multiStyleValue, title.text, styleMapper.commentSintax.value, tStyle);
+                            sharedString += (0, multi_value_1.generateMultiStyleValue)(title.multiStyleValue, title.text, styleMapper.commentSintax.value, tStyle, sheetData.useSplitBaseOnMatch);
                         }
                         else {
                             sharedString += "<si><t>" + title.text + "</t></si>";
@@ -438,8 +438,14 @@ function generateExcel(data) {
                                 't="s"><v>' +
                                 sharedStringIndex +
                                 "</v></c>";
+                        if (typeof sheetData.multiStyleConditin == "function") {
+                            const multi = sheetData.multiStyleConditin(v, null, v.label, rowCount, innerIndex, true);
+                            if (multi) {
+                                v.multiStyleValue = multi;
+                            }
+                        }
                         if (v.multiStyleValue) {
-                            sharedString += (0, multi_value_1.generateMultiStyleValue)(v.multiStyleValue, v.text, styleMapper.commentSintax.value, headerStyleKey ? headerStyleKey : "");
+                            sharedString += (0, multi_value_1.generateMultiStyleValue)(v.multiStyleValue, v.text, styleMapper.commentSintax.value, headerStyleKey ? headerStyleKey : "", sheetData.useSplitBaseOnMatch);
                         }
                         else {
                             sharedString += "<si><t>" + v.text + "</t></si>";
@@ -634,10 +640,20 @@ function generateExcel(data) {
                                                 "><v>" +
                                                 sharedStringIndex +
                                                 "</v></c>";
+                                        if (typeof sheetData.multiStyleConditin == "function") {
+                                            const multi = sheetData.multiStyleConditin(dataEl, mData, key, rowCount, keyIndex, false);
+                                            if (multi) {
+                                                if (!("multiStyleValue" in mData) ||
+                                                    typeof mData.multiStyleValue == "undefined") {
+                                                    mData.multiStyleValue = {};
+                                                }
+                                                mData.multiStyleValue[key] = multi;
+                                            }
+                                        }
                                         if ("multiStyleValue" in mData &&
                                             mData.multiStyleValue &&
                                             key in mData.multiStyleValue) {
-                                            sharedString += (0, multi_value_1.generateMultiStyleValue)(mData.multiStyleValue[key], dataEl, styleMapper.commentSintax.value, cellStyle ? cellStyle : "");
+                                            sharedString += (0, multi_value_1.generateMultiStyleValue)(mData.multiStyleValue[key], dataEl, styleMapper.commentSintax.value, cellStyle ? cellStyle : "", sheetData.useSplitBaseOnMatch);
                                         }
                                         else {
                                             sharedString += "<si><t>" + dataEl + "</t></si>";
