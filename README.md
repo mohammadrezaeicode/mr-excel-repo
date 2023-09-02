@@ -118,6 +118,145 @@ ExcelTable.convertTableToExcel("#table", null, true, rowF, colF)
 
 </details>
 
+### sideBySideLineByLine
+
+sideBySideLineByLine is a new feature that provides the ability to generate multi-table in a single sheet Excel
+
+```javascript
+const sideData = [
+  [
+    {
+      sheetName: "sheetName",
+      spaceX: 1,
+      spaceY: 1,
+      headers: [
+        {
+          label: "id",
+          text: "id",
+        },
+      ],
+      data: [
+        { id: 11 },
+        { id: 10 },
+        { id: 9 },
+        { id: 8 },
+        { id: 7 },
+        { id: 6 },
+        { id: 5 },
+        { id: 4 },
+        { id: 3 },
+        { id: 2 },
+        { id: 1 },
+      ],
+    },
+    {
+      sheetName: "sheetName",
+      spaceX: 1,
+      spaceY: 1,
+      headers: [
+        {
+          label: "el",
+          text: "el",
+        },
+      ],
+      data: [
+        { el: 11 },
+        { el: 10 },
+        { el: 9 },
+        { el: 8 },
+        { el: 7 },
+        { el: 4 },
+        { el: 3 },
+        { el: 2 },
+        { el: 1 },
+      ],
+    },
+  ],
+
+  [
+    {
+      sheetName: "sheetName",
+      spaceX: 1,
+      spaceY: 1,
+      headers: [
+        {
+          label: "id",
+          text: "id",
+        },
+        { label: "test", text: "test" },
+      ],
+      data: [
+        { id: 1 },
+        { id: 2 },
+        { id: 3 },
+        { id: 4 },
+        { id: 5 },
+        { id: 6 },
+        { id: 7 },
+        { id: 8 },
+        { id: 9 },
+        { id: 10 },
+        { id: 11 },
+      ],
+    },
+    {
+      sheetName: "sheetName1",
+      spaceX: 1,
+      spaceY: 1,
+      headers: [
+        {
+          label: "id",
+          text: "id",
+        },
+        { label: "test", text: "test" },
+      ],
+      data: [
+        { id: 1 },
+        { id: 2 },
+        { id: 3 },
+        { id: 4 },
+        { id: 5 },
+        { id: 6 },
+        { id: 7 },
+        { id: 8 },
+        { id: 9 },
+        { id: 10 },
+        { id: 11 },
+      ],
+    },
+    {
+      sheetName: "sheetName",
+      spaceX: 1,
+      spaceY: 1,
+      headers: [
+        {
+          label: "id",
+          text: "id",
+        },
+        { label: "test", text: "test" },
+      ],
+      data: [
+        { test: "test14", id: "u1i1r23" },
+        { test: "test13", id: "u2i2r24" },
+        { test: "test12", id: "u3i3r25" },
+        { test: "test11", id: "u4i4r26" },
+        { test: "test10", id: "u5i5r27" },
+        { test: "test9", id: "u6i6r28" },
+        { test: "test8", id: "u7i7r29" },
+        { test: "test7", id: "u8i8r30" },
+        { test: "test6", id: "u9i9r31" },
+        { test: "test5", id: "ui1010r32" },
+        { test: "test4", id: "ui1111r33" },
+        { test: "test3" },
+        { test: "test2" },
+        { test: "test1" },
+      ],
+    },
+  ],
+];
+ExcelTable.sideBySideLineByLine(sideData);
+```
+
 ### generateExcel
 
 ```javascript
@@ -2884,6 +3023,7 @@ ExcelTable.generateExcel(data);
 ![ex](https://github.com/mohammadrezaeicode/mr-excel-page-repo/blob/main/public/img/ex16.PNG?raw=true)
 
 </details>
+
 ## Conditional Styling
 
 Using the 'styleCellCondition' option, you can apply styles to each cell based on specific conditions as needed.
@@ -3368,6 +3508,12 @@ The library offers multiple options for aligning cells, giving you control over 
 These alignment options empower you to customize the appearance of cell content in your Excel sheets. By adjusting these properties, you can control the positioning, orientation, and overall style of data within your cells.
 
 ## Release Notes
+
+### Version 2.7.0 (2023-09-02)
+
+#### New Features
+
+- sideBySideLineByLine, multi-table in single sheet
 
 ### Version 2.6.0 (2023-08-27)
 

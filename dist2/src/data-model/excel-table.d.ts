@@ -1,6 +1,17 @@
 export type ProtectionOption = {
     [key in ProtectionOptionKey]: "0" | "1" | 0 | 1;
 };
+export interface SideBySide {
+    sheetName?: string;
+    spaceX?: number;
+    spaceY?: number;
+    headers: {
+        label: string;
+        text: string;
+    }[];
+    data: Data[];
+    headerIndex?: number;
+}
 export type ProtectionOptionKey = "sheet" | "formatCells" | "formatColumns" | "formatRows" | "insertColumns" | "insertRows" | "insertHyperlinks" | "deleteColumns" | "deleteRows" | "sort" | "autoFilter" | "pivotTables";
 export type AlignmentOptionKey = "horizontal" | "vertical" | "wrapText" | "shrinkToFit" | "readingOrder" | "textRotation" | "indent";
 export interface AlignmentOption {

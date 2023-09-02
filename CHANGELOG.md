@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 2.7.0 (2023-09-02)
+
+### New Features
+
+- sideBySideLineByLine, multi-table in single sheet
+
 ## Version 2.6.0 (2023-08-27)
 
 ### Improvement

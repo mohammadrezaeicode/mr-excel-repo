@@ -76,7 +76,9 @@ declare interface FormulaSetting {
 
 declare type FormulaType = "AVERAGE" | "SUM" | "COUNT" | "MAX" | "MIN";
 
-export declare function generateExcel(data: ExcelTable): Promise<string | number[] | Blob | Buffer | undefined>;
+export declare const generateExcel: typeof generateExcel_2;
+
+declare function generateExcel_2(data: ExcelTable): Promise<string | number[] | Blob | Buffer | undefined>;
 
 declare interface Header {
     label: string;
@@ -144,6 +146,20 @@ declare interface Sheet {
     headers: Header[];
     data: Data[];
 }
+
+declare interface SideBySide {
+    sheetName?: string;
+    spaceX?: number;
+    spaceY?: number;
+    headers: {
+        label: string;
+        text: string;
+    }[];
+    data: Data[];
+    headerIndex?: number;
+}
+
+export declare function sideBySideLineByLine(data: SideBySide[][]): Promise<string | number[] | Blob | Buffer | undefined>;
 
 declare interface SortAndFilter {
     mode: "all" | "ref";
