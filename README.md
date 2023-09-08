@@ -48,15 +48,6 @@ Our library offers comprehensive support for a wide range of features, including
 
 In version 2.1.0, we introduced a new feature called "convertTableToExcel," which enables the generation of an Excel file from a specified table or DOM element (table). The provided query is expected to be a valid input for the querySelector method. This enhancement allows for greater flexibility and convenience when creating Excel files directly from HTML tables.
 
-## Themes
-
-<div style="display:flex">
-<div style="display:flex;flex-direction:column">
-<div style="width:24px;height:8px;margin-right:1px;background-color:red"></div>
-<div style="width:24px;height:16px;margin-right:1px;background-color:yellow;color:red">1</div>
-</div>
-</div>
-
 ## Installation
 
 Via CDN
