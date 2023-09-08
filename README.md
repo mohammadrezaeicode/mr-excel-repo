@@ -48,6 +48,15 @@ Our library offers comprehensive support for a wide range of features, including
 
 In version 2.1.0, we introduced a new feature called "convertTableToExcel," which enables the generation of an Excel file from a specified table or DOM element (table). The provided query is expected to be a valid input for the querySelector method. This enhancement allows for greater flexibility and convenience when creating Excel files directly from HTML tables.
 
+## Themes
+
+<div style="display:flex">
+<div style="display:flex;flex-direction:column">
+<div style="width:24px;height:8px;margin-right:1px;background-color:red"></div>
+<div style="width:24px;height:16px;margin-right:1px;background-color:yellow;color:red">1</div>
+</div>
+</div>
+
 ## Installation
 
 Via CDN
@@ -3508,6 +3517,12 @@ The library offers multiple options for aligning cells, giving you control over 
 These alignment options empower you to customize the appearance of cell content in your Excel sheets. By adjusting these properties, you can control the positioning, orientation, and overall style of data within your cells.
 
 ## Release Notes
+
+### Version 2.8.0 (2023-09-08)
+
+#### New Features
+
+- ability for add image to excel
 
 ### Version 2.7.0 (2023-09-02)
 
