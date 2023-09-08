@@ -24,6 +24,8 @@ import {
   cols as colsDef,
   formatMap,
 } from "../utils/content-generator/const-data";
+import { toDataURL2 } from "./image";
+import { getColRowBaseOnRefString } from "./excel-util";
 export async function generateExcel(data: ExcelTable) {
   let cols: string[] = [...colsDef];
   if (data.numberOfColumn && data.numberOfColumn > 25) {
@@ -31,10 +33,13 @@ export async function generateExcel(data: ExcelTable) {
   }
   const module = await import("jszip");
   const JSZip = module.default;
-  var zip = new JSZip();
+  let zip = new JSZip();
   const sheetLength = data.sheet.length;
   // xl
-  var xlFolder = zip.folder("xl");
+  let xlFolder = zip.folder("xl");
+  let xl_media_Folder = xlFolder?.folder("media");
+  let xl_drawingsFolder = xlFolder?.folder("drawings");
+  let xl_drawings_relsFolder = xl_drawingsFolder?.folder("_rels");
   if (!data.styles) {
     data.styles = {};
   }
@@ -258,7 +263,7 @@ export async function generateExcel(data: ExcelTable) {
 
   xlFolder?.file("styles.xml", styleGenerator(styleMapper));
 
-  var sheetContentType =
+  let sheetContentType =
     '<Override ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml" PartName="/xl/worksheets/sheet1.xml" />';
   let sharedString = "";
   let sharedStringIndex = 0;
@@ -275,6 +280,7 @@ export async function generateExcel(data: ExcelTable) {
   let sheetNameApp = "";
   let indexId = 4;
   let selectedAdded = false;
+  let arrTypes: string[] = [];
   interface ShapeRC {
     row: string | number;
     col: string | number;
@@ -294,6 +300,41 @@ export async function generateExcel(data: ExcelTable) {
     let objKey: string[] = [];
     let headerFormula: number[] = [];
     let mergeRowConditionMap: MergeRowConditionMap = {};
+    let imagePromise;
+    if (sheetData.images) {
+      imagePromise = Promise.all([
+        ...sheetData.images.map(async (v, i) => {
+          let indexx = v.url.lastIndexOf(".");
+          let type;
+          if (indexx > 0) {
+            type = v.url.substring(indexx + 1).toLowerCase();
+            if (type.length > 4) {
+              if (type.indexOf("gif") >= 0) {
+                type = "gif";
+              } else if (type.indexOf("jpg") >= 0) {
+                type = "jpg";
+              } else if (type.indexOf("jpeg") >= 0) {
+                type = "jpeg";
+              } else {
+                type = "png";
+              }
+            }
+          } else {
+            type = "png";
+          }
+          // if (type == 'ico') {
+          //     type = 'png'
+          // }
+          arrTypes.push(type);
+          return {
+            type,
+            image: await toDataURL2(v.url, "image" + i + "." + type),
+            obj: v,
+            i,
+          };
+        }),
+      ]);
+    }
     const colsLength = sheetData.headers.length;
     if (Array.isArray(sheetData.headers) && colsLength) {
       let titleRow = "";
@@ -922,6 +963,184 @@ export async function generateExcel(data: ExcelTable) {
     sheetNameApp += "<vt:lpstr>" + ("sheet" + (index + 1)) + "</vt:lpstr>";
     selectedAdded = selectedAdded || !!sheetData.selected;
     const filterMode = sheetData.sortAndfilter ? 'filterMode="1"' : "";
+    let hasImages = false;
+    let drawersContent = "";
+    if (imagePromise) {
+      hasImages = true;
+      await imagePromise.then((res) => {
+        console.log(res, "res");
+        let drawerStr = "";
+        res.forEach((val, i) => {
+          const index = i + 1;
+          var v = val.image;
+          var from = val.obj.from;
+          var to = val.obj.to;
+          var margin = val.obj.margin;
+          var imageType = val.type;
+          var type = val.obj.type;
+          var extent = val.obj.extent;
+          if (typeof extent == "undefined") {
+            extent = {
+              cx: 200000,
+              cy: 200000,
+            };
+          }
+          var result: {
+            start: {
+              col: number;
+              row: number;
+              mL?: number;
+              mT?: number;
+            };
+            end: {
+              col: number;
+              row: number;
+              mR?: number;
+              mB?: number;
+            };
+          } = {
+            start: {
+              col: 0,
+              row: 0,
+              mL: 0,
+              mT: 0,
+            },
+            end: {
+              col: 1,
+              row: 1,
+              mR: 0,
+              mB: 0,
+            },
+          };
+          if (typeof from == "string" && from.length >= 2) {
+            var p = getColRowBaseOnRefString(from, cols);
+            result.start = {
+              ...p,
+            };
+            result.end = {
+              col: p.col + 1,
+              row: p.row + 1,
+            };
+          }
+          if (typeof to == "string" && to.length >= 2) {
+            var p = getColRowBaseOnRefString(to, cols);
+            // if (p.row == result.start.row) {
+            //     p.row += 1
+            // }
+            // if (p.col == result.start.col) {
+            //     p.col += 1
+            // }
+            p.row += 1;
+            p.col += 1;
+            result.end = {
+              ...p,
+            };
+          }
+          result.end.mR = 0;
+          result.end.mB = 0;
+          result.start.mL = 0;
+          result.start.mT = 0;
+          if (margin) {
+            if (margin.all || margin.right) {
+              result.end.mR = margin.all || margin.right;
+            }
+            if (margin.all || margin.bottom) {
+              result.end.mB = margin.all || margin.bottom;
+            }
+            if (margin.all || margin.left) {
+              result.start.mL = margin.all || margin.left;
+            }
+            if (margin.all || margin.top) {
+              result.start.mT = margin.all || margin.top;
+            }
+          }
+          if (type == "one") {
+            drawersContent += `<xdr:oneCellAnchor>
+        <xdr:from>
+            <xdr:col>${result.start.col}</xdr:col>
+            <xdr:colOff>${result.start.mT}</xdr:colOff>
+            <xdr:row>${result.start.row}</xdr:row>
+            <xdr:rowOff>${result.start.mL}</xdr:rowOff>
+        </xdr:from>
+        <xdr:ext cx="${extent.cx}" cy="${extent.cy}"/>
+        <xdr:pic>
+            <xdr:nvPicPr>
+                <xdr:cNvPr id="${index}" name="Picture ${index}">
+                </xdr:cNvPr>
+                <xdr:cNvPicPr preferRelativeResize="0" />
+            </xdr:nvPicPr>
+            <xdr:blipFill>
+                <a:blip
+                    xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"
+                    r:embed="rId${index}">
+                </a:blip>
+                <a:stretch>
+                    <a:fillRect />
+                </a:stretch>
+            </xdr:blipFill>
+            <xdr:spPr>
+                <a:prstGeom prst="rect">
+                    <a:avLst />
+                </a:prstGeom>
+                <a:noFill />
+            </xdr:spPr>
+        </xdr:pic>
+        <xdr:clientData />
+    </xdr:oneCellAnchor>`;
+          } else {
+            drawersContent += `<xdr:twoCellAnchor editAs="oneCell">
+        <xdr:from>
+            <xdr:col>${result.start.col}</xdr:col>
+            <xdr:colOff>${result.start.mT}</xdr:colOff>
+            <xdr:row>${result.start.row}</xdr:row>
+            <xdr:rowOff>${result.start.mL}</xdr:rowOff>
+        </xdr:from>
+        <xdr:to>
+            <xdr:col>${result.end.col}</xdr:col>
+            <xdr:colOff>${result.end.mB}</xdr:colOff>
+            <xdr:row>${result.end.row}</xdr:row>
+            <xdr:rowOff>${result.end.mR}</xdr:rowOff>
+        </xdr:to>
+        <xdr:pic>
+            <xdr:nvPicPr>
+                <xdr:cNvPr id="${index}" name="Picture ${index}">
+                </xdr:cNvPr>
+                <xdr:cNvPicPr preferRelativeResize="0" />
+            </xdr:nvPicPr>
+            <xdr:blipFill>
+                <a:blip
+                    xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"
+                    r:embed="rId${index}">
+                </a:blip>
+                <a:stretch>
+                    <a:fillRect />
+                </a:stretch>
+            </xdr:blipFill>
+            <xdr:spPr> 
+                <a:prstGeom prst="rect">
+                    <a:avLst />
+                </a:prstGeom>
+                <a:noFill />
+            </xdr:spPr>
+        </xdr:pic>
+        <xdr:clientData />
+    </xdr:twoCellAnchor>`;
+          }
+          const name = "image" + index + "." + imageType;
+          xl_media_Folder?.file(name, v!);
+          drawerStr += `<Relationship Id="rId${index}"
+        Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image"
+        Target="../media/${name}" />`;
+        });
+        xl_drawings_relsFolder?.file(
+          "drawing1.xml.rels",
+          `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+    ${drawerStr}
+</Relationships>`
+        );
+      });
+    }
     mergesCellArray = [...new Set(mergesCellArray)];
     mapData["sheet" + (index + 1)] = {
       indexId: indexId + 1,
@@ -929,6 +1148,8 @@ export async function generateExcel(data: ExcelTable) {
       sheetName: shName,
       sheetDataString,
       hasComment,
+      drawersContent,
+      hasImages,
       commentString,
       commentAuthor,
       shapeCommentRowCol,
@@ -985,7 +1206,7 @@ export async function generateExcel(data: ExcelTable) {
 
   let sheetKeys = Object.keys(mapData);
   // in _rels
-  var relsFolder = zip.folder("_rels");
+  let relsFolder = zip.folder("_rels");
   relsFolder?.file(
     ".rels",
     '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
@@ -1002,7 +1223,7 @@ export async function generateExcel(data: ExcelTable) {
       "</Relationships>"
   );
 
-  var docPropsFolder = zip.folder("docProps");
+  let docPropsFolder = zip.folder("docProps");
   docPropsFolder?.file(
     "core.xml",
     '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
@@ -1063,7 +1284,7 @@ export async function generateExcel(data: ExcelTable) {
 
   //xl/_rels
 
-  var xl__relsFolder = xlFolder?.folder("_rels");
+  let xl__relsFolder = xlFolder?.folder("_rels");
   xl__relsFolder?.file(
     "workbook.xml.rels",
     '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
@@ -1086,7 +1307,7 @@ export async function generateExcel(data: ExcelTable) {
   );
 
   //xl/theme
-  var xl_themeFolder = xlFolder?.folder("theme");
+  let xl_themeFolder = xlFolder?.folder("theme");
   xl_themeFolder?.file(
     "theme1.xml",
     '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
@@ -1094,12 +1315,39 @@ export async function generateExcel(data: ExcelTable) {
   );
 
   // xl/worksheets
-  var xl_worksheetsFolder = xlFolder?.folder("worksheets");
+  let xl_worksheetsFolder = xlFolder?.folder("worksheets");
   let commentId: number[] = [];
-  const xl_drawingsFolder = xlFolder?.folder("drawings");
   const xl_worksheets_relsFolder = xl_worksheetsFolder?.folder("_rels");
+
+  let sheetDrawers: string[] = [];
   sheetKeys.forEach((k, iCo) => {
     const sh = mapData[k];
+    let sheetRelContentStr = "";
+    if (sh.hasImages) {
+      const drawerName = `drawing${sheetDrawers.length + 1}.xml`;
+      sheetDrawers.push(drawerName);
+      xl_drawingsFolder?.file(
+        drawerName,
+        `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xdr:wsDr xmlns:xdr="http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing"
+    xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"
+    xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"
+    xmlns:c="http://schemas.openxmlformats.org/drawingml/2006/chart"
+    xmlns:cx="http://schemas.microsoft.com/office/drawing/2014/chartex"
+    xmlns:cx1="http://schemas.microsoft.com/office/drawing/2015/9/8/chartex"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:dgm="http://schemas.openxmlformats.org/drawingml/2006/diagram"
+    xmlns:x3Unk="http://schemas.microsoft.com/office/drawing/2010/slicer"
+    xmlns:sle15="http://schemas.microsoft.com/office/drawing/2012/slicer"
+>
+${sh.drawersContent}
+</xdr:wsDr>`
+      );
+      sheetRelContentStr += `<Relationship Id="rId2"
+        Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing"
+        Target="../drawings/${drawerName}" />`;
+    }
+
     if (sh.hasComment) {
       commentId.push(iCo + 1);
       let aurt = sh.commentAuthor;
@@ -1124,25 +1372,31 @@ export async function generateExcel(data: ExcelTable) {
 	</commentList>
 </comments>`
       );
-      xl_worksheets_relsFolder?.file(
-        "sheet" + (iCo + 1) + ".xml.rels",
-        `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
-    <Relationship Id="rId1"
+      sheetRelContentStr += `  <Relationship Id="rId1"
         Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments"
         Target="../comments${iCo + 1}.xml" />
-    ${
-      true
-        ? ""
-        : `<Relationship Id="rId2"
-        Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing"
-        Target="../drawings/drawing${iCo + 1}.xml" />`
-    }
     <Relationship Id="rId3"
         Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing"
-        Target="../drawings/vmlDrawing${iCo + 1}.vml" />
-</Relationships>`
-      );
+        Target="../drawings/vmlDrawing${iCo + 1}.vml" />`;
+      //       xl_worksheets_relsFolder?.file(
+      //         "sheet" + (iCo + 1) + ".xml.rels",
+      //         `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      // <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+      //     <Relationship Id="rId1"
+      //         Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments"
+      //         Target="../comments${iCo + 1}.xml" />
+      //     ${
+      //       true
+      //         ? ""
+      //         : `<Relationship Id="rId2"
+      //         Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing"
+      //         Target="../drawings/drawing${iCo + 1}.xml" />`
+      //     }
+      //     <Relationship Id="rId3"
+      //         Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing"
+      //         Target="../drawings/vmlDrawing${iCo + 1}.vml" />
+      // </Relationships>`
+      //       );
       xl_drawingsFolder?.file(
         "vmlDrawing" + (iCo + 1) + ".vml",
         `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -1180,6 +1434,15 @@ export async function generateExcel(data: ExcelTable) {
  </xml>`
       );
     }
+    if (sh.hasImages || sh.hasComment) {
+      xl_worksheets_relsFolder?.file(
+        "sheet" + (iCo + 1) + ".xml.rels",
+        `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+   ${sheetRelContentStr}
+</Relationships>`
+      );
+    }
     xl_worksheetsFolder?.file(
       sh.key + ".xml",
       '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
@@ -1206,14 +1469,19 @@ export async function generateExcel(data: ExcelTable) {
         sh.protectionOption +
         sh.sheetSortFilter +
         sh.merges +
-        (true ? "" : '<drawing r:id="rId2" />') +
+        (sh.hasImages ? '<drawing r:id="rId2" />' : "") +
         (sh.hasComment ? '<legacyDrawing r:id="rId3" />' : "") +
         "</worksheet>"
     );
   });
   zip.file(
     "[Content_Types].xml",
-    contentTypeGenerator(sheetContentType, commentId)
+    contentTypeGenerator(
+      sheetContentType,
+      commentId,
+      [...new Set(arrTypes)],
+      sheetDrawers
+    )
   );
   if (data.backend) {
     return zip

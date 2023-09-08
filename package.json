@@ -1,6 +1,6 @@
 {
   "name": "mr-excel",
-  "version": "2.7.0",
+  "version": "2.8.0",
   "main": "dist/excel-table.umd.js",
   "scripts": {
     "start": "tsc",
@@ -17,6 +17,15 @@
     "excel style",
     "excel merge",
     "excel format",
+    "excel comment",
+    "xlsx comment",
+    "comment",
+    "xlsx image",
+    "image",
+    "excel image",
+    "multi cell style",
+    "multi cell style excel",
+    "multi cell style xlsx",
     "excel",
     "multi-sheet-excel",
     "xlsx-generation",

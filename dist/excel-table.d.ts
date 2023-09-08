@@ -92,6 +92,24 @@ declare interface Header {
     };
 }
 
+declare interface ImageTypes {
+    url: string;
+    from: string;
+    to?: string;
+    type?: "one" | "two";
+    extent?: {
+        cx: number;
+        cy: number;
+    };
+    margin?: {
+        all?: number;
+        right?: number;
+        left?: number;
+        bottom?: number;
+        top?: number;
+    };
+}
+
 declare interface MapComment {
     [key: string]: Comment_2 | string;
 }
@@ -126,6 +144,7 @@ declare interface Sheet {
     withoutHeader?: boolean;
     multiStyleConditin?: MultiStyleConditinFunction;
     useSplitBaseOnMatch?: boolean;
+    images?: ImageTypes[];
     formula?: Formula;
     name?: string;
     title?: Title;

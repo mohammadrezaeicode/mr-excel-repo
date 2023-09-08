@@ -2,7 +2,9 @@ import { Formula } from "../../data-model/excel-table";
 
 export function contentTypeGenerator(
   sheetContentType: string,
-  commentId: number[]
+  commentId: number[],
+  arrTypes: string[],
+  sheetDrawers: string[]
 ) {
   return (
     '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
@@ -17,6 +19,21 @@ export function contentTypeGenerator(
     ' PartName="/xl/styles.xml" />' +
     '<Override ContentType="application/vnd.openxmlformats-officedocument.theme+xml"' +
     ' PartName="/xl/theme/theme1.xml" />' +
+    arrTypes.reduce((res, curr) => {
+      if (curr == "svg") {
+        return (
+          res +
+          `<Default Extension="png" ContentType="image/png"/>
+                    <Default Extension="svg" ContentType="image/svg+xml"/>`
+        );
+      } else if (curr == "jpeg" || curr == "jpg") {
+        return res + `<Default Extension="${curr}" ContentType="image/jpeg"/>`;
+      } else {
+        return (
+          res + `<Default Extension="${curr}" ContentType="image/${curr}" />`
+        );
+      }
+    }, "") +
     commentId.reduce((res, curr) => {
       return (
         res +
@@ -31,6 +48,13 @@ export function contentTypeGenerator(
     ' PartName="/xl/sharedStrings.xml" />' +
     ' <Override PartName="/docProps/core.xml" ' +
     ' ContentType="application/vnd.openxmlformats-package.core-properties+xml" />' +
+    sheetDrawers.reduce((res, cu) => {
+      return (
+        res +
+        `<Override PartName="/xl/drawings/${cu}"
+        ContentType="application/vnd.openxmlformats-officedocument.drawing+xml" />`
+      );
+    }, "") +
     ' <Override PartName="/docProps/app.xml" ' +
     ' ContentType="application/vnd.openxmlformats-officedocument.extended-properties+xml" />' +
     "</Types>"

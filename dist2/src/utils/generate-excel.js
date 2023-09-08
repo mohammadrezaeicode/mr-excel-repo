@@ -42,6 +42,8 @@ const color_1 = require("../utils/color");
 const comment_1 = require("../utils/comment");
 const multi_value_1 = require("../utils/multi-value");
 const const_data_1 = require("../utils/content-generator/const-data");
+const image_1 = require("./image");
+const excel_util_1 = require("./excel-util");
 function generateExcel(data) {
     return __awaiter(this, void 0, void 0, function* () {
         let cols = [...const_data_1.cols];
@@ -50,10 +52,13 @@ function generateExcel(data) {
         }
         const module = yield Promise.resolve().then(() => __importStar(require("jszip")));
         const JSZip = module.default;
-        var zip = new JSZip();
+        let zip = new JSZip();
         const sheetLength = data.sheet.length;
         // xl
-        var xlFolder = zip.folder("xl");
+        let xlFolder = zip.folder("xl");
+        let xl_media_Folder = xlFolder === null || xlFolder === void 0 ? void 0 : xlFolder.folder("media");
+        let xl_drawingsFolder = xlFolder === null || xlFolder === void 0 ? void 0 : xlFolder.folder("drawings");
+        let xl_drawings_relsFolder = xl_drawingsFolder === null || xl_drawingsFolder === void 0 ? void 0 : xl_drawingsFolder.folder("_rels");
         if (!data.styles) {
             data.styles = {};
         }
@@ -251,7 +256,7 @@ function generateExcel(data) {
             },
         });
         xlFolder === null || xlFolder === void 0 ? void 0 : xlFolder.file("styles.xml", (0, styles_1.styleGenerator)(styleMapper));
-        var sheetContentType = '<Override ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml" PartName="/xl/worksheets/sheet1.xml" />';
+        let sheetContentType = '<Override ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml" PartName="/xl/worksheets/sheet1.xml" />';
         let sharedString = "";
         let sharedStringIndex = 0;
         let workbookString = "";
@@ -261,6 +266,7 @@ function generateExcel(data) {
         let sheetNameApp = "";
         let indexId = 4;
         let selectedAdded = false;
+        let arrTypes = [];
         for (let index = 0; index < sheetLength; index++) {
             const sheetData = data.sheet[index];
             let rowCount = sheetData.shiftTop ? sheetData.shiftTop : 1;
@@ -276,6 +282,45 @@ function generateExcel(data) {
             let objKey = [];
             let headerFormula = [];
             let mergeRowConditionMap = {};
+            let imagePromise;
+            if (sheetData.images) {
+                imagePromise = Promise.all([
+                    ...sheetData.images.map((v, i) => __awaiter(this, void 0, void 0, function* () {
+                        let indexx = v.url.lastIndexOf(".");
+                        let type;
+                        if (indexx > 0) {
+                            type = v.url.substring(indexx + 1).toLowerCase();
+                            if (type.length > 4) {
+                                if (type.indexOf("gif") >= 0) {
+                                    type = "gif";
+                                }
+                                else if (type.indexOf("jpg") >= 0) {
+                                    type = "jpg";
+                                }
+                                else if (type.indexOf("jpeg") >= 0) {
+                                    type = "jpeg";
+                                }
+                                else {
+                                    type = "png";
+                                }
+                            }
+                        }
+                        else {
+                            type = "png";
+                        }
+                        // if (type == 'ico') {
+                        //     type = 'png'
+                        // }
+                        arrTypes.push(type);
+                        return {
+                            type,
+                            image: yield (0, image_1.toDataURL2)(v.url, "image" + i + "." + type),
+                            obj: v,
+                            i,
+                        };
+                    })),
+                ]);
+            }
             const colsLength = sheetData.headers.length;
             if (Array.isArray(sheetData.headers) && colsLength) {
                 let titleRow = "";
@@ -770,6 +815,165 @@ function generateExcel(data) {
             sheetNameApp += "<vt:lpstr>" + ("sheet" + (index + 1)) + "</vt:lpstr>";
             selectedAdded = selectedAdded || !!sheetData.selected;
             const filterMode = sheetData.sortAndfilter ? 'filterMode="1"' : "";
+            let hasImages = false;
+            let drawersContent = "";
+            if (imagePromise) {
+                hasImages = true;
+                yield imagePromise.then((res) => {
+                    console.log(res, "res");
+                    let drawerStr = "";
+                    res.forEach((val, i) => {
+                        const index = i + 1;
+                        var v = val.image;
+                        var from = val.obj.from;
+                        var to = val.obj.to;
+                        var margin = val.obj.margin;
+                        var imageType = val.type;
+                        var type = val.obj.type;
+                        var extent = val.obj.extent;
+                        if (typeof extent == "undefined") {
+                            extent = {
+                                cx: 200000,
+                                cy: 200000,
+                            };
+                        }
+                        var result = {
+                            start: {
+                                col: 0,
+                                row: 0,
+                                mL: 0,
+                                mT: 0,
+                            },
+                            end: {
+                                col: 1,
+                                row: 1,
+                                mR: 0,
+                                mB: 0,
+                            },
+                        };
+                        if (typeof from == "string" && from.length >= 2) {
+                            var p = (0, excel_util_1.getColRowBaseOnRefString)(from, cols);
+                            result.start = Object.assign({}, p);
+                            result.end = {
+                                col: p.col + 1,
+                                row: p.row + 1,
+                            };
+                        }
+                        if (typeof to == "string" && to.length >= 2) {
+                            var p = (0, excel_util_1.getColRowBaseOnRefString)(to, cols);
+                            // if (p.row == result.start.row) {
+                            //     p.row += 1
+                            // }
+                            // if (p.col == result.start.col) {
+                            //     p.col += 1
+                            // }
+                            p.row += 1;
+                            p.col += 1;
+                            result.end = Object.assign({}, p);
+                        }
+                        result.end.mR = 0;
+                        result.end.mB = 0;
+                        result.start.mL = 0;
+                        result.start.mT = 0;
+                        if (margin) {
+                            if (margin.all || margin.right) {
+                                result.end.mR = margin.all || margin.right;
+                            }
+                            if (margin.all || margin.bottom) {
+                                result.end.mB = margin.all || margin.bottom;
+                            }
+                            if (margin.all || margin.left) {
+                                result.start.mL = margin.all || margin.left;
+                            }
+                            if (margin.all || margin.top) {
+                                result.start.mT = margin.all || margin.top;
+                            }
+                        }
+                        if (type == "one") {
+                            drawersContent += `<xdr:oneCellAnchor>
+        <xdr:from>
+            <xdr:col>${result.start.col}</xdr:col>
+            <xdr:colOff>${result.start.mT}</xdr:colOff>
+            <xdr:row>${result.start.row}</xdr:row>
+            <xdr:rowOff>${result.start.mL}</xdr:rowOff>
+        </xdr:from>
+        <xdr:ext cx="${extent.cx}" cy="${extent.cy}"/>
+        <xdr:pic>
+            <xdr:nvPicPr>
+                <xdr:cNvPr id="${index}" name="Picture ${index}">
+                </xdr:cNvPr>
+                <xdr:cNvPicPr preferRelativeResize="0" />
+            </xdr:nvPicPr>
+            <xdr:blipFill>
+                <a:blip
+                    xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"
+                    r:embed="rId${index}">
+                </a:blip>
+                <a:stretch>
+                    <a:fillRect />
+                </a:stretch>
+            </xdr:blipFill>
+            <xdr:spPr>
+                <a:prstGeom prst="rect">
+                    <a:avLst />
+                </a:prstGeom>
+                <a:noFill />
+            </xdr:spPr>
+        </xdr:pic>
+        <xdr:clientData />
+    </xdr:oneCellAnchor>`;
+                        }
+                        else {
+                            drawersContent += `<xdr:twoCellAnchor editAs="oneCell">
+        <xdr:from>
+            <xdr:col>${result.start.col}</xdr:col>
+            <xdr:colOff>${result.start.mT}</xdr:colOff>
+            <xdr:row>${result.start.row}</xdr:row>
+            <xdr:rowOff>${result.start.mL}</xdr:rowOff>
+        </xdr:from>
+        <xdr:to>
+            <xdr:col>${result.end.col}</xdr:col>
+            <xdr:colOff>${result.end.mB}</xdr:colOff>
+            <xdr:row>${result.end.row}</xdr:row>
+            <xdr:rowOff>${result.end.mR}</xdr:rowOff>
+        </xdr:to>
+        <xdr:pic>
+            <xdr:nvPicPr>
+                <xdr:cNvPr id="${index}" name="Picture ${index}">
+                </xdr:cNvPr>
+                <xdr:cNvPicPr preferRelativeResize="0" />
+            </xdr:nvPicPr>
+            <xdr:blipFill>
+                <a:blip
+                    xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"
+                    r:embed="rId${index}">
+                </a:blip>
+                <a:stretch>
+                    <a:fillRect />
+                </a:stretch>
+            </xdr:blipFill>
+            <xdr:spPr> 
+                <a:prstGeom prst="rect">
+                    <a:avLst />
+                </a:prstGeom>
+                <a:noFill />
+            </xdr:spPr>
+        </xdr:pic>
+        <xdr:clientData />
+    </xdr:twoCellAnchor>`;
+                        }
+                        const name = "image" + index + "." + imageType;
+                        xl_media_Folder === null || xl_media_Folder === void 0 ? void 0 : xl_media_Folder.file(name, v);
+                        drawerStr += `<Relationship Id="rId${index}"
+        Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image"
+        Target="../media/${name}" />`;
+                    });
+                    xl_drawings_relsFolder === null || xl_drawings_relsFolder === void 0 ? void 0 : xl_drawings_relsFolder.file("drawing1.xml.rels", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+    ${drawerStr}
+</Relationships>`);
+                });
+            }
             mergesCellArray = [...new Set(mergesCellArray)];
             mapData["sheet" + (index + 1)] = {
                 indexId: indexId + 1,
@@ -777,6 +981,8 @@ function generateExcel(data) {
                 sheetName: shName,
                 sheetDataString,
                 hasComment,
+                drawersContent,
+                hasImages,
                 commentString,
                 commentAuthor,
                 shapeCommentRowCol,
@@ -827,7 +1033,7 @@ function generateExcel(data) {
         }
         let sheetKeys = Object.keys(mapData);
         // in _rels
-        var relsFolder = zip.folder("_rels");
+        let relsFolder = zip.folder("_rels");
         relsFolder === null || relsFolder === void 0 ? void 0 : relsFolder.file(".rels", '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
             '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
             ' <Relationship Id="rId3"' +
@@ -840,7 +1046,7 @@ function generateExcel(data) {
             '  Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument"' +
             '  Target="xl/workbook.xml" />' +
             "</Relationships>");
-        var docPropsFolder = zip.folder("docProps");
+        let docPropsFolder = zip.folder("docProps");
         docPropsFolder === null || docPropsFolder === void 0 ? void 0 : docPropsFolder.file("core.xml", '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
             '<cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" ' +
             'xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" ' +
@@ -889,7 +1095,7 @@ function generateExcel(data) {
             "" +
             "</sst>");
         //xl/_rels
-        var xl__relsFolder = xlFolder === null || xlFolder === void 0 ? void 0 : xlFolder.folder("_rels");
+        let xl__relsFolder = xlFolder === null || xlFolder === void 0 ? void 0 : xlFolder.folder("_rels");
         xl__relsFolder === null || xl__relsFolder === void 0 ? void 0 : xl__relsFolder.file("workbook.xml.rels", '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
             '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
             ' <Relationship Id="rId1"' +
@@ -908,16 +1114,38 @@ function generateExcel(data) {
             "" +
             "</Relationships>");
         //xl/theme
-        var xl_themeFolder = xlFolder === null || xlFolder === void 0 ? void 0 : xlFolder.folder("theme");
+        let xl_themeFolder = xlFolder === null || xlFolder === void 0 ? void 0 : xlFolder.folder("theme");
         xl_themeFolder === null || xl_themeFolder === void 0 ? void 0 : xl_themeFolder.file("theme1.xml", '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
             '<a:theme xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"  name="Office Theme"><a:themeElements><a:clrScheme name="Office"><a:dk1><a:sysClr val="windowText" lastClr="000000"/></a:dk1><a:lt1><a:sysClr val="window" lastClr="FFFFFF"/></a:lt1><a:dk2><a:srgbClr val="44546A"/></a:dk2><a:lt2><a:srgbClr val="E7E6E6"/></a:lt2><a:accent1><a:srgbClr val="5B9BD5"/></a:accent1><a:accent2><a:srgbClr val="ED7D31"/></a:accent2><a:accent3><a:srgbClr val="A5A5A5"/></a:accent3><a:accent4><a:srgbClr val="FFC000"/></a:accent4><a:accent5><a:srgbClr val="4472C4"/></a:accent5><a:accent6><a:srgbClr val="70AD47"/></a:accent6><a:hlink><a:srgbClr val="0563C1"/></a:hlink><a:folHlink><a:srgbClr val="954F72"/></a:folHlink></a:clrScheme><a:fontScheme name="Office"><a:majorFont><a:latin typeface="Calibri Light" panose="020F0302020204030204"/><a:ea typeface=""/><a:cs typeface=""/><a:font script="Jpan" typeface="游ゴシック Light"/><a:font script="Hang" typeface="맑은 고딕"/><a:font script="Hans" typeface="等线 Light"/><a:font script="Hant" typeface="新細明體"/><a:font script="Arab" typeface="Times New Roman"/><a:font script="Hebr" typeface="Times New Roman"/><a:font script="Thai" typeface="Tahoma"/><a:font script="Ethi" typeface="Nyala"/><a:font script="Beng" typeface="Vrinda"/><a:font script="Gujr" typeface="Shruti"/><a:font script="Khmr" typeface="MoolBoran"/><a:font script="Knda" typeface="Tunga"/><a:font script="Guru" typeface="Raavi"/><a:font script="Cans" typeface="Euphemia"/><a:font script="Cher" typeface="Plantagenet Cherokee"/><a:font script="Yiii" typeface="Microsoft Yi Baiti"/><a:font script="Tibt" typeface="Microsoft Himalaya"/><a:font script="Thaa" typeface="MV Boli"/><a:font script="Deva" typeface="Mangal"/><a:font script="Telu" typeface="Gautami"/><a:font script="Taml" typeface="Latha"/><a:font script="Syrc" typeface="Estrangelo Edessa"/><a:font script="Orya" typeface="Kalinga"/><a:font script="Mlym" typeface="Kartika"/><a:font script="Laoo" typeface="DokChampa"/><a:font script="Sinh" typeface="Iskoola Pota"/><a:font script="Mong" typeface="Mongolian Baiti"/><a:font script="Viet" typeface="Times New Roman"/><a:font script="Uigh" typeface="Microsoft Uighur"/><a:font script="Geor" typeface="Sylfaen"/></a:majorFont><a:minorFont><a:latin typeface="Calibri" panose="020F0502020204030204"/><a:ea typeface=""/><a:cs typeface=""/><a:font script="Jpan" typeface="游ゴシック"/><a:font script="Hang" typeface="맑은 고딕"/><a:font script="Hans" typeface="等线"/><a:font script="Hant" typeface="新細明體"/><a:font script="Arab" typeface="Arial"/><a:font script="Hebr" typeface="Arial"/><a:font script="Thai" typeface="Tahoma"/><a:font script="Ethi" typeface="Nyala"/><a:font script="Beng" typeface="Vrinda"/><a:font script="Gujr" typeface="Shruti"/><a:font script="Khmr" typeface="DaunPenh"/><a:font script="Knda" typeface="Tunga"/><a:font script="Guru" typeface="Raavi"/><a:font script="Cans" typeface="Euphemia"/><a:font script="Cher" typeface="Plantagenet Cherokee"/><a:font script="Yiii" typeface="Microsoft Yi Baiti"/><a:font script="Tibt" typeface="Microsoft Himalaya"/><a:font script="Thaa" typeface="MV Boli"/><a:font script="Deva" typeface="Mangal"/><a:font script="Telu" typeface="Gautami"/><a:font script="Taml" typeface="Latha"/><a:font script="Syrc" typeface="Estrangelo Edessa"/><a:font script="Orya" typeface="Kalinga"/><a:font script="Mlym" typeface="Kartika"/><a:font script="Laoo" typeface="DokChampa"/><a:font script="Sinh" typeface="Iskoola Pota"/><a:font script="Mong" typeface="Mongolian Baiti"/><a:font script="Viet" typeface="Arial"/><a:font script="Uigh" typeface="Microsoft Uighur"/><a:font script="Geor" typeface="Sylfaen"/></a:minorFont></a:fontScheme><a:fmtScheme name="Office"><a:fillStyleLst><a:solidFill><a:schemeClr val="phClr"/></a:solidFill><a:gradFill rotWithShape="1"><a:gsLst><a:gs pos="0"><a:schemeClr val="phClr"><a:lumMod val="110000"/><a:satMod val="105000"/><a:tint val="67000"/></a:schemeClr></a:gs><a:gs pos="50000"><a:schemeClr val="phClr"><a:lumMod val="105000"/><a:satMod val="103000"/><a:tint val="73000"/></a:schemeClr></a:gs><a:gs pos="100000"><a:schemeClr val="phClr"><a:lumMod val="105000"/><a:satMod val="109000"/><a:tint val="81000"/></a:schemeClr></a:gs></a:gsLst><a:lin ang="5400000" scaled="0"/></a:gradFill><a:gradFill rotWithShape="1"><a:gsLst><a:gs pos="0"><a:schemeClr val="phClr"><a:satMod val="103000"/><a:lumMod val="102000"/><a:tint val="94000"/></a:schemeClr></a:gs><a:gs pos="50000"><a:schemeClr val="phClr"><a:satMod val="110000"/><a:lumMod val="100000"/><a:shade val="100000"/></a:schemeClr></a:gs><a:gs pos="100000"><a:schemeClr val="phClr"><a:lumMod val="99000"/><a:satMod val="120000"/><a:shade val="78000"/></a:schemeClr></a:gs></a:gsLst><a:lin ang="5400000" scaled="0"/></a:gradFill></a:fillStyleLst><a:lnStyleLst><a:ln w="6350" cap="flat" cmpd="sng" algn="ctr"><a:solidFill><a:schemeClr val="phClr"/></a:solidFill><a:prstDash val="solid"/><a:miter lim="800000"/></a:ln><a:ln w="12700" cap="flat" cmpd="sng" algn="ctr"><a:solidFill><a:schemeClr val="phClr"/></a:solidFill><a:prstDash val="solid"/><a:miter lim="800000"/></a:ln><a:ln w="19050" cap="flat" cmpd="sng" algn="ctr"><a:solidFill><a:schemeClr val="phClr"/></a:solidFill><a:prstDash val="solid"/><a:miter lim="800000"/></a:ln></a:lnStyleLst><a:effectStyleLst><a:effectStyle><a:effectLst/></a:effectStyle><a:effectStyle><a:effectLst/></a:effectStyle><a:effectStyle><a:effectLst><a:outerShdw blurRad="57150" dist="19050" dir="5400000" algn="ctr" rotWithShape="0"><a:srgbClr val="000000"><a:alpha val="63000"/></a:srgbClr></a:outerShdw></a:effectLst></a:effectStyle></a:effectStyleLst><a:bgFillStyleLst><a:solidFill><a:schemeClr val="phClr"/></a:solidFill><a:solidFill><a:schemeClr val="phClr"><a:tint val="95000"/><a:satMod val="170000"/></a:schemeClr></a:solidFill><a:gradFill rotWithShape="1"><a:gsLst><a:gs pos="0"><a:schemeClr val="phClr"><a:tint val="93000"/><a:satMod val="150000"/><a:shade val="98000"/><a:lumMod val="102000"/></a:schemeClr></a:gs><a:gs pos="50000"><a:schemeClr val="phClr"><a:tint val="98000"/><a:satMod val="130000"/><a:shade val="90000"/><a:lumMod val="103000"/></a:schemeClr></a:gs><a:gs pos="100000"><a:schemeClr val="phClr"><a:shade val="63000"/><a:satMod val="120000"/></a:schemeClr></a:gs></a:gsLst><a:lin ang="5400000" scaled="0"/></a:gradFill></a:bgFillStyleLst></a:fmtScheme></a:themeElements><a:objectDefaults/><a:extraClrSchemeLst/><a:extLst><a:ext uri="{05A4C25C-085E-4340-85A3-A5531E510DB2}"><thm15:themeFamily xmlns:thm15="http://schemas.microsoft.com/office/thememl/2012/main" name="Office Theme" id="{62F939B6-93AF-4DB8-9C6B-D6C7DFDC589F}" vid="{4A3C46E8-61CC-4603-A589-7422A47A8E4A}"/></a:ext></a:extLst></a:theme>');
         // xl/worksheets
-        var xl_worksheetsFolder = xlFolder === null || xlFolder === void 0 ? void 0 : xlFolder.folder("worksheets");
+        let xl_worksheetsFolder = xlFolder === null || xlFolder === void 0 ? void 0 : xlFolder.folder("worksheets");
         let commentId = [];
-        const xl_drawingsFolder = xlFolder === null || xlFolder === void 0 ? void 0 : xlFolder.folder("drawings");
         const xl_worksheets_relsFolder = xl_worksheetsFolder === null || xl_worksheetsFolder === void 0 ? void 0 : xl_worksheetsFolder.folder("_rels");
+        let sheetDrawers = [];
         sheetKeys.forEach((k, iCo) => {
             const sh = mapData[k];
+            let sheetRelContentStr = "";
+            if (sh.hasImages) {
+                const drawerName = `drawing${sheetDrawers.length + 1}.xml`;
+                sheetDrawers.push(drawerName);
+                xl_drawingsFolder === null || xl_drawingsFolder === void 0 ? void 0 : xl_drawingsFolder.file(drawerName, `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xdr:wsDr xmlns:xdr="http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing"
+    xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"
+    xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"
+    xmlns:c="http://schemas.openxmlformats.org/drawingml/2006/chart"
+    xmlns:cx="http://schemas.microsoft.com/office/drawing/2014/chartex"
+    xmlns:cx1="http://schemas.microsoft.com/office/drawing/2015/9/8/chartex"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:dgm="http://schemas.openxmlformats.org/drawingml/2006/diagram"
+    xmlns:x3Unk="http://schemas.microsoft.com/office/drawing/2010/slicer"
+    xmlns:sle15="http://schemas.microsoft.com/office/drawing/2012/slicer"
+>
+${sh.drawersContent}
+</xdr:wsDr>`);
+                sheetRelContentStr += `<Relationship Id="rId2"
+        Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing"
+        Target="../drawings/${drawerName}" />`;
+            }
             if (sh.hasComment) {
                 commentId.push(iCo + 1);
                 let aurt = sh.commentAuthor;
@@ -934,20 +1162,31 @@ function generateExcel(data) {
 		${sh.commentString}
 	</commentList>
 </comments>`);
-                xl_worksheets_relsFolder === null || xl_worksheets_relsFolder === void 0 ? void 0 : xl_worksheets_relsFolder.file("sheet" + (iCo + 1) + ".xml.rels", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
-    <Relationship Id="rId1"
+                sheetRelContentStr += `  <Relationship Id="rId1"
         Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments"
         Target="../comments${iCo + 1}.xml" />
-    ${true
-                    ? ""
-                    : `<Relationship Id="rId2"
-        Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing"
-        Target="../drawings/drawing${iCo + 1}.xml" />`}
     <Relationship Id="rId3"
         Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing"
-        Target="../drawings/vmlDrawing${iCo + 1}.vml" />
-</Relationships>`);
+        Target="../drawings/vmlDrawing${iCo + 1}.vml" />`;
+                //       xl_worksheets_relsFolder?.file(
+                //         "sheet" + (iCo + 1) + ".xml.rels",
+                //         `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+                // <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+                //     <Relationship Id="rId1"
+                //         Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments"
+                //         Target="../comments${iCo + 1}.xml" />
+                //     ${
+                //       true
+                //         ? ""
+                //         : `<Relationship Id="rId2"
+                //         Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing"
+                //         Target="../drawings/drawing${iCo + 1}.xml" />`
+                //     }
+                //     <Relationship Id="rId3"
+                //         Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing"
+                //         Target="../drawings/vmlDrawing${iCo + 1}.vml" />
+                // </Relationships>`
+                //       );
                 xl_drawingsFolder === null || xl_drawingsFolder === void 0 ? void 0 : xl_drawingsFolder.file("vmlDrawing" + (iCo + 1) + ".vml", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <xml xmlns:p="http://schemas.openxmlformats.org/presentationml/2006/main" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:oa="urn:schemas-microsoft-com:office:activation" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:pvml="urn:schemas-microsoft-com:office:powerpoint">
  <o:shapelayout v:ext="edit">
@@ -980,6 +1219,12 @@ function generateExcel(data) {
                 }, "")}
  </xml>`);
             }
+            if (sh.hasImages || sh.hasComment) {
+                xl_worksheets_relsFolder === null || xl_worksheets_relsFolder === void 0 ? void 0 : xl_worksheets_relsFolder.file("sheet" + (iCo + 1) + ".xml.rels", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+   ${sheetRelContentStr}
+</Relationships>`);
+            }
             xl_worksheetsFolder === null || xl_worksheetsFolder === void 0 ? void 0 : xl_worksheetsFolder.file(sh.key + ".xml", '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
                 '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"' +
                 ' xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"' +
@@ -1004,11 +1249,11 @@ function generateExcel(data) {
                 sh.protectionOption +
                 sh.sheetSortFilter +
                 sh.merges +
-                (true ? "" : '<drawing r:id="rId2" />') +
+                (sh.hasImages ? '<drawing r:id="rId2" />' : "") +
                 (sh.hasComment ? '<legacyDrawing r:id="rId3" />' : "") +
                 "</worksheet>");
         });
-        zip.file("[Content_Types].xml", (0, content_types_1.contentTypeGenerator)(sheetContentType, commentId));
+        zip.file("[Content_Types].xml", (0, content_types_1.contentTypeGenerator)(sheetContentType, commentId, [...new Set(arrTypes)], sheetDrawers));
         if (data.backend) {
             return zip
                 .generateAsync({

@@ -1,6 +1,23 @@
 export type ProtectionOption = {
   [key in ProtectionOptionKey]: "0" | "1" | 0 | 1;
 };
+export interface ImageTypes {
+  url: string;
+  from: string;
+  to?: string;
+  type?: "one" | "two";
+  extent?: {
+    cx: number;
+    cy: number;
+  };
+  margin?: {
+    all?: number;
+    right?: number;
+    left?: number;
+    bottom?: number;
+    top?: number;
+  };
+}
 export interface SideBySide {
   sheetName?: string;
   spaceX?: number;
@@ -167,6 +184,7 @@ export interface Sheet {
   withoutHeader?: boolean;
   multiStyleConditin?: MultiStyleConditinFunction;
   useSplitBaseOnMatch?: boolean;
+  images?: ImageTypes[];
   formula?: Formula;
   name?: string;
   title?: Title;
