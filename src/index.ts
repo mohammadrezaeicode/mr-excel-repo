@@ -1,4 +1,5 @@
-import { ExcelTable, SideBySide } from "./data-model/excel-table";
+import { ThemeOption, themeGenerator } from "./Themes/theme";
+import { Data, ExcelTable, SideBySide, Theme } from "./data-model/excel-table";
 import {
   ColWidthScaleFunction,
   RowHeightScaleFunction,
@@ -29,4 +30,12 @@ export function convertTableToExcel(
 export function sideBySideLineByLine(data: SideBySide[][]) {
   const exData: ExcelTable = sideBySide(data);
   return generateExcel(exData);
+}
+
+export function themeBaseGenerate(
+  data: ExcelTable | Data[] | Data[][],
+  index: number,
+  option?: ThemeOption
+) {
+  return generateExcel(themeGenerator(data, index, option));
 }

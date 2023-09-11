@@ -47,7 +47,11 @@ declare interface DataOptions {
     comment?: MapComment;
 }
 
-declare interface ExcelTable {
+declare interface ExcelTable extends ExcelTableOption {
+    sheet: Sheet[];
+}
+
+declare interface ExcelTableOption {
     notSave?: boolean;
     creator?: string;
     backend?: boolean;
@@ -60,7 +64,6 @@ declare interface ExcelTable {
     createType?: string;
     mapSheetDataOption?: any;
     styles?: Styles;
-    sheet: Sheet[];
 }
 
 declare interface Formula {
@@ -140,7 +143,12 @@ declare type ProtectionOptionKey = "sheet" | "formatCells" | "formatColumns" | "
 
 declare type RowHeightScaleFunction = (data: number, rowIndex: number, fromHeader: boolean) => number;
 
-declare interface Sheet {
+declare interface Sheet extends SheetOption {
+    headers: Header[];
+    data: Data[];
+}
+
+declare interface SheetOption {
     withoutHeader?: boolean;
     multiStyleConditin?: MultiStyleConditinFunction;
     useSplitBaseOnMatch?: boolean;
@@ -162,8 +170,6 @@ declare interface Sheet {
     headerRowOption?: any;
     protectionOption?: ProtectionOption;
     headerHeight?: number;
-    headers: Header[];
-    data: Data[];
 }
 
 declare interface SideBySide {
@@ -204,6 +210,17 @@ declare type StyleCellConditionFunction = (data: Header | string | number | unde
 
 declare interface Styles {
     [key: string]: StyleBody;
+}
+
+export declare function themeBaseGenerate(data: ExcelTable | Data[] | Data[][], index: number, option?: ThemeOption): Promise<string | number[] | Blob | Buffer | undefined>;
+
+declare interface ThemeOption {
+    hIndex?: number;
+    rIndex?: number;
+    nColor?: boolean;
+    hColor?: string;
+    rColor?: string;
+    fieName?: string;
 }
 
 declare interface Title {

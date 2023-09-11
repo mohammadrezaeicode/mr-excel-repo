@@ -116,7 +116,7 @@ export interface Title {
     multiStyleValue?: MultiStyleValue;
     comment?: Comment | string;
 }
-export interface Sheet {
+export interface SheetOption {
     withoutHeader?: boolean;
     multiStyleConditin?: MultiStyleConditinFunction;
     useSplitBaseOnMatch?: boolean;
@@ -138,6 +138,8 @@ export interface Sheet {
     headerRowOption?: any;
     protectionOption?: ProtectionOption;
     headerHeight?: number;
+}
+export interface Sheet extends SheetOption {
     headers: Header[];
     data: Data[];
 }
@@ -204,7 +206,10 @@ export interface FormulaSetting {
 export interface Formula {
     [insertCell: string]: FormulaSetting;
 }
-export interface ExcelTable {
+export interface Theme extends ExcelTableOption {
+    sheet: SheetOption[];
+}
+export interface ExcelTableOption {
     notSave?: boolean;
     creator?: string;
     backend?: boolean;
@@ -217,6 +222,8 @@ export interface ExcelTable {
     createType?: string;
     mapSheetDataOption?: any;
     styles?: Styles;
+}
+export interface ExcelTable extends ExcelTableOption {
     sheet: Sheet[];
 }
 //# sourceMappingURL=excel-table.d.ts.map

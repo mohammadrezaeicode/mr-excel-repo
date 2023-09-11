@@ -1,5 +1,17 @@
 # Changelog
 
+## Version 2.9.0 (2023-09-10)
+
+### New Features
+
+- Generate excel base on Theme
+
+## Version 2.8.0 (2023-09-08)
+
+### New Features
+
+- ability for add image to excel
+
 ## Version 2.7.0 (2023-09-02)
 
 ### New Features

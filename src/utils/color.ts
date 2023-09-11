@@ -1,6 +1,43 @@
 function removeSpace(str: string) {
   return str.replace(/ /g, "");
 }
+export function hexToRgbArray(hex: string): number[] {
+  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result
+    ? [
+        parseInt(result[1], 16),
+        parseInt(result[2], 16),
+        parseInt(result[3], 16),
+      ]
+    : [0, 0, 0];
+}
+export function generateContrastTextColor(b: string) {
+  const background = hexToRgbArray(b);
+  if (background == null) {
+    return;
+  }
+  // Calculate the perceived brightness (luminance) of the background color
+  const bgLuminance =
+    (0.299 * background[0] + 0.587 * background[1] + 0.114 * background[2]) /
+    255;
+
+  // Determine whether the text should be dark or light based on luminance
+  const textColor = bgLuminance > 0.5 ? "rgb(0,0,0)" : "rgb(255,255,255)"; ;
+
+  return textColor;
+}
+export function hexToRgbNegative(hex: string) {
+  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result
+    ? "rgb(" +
+        (255 - parseInt(result[1], 16)) +
+        "," +
+        (255 - parseInt(result[2], 16)) +
+        "," +
+        (255 - parseInt(result[3], 16)) +
+        ")"
+    : "rgb(0,0,0)";
+}
 
 function valueToHex(c: number | string): string {
   c = Number(c);

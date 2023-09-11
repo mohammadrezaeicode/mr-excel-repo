@@ -4,6 +4,8 @@
 
 <summary>images</summary>
 
+![ex](https://github.com/mohammadrezaeicode/open-screenshot-close/blob/main/done/n2000-2069/negative-text2001.png?raw=true)
+
 ![ex](https://github.com/mohammadrezaeicode/mr-excel-page-repo/blob/main/public/img/ex16.PNG?raw=true)
 
 ![ex](https://github.com/mohammadrezaeicode/mr-excel-page-repo/blob/main/public/img/ex14.PNG?raw=true)
@@ -48,17 +50,27 @@ Our library offers comprehensive support for a wide range of features, including
 
 In version 2.1.0, we introduced a new feature called "convertTableToExcel," which enables the generation of an Excel file from a specified table or DOM element (table). The provided query is expected to be a valid input for the querySelector method. This enhancement allows for greater flexibility and convenience when creating Excel files directly from HTML tables.
 
+We have four functions that are defined with specific use cases as follows:
+
+- **`generateExcel`**: This is the primary and most important function that serves as the entry point for all other functions. Its responsibility is to generate an Excel file based on the received input data. We will provide examples of the various options that can be utilized.
+
+- **`convertTableToExcel`**: This function is designed exclusively for **client-side** use. It requires passing a DOM element (a table element) as a parameter. The output of this function is an Excel file generated from the provided table.
+
+- **`sideBySideLineByLine`**: This function offers the capability to generate a single-sheet Excel file containing multiple tables side by side and line by line.
+
+- **`themeBaseGenerate`**: Within this function, we utilize color palettes from **https://colorhunt.co/**. It accepts data and a theme index as inputs, then generates an Excel file with the selected theme applied.[Thems](https://mohammadrezaeicode.github.io/mr-excel-them-page/)
+
 ## Installation
 
-Via CDN
+**Via CDN**
 
-You can utilize our library, which comes bundled with Vite, by including the following link:
+You can utilize our library, which comes bundled with **Vite**, by including the following link:
 
 ```html
 <script src="https://unpkg.com/mr-excel@latest/dist/excel-table.umd.js"></script>
 ```
 
-Alternatively, you have the option to use the bundle with Webpack by incorporating the link provided below:
+Alternatively, you have the option to use the bundle with **Webpack** by incorporating the link provided below:
 
 ```html
 <script src="https://unpkg.com/mr-excel@latest/dist2/excel-table.js"></script>
@@ -69,19 +81,19 @@ Easily integrate our library into your project using either of these methods, an
 Using a Package Manager
 To seamlessly integrate our library, you can install it using your preferred package manager:
 
-Via npm:
+**Via npm**:
 
 ```terminal/bash
 npm install mr-excel
 ```
 
-Using yarn:
+Using **yarn**:
 
 ```terminal/bash
 npm install mr-excel
 ```
 
-Alternatively, you have the option to use pnpm:
+Alternatively, you have the option to use **pnpm**:
 
 ```terminal/bash
 npm install mr-excel
@@ -92,6 +104,262 @@ Choose the package manager that suits your workflow, and effortlessly bring the 
 ## Getting Started
 
 After adding the library to your project, generating XLSX files becomes straightforward. You can achieve this by creating a data object similar to the code snippet below:
+
+### themeBaseGenerate
+
+```javascript
+let data = {
+  sheet: [
+    {
+      headers: [
+        {
+          label: "ID",
+          text: "ID",
+        },
+        {
+          label: "FirstName",
+          text: "First Name",
+        },
+        {
+          label: "LastName",
+          text: "Last Name",
+        },
+        {
+          label: "Age",
+          text: "Age",
+        },
+        {
+          label: "Email",
+          text: "Email",
+        },
+        {
+          label: "PhoneNumber",
+          text: "PhoneNumber",
+        },
+        {
+          label: "Address",
+          text: "Address",
+        },
+        {
+          label: "Occupation",
+          text: "Occupation",
+        },
+      ],
+      data: [
+        {
+          ID: 1,
+          FirstName: "John",
+          LastName: "Smith",
+          Age: 32,
+          Email: "john@example.com",
+          PhoneNumber: "555-123-4567",
+          Address: "123 Main St, City",
+          Occupation: "Engineer",
+        },
+        {
+          ID: 2,
+          FirstName: "Jane",
+          LastName: "Doe",
+          Age: 28,
+          Email: "jane@example.com",
+          PhoneNumber: "555-987-6543",
+          Address: "456 Elm St, Town",
+          Occupation: "Teacher",
+        },
+        {
+          ID: 3,
+          FirstName: "David",
+          LastName: "Johnson",
+          Age: 45,
+          Email: "david@example.com",
+          PhoneNumber: "555-555-5555",
+          Address: "789 Oak St, City",
+          Occupation: "Doctor",
+        },
+        {
+          ID: 4,
+          FirstName: "Sarah",
+          LastName: "Brown",
+          Age: 22,
+          Email: "sarah@example.com",
+          PhoneNumber: "555-321-6549",
+          Address: "101 Pine St, Town",
+          Occupation: "Student",
+        },
+        {
+          ID: 5,
+          FirstName: "Michael",
+          LastName: "Wilson",
+          Age: 38,
+          Email: "michael@example.com",
+          PhoneNumber: "555-777-8888",
+          Address: "246 Maple St, City",
+          Occupation: "Lawyer",
+        },
+        {
+          ID: 6,
+          FirstName: "Emily",
+          LastName: "Davis",
+          Age: 29,
+          Email: "emily@example.com",
+          PhoneNumber: "555-444-3333",
+          Address: "555 Birch St, Town",
+          Occupation: "Nurse",
+        },
+        {
+          ID: 7,
+          FirstName: "Daniel",
+          LastName: "Lee",
+          Age: 31,
+          Email: "daniel@example.com",
+          PhoneNumber: "555-666-9999",
+          Address: "777 Cedar St, City",
+          Occupation: "Software Dev",
+        },
+        {
+          ID: 8,
+          FirstName: "Olivia",
+          LastName: "White",
+          Age: 27,
+          Email: "olivia@example.com",
+          PhoneNumber: "555-222-1111",
+          Address: "888 Redwood St, Town",
+          Occupation: "Artist",
+        },
+        {
+          ID: 9,
+          FirstName: "James",
+          LastName: "Anderson",
+          Age: 40,
+          Email: "james@example.com",
+          PhoneNumber: "555-888-3333",
+          Address: "333 Oak St, City",
+          Occupation: "Accountant",
+        },
+        {
+          ID: 10,
+          FirstName: "Sophia",
+          LastName: "Martinez",
+          Age: 24,
+          Email: "sophia@example.com",
+          PhoneNumber: "555-999-7777",
+          Address: "666 Pine St, Town",
+          Occupation: "Engineer",
+        },
+      ],
+    },
+  ],
+};
+ExcelTable.themeBaseGenerate(data, 0);
+```
+
+Or:
+
+```javascript
+let data = [
+  {
+    ID: 1,
+    FirstName: "John",
+    LastName: "Smith",
+    Age: 32,
+    Email: "john@example.com",
+    PhoneNumber: "555-123-4567",
+    Address: "123 Main St, City",
+    Occupation: "Engineer",
+  },
+  {
+    ID: 2,
+    FirstName: "Jane",
+    LastName: "Doe",
+    Age: 28,
+    Email: "jane@example.com",
+    PhoneNumber: "555-987-6543",
+    Address: "456 Elm St, Town",
+    Occupation: "Teacher",
+  },
+  {
+    ID: 3,
+    FirstName: "David",
+    LastName: "Johnson",
+    Age: 45,
+    Email: "david@example.com",
+    PhoneNumber: "555-555-5555",
+    Address: "789 Oak St, City",
+    Occupation: "Doctor",
+  },
+  {
+    ID: 4,
+    FirstName: "Sarah",
+    LastName: "Brown",
+    Age: 22,
+    Email: "sarah@example.com",
+    PhoneNumber: "555-321-6549",
+    Address: "101 Pine St, Town",
+    Occupation: "Student",
+  },
+  {
+    ID: 5,
+    FirstName: "Michael",
+    LastName: "Wilson",
+    Age: 38,
+    Email: "michael@example.com",
+    PhoneNumber: "555-777-8888",
+    Address: "246 Maple St, City",
+    Occupation: "Lawyer",
+  },
+  {
+    ID: 6,
+    FirstName: "Emily",
+    LastName: "Davis",
+    Age: 29,
+    Email: "emily@example.com",
+    PhoneNumber: "555-444-3333",
+    Address: "555 Birch St, Town",
+    Occupation: "Nurse",
+  },
+  {
+    ID: 7,
+    FirstName: "Daniel",
+    LastName: "Lee",
+    Age: 31,
+    Email: "daniel@example.com",
+    PhoneNumber: "555-666-9999",
+    Address: "777 Cedar St, City",
+    Occupation: "Software Dev",
+  },
+  {
+    ID: 8,
+    FirstName: "Olivia",
+    LastName: "White",
+    Age: 27,
+    Email: "olivia@example.com",
+    PhoneNumber: "555-222-1111",
+    Address: "888 Redwood St, Town",
+    Occupation: "Artist",
+  },
+  {
+    ID: 9,
+    FirstName: "James",
+    LastName: "Anderson",
+    Age: 40,
+    Email: "james@example.com",
+    PhoneNumber: "555-888-3333",
+    Address: "333 Oak St, City",
+    Occupation: "Accountant",
+  },
+  {
+    ID: 10,
+    FirstName: "Sophia",
+    LastName: "Martinez",
+    Age: 24,
+    Email: "sophia@example.com",
+    PhoneNumber: "555-999-7777",
+    Address: "666 Pine St, Town",
+    Occupation: "Engineer",
+  },
+];
+ExcelTable.themeBaseGenerate(data, 12);
+```
 
 ### convertTableToExcel
 
@@ -120,7 +388,7 @@ ExcelTable.convertTableToExcel("#table", null, true, rowF, colF)
 
 ### sideBySideLineByLine
 
-sideBySideLineByLine is a new feature that provides the ability to generate multi-table in a single sheet Excel
+`sideBySideLineByLine` is a new feature that enables the generation of multiple tables within a single Excel sheet.
 
 ```javascript
 const sideData = [
@@ -3508,6 +3776,12 @@ The library offers multiple options for aligning cells, giving you control over 
 These alignment options empower you to customize the appearance of cell content in your Excel sheets. By adjusting these properties, you can control the positioning, orientation, and overall style of data within your cells.
 
 ## Release Notes
+
+### Version 2.9.0 (2023-09-10)
+
+#### New Features
+
+- Generate excel base on Theme
 
 ### Version 2.8.0 (2023-09-08)
 
