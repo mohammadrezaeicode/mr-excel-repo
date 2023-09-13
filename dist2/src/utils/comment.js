@@ -36,17 +36,19 @@ function commentConvertor(commentValue, mapStyle, commentStyl) {
 }
 exports.commentConvertor = commentConvertor;
 function splitBaseOnbreackline(str) {
-    //     var str = `your text
-    //    that spans
-    //    multiple lines`
     // Split the string on \n or \r characters
     var separateLines = str.split(/\r?\n|\r|\n/g);
     return separateLines;
 }
 exports.splitBaseOnbreackline = splitBaseOnbreackline;
 function generateCommentTag(ref, comment, style, auIndex) {
-    let result = `<comment ref="${ref}" authorId="${Math.max(0, auIndex - 1)}" shapeId="0">
-            <text>`;
+    let result = '<comment ref="' +
+        ref +
+        '" authorId="' +
+        Math.max(0, auIndex - 1) +
+        '" shapeId="0">' +
+        " <text>";
+    ;
     let bac = "";
     comment.forEach((v, vindex) => {
         let pr = "";
@@ -65,11 +67,11 @@ function generateCommentTag(ref, comment, style, auIndex) {
     return result;
 }
 exports.generateCommentTag = generateCommentTag;
-exports.defaultCellCommentStyle = `<rPr>
-                        <b />
-                        <sz val="9" />
-                        <color rgb="000000" />
-                        <rFont val="Tahoma" />
-                    </rPr>
-            `;
+exports.defaultCellCommentStyle = "<rPr>" +
+    " <b />" +
+    ' <sz val="9" />' +
+    ' <color rgb="000000" />' +
+    ' <rFont val="Tahoma" />' +
+    "</rPr>";
+;
 //# sourceMappingURL=comment.js.map

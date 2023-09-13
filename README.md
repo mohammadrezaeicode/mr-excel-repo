@@ -58,7 +58,7 @@ We have four functions that are defined with specific use cases as follows:
 
 - **`sideBySideLineByLine`**: This function offers the capability to generate a single-sheet Excel file containing multiple tables side by side and line by line.
 
-- **`themeBaseGenerate`**: Within this function, we utilize color palettes from **https://colorhunt.co/**. It accepts data and a theme index as inputs, then generates an Excel file with the selected theme applied.[Thems](https://mohammadrezaeicode.github.io/mr-excel-them-page/)
+- **`themeBaseGenerate`**: Within this function, we utilize color palettes from **https://colorhunt.co/**. It accepts data and a theme index as inputs, then generates an Excel file with the selected theme applied.[Themes](https://mohammadrezaeicode.github.io/mr-excel-them-page/)
 
 ## Installation
 
@@ -3355,12 +3355,151 @@ ExcelTable.generateExcel(data);
 
 </details>
 
+## Image Option
+
+After version 2.8.0, we introduced the ability to add images.
+
+<details>
+
+<summary>Display code</summary>
+
+```javascript
+function generateData() {
+  return {
+    data: {
+      creator: "mr",
+      sheet: [
+        {
+          images: [
+            {
+              url: "/img/ezgif.com-gif-maker.gif",
+              from: "H1",
+              type: "one",
+            },
+            {
+              url: "/img/uniqe.jpg",
+              from: "H2",
+              type: "one",
+            },
+
+            {
+              url: "/img/ex.PNG",
+              from: "H3",
+              type: "onde",
+            },
+            {
+              url: "/img/ex.PNG",
+              from: "H4",
+              type: "two",
+            },
+            {
+              url: "/img/ezgif.com-gif-maker.gif",
+              from: "E1",
+              to: "F10",
+              type: "two",
+            },
+            {
+              url: "/img/uniqe.jpg",
+              from: "H6",
+              type: "two",
+            },
+          ],
+
+          headers: [
+            {
+              label: "Name",
+              text: "Name",
+            },
+            { label: "Color", text: "Color" },
+            { label: "Size", text: "Size" },
+            { label: "Price", text: "Price" },
+          ],
+          data: [
+            {
+              Name: "Rose",
+              Color: "Red",
+              Size: "Medium",
+              Price: 5.99,
+            },
+            {
+              Name: "Tulip",
+              Color: "Yellow",
+              Size: "Small",
+              Price: 2.49,
+            },
+            {
+              Name: "Daisy",
+              Color: "White",
+              Size: "Small",
+              Price: 1.99,
+            },
+            {
+              Name: "Sunflower",
+              Color: "Yellow",
+              Size: "Large",
+              Price: 4.99,
+            },
+            {
+              Name: "Lily",
+              Color: "Pink",
+              Size: "Medium",
+              Price: 3.99,
+            },
+            {
+              Name: "Daffodil",
+              Color: "Yellow",
+              Size: "Small",
+              Price: 2.49,
+            },
+            {
+              Name: "Orchid",
+              Color: "Purple",
+              Size: "Medium",
+              Price: 6.99,
+            },
+            {
+              Name: "Carnation",
+              Color: "Red",
+              Size: "Small",
+              Price: 1.99,
+            },
+            {
+              Name: "Hyacinth",
+              Color: "Blue",
+              Size: "Medium",
+              Price: 4.49,
+            },
+            {
+              Name: "Pansy",
+              Color: "Purple",
+              Size: "Small",
+              Price: 2.99,
+            },
+          ],
+        },
+      ],
+    },
+  };
+}
+const { data } = generateData();
+ExcelTable.generateExcel(data);
+
+```
+
+</details>
 <details>
 <summary>result image</summary>
 
-![ex](https://github.com/mohammadrezaeicode/mr-excel-page-repo/blob/main/public/img/ex9.PNG?raw=true)
+![ex](https://github.com/mohammadrezaeicode/mr-excel-page-repo/blob/main/public/img/ex17.PNG?raw=true)
 
 </details>
+<details>
+<summary>result image</summary>
+
+![ex](https://github.com/mohammadrezaeicode/mr-excel-page-repo/blob/main/public/img/ex17.PNG?raw=true)
+
+</details>
+
 
 ## API
 
@@ -3373,6 +3512,31 @@ In the API section, you will discover various options and configurations that yo
 export type ProtectionOption = {
   [key in ProtectionOptionKey]: "0" | "1" | 0 | 1;
 };
+export interface ImageTypes {
+  url: string;
+  from: string;
+  to?: string;
+  type?: "one" | "two";
+  extent?: {
+    cx: number;
+    cy: number;
+  };
+  margin?: {
+    all?: number;
+    right?: number;
+    left?: number;
+    bottom?: number;
+    top?: number;
+  };
+}
+export interface SideBySide {
+  sheetName?: string;
+  spaceX?: number;
+  spaceY?: number;
+  headers: { label: string; text: string }[];
+  data: Data[];
+  headerIndex?: number;
+}
 export type ProtectionOptionKey =
   | "sheet"
   | "formatCells"
@@ -3481,6 +3645,15 @@ export interface MergeRowConditionMap {
     start: number;
   };
 }
+export type MultiStyleConditinFunction = (
+  data: Header | string | number | undefined,
+  object: null | Data,
+  headerKey: string,
+  rowIndex: number,
+  colIndex: number,
+  fromHeader: boolean
+) => MultiStyleValue | null;
+
 export type CommentConditionFunction = (
   data: Header | string | number | undefined,
   object: null | Data,
@@ -3518,8 +3691,11 @@ export interface Title {
   multiStyleValue?: MultiStyleValue;
   comment?: Comment | string;
 }
-export interface Sheet {
+export interface SheetOption {
   withoutHeader?: boolean;
+  multiStyleConditin?: MultiStyleConditinFunction;
+  useSplitBaseOnMatch?: boolean;
+  images?: ImageTypes[];
   formula?: Formula;
   name?: string;
   title?: Title;
@@ -3537,6 +3713,8 @@ export interface Sheet {
   headerRowOption?: any;
   protectionOption?: ProtectionOption;
   headerHeight?: number;
+}
+export interface Sheet extends SheetOption {
   headers: Header[];
   data: Data[];
 }
@@ -3603,8 +3781,10 @@ export interface FormulaSetting {
 export interface Formula {
   [insertCell: string]: FormulaSetting;
 }
-
-export interface ExcelTable {
+export interface Theme extends ExcelTableOption {
+  sheet: SheetOption[];
+}
+export interface ExcelTableOption {
   notSave?: boolean;
   creator?: string;
   backend?: boolean;
@@ -3617,6 +3797,8 @@ export interface ExcelTable {
   createType?: string;
   mapSheetDataOption?: any;
   styles?: Styles;
+}
+export interface ExcelTable extends ExcelTableOption{
   sheet: Sheet[];
 }
 ```
@@ -3776,6 +3958,22 @@ The library offers multiple options for aligning cells, giving you control over 
 These alignment options empower you to customize the appearance of cell content in your Excel sheets. By adjusting these properties, you can control the positioning, orientation, and overall style of data within your cells.
 
 ## Release Notes
+
+### Version 2.11.0 (2023-09-13)
+
+#### Bug Fixes
+
+- bug related to string with special character(&<,...)
+
+#### Improvement
+
+- improvement in generate file
+
+### Version 2.10.0 (2023-09-12)
+
+#### improvement
+
+- Data Can Be Undefined
 
 ### Version 2.9.0 (2023-09-10)
 

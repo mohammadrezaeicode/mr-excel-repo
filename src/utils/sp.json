@@ -1,0 +1,6046 @@
+[
+    {
+        "code": "&Tab;",
+        "text": "TAB"
+    },
+    {
+        "code": "&NewLine;",
+        "text": "LF"
+    },
+    {
+        "code": "&DownBreve;",
+        "text": " ̑"
+    },
+    {
+        "code": "&tdot;\n&TripleDot;",
+        "text": " ⃛"
+    },
+    {
+        "code": "&DotDot;",
+        "text": " ⃜"
+    },
+    {
+        "code": "&excl;",
+        "text": "!"
+    },
+    {
+        "code": "&quot;[b]\n&QUOT;[b]",
+        "text": "\""
+    },
+    {
+        "code": "&num;",
+        "text": "#"
+    },
+    {
+        "code": "&dollar;",
+        "text": "$"
+    },
+    {
+        "code": "&percnt;",
+        "text": "%"
+    },
+    {
+        "code": "&amp;[b]\n&AMP;[b]",
+        "text": "&"
+    },
+    {
+        "code": "&apos;",
+        "text": "'"
+    },
+    {
+        "code": "&lpar;",
+        "text": "("
+    },
+    {
+        "code": "&rpar;",
+        "text": ")"
+    },
+    {
+        "code": "&ast;\n&midast;",
+        "text": "*"
+    },
+    {
+        "code": "&plus;",
+        "text": "+"
+    },
+    {
+        "code": "&comma;",
+        "text": ","
+    },
+    {
+        "code": "&period;",
+        "text": "."
+    },
+    {
+        "code": "&sol;",
+        "text": "/"
+    },
+    {
+        "code": "&colon;",
+        "text": ":"
+    },
+    {
+        "code": "&semi;",
+        "text": ";"
+    },
+    {
+        "code": "&lt;[b]\n&LT;[b]",
+        "text": "<"
+    },
+    {
+        "code": "&nvlt;",
+        "text": "<⃒"
+    },
+    {
+        "code": "&equals;",
+        "text": "="
+    },
+    {
+        "code": "&bne;",
+        "text": "=⃥"
+    },
+    {
+        "code": "&gt;[b]\n&GT;[b]",
+        "text": ">"
+    },
+    {
+        "code": "&nvgt;",
+        "text": ">⃒"
+    },
+    {
+        "code": "&quest;",
+        "text": "?"
+    },
+    {
+        "code": "&commat;",
+        "text": "@"
+    },
+    {
+        "code": "&lsqb;\n&lbrack;",
+        "text": "["
+    },
+    {
+        "code": "&bsol;",
+        "text": "\\"
+    },
+    {
+        "code": "&rsqb;\n&rbrack;",
+        "text": "]"
+    },
+    {
+        "code": "&Hat;",
+        "text": "^"
+    },
+    {
+        "code": "&lowbar;\n&UnderBar;",
+        "text": "_"
+    },
+    {
+        "code": "&grave;\n&DiacriticalGrave;",
+        "text": "`"
+    },
+    {
+        "code": "&fjlig;",
+        "text": "fj"
+    },
+    {
+        "code": "&lcub;\n&lbrace;",
+        "text": "{"
+    },
+    {
+        "code": "&verbar;\n&vert;\n&VerticalLine;",
+        "text": "|"
+    },
+    {
+        "code": "&rcub;\n&rbrace;",
+        "text": "}"
+    },
+    {
+        "code": "&nbsp;[b]\n&NonBreakingSpace;",
+        "text": " "
+    },
+    {
+        "code": "&iexcl;[b]",
+        "text": "¡"
+    },
+    {
+        "code": "&cent;[b]",
+        "text": "¢"
+    },
+    {
+        "code": "&pound;[b]",
+        "text": "£"
+    },
+    {
+        "code": "&curren;[b]",
+        "text": "¤"
+    },
+    {
+        "code": "&yen;[b]",
+        "text": "¥"
+    },
+    {
+        "code": "&brvbar;[b]",
+        "text": "¦"
+    },
+    {
+        "code": "&sect;[b]",
+        "text": "§"
+    },
+    {
+        "code": "&Dot;\n&die;\n&DoubleDot;\n&uml;[b]",
+        "text": "¨"
+    },
+    {
+        "code": "&copy;[b]\n&COPY;[b]",
+        "text": "©"
+    },
+    {
+        "code": "&ordf;[b]",
+        "text": "ª"
+    },
+    {
+        "code": "&laquo;[b]",
+        "text": "«"
+    },
+    {
+        "code": "&not;[b]",
+        "text": "¬"
+    },
+    {
+        "code": "&shy;[b]",
+        "text": "SHY"
+    },
+    {
+        "code": "&reg;[b]\n&circledR;\n&REG;[b]",
+        "text": "®"
+    },
+    {
+        "code": "&macr;[b]\n&strns;",
+        "text": "¯"
+    },
+    {
+        "code": "&deg;[b]",
+        "text": "°"
+    },
+    {
+        "code": "&plusmn;[b]\n&pm;\n&PlusMinus;",
+        "text": "±"
+    },
+    {
+        "code": "&sup2;[b]",
+        "text": "²"
+    },
+    {
+        "code": "&sup3;[b]",
+        "text": "³"
+    },
+    {
+        "code": "&acute;[b]\n&DiacriticalAcute;",
+        "text": "´"
+    },
+    {
+        "code": "&micro;[b]",
+        "text": "µ"
+    },
+    {
+        "code": "&para;[b]",
+        "text": "¶"
+    },
+    {
+        "code": "&middot;[b]\n&centerdot;\n&CenterDot;",
+        "text": "·"
+    },
+    {
+        "code": "&cedil;[b]\n&Cedilla;",
+        "text": "¸"
+    },
+    {
+        "code": "&sup1;[b]",
+        "text": "¹"
+    },
+    {
+        "code": "&ordm;[b]",
+        "text": "º"
+    },
+    {
+        "code": "&raquo;[b]",
+        "text": "»"
+    },
+    {
+        "code": "&frac14;[b]",
+        "text": "¼"
+    },
+    {
+        "code": "&frac12;[b]\n&half;",
+        "text": "½"
+    },
+    {
+        "code": "&frac34;[b]",
+        "text": "¾"
+    },
+    {
+        "code": "&iquest;[b]",
+        "text": "¿"
+    },
+    {
+        "code": "&Agrave;[b]",
+        "text": "À"
+    },
+    {
+        "code": "&Aacute;[b]",
+        "text": "Á"
+    },
+    {
+        "code": "&Acirc;[b]",
+        "text": "Â"
+    },
+    {
+        "code": "&Atilde;[b]",
+        "text": "Ã"
+    },
+    {
+        "code": "&Auml;[b]",
+        "text": "Ä"
+    },
+    {
+        "code": "&Aring;[b]\n&angst;",
+        "text": "Å"
+    },
+    {
+        "code": "&AElig;[b]",
+        "text": "Æ"
+    },
+    {
+        "code": "&Ccedil;[b]",
+        "text": "Ç"
+    },
+    {
+        "code": "&Egrave;[b]",
+        "text": "È"
+    },
+    {
+        "code": "&Eacute;[b]",
+        "text": "É"
+    },
+    {
+        "code": "&Ecirc;[b]",
+        "text": "Ê"
+    },
+    {
+        "code": "&Euml;[b]",
+        "text": "Ë"
+    },
+    {
+        "code": "&Igrave;[b]",
+        "text": "Ì"
+    },
+    {
+        "code": "&Iacute;[b]",
+        "text": "Í"
+    },
+    {
+        "code": "&Icirc;[b]",
+        "text": "Î"
+    },
+    {
+        "code": "&Iuml;[b]",
+        "text": "Ï"
+    },
+    {
+        "code": "&ETH;[b]",
+        "text": "Ð"
+    },
+    {
+        "code": "&Ntilde;[b]",
+        "text": "Ñ"
+    },
+    {
+        "code": "&Ograve;[b]",
+        "text": "Ò"
+    },
+    {
+        "code": "&Oacute;[b]",
+        "text": "Ó"
+    },
+    {
+        "code": "&Ocirc;[b]",
+        "text": "Ô"
+    },
+    {
+        "code": "&Otilde;[b]",
+        "text": "Õ"
+    },
+    {
+        "code": "&Ouml;[b]",
+        "text": "Ö"
+    },
+    {
+        "code": "&times;[b]",
+        "text": "×"
+    },
+    {
+        "code": "&Oslash;[b]",
+        "text": "Ø"
+    },
+    {
+        "code": "&Ugrave;[b]",
+        "text": "Ù"
+    },
+    {
+        "code": "&Uacute;[b]",
+        "text": "Ú"
+    },
+    {
+        "code": "&Ucirc;[b]",
+        "text": "Û"
+    },
+    {
+        "code": "&Uuml;[b]",
+        "text": "Ü"
+    },
+    {
+        "code": "&Yacute;[b]",
+        "text": "Ý"
+    },
+    {
+        "code": "&THORN;[b]",
+        "text": "Þ"
+    },
+    {
+        "code": "&szlig;[b]",
+        "text": "ß"
+    },
+    {
+        "code": "&agrave;[b]",
+        "text": "à"
+    },
+    {
+        "code": "&aacute;[b]",
+        "text": "á"
+    },
+    {
+        "code": "&acirc;[b]",
+        "text": "â"
+    },
+    {
+        "code": "&atilde;[b]",
+        "text": "ã"
+    },
+    {
+        "code": "&auml;[b]",
+        "text": "ä"
+    },
+    {
+        "code": "&aring;[b]",
+        "text": "å"
+    },
+    {
+        "code": "&aelig;[b]",
+        "text": "æ"
+    },
+    {
+        "code": "&ccedil;[b]",
+        "text": "ç"
+    },
+    {
+        "code": "&egrave;[b]",
+        "text": "è"
+    },
+    {
+        "code": "&eacute;[b]",
+        "text": "é"
+    },
+    {
+        "code": "&ecirc;[b]",
+        "text": "ê"
+    },
+    {
+        "code": "&euml;[b]",
+        "text": "ë"
+    },
+    {
+        "code": "&igrave;[b]",
+        "text": "ì"
+    },
+    {
+        "code": "&iacute;[b]",
+        "text": "í"
+    },
+    {
+        "code": "&icirc;[b]",
+        "text": "î"
+    },
+    {
+        "code": "&iuml;[b]",
+        "text": "ï"
+    },
+    {
+        "code": "&eth;[b]",
+        "text": "ð"
+    },
+    {
+        "code": "&ntilde;[b]",
+        "text": "ñ"
+    },
+    {
+        "code": "&ograve;[b]",
+        "text": "ò"
+    },
+    {
+        "code": "&oacute;[b]",
+        "text": "ó"
+    },
+    {
+        "code": "&ocirc;[b]",
+        "text": "ô"
+    },
+    {
+        "code": "&otilde;[b]",
+        "text": "õ"
+    },
+    {
+        "code": "&ouml;[b]",
+        "text": "ö"
+    },
+    {
+        "code": "&divide;[b]\n&div;",
+        "text": "÷"
+    },
+    {
+        "code": "&oslash;[b]",
+        "text": "ø"
+    },
+    {
+        "code": "&ugrave;[b]",
+        "text": "ù"
+    },
+    {
+        "code": "&uacute;[b]",
+        "text": "ú"
+    },
+    {
+        "code": "&ucirc;[b]",
+        "text": "û"
+    },
+    {
+        "code": "&uuml;[b]",
+        "text": "ü"
+    },
+    {
+        "code": "&yacute;[b]",
+        "text": "ý"
+    },
+    {
+        "code": "&thorn;[b]",
+        "text": "þ"
+    },
+    {
+        "code": "&yuml;[b]",
+        "text": "ÿ"
+    },
+    {
+        "code": "&Amacr;",
+        "text": "Ā"
+    },
+    {
+        "code": "&amacr;",
+        "text": "ā"
+    },
+    {
+        "code": "&Abreve;",
+        "text": "Ă"
+    },
+    {
+        "code": "&abreve;",
+        "text": "ă"
+    },
+    {
+        "code": "&Aogon;",
+        "text": "Ą"
+    },
+    {
+        "code": "&aogon;",
+        "text": "ą"
+    },
+    {
+        "code": "&Cacute;",
+        "text": "Ć"
+    },
+    {
+        "code": "&cacute;",
+        "text": "ć"
+    },
+    {
+        "code": "&Ccirc;",
+        "text": "Ĉ"
+    },
+    {
+        "code": "&ccirc;",
+        "text": "ĉ"
+    },
+    {
+        "code": "&Cdot;",
+        "text": "Ċ"
+    },
+    {
+        "code": "&cdot;",
+        "text": "ċ"
+    },
+    {
+        "code": "&Ccaron;",
+        "text": "Č"
+    },
+    {
+        "code": "&ccaron;",
+        "text": "č"
+    },
+    {
+        "code": "&Dcaron;",
+        "text": "Ď"
+    },
+    {
+        "code": "&dcaron;",
+        "text": "ď"
+    },
+    {
+        "code": "&Dstrok;",
+        "text": "Đ"
+    },
+    {
+        "code": "&dstrok;",
+        "text": "đ"
+    },
+    {
+        "code": "&Emacr;",
+        "text": "Ē"
+    },
+    {
+        "code": "&emacr;",
+        "text": "ē"
+    },
+    {
+        "code": "&Edot;",
+        "text": "Ė"
+    },
+    {
+        "code": "&edot;",
+        "text": "ė"
+    },
+    {
+        "code": "&Eogon;",
+        "text": "Ę"
+    },
+    {
+        "code": "&eogon;",
+        "text": "ę"
+    },
+    {
+        "code": "&Ecaron;",
+        "text": "Ě"
+    },
+    {
+        "code": "&ecaron;",
+        "text": "ě"
+    },
+    {
+        "code": "&Gcirc;",
+        "text": "Ĝ"
+    },
+    {
+        "code": "&gcirc;",
+        "text": "ĝ"
+    },
+    {
+        "code": "&Gbreve;",
+        "text": "Ğ"
+    },
+    {
+        "code": "&gbreve;",
+        "text": "ğ"
+    },
+    {
+        "code": "&Gdot;",
+        "text": "Ġ"
+    },
+    {
+        "code": "&gdot;",
+        "text": "ġ"
+    },
+    {
+        "code": "&Gcedil;",
+        "text": "Ģ"
+    },
+    {
+        "code": "&Hcirc;",
+        "text": "Ĥ"
+    },
+    {
+        "code": "&hcirc;",
+        "text": "ĥ"
+    },
+    {
+        "code": "&Hstrok;",
+        "text": "Ħ"
+    },
+    {
+        "code": "&hstrok;",
+        "text": "ħ"
+    },
+    {
+        "code": "&Itilde;",
+        "text": "Ĩ"
+    },
+    {
+        "code": "&itilde;",
+        "text": "ĩ"
+    },
+    {
+        "code": "&Imacr;",
+        "text": "Ī"
+    },
+    {
+        "code": "&imacr;",
+        "text": "ī"
+    },
+    {
+        "code": "&Iogon;",
+        "text": "Į"
+    },
+    {
+        "code": "&iogon;",
+        "text": "į"
+    },
+    {
+        "code": "&Idot;",
+        "text": "İ"
+    },
+    {
+        "code": "&imath;\n&inodot;",
+        "text": "ı"
+    },
+    {
+        "code": "&IJlig;",
+        "text": "Ĳ"
+    },
+    {
+        "code": "&ijlig;",
+        "text": "ĳ"
+    },
+    {
+        "code": "&Jcirc;",
+        "text": "Ĵ"
+    },
+    {
+        "code": "&jcirc;",
+        "text": "ĵ"
+    },
+    {
+        "code": "&Kcedil;",
+        "text": "Ķ"
+    },
+    {
+        "code": "&kcedil;",
+        "text": "ķ"
+    },
+    {
+        "code": "&kgreen;",
+        "text": "ĸ"
+    },
+    {
+        "code": "&Lacute;",
+        "text": "Ĺ"
+    },
+    {
+        "code": "&lacute;",
+        "text": "ĺ"
+    },
+    {
+        "code": "&Lcedil;",
+        "text": "Ļ"
+    },
+    {
+        "code": "&lcedil;",
+        "text": "ļ"
+    },
+    {
+        "code": "&Lcaron;",
+        "text": "Ľ"
+    },
+    {
+        "code": "&lcaron;",
+        "text": "ľ"
+    },
+    {
+        "code": "&Lmidot;",
+        "text": "Ŀ"
+    },
+    {
+        "code": "&lmidot;",
+        "text": "ŀ"
+    },
+    {
+        "code": "&Lstrok;",
+        "text": "Ł"
+    },
+    {
+        "code": "&lstrok;",
+        "text": "ł"
+    },
+    {
+        "code": "&Nacute;",
+        "text": "Ń"
+    },
+    {
+        "code": "&nacute;",
+        "text": "ń"
+    },
+    {
+        "code": "&Ncedil;",
+        "text": "Ņ"
+    },
+    {
+        "code": "&ncedil;",
+        "text": "ņ"
+    },
+    {
+        "code": "&Ncaron;",
+        "text": "Ň"
+    },
+    {
+        "code": "&ncaron;",
+        "text": "ň"
+    },
+    {
+        "code": "&napos;",
+        "text": "ŉ"
+    },
+    {
+        "code": "&ENG;",
+        "text": "Ŋ"
+    },
+    {
+        "code": "&eng;",
+        "text": "ŋ"
+    },
+    {
+        "code": "&Omacr;",
+        "text": "Ō"
+    },
+    {
+        "code": "&omacr;",
+        "text": "ō"
+    },
+    {
+        "code": "&Odblac;",
+        "text": "Ő"
+    },
+    {
+        "code": "&odblac;",
+        "text": "ő"
+    },
+    {
+        "code": "&OElig;",
+        "text": "Œ"
+    },
+    {
+        "code": "&oelig;",
+        "text": "œ"
+    },
+    {
+        "code": "&Racute;",
+        "text": "Ŕ"
+    },
+    {
+        "code": "&racute;",
+        "text": "ŕ"
+    },
+    {
+        "code": "&Rcedil;",
+        "text": "Ŗ"
+    },
+    {
+        "code": "&rcedil;",
+        "text": "ŗ"
+    },
+    {
+        "code": "&Rcaron;",
+        "text": "Ř"
+    },
+    {
+        "code": "&rcaron;",
+        "text": "ř"
+    },
+    {
+        "code": "&Sacute;",
+        "text": "Ś"
+    },
+    {
+        "code": "&sacute;",
+        "text": "ś"
+    },
+    {
+        "code": "&Scirc;",
+        "text": "Ŝ"
+    },
+    {
+        "code": "&scirc;",
+        "text": "ŝ"
+    },
+    {
+        "code": "&Scedil;",
+        "text": "Ş"
+    },
+    {
+        "code": "&scedil;",
+        "text": "ş"
+    },
+    {
+        "code": "&Scaron;",
+        "text": "Š"
+    },
+    {
+        "code": "&scaron;",
+        "text": "š"
+    },
+    {
+        "code": "&Tcedil;",
+        "text": "Ţ"
+    },
+    {
+        "code": "&tcedil;",
+        "text": "ţ"
+    },
+    {
+        "code": "&Tcaron;",
+        "text": "Ť"
+    },
+    {
+        "code": "&tcaron;",
+        "text": "ť"
+    },
+    {
+        "code": "&Tstrok;",
+        "text": "Ŧ"
+    },
+    {
+        "code": "&tstrok;",
+        "text": "ŧ"
+    },
+    {
+        "code": "&Utilde;",
+        "text": "Ũ"
+    },
+    {
+        "code": "&utilde;",
+        "text": "ũ"
+    },
+    {
+        "code": "&Umacr;",
+        "text": "Ū"
+    },
+    {
+        "code": "&umacr;",
+        "text": "ū"
+    },
+    {
+        "code": "&Ubreve;",
+        "text": "Ŭ"
+    },
+    {
+        "code": "&ubreve;",
+        "text": "ŭ"
+    },
+    {
+        "code": "&Uring;",
+        "text": "Ů"
+    },
+    {
+        "code": "&uring;",
+        "text": "ů"
+    },
+    {
+        "code": "&Udblac;",
+        "text": "Ű"
+    },
+    {
+        "code": "&udblac;",
+        "text": "ű"
+    },
+    {
+        "code": "&Uogon;",
+        "text": "Ų"
+    },
+    {
+        "code": "&uogon;",
+        "text": "ų"
+    },
+    {
+        "code": "&Wcirc;",
+        "text": "Ŵ"
+    },
+    {
+        "code": "&wcirc;",
+        "text": "ŵ"
+    },
+    {
+        "code": "&Ycirc;",
+        "text": "Ŷ"
+    },
+    {
+        "code": "&ycirc;",
+        "text": "ŷ"
+    },
+    {
+        "code": "&Yuml;",
+        "text": "Ÿ"
+    },
+    {
+        "code": "&Zacute;",
+        "text": "Ź"
+    },
+    {
+        "code": "&zacute;",
+        "text": "ź"
+    },
+    {
+        "code": "&Zdot;",
+        "text": "Ż"
+    },
+    {
+        "code": "&zdot;",
+        "text": "ż"
+    },
+    {
+        "code": "&Zcaron;",
+        "text": "Ž"
+    },
+    {
+        "code": "&zcaron;",
+        "text": "ž"
+    },
+    {
+        "code": "&fnof;",
+        "text": "ƒ"
+    },
+    {
+        "code": "&imped;",
+        "text": "Ƶ"
+    },
+    {
+        "code": "&gacute;",
+        "text": "ǵ"
+    },
+    {
+        "code": "&jmath;",
+        "text": "ȷ"
+    },
+    {
+        "code": "&circ;",
+        "text": "ˆ"
+    },
+    {
+        "code": "&caron;\n&Hacek;",
+        "text": "ˇ"
+    },
+    {
+        "code": "&breve;\n&Breve;",
+        "text": "˘"
+    },
+    {
+        "code": "&dot;\n&DiacriticalDot;",
+        "text": "˙"
+    },
+    {
+        "code": "&ring;",
+        "text": "˚"
+    },
+    {
+        "code": "&ogon;",
+        "text": "˛"
+    },
+    {
+        "code": "&tilde;\n&DiacriticalTilde;",
+        "text": "˜"
+    },
+    {
+        "code": "&dblac;\n&DiacriticalDoubleAcute;",
+        "text": "˝"
+    },
+    {
+        "code": "&Alpha;",
+        "text": "Α"
+    },
+    {
+        "code": "&Beta;",
+        "text": "Β"
+    },
+    {
+        "code": "&Gamma;",
+        "text": "Γ"
+    },
+    {
+        "code": "&Delta;",
+        "text": "Δ"
+    },
+    {
+        "code": "&Epsilon;",
+        "text": "Ε"
+    },
+    {
+        "code": "&Zeta;",
+        "text": "Ζ"
+    },
+    {
+        "code": "&Eta;",
+        "text": "Η"
+    },
+    {
+        "code": "&Theta;",
+        "text": "Θ"
+    },
+    {
+        "code": "&Iota;",
+        "text": "Ι"
+    },
+    {
+        "code": "&Kappa;",
+        "text": "Κ"
+    },
+    {
+        "code": "&Lambda;",
+        "text": "Λ"
+    },
+    {
+        "code": "&Mu;",
+        "text": "Μ"
+    },
+    {
+        "code": "&Nu;",
+        "text": "Ν"
+    },
+    {
+        "code": "&Xi;",
+        "text": "Ξ"
+    },
+    {
+        "code": "&Omicron;",
+        "text": "Ο"
+    },
+    {
+        "code": "&Pi;",
+        "text": "Π"
+    },
+    {
+        "code": "&Rho;",
+        "text": "Ρ"
+    },
+    {
+        "code": "&Sigma;",
+        "text": "Σ"
+    },
+    {
+        "code": "&Tau;",
+        "text": "Τ"
+    },
+    {
+        "code": "&Upsilon;",
+        "text": "Υ"
+    },
+    {
+        "code": "&Phi;",
+        "text": "Φ"
+    },
+    {
+        "code": "&Chi;",
+        "text": "Χ"
+    },
+    {
+        "code": "&Psi;",
+        "text": "Ψ"
+    },
+    {
+        "code": "&Omega;\n&ohm;",
+        "text": "Ω"
+    },
+    {
+        "code": "&alpha;",
+        "text": "α"
+    },
+    {
+        "code": "&beta;",
+        "text": "β"
+    },
+    {
+        "code": "&gamma;",
+        "text": "γ"
+    },
+    {
+        "code": "&delta;",
+        "text": "δ"
+    },
+    {
+        "code": "&epsi;\n&epsilon;",
+        "text": "ε"
+    },
+    {
+        "code": "&zeta;",
+        "text": "ζ"
+    },
+    {
+        "code": "&eta;",
+        "text": "η"
+    },
+    {
+        "code": "&theta;",
+        "text": "θ"
+    },
+    {
+        "code": "&iota;",
+        "text": "ι"
+    },
+    {
+        "code": "&kappa;",
+        "text": "κ"
+    },
+    {
+        "code": "&lambda;",
+        "text": "λ"
+    },
+    {
+        "code": "&mu;",
+        "text": "μ"
+    },
+    {
+        "code": "&nu;",
+        "text": "ν"
+    },
+    {
+        "code": "&xi;",
+        "text": "ξ"
+    },
+    {
+        "code": "&omicron;",
+        "text": "ο"
+    },
+    {
+        "code": "&pi;",
+        "text": "π"
+    },
+    {
+        "code": "&rho;",
+        "text": "ρ"
+    },
+    {
+        "code": "&sigmav;\n&varsigma;\n&sigmaf;",
+        "text": "ς"
+    },
+    {
+        "code": "&sigma;",
+        "text": "σ"
+    },
+    {
+        "code": "&tau;",
+        "text": "τ"
+    },
+    {
+        "code": "&upsi;\n&upsilon;",
+        "text": "υ"
+    },
+    {
+        "code": "&phi;",
+        "text": "φ"
+    },
+    {
+        "code": "&chi;",
+        "text": "χ"
+    },
+    {
+        "code": "&psi;",
+        "text": "ψ"
+    },
+    {
+        "code": "&omega;",
+        "text": "ω"
+    },
+    {
+        "code": "&thetav;\n&vartheta;\n&thetasym;",
+        "text": "ϑ"
+    },
+    {
+        "code": "&Upsi;\n&upsih;",
+        "text": "ϒ"
+    },
+    {
+        "code": "&straightphi;\n&phiv;\n&varphi;",
+        "text": "ϕ"
+    },
+    {
+        "code": "&piv;\n&varpi;",
+        "text": "ϖ"
+    },
+    {
+        "code": "&Gammad;",
+        "text": "Ϝ"
+    },
+    {
+        "code": "&gammad;\n&digamma;",
+        "text": "ϝ"
+    },
+    {
+        "code": "&kappav;\n&varkappa;",
+        "text": "ϰ"
+    },
+    {
+        "code": "&rhov;\n&varrho;",
+        "text": "ϱ"
+    },
+    {
+        "code": "&epsiv;\n&varepsilon;\n&straightepsilon;",
+        "text": "ϵ"
+    },
+    {
+        "code": "&bepsi;\n&backepsilon;",
+        "text": "϶"
+    },
+    {
+        "code": "&IOcy;",
+        "text": "Ё"
+    },
+    {
+        "code": "&DJcy;",
+        "text": "Ђ"
+    },
+    {
+        "code": "&GJcy;",
+        "text": "Ѓ"
+    },
+    {
+        "code": "&Jukcy;",
+        "text": "Є"
+    },
+    {
+        "code": "&DScy;",
+        "text": "Ѕ"
+    },
+    {
+        "code": "&Iukcy;",
+        "text": "І"
+    },
+    {
+        "code": "&YIcy;",
+        "text": "Ї"
+    },
+    {
+        "code": "&Jsercy;",
+        "text": "Ј"
+    },
+    {
+        "code": "&LJcy;",
+        "text": "Љ"
+    },
+    {
+        "code": "&NJcy;",
+        "text": "Њ"
+    },
+    {
+        "code": "&TSHcy;",
+        "text": "Ћ"
+    },
+    {
+        "code": "&KJcy;",
+        "text": "Ќ"
+    },
+    {
+        "code": "&Ubrcy;",
+        "text": "Ў"
+    },
+    {
+        "code": "&DZcy;",
+        "text": "Џ"
+    },
+    {
+        "code": "&Acy;",
+        "text": "А"
+    },
+    {
+        "code": "&Bcy;",
+        "text": "Б"
+    },
+    {
+        "code": "&Vcy;",
+        "text": "В"
+    },
+    {
+        "code": "&Gcy;",
+        "text": "Г"
+    },
+    {
+        "code": "&Dcy;",
+        "text": "Д"
+    },
+    {
+        "code": "&IEcy;",
+        "text": "Е"
+    },
+    {
+        "code": "&ZHcy;",
+        "text": "Ж"
+    },
+    {
+        "code": "&Zcy;",
+        "text": "З"
+    },
+    {
+        "code": "&Icy;",
+        "text": "И"
+    },
+    {
+        "code": "&Jcy;",
+        "text": "Й"
+    },
+    {
+        "code": "&Kcy;",
+        "text": "К"
+    },
+    {
+        "code": "&Lcy;",
+        "text": "Л"
+    },
+    {
+        "code": "&Mcy;",
+        "text": "М"
+    },
+    {
+        "code": "&Ncy;",
+        "text": "Н"
+    },
+    {
+        "code": "&Ocy;",
+        "text": "О"
+    },
+    {
+        "code": "&Pcy;",
+        "text": "П"
+    },
+    {
+        "code": "&Rcy;",
+        "text": "Р"
+    },
+    {
+        "code": "&Scy;",
+        "text": "С"
+    },
+    {
+        "code": "&Tcy;",
+        "text": "Т"
+    },
+    {
+        "code": "&Ucy;",
+        "text": "У"
+    },
+    {
+        "code": "&Fcy;",
+        "text": "Ф"
+    },
+    {
+        "code": "&KHcy;",
+        "text": "Х"
+    },
+    {
+        "code": "&TScy;",
+        "text": "Ц"
+    },
+    {
+        "code": "&CHcy;",
+        "text": "Ч"
+    },
+    {
+        "code": "&SHcy;",
+        "text": "Ш"
+    },
+    {
+        "code": "&SHCHcy;",
+        "text": "Щ"
+    },
+    {
+        "code": "&HARDcy;",
+        "text": "Ъ"
+    },
+    {
+        "code": "&Ycy;",
+        "text": "Ы"
+    },
+    {
+        "code": "&SOFTcy;",
+        "text": "Ь"
+    },
+    {
+        "code": "&Ecy;",
+        "text": "Э"
+    },
+    {
+        "code": "&YUcy;",
+        "text": "Ю"
+    },
+    {
+        "code": "&YAcy;",
+        "text": "Я"
+    },
+    {
+        "code": "&acy;",
+        "text": "а"
+    },
+    {
+        "code": "&bcy;",
+        "text": "б"
+    },
+    {
+        "code": "&vcy;",
+        "text": "в"
+    },
+    {
+        "code": "&gcy;",
+        "text": "г"
+    },
+    {
+        "code": "&dcy;",
+        "text": "д"
+    },
+    {
+        "code": "&iecy;",
+        "text": "е"
+    },
+    {
+        "code": "&zhcy;",
+        "text": "ж"
+    },
+    {
+        "code": "&zcy;",
+        "text": "з"
+    },
+    {
+        "code": "&icy;",
+        "text": "и"
+    },
+    {
+        "code": "&jcy;",
+        "text": "й"
+    },
+    {
+        "code": "&kcy;",
+        "text": "к"
+    },
+    {
+        "code": "&lcy;",
+        "text": "л"
+    },
+    {
+        "code": "&mcy;",
+        "text": "м"
+    },
+    {
+        "code": "&ncy;",
+        "text": "н"
+    },
+    {
+        "code": "&ocy;",
+        "text": "о"
+    },
+    {
+        "code": "&pcy;",
+        "text": "п"
+    },
+    {
+        "code": "&rcy;",
+        "text": "р"
+    },
+    {
+        "code": "&scy;",
+        "text": "с"
+    },
+    {
+        "code": "&tcy;",
+        "text": "т"
+    },
+    {
+        "code": "&ucy;",
+        "text": "у"
+    },
+    {
+        "code": "&fcy;",
+        "text": "ф"
+    },
+    {
+        "code": "&khcy;",
+        "text": "х"
+    },
+    {
+        "code": "&tscy;",
+        "text": "ц"
+    },
+    {
+        "code": "&chcy;",
+        "text": "ч"
+    },
+    {
+        "code": "&shcy;",
+        "text": "ш"
+    },
+    {
+        "code": "&shchcy;",
+        "text": "щ"
+    },
+    {
+        "code": "&hardcy;",
+        "text": "ъ"
+    },
+    {
+        "code": "&ycy;",
+        "text": "ы"
+    },
+    {
+        "code": "&softcy;",
+        "text": "ь"
+    },
+    {
+        "code": "&ecy;",
+        "text": "э"
+    },
+    {
+        "code": "&yucy;",
+        "text": "ю"
+    },
+    {
+        "code": "&yacy;",
+        "text": "я"
+    },
+    {
+        "code": "&iocy;",
+        "text": "ё"
+    },
+    {
+        "code": "&djcy;",
+        "text": "ђ"
+    },
+    {
+        "code": "&gjcy;",
+        "text": "ѓ"
+    },
+    {
+        "code": "&jukcy;",
+        "text": "є"
+    },
+    {
+        "code": "&dscy;",
+        "text": "ѕ"
+    },
+    {
+        "code": "&iukcy;",
+        "text": "і"
+    },
+    {
+        "code": "&yicy;",
+        "text": "ї"
+    },
+    {
+        "code": "&jsercy;",
+        "text": "ј"
+    },
+    {
+        "code": "&ljcy;",
+        "text": "љ"
+    },
+    {
+        "code": "&njcy;",
+        "text": "њ"
+    },
+    {
+        "code": "&tshcy;",
+        "text": "ћ"
+    },
+    {
+        "code": "&kjcy;",
+        "text": "ќ"
+    },
+    {
+        "code": "&ubrcy;",
+        "text": "ў"
+    },
+    {
+        "code": "&dzcy;",
+        "text": "џ"
+    },
+    {
+        "code": "&ensp;",
+        "text": " "
+    },
+    {
+        "code": "&emsp;",
+        "text": " "
+    },
+    {
+        "code": "&emsp13;",
+        "text": " "
+    },
+    {
+        "code": "&emsp14;",
+        "text": " "
+    },
+    {
+        "code": "&numsp;",
+        "text": " "
+    },
+    {
+        "code": "&puncsp;",
+        "text": " "
+    },
+    {
+        "code": "&thinsp;\n&ThinSpace;",
+        "text": " "
+    },
+    {
+        "code": "&hairsp;\n&VeryThinSpace;",
+        "text": " "
+    },
+    {
+        "code": "&ZeroWidthSpace;\n&NegativeVeryThinSpace;\n&NegativeThinSpace;\n&NegativeMediumSpace;\n&NegativeThickSpace;",
+        "text": "ZWSP"
+    },
+    {
+        "code": "&zwnj;",
+        "text": "ZWNJ"
+    },
+    {
+        "code": "&zwj;",
+        "text": "ZWJ"
+    },
+    {
+        "code": "&lrm;",
+        "text": "LRM"
+    },
+    {
+        "code": "&rlm;",
+        "text": "RLM"
+    },
+    {
+        "code": "&hyphen;\n&dash;",
+        "text": "‐"
+    },
+    {
+        "code": "&ndash;",
+        "text": "–"
+    },
+    {
+        "code": "&mdash;",
+        "text": "—"
+    },
+    {
+        "code": "&horbar;",
+        "text": "―"
+    },
+    {
+        "code": "&Verbar;\n&Vert;",
+        "text": "‖"
+    },
+    {
+        "code": "&lsquo;\n&OpenCurlyQuote;",
+        "text": "‘"
+    },
+    {
+        "code": "&rsquo;\n&rsquor;\n&CloseCurlyQuote;",
+        "text": "’"
+    },
+    {
+        "code": "&sbquo;\n&lsquor;",
+        "text": "‚"
+    },
+    {
+        "code": "&ldquo;\n&OpenCurlyDoubleQuote;",
+        "text": "“"
+    },
+    {
+        "code": "&rdquo;\n&rdquor;\n&CloseCurlyDoubleQuote;",
+        "text": "”"
+    },
+    {
+        "code": "&bdquo;\n&ldquor;",
+        "text": "„"
+    },
+    {
+        "code": "&dagger;",
+        "text": "†"
+    },
+    {
+        "code": "&Dagger;\n&ddagger;",
+        "text": "‡"
+    },
+    {
+        "code": "&bull;\n&bullet;",
+        "text": "•"
+    },
+    {
+        "code": "&nldr;",
+        "text": "‥"
+    },
+    {
+        "code": "&hellip;\n&mldr;",
+        "text": "…"
+    },
+    {
+        "code": "&permil;",
+        "text": "‰"
+    },
+    {
+        "code": "&pertenk;",
+        "text": "‱"
+    },
+    {
+        "code": "&prime;",
+        "text": "′"
+    },
+    {
+        "code": "&Prime;",
+        "text": "″"
+    },
+    {
+        "code": "&tprime;",
+        "text": "‴"
+    },
+    {
+        "code": "&bprime;\n&backprime;",
+        "text": "‵"
+    },
+    {
+        "code": "&lsaquo;",
+        "text": "‹"
+    },
+    {
+        "code": "&rsaquo;",
+        "text": "›"
+    },
+    {
+        "code": "&oline;\n&OverBar;",
+        "text": "‾"
+    },
+    {
+        "code": "&caret;",
+        "text": "⁁"
+    },
+    {
+        "code": "&hybull;",
+        "text": "⁃"
+    },
+    {
+        "code": "&frasl;",
+        "text": "⁄"
+    },
+    {
+        "code": "&bsemi;",
+        "text": "⁏"
+    },
+    {
+        "code": "&qprime;",
+        "text": "⁗"
+    },
+    {
+        "code": "&MediumSpace;",
+        "text": " "
+    },
+    {
+        "code": "&ThickSpace;",
+        "text": "  "
+    },
+    {
+        "code": "&NoBreak;",
+        "text": "WJ"
+    },
+    {
+        "code": "&ApplyFunction;\n&af;",
+        "text": "()"
+    },
+    {
+        "code": "&InvisibleTimes;\n&it;",
+        "text": "×"
+    },
+    {
+        "code": "&InvisibleComma;\n&ic;",
+        "text": ","
+    },
+    {
+        "code": "&euro;",
+        "text": "€"
+    },
+    {
+        "code": "&Copf;\n&complexes;",
+        "text": "ℂ"
+    },
+    {
+        "code": "&incare;",
+        "text": "℅"
+    },
+    {
+        "code": "&gscr;",
+        "text": "ℊ"
+    },
+    {
+        "code": "&hamilt;\n&HilbertSpace;\n&Hscr;",
+        "text": "ℋ"
+    },
+    {
+        "code": "&Hfr;\n&Poincareplane;",
+        "text": "ℌ"
+    },
+    {
+        "code": "&quaternions;\n&Hopf;",
+        "text": "ℍ"
+    },
+    {
+        "code": "&planckh;",
+        "text": "ℎ"
+    },
+    {
+        "code": "&planck;\n&hbar;\n&plankv;\n&hslash;",
+        "text": "ℏ"
+    },
+    {
+        "code": "&Iscr;\n&imagline;",
+        "text": "ℐ"
+    },
+    {
+        "code": "&image;\n&Im;\n&imagpart;\n&Ifr;",
+        "text": "ℑ"
+    },
+    {
+        "code": "&Lscr;\n&lagran;\n&Laplacetrf;",
+        "text": "ℒ"
+    },
+    {
+        "code": "&ell;",
+        "text": "ℓ"
+    },
+    {
+        "code": "&Nopf;\n&naturals;",
+        "text": "ℕ"
+    },
+    {
+        "code": "&numero;",
+        "text": "№"
+    },
+    {
+        "code": "&copysr;",
+        "text": "℗"
+    },
+    {
+        "code": "&weierp;\n&wp;",
+        "text": "℘"
+    },
+    {
+        "code": "&Popf;\n&primes;",
+        "text": "ℙ"
+    },
+    {
+        "code": "&rationals;\n&Qopf;",
+        "text": "ℚ"
+    },
+    {
+        "code": "&Rscr;\n&realine;",
+        "text": "ℛ"
+    },
+    {
+        "code": "&real;\n&Re;\n&realpart;\n&Rfr;",
+        "text": "ℜ"
+    },
+    {
+        "code": "&reals;\n&Ropf;",
+        "text": "ℝ"
+    },
+    {
+        "code": "&rx;",
+        "text": "℞"
+    },
+    {
+        "code": "&trade;\n&TRADE;",
+        "text": "™"
+    },
+    {
+        "code": "&integers;\n&Zopf;",
+        "text": "ℤ"
+    },
+    {
+        "code": "&mho;",
+        "text": "℧"
+    },
+    {
+        "code": "&Zfr;\n&zeetrf;",
+        "text": "ℨ"
+    },
+    {
+        "code": "&iiota;",
+        "text": "℩"
+    },
+    {
+        "code": "&bernou;\n&Bernoullis;\n&Bscr;",
+        "text": "ℬ"
+    },
+    {
+        "code": "&Cfr;\n&Cayleys;",
+        "text": "ℭ"
+    },
+    {
+        "code": "&escr;",
+        "text": "ℯ"
+    },
+    {
+        "code": "&Escr;\n&expectation;",
+        "text": "ℰ"
+    },
+    {
+        "code": "&Fscr;\n&Fouriertrf;",
+        "text": "ℱ"
+    },
+    {
+        "code": "&phmmat;\n&Mellintrf;\n&Mscr;",
+        "text": "ℳ"
+    },
+    {
+        "code": "&order;\n&orderof;\n&oscr;",
+        "text": "ℴ"
+    },
+    {
+        "code": "&alefsym;\n&aleph;",
+        "text": "ℵ"
+    },
+    {
+        "code": "&beth;",
+        "text": "ℶ"
+    },
+    {
+        "code": "&gimel;",
+        "text": "ℷ"
+    },
+    {
+        "code": "&daleth;",
+        "text": "ℸ"
+    },
+    {
+        "code": "&CapitalDifferentialD;\n&DD;",
+        "text": "ⅅ"
+    },
+    {
+        "code": "&DifferentialD;\n&dd;",
+        "text": "ⅆ"
+    },
+    {
+        "code": "&ExponentialE;\n&exponentiale;\n&ee;",
+        "text": "ⅇ"
+    },
+    {
+        "code": "&ImaginaryI;\n&ii;",
+        "text": "ⅈ"
+    },
+    {
+        "code": "&frac13;",
+        "text": "⅓"
+    },
+    {
+        "code": "&frac23;",
+        "text": "⅔"
+    },
+    {
+        "code": "&frac15;",
+        "text": "⅕"
+    },
+    {
+        "code": "&frac25;",
+        "text": "⅖"
+    },
+    {
+        "code": "&frac35;",
+        "text": "⅗"
+    },
+    {
+        "code": "&frac45;",
+        "text": "⅘"
+    },
+    {
+        "code": "&frac16;",
+        "text": "⅙"
+    },
+    {
+        "code": "&frac56;",
+        "text": "⅚"
+    },
+    {
+        "code": "&frac18;",
+        "text": "⅛"
+    },
+    {
+        "code": "&frac38;",
+        "text": "⅜"
+    },
+    {
+        "code": "&frac58;",
+        "text": "⅝"
+    },
+    {
+        "code": "&frac78;",
+        "text": "⅞"
+    },
+    {
+        "code": "&larr;\n&leftarrow;\n&LeftArrow;\n&slarr;\n&ShortLeftArrow;",
+        "text": "←"
+    },
+    {
+        "code": "&uarr;\n&uparrow;\n&UpArrow;\n&ShortUpArrow;",
+        "text": "↑"
+    },
+    {
+        "code": "&rarr;\n&rightarrow;\n&RightArrow;\n&srarr;\n&ShortRightArrow;",
+        "text": "→"
+    },
+    {
+        "code": "&darr;\n&downarrow;\n&DownArrow;\n&ShortDownArrow;",
+        "text": "↓"
+    },
+    {
+        "code": "&harr;\n&leftrightarrow;\n&LeftRightArrow;",
+        "text": "↔"
+    },
+    {
+        "code": "&varr;\n&updownarrow;\n&UpDownArrow;",
+        "text": "↕"
+    },
+    {
+        "code": "&nwarr;\n&UpperLeftArrow;\n&nwarrow;",
+        "text": "↖"
+    },
+    {
+        "code": "&nearr;\n&UpperRightArrow;\n&nearrow;",
+        "text": "↗"
+    },
+    {
+        "code": "&searr;\n&searrow;\n&LowerRightArrow;",
+        "text": "↘"
+    },
+    {
+        "code": "&swarr;\n&swarrow;\n&LowerLeftArrow;",
+        "text": "↙"
+    },
+    {
+        "code": "&nlarr;\n&nleftarrow;",
+        "text": "↚"
+    },
+    {
+        "code": "&nrarr;\n&nrightarrow;",
+        "text": "↛"
+    },
+    {
+        "code": "&rarrw;\n&rightsquigarrow;",
+        "text": "↝"
+    },
+    {
+        "code": "&nrarrw;",
+        "text": "↝̸"
+    },
+    {
+        "code": "&Larr;\n&twoheadleftarrow;",
+        "text": "↞"
+    },
+    {
+        "code": "&Uarr;",
+        "text": "↟"
+    },
+    {
+        "code": "&Rarr;\n&twoheadrightarrow;",
+        "text": "↠"
+    },
+    {
+        "code": "&Darr;",
+        "text": "↡"
+    },
+    {
+        "code": "&larrtl;\n&leftarrowtail;",
+        "text": "↢"
+    },
+    {
+        "code": "&rarrtl;\n&rightarrowtail;",
+        "text": "↣"
+    },
+    {
+        "code": "&LeftTeeArrow;\n&mapstoleft;",
+        "text": "↤"
+    },
+    {
+        "code": "&UpTeeArrow;\n&mapstoup;",
+        "text": "↥"
+    },
+    {
+        "code": "&map;\n&RightTeeArrow;\n&mapsto;",
+        "text": "↦"
+    },
+    {
+        "code": "&DownTeeArrow;\n&mapstodown;",
+        "text": "↧"
+    },
+    {
+        "code": "&larrhk;\n&hookleftarrow;",
+        "text": "↩"
+    },
+    {
+        "code": "&rarrhk;\n&hookrightarrow;",
+        "text": "↪"
+    },
+    {
+        "code": "&larrlp;\n&looparrowleft;",
+        "text": "↫"
+    },
+    {
+        "code": "&rarrlp;\n&looparrowright;",
+        "text": "↬"
+    },
+    {
+        "code": "&harrw;\n&leftrightsquigarrow;",
+        "text": "↭"
+    },
+    {
+        "code": "&nharr;\n&nleftrightarrow;",
+        "text": "↮"
+    },
+    {
+        "code": "&lsh;\n&Lsh;",
+        "text": "↰"
+    },
+    {
+        "code": "&rsh;\n&Rsh;",
+        "text": "↱"
+    },
+    {
+        "code": "&ldsh;",
+        "text": "↲"
+    },
+    {
+        "code": "&rdsh;",
+        "text": "↳"
+    },
+    {
+        "code": "&crarr;",
+        "text": "↵"
+    },
+    {
+        "code": "&cularr;\n&curvearrowleft;",
+        "text": "↶"
+    },
+    {
+        "code": "&curarr;\n&curvearrowright;",
+        "text": "↷"
+    },
+    {
+        "code": "&olarr;\n&circlearrowleft;",
+        "text": "↺"
+    },
+    {
+        "code": "&orarr;\n&circlearrowright;",
+        "text": "↻"
+    },
+    {
+        "code": "&lharu;\n&LeftVector;\n&leftharpoonup;",
+        "text": "↼"
+    },
+    {
+        "code": "&lhard;\n&leftharpoondown;\n&DownLeftVector;",
+        "text": "↽"
+    },
+    {
+        "code": "&uharr;\n&upharpoonright;\n&RightUpVector;",
+        "text": "↾"
+    },
+    {
+        "code": "&uharl;\n&upharpoonleft;\n&LeftUpVector;",
+        "text": "↿"
+    },
+    {
+        "code": "&rharu;\n&RightVector;\n&rightharpoonup;",
+        "text": "⇀"
+    },
+    {
+        "code": "&rhard;\n&rightharpoondown;\n&DownRightVector;",
+        "text": "⇁"
+    },
+    {
+        "code": "&dharr;\n&RightDownVector;\n&downharpoonright;",
+        "text": "⇂"
+    },
+    {
+        "code": "&dharl;\n&LeftDownVector;\n&downharpoonleft;",
+        "text": "⇃"
+    },
+    {
+        "code": "&rlarr;\n&rightleftarrows;\n&RightArrowLeftArrow;",
+        "text": "⇄"
+    },
+    {
+        "code": "&udarr;\n&UpArrowDownArrow;",
+        "text": "⇅"
+    },
+    {
+        "code": "&lrarr;\n&leftrightarrows;\n&LeftArrowRightArrow;",
+        "text": "⇆"
+    },
+    {
+        "code": "&llarr;\n&leftleftarrows;",
+        "text": "⇇"
+    },
+    {
+        "code": "&uuarr;\n&upuparrows;",
+        "text": "⇈"
+    },
+    {
+        "code": "&rrarr;\n&rightrightarrows;",
+        "text": "⇉"
+    },
+    {
+        "code": "&ddarr;\n&downdownarrows;",
+        "text": "⇊"
+    },
+    {
+        "code": "&lrhar;\n&ReverseEquilibrium;\n&leftrightharpoons;",
+        "text": "⇋"
+    },
+    {
+        "code": "&rlhar;\n&rightleftharpoons;\n&Equilibrium;",
+        "text": "⇌"
+    },
+    {
+        "code": "&nlArr;\n&nLeftarrow;",
+        "text": "⇍"
+    },
+    {
+        "code": "&nhArr;\n&nLeftrightarrow;",
+        "text": "⇎"
+    },
+    {
+        "code": "&nrArr;\n&nRightarrow;",
+        "text": "⇏"
+    },
+    {
+        "code": "&lArr;\n&Leftarrow;\n&DoubleLeftArrow;",
+        "text": "⇐"
+    },
+    {
+        "code": "&uArr;\n&Uparrow;\n&DoubleUpArrow;",
+        "text": "⇑"
+    },
+    {
+        "code": "&rArr;\n&Rightarrow;\n&Implies;\n&DoubleRightArrow;",
+        "text": "⇒"
+    },
+    {
+        "code": "&dArr;\n&Downarrow;\n&DoubleDownArrow;",
+        "text": "⇓"
+    },
+    {
+        "code": "&hArr;\n&Leftrightarrow;\n&DoubleLeftRightArrow;\n&iff;",
+        "text": "⇔"
+    },
+    {
+        "code": "&vArr;\n&Updownarrow;\n&DoubleUpDownArrow;",
+        "text": "⇕"
+    },
+    {
+        "code": "&nwArr;",
+        "text": "⇖"
+    },
+    {
+        "code": "&neArr;",
+        "text": "⇗"
+    },
+    {
+        "code": "&seArr;",
+        "text": "⇘"
+    },
+    {
+        "code": "&swArr;",
+        "text": "⇙"
+    },
+    {
+        "code": "&lAarr;\n&Lleftarrow;",
+        "text": "⇚"
+    },
+    {
+        "code": "&rAarr;\n&Rrightarrow;",
+        "text": "⇛"
+    },
+    {
+        "code": "&zigrarr;",
+        "text": "⇝"
+    },
+    {
+        "code": "&larrb;\n&LeftArrowBar;",
+        "text": "⇤"
+    },
+    {
+        "code": "&rarrb;\n&RightArrowBar;",
+        "text": "⇥"
+    },
+    {
+        "code": "&duarr;\n&DownArrowUpArrow;",
+        "text": "⇵"
+    },
+    {
+        "code": "&loarr;",
+        "text": "⇽"
+    },
+    {
+        "code": "&roarr;",
+        "text": "⇾"
+    },
+    {
+        "code": "&hoarr;",
+        "text": "⇿"
+    },
+    {
+        "code": "&forall;\n&ForAll;",
+        "text": "∀"
+    },
+    {
+        "code": "&comp;\n&complement;",
+        "text": "∁"
+    },
+    {
+        "code": "&part;\n&PartialD;",
+        "text": "∂"
+    },
+    {
+        "code": "&npart;",
+        "text": "∂̸"
+    },
+    {
+        "code": "&exist;\n&Exists;",
+        "text": "∃"
+    },
+    {
+        "code": "&nexist;\n&NotExists;\n&nexists;",
+        "text": "∄"
+    },
+    {
+        "code": "&empty;\n&emptyset;\n&emptyv;\n&varnothing;",
+        "text": "∅"
+    },
+    {
+        "code": "&nabla;\n&Del;",
+        "text": "∇"
+    },
+    {
+        "code": "&isin;\n&isinv;\n&Element;\n&in;",
+        "text": "∈"
+    },
+    {
+        "code": "&notin;\n&NotElement;\n&notinva;",
+        "text": "∉"
+    },
+    {
+        "code": "&niv;\n&ReverseElement;\n&ni;\n&SuchThat;",
+        "text": "∋"
+    },
+    {
+        "code": "&notni;\n&notniva;\n&NotReverseElement;",
+        "text": "∌"
+    },
+    {
+        "code": "&prod;\n&Product;",
+        "text": "∏"
+    },
+    {
+        "code": "&coprod;\n&Coproduct;",
+        "text": "∐"
+    },
+    {
+        "code": "&sum;\n&Sum;",
+        "text": "∑"
+    },
+    {
+        "code": "&minus;",
+        "text": "−"
+    },
+    {
+        "code": "&mnplus;\n&mp;\n&MinusPlus;",
+        "text": "∓"
+    },
+    {
+        "code": "&plusdo;\n&dotplus;",
+        "text": "∔"
+    },
+    {
+        "code": "&setmn;\n&setminus;\n&Backslash;\n&ssetmn;\n&smallsetminus;",
+        "text": "∖"
+    },
+    {
+        "code": "&lowast;",
+        "text": "∗"
+    },
+    {
+        "code": "&compfn;\n&SmallCircle;",
+        "text": "∘"
+    },
+    {
+        "code": "&radic;\n&Sqrt;",
+        "text": "√"
+    },
+    {
+        "code": "&prop;\n&propto;\n&Proportional;\n&vprop;\n&varpropto;",
+        "text": "∝"
+    },
+    {
+        "code": "&infin;",
+        "text": "∞"
+    },
+    {
+        "code": "&angrt;",
+        "text": "∟"
+    },
+    {
+        "code": "&ang;\n&angle;",
+        "text": "∠"
+    },
+    {
+        "code": "&nang;",
+        "text": "∠⃒"
+    },
+    {
+        "code": "&angmsd;\n&measuredangle;",
+        "text": "∡"
+    },
+    {
+        "code": "&angsph;",
+        "text": "∢"
+    },
+    {
+        "code": "&mid;\n&VerticalBar;\n&smid;\n&shortmid;",
+        "text": "∣"
+    },
+    {
+        "code": "&nmid;\n&NotVerticalBar;\n&nsmid;\n&nshortmid;",
+        "text": "∤"
+    },
+    {
+        "code": "&par;\n&parallel;\n&DoubleVerticalBar;\n&spar;\n&shortparallel;",
+        "text": "∥"
+    },
+    {
+        "code": "&npar;\n&nparallel;\n&NotDoubleVerticalBar;\n&nspar;\n&nshortparallel;",
+        "text": "∦"
+    },
+    {
+        "code": "&and;\n&wedge;",
+        "text": "∧"
+    },
+    {
+        "code": "&or;\n&vee;",
+        "text": "∨"
+    },
+    {
+        "code": "&cap;",
+        "text": "∩"
+    },
+    {
+        "code": "&caps;",
+        "text": "∩︀"
+    },
+    {
+        "code": "&cup;",
+        "text": "∪"
+    },
+    {
+        "code": "&cups;",
+        "text": "∪︀"
+    },
+    {
+        "code": "&int;\n&Integral;",
+        "text": "∫"
+    },
+    {
+        "code": "&Int;",
+        "text": "∬"
+    },
+    {
+        "code": "&tint;\n&iiint;",
+        "text": "∭"
+    },
+    {
+        "code": "&conint;\n&oint;\n&ContourIntegral;",
+        "text": "∮"
+    },
+    {
+        "code": "&Conint;\n&DoubleContourIntegral;",
+        "text": "∯"
+    },
+    {
+        "code": "&Cconint;",
+        "text": "∰"
+    },
+    {
+        "code": "&cwint;",
+        "text": "∱"
+    },
+    {
+        "code": "&cwconint;\n&ClockwiseContourIntegral;",
+        "text": "∲"
+    },
+    {
+        "code": "&awconint;\n&CounterClockwiseContourIntegral;",
+        "text": "∳"
+    },
+    {
+        "code": "&there4;\n&therefore;\n&Therefore;",
+        "text": "∴"
+    },
+    {
+        "code": "&becaus;\n&because;\n&Because;",
+        "text": "∵"
+    },
+    {
+        "code": "&ratio;",
+        "text": "∶"
+    },
+    {
+        "code": "&Colon;\n&Proportion;",
+        "text": "∷"
+    },
+    {
+        "code": "&minusd;\n&dotminus;",
+        "text": "∸"
+    },
+    {
+        "code": "&mDDot;",
+        "text": "∺"
+    },
+    {
+        "code": "&homtht;",
+        "text": "∻"
+    },
+    {
+        "code": "&sim;\n&Tilde;\n&thksim;\n&thicksim;",
+        "text": "∼"
+    },
+    {
+        "code": "&nvsim;",
+        "text": "∼⃒"
+    },
+    {
+        "code": "&bsim;\n&backsim;",
+        "text": "∽"
+    },
+    {
+        "code": "&race;",
+        "text": "∽̱"
+    },
+    {
+        "code": "&ac;\n&mstpos;",
+        "text": "∾"
+    },
+    {
+        "code": "&acE;",
+        "text": "∾̳"
+    },
+    {
+        "code": "&acd;",
+        "text": "∿"
+    },
+    {
+        "code": "&wreath;\n&VerticalTilde;\n&wr;",
+        "text": "≀"
+    },
+    {
+        "code": "&nsim;\n&NotTilde;",
+        "text": "≁"
+    },
+    {
+        "code": "&esim;\n&EqualTilde;\n&eqsim;",
+        "text": "≂"
+    },
+    {
+        "code": "&nesim;\n&NotEqualTilde;",
+        "text": "≂̸"
+    },
+    {
+        "code": "&sime;\n&TildeEqual;\n&simeq;",
+        "text": "≃"
+    },
+    {
+        "code": "&nsime;\n&nsimeq;\n&NotTildeEqual;",
+        "text": "≄"
+    },
+    {
+        "code": "&cong;\n&TildeFullEqual;",
+        "text": "≅"
+    },
+    {
+        "code": "&simne;",
+        "text": "≆"
+    },
+    {
+        "code": "&ncong;\n&NotTildeFullEqual;",
+        "text": "≇"
+    },
+    {
+        "code": "&asymp;\n&ap;\n&TildeTilde;\n&approx;\n&thkap;\n&thickapprox;",
+        "text": "≈"
+    },
+    {
+        "code": "&nap;\n&NotTildeTilde;\n&napprox;",
+        "text": "≉"
+    },
+    {
+        "code": "&ape;\n&approxeq;",
+        "text": "≊"
+    },
+    {
+        "code": "&apid;",
+        "text": "≋"
+    },
+    {
+        "code": "&napid;",
+        "text": "≋̸"
+    },
+    {
+        "code": "&bcong;\n&backcong;",
+        "text": "≌"
+    },
+    {
+        "code": "&asympeq;\n&CupCap;",
+        "text": "≍"
+    },
+    {
+        "code": "&nvap;",
+        "text": "≍⃒"
+    },
+    {
+        "code": "&bump;\n&HumpDownHump;\n&Bumpeq;",
+        "text": "≎"
+    },
+    {
+        "code": "&nbump;\n&NotHumpDownHump;",
+        "text": "≎̸"
+    },
+    {
+        "code": "&bumpe;\n&HumpEqual;\n&bumpeq;",
+        "text": "≏"
+    },
+    {
+        "code": "&nbumpe;\n&NotHumpEqual;",
+        "text": "≏̸"
+    },
+    {
+        "code": "&esdot;\n&DotEqual;\n&doteq;",
+        "text": "≐"
+    },
+    {
+        "code": "&nedot;",
+        "text": "≐̸"
+    },
+    {
+        "code": "&eDot;\n&doteqdot;",
+        "text": "≑"
+    },
+    {
+        "code": "&efDot;\n&fallingdotseq;",
+        "text": "≒"
+    },
+    {
+        "code": "&erDot;\n&risingdotseq;",
+        "text": "≓"
+    },
+    {
+        "code": "&colone;\n&coloneq;\n&Assign;",
+        "text": "≔"
+    },
+    {
+        "code": "&ecolon;\n&eqcolon;",
+        "text": "≕"
+    },
+    {
+        "code": "&ecir;\n&eqcirc;",
+        "text": "≖"
+    },
+    {
+        "code": "&cire;\n&circeq;",
+        "text": "≗"
+    },
+    {
+        "code": "&wedgeq;",
+        "text": "≙"
+    },
+    {
+        "code": "&veeeq;",
+        "text": "≚"
+    },
+    {
+        "code": "&trie;\n&triangleq;",
+        "text": "≜"
+    },
+    {
+        "code": "&equest;\n&questeq;",
+        "text": "≟"
+    },
+    {
+        "code": "&ne;\n&NotEqual;",
+        "text": "≠"
+    },
+    {
+        "code": "&equiv;\n&Congruent;",
+        "text": "≡"
+    },
+    {
+        "code": "&bnequiv;",
+        "text": "≡⃥"
+    },
+    {
+        "code": "&nequiv;\n&NotCongruent;",
+        "text": "≢"
+    },
+    {
+        "code": "&le;\n&leq;",
+        "text": "≤"
+    },
+    {
+        "code": "&nvle;",
+        "text": "≤⃒"
+    },
+    {
+        "code": "&ge;\n&GreaterEqual;\n&geq;",
+        "text": "≥"
+    },
+    {
+        "code": "&nvge;",
+        "text": "≥⃒"
+    },
+    {
+        "code": "&lE;\n&LessFullEqual;\n&leqq;",
+        "text": "≦"
+    },
+    {
+        "code": "&nlE;\n&nleqq;",
+        "text": "≦̸"
+    },
+    {
+        "code": "&gE;\n&GreaterFullEqual;\n&geqq;",
+        "text": "≧"
+    },
+    {
+        "code": "&ngE;\n&ngeqq;\n&NotGreaterFullEqual;",
+        "text": "≧̸"
+    },
+    {
+        "code": "&lnE;\n&lneqq;",
+        "text": "≨"
+    },
+    {
+        "code": "&lvertneqq;\n&lvnE;",
+        "text": "≨︀"
+    },
+    {
+        "code": "&gnE;\n&gneqq;",
+        "text": "≩"
+    },
+    {
+        "code": "&gvertneqq;\n&gvnE;",
+        "text": "≩︀"
+    },
+    {
+        "code": "&Lt;\n&NestedLessLess;\n&ll;",
+        "text": "≪"
+    },
+    {
+        "code": "&nLtv;\n&NotLessLess;",
+        "text": "≪̸"
+    },
+    {
+        "code": "&nLt;",
+        "text": "≪⃒"
+    },
+    {
+        "code": "&Gt;\n&NestedGreaterGreater;\n&gg;",
+        "text": "≫"
+    },
+    {
+        "code": "&nGtv;\n&NotGreaterGreater;",
+        "text": "≫̸"
+    },
+    {
+        "code": "&nGt;",
+        "text": "≫⃒"
+    },
+    {
+        "code": "&twixt;\n&between;",
+        "text": "≬"
+    },
+    {
+        "code": "&NotCupCap;",
+        "text": "≭"
+    },
+    {
+        "code": "&nlt;\n&NotLess;\n&nless;",
+        "text": "≮"
+    },
+    {
+        "code": "&ngt;\n&NotGreater;\n&ngtr;",
+        "text": "≯"
+    },
+    {
+        "code": "&nle;\n&NotLessEqual;\n&nleq;",
+        "text": "≰"
+    },
+    {
+        "code": "&nge;\n&NotGreaterEqual;\n&ngeq;",
+        "text": "≱"
+    },
+    {
+        "code": "&lsim;\n&LessTilde;\n&lesssim;",
+        "text": "≲"
+    },
+    {
+        "code": "&gsim;\n&gtrsim;\n&GreaterTilde;",
+        "text": "≳"
+    },
+    {
+        "code": "&nlsim;\n&NotLessTilde;",
+        "text": "≴"
+    },
+    {
+        "code": "&ngsim;\n&NotGreaterTilde;",
+        "text": "≵"
+    },
+    {
+        "code": "&lg;\n&lessgtr;\n&LessGreater;",
+        "text": "≶"
+    },
+    {
+        "code": "&gl;\n&gtrless;\n&GreaterLess;",
+        "text": "≷"
+    },
+    {
+        "code": "&ntlg;\n&NotLessGreater;",
+        "text": "≸"
+    },
+    {
+        "code": "&ntgl;\n&NotGreaterLess;",
+        "text": "≹"
+    },
+    {
+        "code": "&pr;\n&Precedes;\n&prec;",
+        "text": "≺"
+    },
+    {
+        "code": "&sc;\n&Succeeds;\n&succ;",
+        "text": "≻"
+    },
+    {
+        "code": "&prcue;\n&PrecedesSlantEqual;\n&preccurlyeq;",
+        "text": "≼"
+    },
+    {
+        "code": "&sccue;\n&SucceedsSlantEqual;\n&succcurlyeq;",
+        "text": "≽"
+    },
+    {
+        "code": "&prsim;\n&precsim;\n&PrecedesTilde;",
+        "text": "≾"
+    },
+    {
+        "code": "&scsim;\n&succsim;\n&SucceedsTilde;",
+        "text": "≿"
+    },
+    {
+        "code": "&NotSucceedsTilde;",
+        "text": "≿̸"
+    },
+    {
+        "code": "&npr;\n&nprec;\n&NotPrecedes;",
+        "text": "⊀"
+    },
+    {
+        "code": "&nsc;\n&nsucc;\n&NotSucceeds;",
+        "text": "⊁"
+    },
+    {
+        "code": "&sub;\n&subset;",
+        "text": "⊂"
+    },
+    {
+        "code": "&NotSubset;\n&nsubset;\n&vnsub;",
+        "text": "⊂⃒"
+    },
+    {
+        "code": "&sup;\n&supset;\n&Superset;",
+        "text": "⊃"
+    },
+    {
+        "code": "&NotSuperset;\n&nsupset;\n&vnsup;",
+        "text": "⊃⃒"
+    },
+    {
+        "code": "&nsub;",
+        "text": "⊄"
+    },
+    {
+        "code": "&nsup;",
+        "text": "⊅"
+    },
+    {
+        "code": "&sube;\n&SubsetEqual;\n&subseteq;",
+        "text": "⊆"
+    },
+    {
+        "code": "&supe;\n&supseteq;\n&SupersetEqual;",
+        "text": "⊇"
+    },
+    {
+        "code": "&nsube;\n&nsubseteq;\n&NotSubsetEqual;",
+        "text": "⊈"
+    },
+    {
+        "code": "&nsupe;\n&nsupseteq;\n&NotSupersetEqual;",
+        "text": "⊉"
+    },
+    {
+        "code": "&subne;\n&subsetneq;",
+        "text": "⊊"
+    },
+    {
+        "code": "&varsubsetneq;\n&vsubne;",
+        "text": "⊊︀"
+    },
+    {
+        "code": "&supne;\n&supsetneq;",
+        "text": "⊋"
+    },
+    {
+        "code": "&varsupsetneq;\n&vsupne;",
+        "text": "⊋︀"
+    },
+    {
+        "code": "&cupdot;",
+        "text": "⊍"
+    },
+    {
+        "code": "&uplus;\n&UnionPlus;",
+        "text": "⊎"
+    },
+    {
+        "code": "&sqsub;\n&SquareSubset;\n&sqsubset;",
+        "text": "⊏"
+    },
+    {
+        "code": "&NotSquareSubset;",
+        "text": "⊏̸"
+    },
+    {
+        "code": "&sqsup;\n&SquareSuperset;\n&sqsupset;",
+        "text": "⊐"
+    },
+    {
+        "code": "&NotSquareSuperset;",
+        "text": "⊐̸"
+    },
+    {
+        "code": "&sqsube;\n&SquareSubsetEqual;\n&sqsubseteq;",
+        "text": "⊑"
+    },
+    {
+        "code": "&sqsupe;\n&SquareSupersetEqual;\n&sqsupseteq;",
+        "text": "⊒"
+    },
+    {
+        "code": "&sqcap;\n&SquareIntersection;",
+        "text": "⊓"
+    },
+    {
+        "code": "&sqcaps;",
+        "text": "⊓︀"
+    },
+    {
+        "code": "&sqcup;\n&SquareUnion;",
+        "text": "⊔"
+    },
+    {
+        "code": "&sqcups;",
+        "text": "⊔︀"
+    },
+    {
+        "code": "&oplus;\n&CirclePlus;",
+        "text": "⊕"
+    },
+    {
+        "code": "&ominus;\n&CircleMinus;",
+        "text": "⊖"
+    },
+    {
+        "code": "&otimes;\n&CircleTimes;",
+        "text": "⊗"
+    },
+    {
+        "code": "&osol;",
+        "text": "⊘"
+    },
+    {
+        "code": "&odot;\n&CircleDot;",
+        "text": "⊙"
+    },
+    {
+        "code": "&ocir;\n&circledcirc;",
+        "text": "⊚"
+    },
+    {
+        "code": "&oast;\n&circledast;",
+        "text": "⊛"
+    },
+    {
+        "code": "&odash;\n&circleddash;",
+        "text": "⊝"
+    },
+    {
+        "code": "&plusb;\n&boxplus;",
+        "text": "⊞"
+    },
+    {
+        "code": "&minusb;\n&boxminus;",
+        "text": "⊟"
+    },
+    {
+        "code": "&timesb;\n&boxtimes;",
+        "text": "⊠"
+    },
+    {
+        "code": "&sdotb;\n&dotsquare;",
+        "text": "⊡"
+    },
+    {
+        "code": "&vdash;\n&RightTee;",
+        "text": "⊢"
+    },
+    {
+        "code": "&dashv;\n&LeftTee;",
+        "text": "⊣"
+    },
+    {
+        "code": "&top;\n&DownTee;",
+        "text": "⊤"
+    },
+    {
+        "code": "&bottom;\n&bot;\n&perp;\n&UpTee;",
+        "text": "⊥"
+    },
+    {
+        "code": "&models;",
+        "text": "⊧"
+    },
+    {
+        "code": "&vDash;\n&DoubleRightTee;",
+        "text": "⊨"
+    },
+    {
+        "code": "&Vdash;",
+        "text": "⊩"
+    },
+    {
+        "code": "&Vvdash;",
+        "text": "⊪"
+    },
+    {
+        "code": "&VDash;",
+        "text": "⊫"
+    },
+    {
+        "code": "&nvdash;",
+        "text": "⊬"
+    },
+    {
+        "code": "&nvDash;",
+        "text": "⊭"
+    },
+    {
+        "code": "&nVdash;",
+        "text": "⊮"
+    },
+    {
+        "code": "&nVDash;",
+        "text": "⊯"
+    },
+    {
+        "code": "&prurel;",
+        "text": "⊰"
+    },
+    {
+        "code": "&vltri;\n&vartriangleleft;\n&LeftTriangle;",
+        "text": "⊲"
+    },
+    {
+        "code": "&vrtri;\n&vartriangleright;\n&RightTriangle;",
+        "text": "⊳"
+    },
+    {
+        "code": "&ltrie;\n&trianglelefteq;\n&LeftTriangleEqual;",
+        "text": "⊴"
+    },
+    {
+        "code": "&nvltrie;",
+        "text": "⊴⃒"
+    },
+    {
+        "code": "&rtrie;\n&trianglerighteq;\n&RightTriangleEqual;",
+        "text": "⊵"
+    },
+    {
+        "code": "&nvrtrie;",
+        "text": "⊵⃒"
+    },
+    {
+        "code": "&origof;",
+        "text": "⊶"
+    },
+    {
+        "code": "&imof;",
+        "text": "⊷"
+    },
+    {
+        "code": "&mumap;\n&multimap;",
+        "text": "⊸"
+    },
+    {
+        "code": "&hercon;",
+        "text": "⊹"
+    },
+    {
+        "code": "&intcal;\n&intercal;",
+        "text": "⊺"
+    },
+    {
+        "code": "&veebar;",
+        "text": "⊻"
+    },
+    {
+        "code": "&barvee;",
+        "text": "⊽"
+    },
+    {
+        "code": "&angrtvb;",
+        "text": "⊾"
+    },
+    {
+        "code": "&lrtri;",
+        "text": "⊿"
+    },
+    {
+        "code": "&xwedge;\n&Wedge;\n&bigwedge;",
+        "text": "⋀"
+    },
+    {
+        "code": "&xvee;\n&Vee;\n&bigvee;",
+        "text": "⋁"
+    },
+    {
+        "code": "&xcap;\n&Intersection;\n&bigcap;",
+        "text": "⋂"
+    },
+    {
+        "code": "&xcup;\n&Union;\n&bigcup;",
+        "text": "⋃"
+    },
+    {
+        "code": "&diam;\n&diamond;\n&Diamond;",
+        "text": "⋄"
+    },
+    {
+        "code": "&sdot;",
+        "text": "⋅"
+    },
+    {
+        "code": "&sstarf;\n&Star;",
+        "text": "⋆"
+    },
+    {
+        "code": "&divonx;\n&divideontimes;",
+        "text": "⋇"
+    },
+    {
+        "code": "&bowtie;",
+        "text": "⋈"
+    },
+    {
+        "code": "&ltimes;",
+        "text": "⋉"
+    },
+    {
+        "code": "&rtimes;",
+        "text": "⋊"
+    },
+    {
+        "code": "&lthree;\n&leftthreetimes;",
+        "text": "⋋"
+    },
+    {
+        "code": "&rthree;\n&rightthreetimes;",
+        "text": "⋌"
+    },
+    {
+        "code": "&bsime;\n&backsimeq;",
+        "text": "⋍"
+    },
+    {
+        "code": "&cuvee;\n&curlyvee;",
+        "text": "⋎"
+    },
+    {
+        "code": "&cuwed;\n&curlywedge;",
+        "text": "⋏"
+    },
+    {
+        "code": "&Sub;\n&Subset;",
+        "text": "⋐"
+    },
+    {
+        "code": "&Sup;\n&Supset;",
+        "text": "⋑"
+    },
+    {
+        "code": "&Cap;",
+        "text": "⋒"
+    },
+    {
+        "code": "&Cup;",
+        "text": "⋓"
+    },
+    {
+        "code": "&fork;\n&pitchfork;",
+        "text": "⋔"
+    },
+    {
+        "code": "&epar;",
+        "text": "⋕"
+    },
+    {
+        "code": "&ltdot;\n&lessdot;",
+        "text": "⋖"
+    },
+    {
+        "code": "&gtdot;\n&gtrdot;",
+        "text": "⋗"
+    },
+    {
+        "code": "&Ll;",
+        "text": "⋘"
+    },
+    {
+        "code": "&nLl;",
+        "text": "⋘̸"
+    },
+    {
+        "code": "&Gg;\n&ggg;",
+        "text": "⋙"
+    },
+    {
+        "code": "&nGg;",
+        "text": "⋙̸"
+    },
+    {
+        "code": "&leg;\n&LessEqualGreater;\n&lesseqgtr;",
+        "text": "⋚"
+    },
+    {
+        "code": "&lesg;",
+        "text": "⋚︀"
+    },
+    {
+        "code": "&gel;\n&gtreqless;\n&GreaterEqualLess;",
+        "text": "⋛"
+    },
+    {
+        "code": "&gesl;",
+        "text": "⋛︀"
+    },
+    {
+        "code": "&cuepr;\n&curlyeqprec;",
+        "text": "⋞"
+    },
+    {
+        "code": "&cuesc;\n&curlyeqsucc;",
+        "text": "⋟"
+    },
+    {
+        "code": "&nprcue;\n&NotPrecedesSlantEqual;",
+        "text": "⋠"
+    },
+    {
+        "code": "&nsccue;\n&NotSucceedsSlantEqual;",
+        "text": "⋡"
+    },
+    {
+        "code": "&nsqsube;\n&NotSquareSubsetEqual;",
+        "text": "⋢"
+    },
+    {
+        "code": "&nsqsupe;\n&NotSquareSupersetEqual;",
+        "text": "⋣"
+    },
+    {
+        "code": "&lnsim;",
+        "text": "⋦"
+    },
+    {
+        "code": "&gnsim;",
+        "text": "⋧"
+    },
+    {
+        "code": "&prnsim;\n&precnsim;",
+        "text": "⋨"
+    },
+    {
+        "code": "&scnsim;\n&succnsim;",
+        "text": "⋩"
+    },
+    {
+        "code": "&nltri;\n&ntriangleleft;\n&NotLeftTriangle;",
+        "text": "⋪"
+    },
+    {
+        "code": "&nrtri;\n&ntriangleright;\n&NotRightTriangle;",
+        "text": "⋫"
+    },
+    {
+        "code": "&nltrie;\n&ntrianglelefteq;\n&NotLeftTriangleEqual;",
+        "text": "⋬"
+    },
+    {
+        "code": "&nrtrie;\n&ntrianglerighteq;\n&NotRightTriangleEqual;",
+        "text": "⋭"
+    },
+    {
+        "code": "&vellip;",
+        "text": "⋮"
+    },
+    {
+        "code": "&ctdot;",
+        "text": "⋯"
+    },
+    {
+        "code": "&utdot;",
+        "text": "⋰"
+    },
+    {
+        "code": "&dtdot;",
+        "text": "⋱"
+    },
+    {
+        "code": "&disin;",
+        "text": "⋲"
+    },
+    {
+        "code": "&isinsv;",
+        "text": "⋳"
+    },
+    {
+        "code": "&isins;",
+        "text": "⋴"
+    },
+    {
+        "code": "&isindot;",
+        "text": "⋵"
+    },
+    {
+        "code": "&notindot;",
+        "text": "⋵̸"
+    },
+    {
+        "code": "&notinvc;",
+        "text": "⋶"
+    },
+    {
+        "code": "&notinvb;",
+        "text": "⋷"
+    },
+    {
+        "code": "&isinE;",
+        "text": "⋹"
+    },
+    {
+        "code": "&notinE;",
+        "text": "⋹̸"
+    },
+    {
+        "code": "&nisd;",
+        "text": "⋺"
+    },
+    {
+        "code": "&xnis;",
+        "text": "⋻"
+    },
+    {
+        "code": "&nis;",
+        "text": "⋼"
+    },
+    {
+        "code": "&notnivc;",
+        "text": "⋽"
+    },
+    {
+        "code": "&notnivb;",
+        "text": "⋾"
+    },
+    {
+        "code": "&barwed;\n&barwedge;",
+        "text": "⌅"
+    },
+    {
+        "code": "&Barwed;\n&doublebarwedge;",
+        "text": "⌆"
+    },
+    {
+        "code": "&lceil;\n&LeftCeiling;",
+        "text": "⌈"
+    },
+    {
+        "code": "&rceil;\n&RightCeiling;",
+        "text": "⌉"
+    },
+    {
+        "code": "&lfloor;\n&LeftFloor;",
+        "text": "⌊"
+    },
+    {
+        "code": "&rfloor;\n&RightFloor;",
+        "text": "⌋"
+    },
+    {
+        "code": "&drcrop;",
+        "text": "⌌"
+    },
+    {
+        "code": "&dlcrop;",
+        "text": "⌍"
+    },
+    {
+        "code": "&urcrop;",
+        "text": "⌎"
+    },
+    {
+        "code": "&ulcrop;",
+        "text": "⌏"
+    },
+    {
+        "code": "&bnot;",
+        "text": "⌐"
+    },
+    {
+        "code": "&profline;",
+        "text": "⌒"
+    },
+    {
+        "code": "&profsurf;",
+        "text": "⌓"
+    },
+    {
+        "code": "&telrec;",
+        "text": "⌕"
+    },
+    {
+        "code": "&target;",
+        "text": "⌖"
+    },
+    {
+        "code": "&ulcorn;\n&ulcorner;",
+        "text": "⌜"
+    },
+    {
+        "code": "&urcorn;\n&urcorner;",
+        "text": "⌝"
+    },
+    {
+        "code": "&dlcorn;\n&llcorner;",
+        "text": "⌞"
+    },
+    {
+        "code": "&drcorn;\n&lrcorner;",
+        "text": "⌟"
+    },
+    {
+        "code": "&frown;\n&sfrown;",
+        "text": "⌢"
+    },
+    {
+        "code": "&smile;\n&ssmile;",
+        "text": "⌣"
+    },
+    {
+        "code": "&cylcty;",
+        "text": "⌭"
+    },
+    {
+        "code": "&profalar;",
+        "text": "⌮"
+    },
+    {
+        "code": "&topbot;",
+        "text": "⌶"
+    },
+    {
+        "code": "&ovbar;",
+        "text": "⌽"
+    },
+    {
+        "code": "&solbar;",
+        "text": "⌿"
+    },
+    {
+        "code": "&angzarr;",
+        "text": "⍼"
+    },
+    {
+        "code": "&lmoust;\n&lmoustache;",
+        "text": "⎰"
+    },
+    {
+        "code": "&rmoust;\n&rmoustache;",
+        "text": "⎱"
+    },
+    {
+        "code": "&tbrk;\n&OverBracket;",
+        "text": "⎴"
+    },
+    {
+        "code": "&bbrk;\n&UnderBracket;",
+        "text": "⎵"
+    },
+    {
+        "code": "&bbrktbrk;",
+        "text": "⎶"
+    },
+    {
+        "code": "&OverParenthesis;",
+        "text": "⏜"
+    },
+    {
+        "code": "&UnderParenthesis;",
+        "text": "⏝"
+    },
+    {
+        "code": "&OverBrace;",
+        "text": "⏞"
+    },
+    {
+        "code": "&UnderBrace;",
+        "text": "⏟"
+    },
+    {
+        "code": "&trpezium;",
+        "text": "⏢"
+    },
+    {
+        "code": "&elinters;",
+        "text": "⏧"
+    },
+    {
+        "code": "&blank;",
+        "text": "␣"
+    },
+    {
+        "code": "&oS;\n&circledS;",
+        "text": "Ⓢ"
+    },
+    {
+        "code": "&boxh;\n&HorizontalLine;",
+        "text": "─"
+    },
+    {
+        "code": "&boxv;",
+        "text": "│"
+    },
+    {
+        "code": "&boxdr;",
+        "text": "┌"
+    },
+    {
+        "code": "&boxdl;",
+        "text": "┐"
+    },
+    {
+        "code": "&boxur;",
+        "text": "└"
+    },
+    {
+        "code": "&boxul;",
+        "text": "┘"
+    },
+    {
+        "code": "&boxvr;",
+        "text": "├"
+    },
+    {
+        "code": "&boxvl;",
+        "text": "┤"
+    },
+    {
+        "code": "&boxhd;",
+        "text": "┬"
+    },
+    {
+        "code": "&boxhu;",
+        "text": "┴"
+    },
+    {
+        "code": "&boxvh;",
+        "text": "┼"
+    },
+    {
+        "code": "&boxH;",
+        "text": "═"
+    },
+    {
+        "code": "&boxV;",
+        "text": "║"
+    },
+    {
+        "code": "&boxdR;",
+        "text": "╒"
+    },
+    {
+        "code": "&boxDr;",
+        "text": "╓"
+    },
+    {
+        "code": "&boxDR;",
+        "text": "╔"
+    },
+    {
+        "code": "&boxdL;",
+        "text": "╕"
+    },
+    {
+        "code": "&boxDl;",
+        "text": "╖"
+    },
+    {
+        "code": "&boxDL;",
+        "text": "╗"
+    },
+    {
+        "code": "&boxuR;",
+        "text": "╘"
+    },
+    {
+        "code": "&boxUr;",
+        "text": "╙"
+    },
+    {
+        "code": "&boxUR;",
+        "text": "╚"
+    },
+    {
+        "code": "&boxuL;",
+        "text": "╛"
+    },
+    {
+        "code": "&boxUl;",
+        "text": "╜"
+    },
+    {
+        "code": "&boxUL;",
+        "text": "╝"
+    },
+    {
+        "code": "&boxvR;",
+        "text": "╞"
+    },
+    {
+        "code": "&boxVr;",
+        "text": "╟"
+    },
+    {
+        "code": "&boxVR;",
+        "text": "╠"
+    },
+    {
+        "code": "&boxvL;",
+        "text": "╡"
+    },
+    {
+        "code": "&boxVl;",
+        "text": "╢"
+    },
+    {
+        "code": "&boxVL;",
+        "text": "╣"
+    },
+    {
+        "code": "&boxHd;",
+        "text": "╤"
+    },
+    {
+        "code": "&boxhD;",
+        "text": "╥"
+    },
+    {
+        "code": "&boxHD;",
+        "text": "╦"
+    },
+    {
+        "code": "&boxHu;",
+        "text": "╧"
+    },
+    {
+        "code": "&boxhU;",
+        "text": "╨"
+    },
+    {
+        "code": "&boxHU;",
+        "text": "╩"
+    },
+    {
+        "code": "&boxvH;",
+        "text": "╪"
+    },
+    {
+        "code": "&boxVh;",
+        "text": "╫"
+    },
+    {
+        "code": "&boxVH;",
+        "text": "╬"
+    },
+    {
+        "code": "&uhblk;",
+        "text": "▀"
+    },
+    {
+        "code": "&lhblk;",
+        "text": "▄"
+    },
+    {
+        "code": "&block;",
+        "text": "█"
+    },
+    {
+        "code": "&blk14;",
+        "text": "░"
+    },
+    {
+        "code": "&blk12;",
+        "text": "▒"
+    },
+    {
+        "code": "&blk34;",
+        "text": "▓"
+    },
+    {
+        "code": "&squ;\n&square;\n&Square;",
+        "text": "□"
+    },
+    {
+        "code": "&squf;\n&squarf;\n&blacksquare;\n&FilledVerySmallSquare;",
+        "text": "▪"
+    },
+    {
+        "code": "&EmptyVerySmallSquare;",
+        "text": "▫"
+    },
+    {
+        "code": "&rect;",
+        "text": "▭"
+    },
+    {
+        "code": "&marker;",
+        "text": "▮"
+    },
+    {
+        "code": "&fltns;",
+        "text": "▱"
+    },
+    {
+        "code": "&xutri;\n&bigtriangleup;",
+        "text": "△"
+    },
+    {
+        "code": "&utrif;\n&blacktriangle;",
+        "text": "▴"
+    },
+    {
+        "code": "&utri;\n&triangle;",
+        "text": "▵"
+    },
+    {
+        "code": "&rtrif;\n&blacktriangleright;",
+        "text": "▸"
+    },
+    {
+        "code": "&rtri;\n&triangleright;",
+        "text": "▹"
+    },
+    {
+        "code": "&xdtri;\n&bigtriangledown;",
+        "text": "▽"
+    },
+    {
+        "code": "&dtrif;\n&blacktriangledown;",
+        "text": "▾"
+    },
+    {
+        "code": "&dtri;\n&triangledown;",
+        "text": "▿"
+    },
+    {
+        "code": "&ltrif;\n&blacktriangleleft;",
+        "text": "◂"
+    },
+    {
+        "code": "&ltri;\n&triangleleft;",
+        "text": "◃"
+    },
+    {
+        "code": "&loz;\n&lozenge;",
+        "text": "◊"
+    },
+    {
+        "code": "&cir;",
+        "text": "○"
+    },
+    {
+        "code": "&tridot;",
+        "text": "◬"
+    },
+    {
+        "code": "&xcirc;\n&bigcirc;",
+        "text": "◯"
+    },
+    {
+        "code": "&ultri;",
+        "text": "◸"
+    },
+    {
+        "code": "&urtri;",
+        "text": "◹"
+    },
+    {
+        "code": "&lltri;",
+        "text": "◺"
+    },
+    {
+        "code": "&EmptySmallSquare;",
+        "text": "◻"
+    },
+    {
+        "code": "&FilledSmallSquare;",
+        "text": "◼"
+    },
+    {
+        "code": "&starf;\n&bigstar;",
+        "text": "★"
+    },
+    {
+        "code": "&star;",
+        "text": "☆"
+    },
+    {
+        "code": "&phone;",
+        "text": "☎"
+    },
+    {
+        "code": "&female;",
+        "text": "♀"
+    },
+    {
+        "code": "&male;",
+        "text": "♂"
+    },
+    {
+        "code": "&spades;\n&spadesuit;",
+        "text": "♠"
+    },
+    {
+        "code": "&clubs;\n&clubsuit;",
+        "text": "♣"
+    },
+    {
+        "code": "&hearts;\n&heartsuit;",
+        "text": "♥"
+    },
+    {
+        "code": "&diams;\n&diamondsuit;",
+        "text": "♦"
+    },
+    {
+        "code": "&sung;",
+        "text": "♪"
+    },
+    {
+        "code": "&flat;",
+        "text": "♭"
+    },
+    {
+        "code": "&natur;\n&natural;",
+        "text": "♮"
+    },
+    {
+        "code": "&sharp;",
+        "text": "♯"
+    },
+    {
+        "code": "&check;\n&checkmark;",
+        "text": "✓"
+    },
+    {
+        "code": "&cross;",
+        "text": "✗"
+    },
+    {
+        "code": "&malt;\n&maltese;",
+        "text": "✠"
+    },
+    {
+        "code": "&sext;",
+        "text": "✶"
+    },
+    {
+        "code": "&VerticalSeparator;",
+        "text": "❘"
+    },
+    {
+        "code": "&lbbrk;",
+        "text": "❲"
+    },
+    {
+        "code": "&rbbrk;",
+        "text": "❳"
+    },
+    {
+        "code": "&bsolhsub;",
+        "text": "⟈"
+    },
+    {
+        "code": "&suphsol;",
+        "text": "⟉"
+    },
+    {
+        "code": "&lobrk;\n&LeftDoubleBracket;",
+        "text": "⟦"
+    },
+    {
+        "code": "&robrk;\n&RightDoubleBracket;",
+        "text": "⟧"
+    },
+    {
+        "code": "&lang;\n&LeftAngleBracket;\n&langle;",
+        "text": "⟨"
+    },
+    {
+        "code": "&rang;\n&RightAngleBracket;\n&rangle;",
+        "text": "⟩"
+    },
+    {
+        "code": "&Lang;",
+        "text": "⟪"
+    },
+    {
+        "code": "&Rang;",
+        "text": "⟫"
+    },
+    {
+        "code": "&loang;",
+        "text": "⟬"
+    },
+    {
+        "code": "&roang;",
+        "text": "⟭"
+    },
+    {
+        "code": "&xlarr;\n&longleftarrow;\n&LongLeftArrow;",
+        "text": "⟵"
+    },
+    {
+        "code": "&xrarr;\n&longrightarrow;\n&LongRightArrow;",
+        "text": "⟶"
+    },
+    {
+        "code": "&xharr;\n&longleftrightarrow;\n&LongLeftRightArrow;",
+        "text": "⟷"
+    },
+    {
+        "code": "&xlArr;\n&Longleftarrow;\n&DoubleLongLeftArrow;",
+        "text": "⟸"
+    },
+    {
+        "code": "&xrArr;\n&Longrightarrow;\n&DoubleLongRightArrow;",
+        "text": "⟹"
+    },
+    {
+        "code": "&xhArr;\n&Longleftrightarrow;\n&DoubleLongLeftRightArrow;",
+        "text": "⟺"
+    },
+    {
+        "code": "&xmap;\n&longmapsto;",
+        "text": "⟼"
+    },
+    {
+        "code": "&dzigrarr;",
+        "text": "⟿"
+    },
+    {
+        "code": "&nvlArr;",
+        "text": "⤂"
+    },
+    {
+        "code": "&nvrArr;",
+        "text": "⤃"
+    },
+    {
+        "code": "&nvHarr;",
+        "text": "⤄"
+    },
+    {
+        "code": "&Map;",
+        "text": "⤅"
+    },
+    {
+        "code": "&lbarr;",
+        "text": "⤌"
+    },
+    {
+        "code": "&rbarr;\n&bkarow;",
+        "text": "⤍"
+    },
+    {
+        "code": "&lBarr;",
+        "text": "⤎"
+    },
+    {
+        "code": "&rBarr;\n&dbkarow;",
+        "text": "⤏"
+    },
+    {
+        "code": "&RBarr;\n&drbkarow;",
+        "text": "⤐"
+    },
+    {
+        "code": "&DDotrahd;",
+        "text": "⤑"
+    },
+    {
+        "code": "&UpArrowBar;",
+        "text": "⤒"
+    },
+    {
+        "code": "&DownArrowBar;",
+        "text": "⤓"
+    },
+    {
+        "code": "&Rarrtl;",
+        "text": "⤖"
+    },
+    {
+        "code": "&latail;",
+        "text": "⤙"
+    },
+    {
+        "code": "&ratail;",
+        "text": "⤚"
+    },
+    {
+        "code": "&lAtail;",
+        "text": "⤛"
+    },
+    {
+        "code": "&rAtail;",
+        "text": "⤜"
+    },
+    {
+        "code": "&larrfs;",
+        "text": "⤝"
+    },
+    {
+        "code": "&rarrfs;",
+        "text": "⤞"
+    },
+    {
+        "code": "&larrbfs;",
+        "text": "⤟"
+    },
+    {
+        "code": "&rarrbfs;",
+        "text": "⤠"
+    },
+    {
+        "code": "&nwarhk;",
+        "text": "⤣"
+    },
+    {
+        "code": "&nearhk;",
+        "text": "⤤"
+    },
+    {
+        "code": "&searhk;\n&hksearow;",
+        "text": "⤥"
+    },
+    {
+        "code": "&swarhk;\n&hkswarow;",
+        "text": "⤦"
+    },
+    {
+        "code": "&nwnear;",
+        "text": "⤧"
+    },
+    {
+        "code": "&nesear;\n&toea;",
+        "text": "⤨"
+    },
+    {
+        "code": "&seswar;\n&tosa;",
+        "text": "⤩"
+    },
+    {
+        "code": "&swnwar;",
+        "text": "⤪"
+    },
+    {
+        "code": "&rarrc;",
+        "text": "⤳"
+    },
+    {
+        "code": "&nrarrc;",
+        "text": "⤳̸"
+    },
+    {
+        "code": "&cudarrr;",
+        "text": "⤵"
+    },
+    {
+        "code": "&ldca;",
+        "text": "⤶"
+    },
+    {
+        "code": "&rdca;",
+        "text": "⤷"
+    },
+    {
+        "code": "&cudarrl;",
+        "text": "⤸"
+    },
+    {
+        "code": "&larrpl;",
+        "text": "⤹"
+    },
+    {
+        "code": "&curarrm;",
+        "text": "⤼"
+    },
+    {
+        "code": "&cularrp;",
+        "text": "⤽"
+    },
+    {
+        "code": "&rarrpl;",
+        "text": "⥅"
+    },
+    {
+        "code": "&harrcir;",
+        "text": "⥈"
+    },
+    {
+        "code": "&Uarrocir;",
+        "text": "⥉"
+    },
+    {
+        "code": "&lurdshar;",
+        "text": "⥊"
+    },
+    {
+        "code": "&ldrushar;",
+        "text": "⥋"
+    },
+    {
+        "code": "&LeftRightVector;",
+        "text": "⥎"
+    },
+    {
+        "code": "&RightUpDownVector;",
+        "text": "⥏"
+    },
+    {
+        "code": "&DownLeftRightVector;",
+        "text": "⥐"
+    },
+    {
+        "code": "&LeftUpDownVector;",
+        "text": "⥑"
+    },
+    {
+        "code": "&LeftVectorBar;",
+        "text": "⥒"
+    },
+    {
+        "code": "&RightVectorBar;",
+        "text": "⥓"
+    },
+    {
+        "code": "&RightUpVectorBar;",
+        "text": "⥔"
+    },
+    {
+        "code": "&RightDownVectorBar;",
+        "text": "⥕"
+    },
+    {
+        "code": "&DownLeftVectorBar;",
+        "text": "⥖"
+    },
+    {
+        "code": "&DownRightVectorBar;",
+        "text": "⥗"
+    },
+    {
+        "code": "&LeftUpVectorBar;",
+        "text": "⥘"
+    },
+    {
+        "code": "&LeftDownVectorBar;",
+        "text": "⥙"
+    },
+    {
+        "code": "&LeftTeeVector;",
+        "text": "⥚"
+    },
+    {
+        "code": "&RightTeeVector;",
+        "text": "⥛"
+    },
+    {
+        "code": "&RightUpTeeVector;",
+        "text": "⥜"
+    },
+    {
+        "code": "&RightDownTeeVector;",
+        "text": "⥝"
+    },
+    {
+        "code": "&DownLeftTeeVector;",
+        "text": "⥞"
+    },
+    {
+        "code": "&DownRightTeeVector;",
+        "text": "⥟"
+    },
+    {
+        "code": "&LeftUpTeeVector;",
+        "text": "⥠"
+    },
+    {
+        "code": "&LeftDownTeeVector;",
+        "text": "⥡"
+    },
+    {
+        "code": "&lHar;",
+        "text": "⥢"
+    },
+    {
+        "code": "&uHar;",
+        "text": "⥣"
+    },
+    {
+        "code": "&rHar;",
+        "text": "⥤"
+    },
+    {
+        "code": "&dHar;",
+        "text": "⥥"
+    },
+    {
+        "code": "&luruhar;",
+        "text": "⥦"
+    },
+    {
+        "code": "&ldrdhar;",
+        "text": "⥧"
+    },
+    {
+        "code": "&ruluhar;",
+        "text": "⥨"
+    },
+    {
+        "code": "&rdldhar;",
+        "text": "⥩"
+    },
+    {
+        "code": "&lharul;",
+        "text": "⥪"
+    },
+    {
+        "code": "&llhard;",
+        "text": "⥫"
+    },
+    {
+        "code": "&rharul;",
+        "text": "⥬"
+    },
+    {
+        "code": "&lrhard;",
+        "text": "⥭"
+    },
+    {
+        "code": "&udhar;\n&UpEquilibrium;",
+        "text": "⥮"
+    },
+    {
+        "code": "&duhar;\n&ReverseUpEquilibrium;",
+        "text": "⥯"
+    },
+    {
+        "code": "&RoundImplies;",
+        "text": "⥰"
+    },
+    {
+        "code": "&erarr;",
+        "text": "⥱"
+    },
+    {
+        "code": "&simrarr;",
+        "text": "⥲"
+    },
+    {
+        "code": "&larrsim;",
+        "text": "⥳"
+    },
+    {
+        "code": "&rarrsim;",
+        "text": "⥴"
+    },
+    {
+        "code": "&rarrap;",
+        "text": "⥵"
+    },
+    {
+        "code": "&ltlarr;",
+        "text": "⥶"
+    },
+    {
+        "code": "&gtrarr;",
+        "text": "⥸"
+    },
+    {
+        "code": "&subrarr;",
+        "text": "⥹"
+    },
+    {
+        "code": "&suplarr;",
+        "text": "⥻"
+    },
+    {
+        "code": "&lfisht;",
+        "text": "⥼"
+    },
+    {
+        "code": "&rfisht;",
+        "text": "⥽"
+    },
+    {
+        "code": "&ufisht;",
+        "text": "⥾"
+    },
+    {
+        "code": "&dfisht;",
+        "text": "⥿"
+    },
+    {
+        "code": "&lopar;",
+        "text": "⦅"
+    },
+    {
+        "code": "&ropar;",
+        "text": "⦆"
+    },
+    {
+        "code": "&lbrke;",
+        "text": "⦋"
+    },
+    {
+        "code": "&rbrke;",
+        "text": "⦌"
+    },
+    {
+        "code": "&lbrkslu;",
+        "text": "⦍"
+    },
+    {
+        "code": "&rbrksld;",
+        "text": "⦎"
+    },
+    {
+        "code": "&lbrksld;",
+        "text": "⦏"
+    },
+    {
+        "code": "&rbrkslu;",
+        "text": "⦐"
+    },
+    {
+        "code": "&langd;",
+        "text": "⦑"
+    },
+    {
+        "code": "&rangd;",
+        "text": "⦒"
+    },
+    {
+        "code": "&lparlt;",
+        "text": "⦓"
+    },
+    {
+        "code": "&rpargt;",
+        "text": "⦔"
+    },
+    {
+        "code": "&gtlPar;",
+        "text": "⦕"
+    },
+    {
+        "code": "&ltrPar;",
+        "text": "⦖"
+    },
+    {
+        "code": "&vzigzag;",
+        "text": "⦚"
+    },
+    {
+        "code": "&vangrt;",
+        "text": "⦜"
+    },
+    {
+        "code": "&angrtvbd;",
+        "text": "⦝"
+    },
+    {
+        "code": "&ange;",
+        "text": "⦤"
+    },
+    {
+        "code": "&range;",
+        "text": "⦥"
+    },
+    {
+        "code": "&dwangle;",
+        "text": "⦦"
+    },
+    {
+        "code": "&uwangle;",
+        "text": "⦧"
+    },
+    {
+        "code": "&angmsdaa;",
+        "text": "⦨"
+    },
+    {
+        "code": "&angmsdab;",
+        "text": "⦩"
+    },
+    {
+        "code": "&angmsdac;",
+        "text": "⦪"
+    },
+    {
+        "code": "&angmsdad;",
+        "text": "⦫"
+    },
+    {
+        "code": "&angmsdae;",
+        "text": "⦬"
+    },
+    {
+        "code": "&angmsdaf;",
+        "text": "⦭"
+    },
+    {
+        "code": "&angmsdag;",
+        "text": "⦮"
+    },
+    {
+        "code": "&angmsdah;",
+        "text": "⦯"
+    },
+    {
+        "code": "&bemptyv;",
+        "text": "⦰"
+    },
+    {
+        "code": "&demptyv;",
+        "text": "⦱"
+    },
+    {
+        "code": "&cemptyv;",
+        "text": "⦲"
+    },
+    {
+        "code": "&raemptyv;",
+        "text": "⦳"
+    },
+    {
+        "code": "&laemptyv;",
+        "text": "⦴"
+    },
+    {
+        "code": "&ohbar;",
+        "text": "⦵"
+    },
+    {
+        "code": "&omid;",
+        "text": "⦶"
+    },
+    {
+        "code": "&opar;",
+        "text": "⦷"
+    },
+    {
+        "code": "&operp;",
+        "text": "⦹"
+    },
+    {
+        "code": "&olcross;",
+        "text": "⦻"
+    },
+    {
+        "code": "&odsold;",
+        "text": "⦼"
+    },
+    {
+        "code": "&olcir;",
+        "text": "⦾"
+    },
+    {
+        "code": "&ofcir;",
+        "text": "⦿"
+    },
+    {
+        "code": "&olt;",
+        "text": "⧀"
+    },
+    {
+        "code": "&ogt;",
+        "text": "⧁"
+    },
+    {
+        "code": "&cirscir;",
+        "text": "⧂"
+    },
+    {
+        "code": "&cirE;",
+        "text": "⧃"
+    },
+    {
+        "code": "&solb;",
+        "text": "⧄"
+    },
+    {
+        "code": "&bsolb;",
+        "text": "⧅"
+    },
+    {
+        "code": "&boxbox;",
+        "text": "⧉"
+    },
+    {
+        "code": "&trisb;",
+        "text": "⧍"
+    },
+    {
+        "code": "&rtriltri;",
+        "text": "⧎"
+    },
+    {
+        "code": "&LeftTriangleBar;",
+        "text": "⧏"
+    },
+    {
+        "code": "&NotLeftTriangleBar;",
+        "text": "⧏̸"
+    },
+    {
+        "code": "&RightTriangleBar;",
+        "text": "⧐"
+    },
+    {
+        "code": "&NotRightTriangleBar;",
+        "text": "⧐̸"
+    },
+    {
+        "code": "&iinfin;",
+        "text": "⧜"
+    },
+    {
+        "code": "&infintie;",
+        "text": "⧝"
+    },
+    {
+        "code": "&nvinfin;",
+        "text": "⧞"
+    },
+    {
+        "code": "&eparsl;",
+        "text": "⧣"
+    },
+    {
+        "code": "&smeparsl;",
+        "text": "⧤"
+    },
+    {
+        "code": "&eqvparsl;",
+        "text": "⧥"
+    },
+    {
+        "code": "&lozf;\n&blacklozenge;",
+        "text": "⧫"
+    },
+    {
+        "code": "&RuleDelayed;",
+        "text": "⧴"
+    },
+    {
+        "code": "&dsol;",
+        "text": "⧶"
+    },
+    {
+        "code": "&xodot;\n&bigodot;",
+        "text": "⨀"
+    },
+    {
+        "code": "&xoplus;\n&bigoplus;",
+        "text": "⨁"
+    },
+    {
+        "code": "&xotime;\n&bigotimes;",
+        "text": "⨂"
+    },
+    {
+        "code": "&xuplus;\n&biguplus;",
+        "text": "⨄"
+    },
+    {
+        "code": "&xsqcup;\n&bigsqcup;",
+        "text": "⨆"
+    },
+    {
+        "code": "&qint;\n&iiiint;",
+        "text": "⨌"
+    },
+    {
+        "code": "&fpartint;",
+        "text": "⨍"
+    },
+    {
+        "code": "&cirfnint;",
+        "text": "⨐"
+    },
+    {
+        "code": "&awint;",
+        "text": "⨑"
+    },
+    {
+        "code": "&rppolint;",
+        "text": "⨒"
+    },
+    {
+        "code": "&scpolint;",
+        "text": "⨓"
+    },
+    {
+        "code": "&npolint;",
+        "text": "⨔"
+    },
+    {
+        "code": "&pointint;",
+        "text": "⨕"
+    },
+    {
+        "code": "&quatint;",
+        "text": "⨖"
+    },
+    {
+        "code": "&intlarhk;",
+        "text": "⨗"
+    },
+    {
+        "code": "&pluscir;",
+        "text": "⨢"
+    },
+    {
+        "code": "&plusacir;",
+        "text": "⨣"
+    },
+    {
+        "code": "&simplus;",
+        "text": "⨤"
+    },
+    {
+        "code": "&plusdu;",
+        "text": "⨥"
+    },
+    {
+        "code": "&plussim;",
+        "text": "⨦"
+    },
+    {
+        "code": "&plustwo;",
+        "text": "⨧"
+    },
+    {
+        "code": "&mcomma;",
+        "text": "⨩"
+    },
+    {
+        "code": "&minusdu;",
+        "text": "⨪"
+    },
+    {
+        "code": "&loplus;",
+        "text": "⨭"
+    },
+    {
+        "code": "&roplus;",
+        "text": "⨮"
+    },
+    {
+        "code": "&Cross;",
+        "text": "⨯"
+    },
+    {
+        "code": "&timesd;",
+        "text": "⨰"
+    },
+    {
+        "code": "&timesbar;",
+        "text": "⨱"
+    },
+    {
+        "code": "&smashp;",
+        "text": "⨳"
+    },
+    {
+        "code": "&lotimes;",
+        "text": "⨴"
+    },
+    {
+        "code": "&rotimes;",
+        "text": "⨵"
+    },
+    {
+        "code": "&otimesas;",
+        "text": "⨶"
+    },
+    {
+        "code": "&Otimes;",
+        "text": "⨷"
+    },
+    {
+        "code": "&odiv;",
+        "text": "⨸"
+    },
+    {
+        "code": "&triplus;",
+        "text": "⨹"
+    },
+    {
+        "code": "&triminus;",
+        "text": "⨺"
+    },
+    {
+        "code": "&tritime;",
+        "text": "⨻"
+    },
+    {
+        "code": "&iprod;\n&intprod;",
+        "text": "⨼"
+    },
+    {
+        "code": "&amalg;",
+        "text": "⨿"
+    },
+    {
+        "code": "&capdot;",
+        "text": "⩀"
+    },
+    {
+        "code": "&ncup;",
+        "text": "⩂"
+    },
+    {
+        "code": "&ncap;",
+        "text": "⩃"
+    },
+    {
+        "code": "&capand;",
+        "text": "⩄"
+    },
+    {
+        "code": "&cupor;",
+        "text": "⩅"
+    },
+    {
+        "code": "&cupcap;",
+        "text": "⩆"
+    },
+    {
+        "code": "&capcup;",
+        "text": "⩇"
+    },
+    {
+        "code": "&cupbrcap;",
+        "text": "⩈"
+    },
+    {
+        "code": "&capbrcup;",
+        "text": "⩉"
+    },
+    {
+        "code": "&cupcup;",
+        "text": "⩊"
+    },
+    {
+        "code": "&capcap;",
+        "text": "⩋"
+    },
+    {
+        "code": "&ccups;",
+        "text": "⩌"
+    },
+    {
+        "code": "&ccaps;",
+        "text": "⩍"
+    },
+    {
+        "code": "&ccupssm;",
+        "text": "⩐"
+    },
+    {
+        "code": "&And;",
+        "text": "⩓"
+    },
+    {
+        "code": "&Or;",
+        "text": "⩔"
+    },
+    {
+        "code": "&andand;",
+        "text": "⩕"
+    },
+    {
+        "code": "&oror;",
+        "text": "⩖"
+    },
+    {
+        "code": "&orslope;",
+        "text": "⩗"
+    },
+    {
+        "code": "&andslope;",
+        "text": "⩘"
+    },
+    {
+        "code": "&andv;",
+        "text": "⩚"
+    },
+    {
+        "code": "&orv;",
+        "text": "⩛"
+    },
+    {
+        "code": "&andd;",
+        "text": "⩜"
+    },
+    {
+        "code": "&ord;",
+        "text": "⩝"
+    },
+    {
+        "code": "&wedbar;",
+        "text": "⩟"
+    },
+    {
+        "code": "&sdote;",
+        "text": "⩦"
+    },
+    {
+        "code": "&simdot;",
+        "text": "⩪"
+    },
+    {
+        "code": "&congdot;",
+        "text": "⩭"
+    },
+    {
+        "code": "&ncongdot;",
+        "text": "⩭̸"
+    },
+    {
+        "code": "&easter;",
+        "text": "⩮"
+    },
+    {
+        "code": "&apacir;",
+        "text": "⩯"
+    },
+    {
+        "code": "&apE;",
+        "text": "⩰"
+    },
+    {
+        "code": "&napE;",
+        "text": "⩰̸"
+    },
+    {
+        "code": "&eplus;",
+        "text": "⩱"
+    },
+    {
+        "code": "&pluse;",
+        "text": "⩲"
+    },
+    {
+        "code": "&Esim;",
+        "text": "⩳"
+    },
+    {
+        "code": "&Colone;",
+        "text": "⩴"
+    },
+    {
+        "code": "&Equal;",
+        "text": "⩵"
+    },
+    {
+        "code": "&eDDot;\n&ddotseq;",
+        "text": "⩷"
+    },
+    {
+        "code": "&equivDD;",
+        "text": "⩸"
+    },
+    {
+        "code": "&ltcir;",
+        "text": "⩹"
+    },
+    {
+        "code": "&gtcir;",
+        "text": "⩺"
+    },
+    {
+        "code": "&ltquest;",
+        "text": "⩻"
+    },
+    {
+        "code": "&gtquest;",
+        "text": "⩼"
+    },
+    {
+        "code": "&les;\n&LessSlantEqual;\n&leqslant;",
+        "text": "⩽"
+    },
+    {
+        "code": "&nleqslant;\n&nles;\n&NotLessSlantEqual;",
+        "text": "⩽̸"
+    },
+    {
+        "code": "&ges;\n&GreaterSlantEqual;\n&geqslant;",
+        "text": "⩾"
+    },
+    {
+        "code": "&ngeqslant;\n&nges;\n&NotGreaterSlantEqual;",
+        "text": "⩾̸"
+    },
+    {
+        "code": "&lesdot;",
+        "text": "⩿"
+    },
+    {
+        "code": "&gesdot;",
+        "text": "⪀"
+    },
+    {
+        "code": "&lesdoto;",
+        "text": "⪁"
+    },
+    {
+        "code": "&gesdoto;",
+        "text": "⪂"
+    },
+    {
+        "code": "&lesdotor;",
+        "text": "⪃"
+    },
+    {
+        "code": "&gesdotol;",
+        "text": "⪄"
+    },
+    {
+        "code": "&lap;\n&lessapprox;",
+        "text": "⪅"
+    },
+    {
+        "code": "&gap;\n&gtrapprox;",
+        "text": "⪆"
+    },
+    {
+        "code": "&lne;\n&lneq;",
+        "text": "⪇"
+    },
+    {
+        "code": "&gne;\n&gneq;",
+        "text": "⪈"
+    },
+    {
+        "code": "&lnap;\n&lnapprox;",
+        "text": "⪉"
+    },
+    {
+        "code": "&gnap;\n&gnapprox;",
+        "text": "⪊"
+    },
+    {
+        "code": "&lEg;\n&lesseqqgtr;",
+        "text": "⪋"
+    },
+    {
+        "code": "&gEl;\n&gtreqqless;",
+        "text": "⪌"
+    },
+    {
+        "code": "&lsime;",
+        "text": "⪍"
+    },
+    {
+        "code": "&gsime;",
+        "text": "⪎"
+    },
+    {
+        "code": "&lsimg;",
+        "text": "⪏"
+    },
+    {
+        "code": "&gsiml;",
+        "text": "⪐"
+    },
+    {
+        "code": "&lgE;",
+        "text": "⪑"
+    },
+    {
+        "code": "&glE;",
+        "text": "⪒"
+    },
+    {
+        "code": "&lesges;",
+        "text": "⪓"
+    },
+    {
+        "code": "&gesles;",
+        "text": "⪔"
+    },
+    {
+        "code": "&els;\n&eqslantless;",
+        "text": "⪕"
+    },
+    {
+        "code": "&egs;\n&eqslantgtr;",
+        "text": "⪖"
+    },
+    {
+        "code": "&elsdot;",
+        "text": "⪗"
+    },
+    {
+        "code": "&egsdot;",
+        "text": "⪘"
+    },
+    {
+        "code": "&el;",
+        "text": "⪙"
+    },
+    {
+        "code": "&eg;",
+        "text": "⪚"
+    },
+    {
+        "code": "&siml;",
+        "text": "⪝"
+    },
+    {
+        "code": "&simg;",
+        "text": "⪞"
+    },
+    {
+        "code": "&simlE;",
+        "text": "⪟"
+    },
+    {
+        "code": "&simgE;",
+        "text": "⪠"
+    },
+    {
+        "code": "&LessLess;",
+        "text": "⪡"
+    },
+    {
+        "code": "&NotNestedLessLess;",
+        "text": "⪡̸"
+    },
+    {
+        "code": "&GreaterGreater;",
+        "text": "⪢"
+    },
+    {
+        "code": "&NotNestedGreaterGreater;",
+        "text": "⪢̸"
+    },
+    {
+        "code": "&glj;",
+        "text": "⪤"
+    },
+    {
+        "code": "&gla;",
+        "text": "⪥"
+    },
+    {
+        "code": "&ltcc;",
+        "text": "⪦"
+    },
+    {
+        "code": "&gtcc;",
+        "text": "⪧"
+    },
+    {
+        "code": "&lescc;",
+        "text": "⪨"
+    },
+    {
+        "code": "&gescc;",
+        "text": "⪩"
+    },
+    {
+        "code": "&smt;",
+        "text": "⪪"
+    },
+    {
+        "code": "&lat;",
+        "text": "⪫"
+    },
+    {
+        "code": "&smte;",
+        "text": "⪬"
+    },
+    {
+        "code": "&smtes;",
+        "text": "⪬︀"
+    },
+    {
+        "code": "&late;",
+        "text": "⪭"
+    },
+    {
+        "code": "&lates;",
+        "text": "⪭︀"
+    },
+    {
+        "code": "&bumpE;",
+        "text": "⪮"
+    },
+    {
+        "code": "&pre;\n&preceq;\n&PrecedesEqual;",
+        "text": "⪯"
+    },
+    {
+        "code": "&NotPrecedesEqual;\n&npre;\n&npreceq;",
+        "text": "⪯̸"
+    },
+    {
+        "code": "&sce;\n&succeq;\n&SucceedsEqual;",
+        "text": "⪰"
+    },
+    {
+        "code": "&NotSucceedsEqual;\n&nsce;\n&nsucceq;",
+        "text": "⪰̸"
+    },
+    {
+        "code": "&prE;",
+        "text": "⪳"
+    },
+    {
+        "code": "&scE;",
+        "text": "⪴"
+    },
+    {
+        "code": "&prnE;\n&precneqq;",
+        "text": "⪵"
+    },
+    {
+        "code": "&scnE;\n&succneqq;",
+        "text": "⪶"
+    },
+    {
+        "code": "&prap;\n&precapprox;",
+        "text": "⪷"
+    },
+    {
+        "code": "&scap;\n&succapprox;",
+        "text": "⪸"
+    },
+    {
+        "code": "&prnap;\n&precnapprox;",
+        "text": "⪹"
+    },
+    {
+        "code": "&scnap;\n&succnapprox;",
+        "text": "⪺"
+    },
+    {
+        "code": "&Pr;",
+        "text": "⪻"
+    },
+    {
+        "code": "&Sc;",
+        "text": "⪼"
+    },
+    {
+        "code": "&subdot;",
+        "text": "⪽"
+    },
+    {
+        "code": "&supdot;",
+        "text": "⪾"
+    },
+    {
+        "code": "&subplus;",
+        "text": "⪿"
+    },
+    {
+        "code": "&supplus;",
+        "text": "⫀"
+    },
+    {
+        "code": "&submult;",
+        "text": "⫁"
+    },
+    {
+        "code": "&supmult;",
+        "text": "⫂"
+    },
+    {
+        "code": "&subedot;",
+        "text": "⫃"
+    },
+    {
+        "code": "&supedot;",
+        "text": "⫄"
+    },
+    {
+        "code": "&subE;\n&subseteqq;",
+        "text": "⫅"
+    },
+    {
+        "code": "&nsubE;\n&nsubseteqq;",
+        "text": "⫅̸"
+    },
+    {
+        "code": "&supE;\n&supseteqq;",
+        "text": "⫆"
+    },
+    {
+        "code": "&nsupE;\n&nsupseteqq;",
+        "text": "⫆̸"
+    },
+    {
+        "code": "&subsim;",
+        "text": "⫇"
+    },
+    {
+        "code": "&supsim;",
+        "text": "⫈"
+    },
+    {
+        "code": "&subnE;\n&subsetneqq;",
+        "text": "⫋"
+    },
+    {
+        "code": "&varsubsetneqq;\n&vsubnE;",
+        "text": "⫋︀"
+    },
+    {
+        "code": "&supnE;\n&supsetneqq;",
+        "text": "⫌"
+    },
+    {
+        "code": "&varsupsetneqq;\n&vsupnE;",
+        "text": "⫌︀"
+    },
+    {
+        "code": "&csub;",
+        "text": "⫏"
+    },
+    {
+        "code": "&csup;",
+        "text": "⫐"
+    },
+    {
+        "code": "&csube;",
+        "text": "⫑"
+    },
+    {
+        "code": "&csupe;",
+        "text": "⫒"
+    },
+    {
+        "code": "&subsup;",
+        "text": "⫓"
+    },
+    {
+        "code": "&supsub;",
+        "text": "⫔"
+    },
+    {
+        "code": "&subsub;",
+        "text": "⫕"
+    },
+    {
+        "code": "&supsup;",
+        "text": "⫖"
+    },
+    {
+        "code": "&suphsub;",
+        "text": "⫗"
+    },
+    {
+        "code": "&supdsub;",
+        "text": "⫘"
+    },
+    {
+        "code": "&forkv;",
+        "text": "⫙"
+    },
+    {
+        "code": "&topfork;",
+        "text": "⫚"
+    },
+    {
+        "code": "&mlcp;",
+        "text": "⫛"
+    },
+    {
+        "code": "&Dashv;\n&DoubleLeftTee;",
+        "text": "⫤"
+    },
+    {
+        "code": "&Vdashl;",
+        "text": "⫦"
+    },
+    {
+        "code": "&Barv;",
+        "text": "⫧"
+    },
+    {
+        "code": "&vBar;",
+        "text": "⫨"
+    },
+    {
+        "code": "&vBarv;",
+        "text": "⫩"
+    },
+    {
+        "code": "&Vbar;",
+        "text": "⫫"
+    },
+    {
+        "code": "&Not;",
+        "text": "⫬"
+    },
+    {
+        "code": "&bNot;",
+        "text": "⫭"
+    },
+    {
+        "code": "&rnmid;",
+        "text": "⫮"
+    },
+    {
+        "code": "&cirmid;",
+        "text": "⫯"
+    },
+    {
+        "code": "&midcir;",
+        "text": "⫰"
+    },
+    {
+        "code": "&topcir;",
+        "text": "⫱"
+    },
+    {
+        "code": "&nhpar;",
+        "text": "⫲"
+    },
+    {
+        "code": "&parsim;",
+        "text": "⫳"
+    },
+    {
+        "code": "&parsl;",
+        "text": "⫽"
+    },
+    {
+        "code": "&nparsl;",
+        "text": "⫽⃥"
+    },
+    {
+        "code": "&fflig;",
+        "text": "ﬀ"
+    },
+    {
+        "code": "&filig;",
+        "text": "ﬁ"
+    },
+    {
+        "code": "&fllig;",
+        "text": "ﬂ"
+    },
+    {
+        "code": "&ffilig;",
+        "text": "ﬃ"
+    },
+    {
+        "code": "&ffllig;",
+        "text": "ﬄ"
+    },
+    {
+        "code": "&Ascr;",
+        "text": "𝒜"
+    },
+    {
+        "code": "&Cscr;",
+        "text": "𝒞"
+    },
+    {
+        "code": "&Dscr;",
+        "text": "𝒟"
+    },
+    {
+        "code": "&Gscr;",
+        "text": "𝒢"
+    },
+    {
+        "code": "&Jscr;",
+        "text": "𝒥"
+    },
+    {
+        "code": "&Kscr;",
+        "text": "𝒦"
+    },
+    {
+        "code": "&Nscr;",
+        "text": "𝒩"
+    },
+    {
+        "code": "&Oscr;",
+        "text": "𝒪"
+    },
+    {
+        "code": "&Pscr;",
+        "text": "𝒫"
+    },
+    {
+        "code": "&Qscr;",
+        "text": "𝒬"
+    },
+    {
+        "code": "&Sscr;",
+        "text": "𝒮"
+    },
+    {
+        "code": "&Tscr;",
+        "text": "𝒯"
+    },
+    {
+        "code": "&Uscr;",
+        "text": "𝒰"
+    },
+    {
+        "code": "&Vscr;",
+        "text": "𝒱"
+    },
+    {
+        "code": "&Wscr;",
+        "text": "𝒲"
+    },
+    {
+        "code": "&Xscr;",
+        "text": "𝒳"
+    },
+    {
+        "code": "&Yscr;",
+        "text": "𝒴"
+    },
+    {
+        "code": "&Zscr;",
+        "text": "𝒵"
+    },
+    {
+        "code": "&ascr;",
+        "text": "𝒶"
+    },
+    {
+        "code": "&bscr;",
+        "text": "𝒷"
+    },
+    {
+        "code": "&cscr;",
+        "text": "𝒸"
+    },
+    {
+        "code": "&dscr;",
+        "text": "𝒹"
+    },
+    {
+        "code": "&fscr;",
+        "text": "𝒻"
+    },
+    {
+        "code": "&hscr;",
+        "text": "𝒽"
+    },
+    {
+        "code": "&iscr;",
+        "text": "𝒾"
+    },
+    {
+        "code": "&jscr;",
+        "text": "𝒿"
+    },
+    {
+        "code": "&kscr;",
+        "text": "𝓀"
+    },
+    {
+        "code": "&lscr;",
+        "text": "𝓁"
+    },
+    {
+        "code": "&mscr;",
+        "text": "𝓂"
+    },
+    {
+        "code": "&nscr;",
+        "text": "𝓃"
+    },
+    {
+        "code": "&pscr;",
+        "text": "𝓅"
+    },
+    {
+        "code": "&qscr;",
+        "text": "𝓆"
+    },
+    {
+        "code": "&rscr;",
+        "text": "𝓇"
+    },
+    {
+        "code": "&sscr;",
+        "text": "𝓈"
+    },
+    {
+        "code": "&tscr;",
+        "text": "𝓉"
+    },
+    {
+        "code": "&uscr;",
+        "text": "𝓊"
+    },
+    {
+        "code": "&vscr;",
+        "text": "𝓋"
+    },
+    {
+        "code": "&wscr;",
+        "text": "𝓌"
+    },
+    {
+        "code": "&xscr;",
+        "text": "𝓍"
+    },
+    {
+        "code": "&yscr;",
+        "text": "𝓎"
+    },
+    {
+        "code": "&zscr;",
+        "text": "𝓏"
+    },
+    {
+        "code": "&Afr;",
+        "text": "𝔄"
+    },
+    {
+        "code": "&Bfr;",
+        "text": "𝔅"
+    },
+    {
+        "code": "&Dfr;",
+        "text": "𝔇"
+    },
+    {
+        "code": "&Efr;",
+        "text": "𝔈"
+    },
+    {
+        "code": "&Ffr;",
+        "text": "𝔉"
+    },
+    {
+        "code": "&Gfr;",
+        "text": "𝔊"
+    },
+    {
+        "code": "&Jfr;",
+        "text": "𝔍"
+    },
+    {
+        "code": "&Kfr;",
+        "text": "𝔎"
+    },
+    {
+        "code": "&Lfr;",
+        "text": "𝔏"
+    },
+    {
+        "code": "&Mfr;",
+        "text": "𝔐"
+    },
+    {
+        "code": "&Nfr;",
+        "text": "𝔑"
+    },
+    {
+        "code": "&Ofr;",
+        "text": "𝔒"
+    },
+    {
+        "code": "&Pfr;",
+        "text": "𝔓"
+    },
+    {
+        "code": "&Qfr;",
+        "text": "𝔔"
+    },
+    {
+        "code": "&Sfr;",
+        "text": "𝔖"
+    },
+    {
+        "code": "&Tfr;",
+        "text": "𝔗"
+    },
+    {
+        "code": "&Ufr;",
+        "text": "𝔘"
+    },
+    {
+        "code": "&Vfr;",
+        "text": "𝔙"
+    },
+    {
+        "code": "&Wfr;",
+        "text": "𝔚"
+    },
+    {
+        "code": "&Xfr;",
+        "text": "𝔛"
+    },
+    {
+        "code": "&Yfr;",
+        "text": "𝔜"
+    },
+    {
+        "code": "&afr;",
+        "text": "𝔞"
+    },
+    {
+        "code": "&bfr;",
+        "text": "𝔟"
+    },
+    {
+        "code": "&cfr;",
+        "text": "𝔠"
+    },
+    {
+        "code": "&dfr;",
+        "text": "𝔡"
+    },
+    {
+        "code": "&efr;",
+        "text": "𝔢"
+    },
+    {
+        "code": "&ffr;",
+        "text": "𝔣"
+    },
+    {
+        "code": "&gfr;",
+        "text": "𝔤"
+    },
+    {
+        "code": "&hfr;",
+        "text": "𝔥"
+    },
+    {
+        "code": "&ifr;",
+        "text": "𝔦"
+    },
+    {
+        "code": "&jfr;",
+        "text": "𝔧"
+    },
+    {
+        "code": "&kfr;",
+        "text": "𝔨"
+    },
+    {
+        "code": "&lfr;",
+        "text": "𝔩"
+    },
+    {
+        "code": "&mfr;",
+        "text": "𝔪"
+    },
+    {
+        "code": "&nfr;",
+        "text": "𝔫"
+    },
+    {
+        "code": "&ofr;",
+        "text": "𝔬"
+    },
+    {
+        "code": "&pfr;",
+        "text": "𝔭"
+    },
+    {
+        "code": "&qfr;",
+        "text": "𝔮"
+    },
+    {
+        "code": "&rfr;",
+        "text": "𝔯"
+    },
+    {
+        "code": "&sfr;",
+        "text": "𝔰"
+    },
+    {
+        "code": "&tfr;",
+        "text": "𝔱"
+    },
+    {
+        "code": "&ufr;",
+        "text": "𝔲"
+    },
+    {
+        "code": "&vfr;",
+        "text": "𝔳"
+    },
+    {
+        "code": "&wfr;",
+        "text": "𝔴"
+    },
+    {
+        "code": "&xfr;",
+        "text": "𝔵"
+    },
+    {
+        "code": "&yfr;",
+        "text": "𝔶"
+    },
+    {
+        "code": "&zfr;",
+        "text": "𝔷"
+    },
+    {
+        "code": "&Aopf;",
+        "text": "𝔸"
+    },
+    {
+        "code": "&Bopf;",
+        "text": "𝔹"
+    },
+    {
+        "code": "&Dopf;",
+        "text": "𝔻"
+    },
+    {
+        "code": "&Eopf;",
+        "text": "𝔼"
+    },
+    {
+        "code": "&Fopf;",
+        "text": "𝔽"
+    },
+    {
+        "code": "&Gopf;",
+        "text": "𝔾"
+    },
+    {
+        "code": "&Iopf;",
+        "text": "𝕀"
+    },
+    {
+        "code": "&Jopf;",
+        "text": "𝕁"
+    },
+    {
+        "code": "&Kopf;",
+        "text": "𝕂"
+    },
+    {
+        "code": "&Lopf;",
+        "text": "𝕃"
+    },
+    {
+        "code": "&Mopf;",
+        "text": "𝕄"
+    },
+    {
+        "code": "&Oopf;",
+        "text": "𝕆"
+    },
+    {
+        "code": "&Sopf;",
+        "text": "𝕊"
+    },
+    {
+        "code": "&Topf;",
+        "text": "𝕋"
+    },
+    {
+        "code": "&Uopf;",
+        "text": "𝕌"
+    },
+    {
+        "code": "&Vopf;",
+        "text": "𝕍"
+    },
+    {
+        "code": "&Wopf;",
+        "text": "𝕎"
+    },
+    {
+        "code": "&Xopf;",
+        "text": "𝕏"
+    },
+    {
+        "code": "&Yopf;",
+        "text": "𝕐"
+    },
+    {
+        "code": "&aopf;",
+        "text": "𝕒"
+    },
+    {
+        "code": "&bopf;",
+        "text": "𝕓"
+    },
+    {
+        "code": "&copf;",
+        "text": "𝕔"
+    },
+    {
+        "code": "&dopf;",
+        "text": "𝕕"
+    },
+    {
+        "code": "&eopf;",
+        "text": "𝕖"
+    },
+    {
+        "code": "&fopf;",
+        "text": "𝕗"
+    },
+    {
+        "code": "&gopf;",
+        "text": "𝕘"
+    },
+    {
+        "code": "&hopf;",
+        "text": "𝕙"
+    },
+    {
+        "code": "&iopf;",
+        "text": "𝕚"
+    },
+    {
+        "code": "&jopf;",
+        "text": "𝕛"
+    },
+    {
+        "code": "&kopf;",
+        "text": "𝕜"
+    },
+    {
+        "code": "&lopf;",
+        "text": "𝕝"
+    },
+    {
+        "code": "&mopf;",
+        "text": "𝕞"
+    },
+    {
+        "code": "&nopf;",
+        "text": "𝕟"
+    },
+    {
+        "code": "&oopf;",
+        "text": "𝕠"
+    },
+    {
+        "code": "&popf;",
+        "text": "𝕡"
+    },
+    {
+        "code": "&qopf;",
+        "text": "𝕢"
+    },
+    {
+        "code": "&ropf;",
+        "text": "𝕣"
+    },
+    {
+        "code": "&sopf;",
+        "text": "𝕤"
+    },
+    {
+        "code": "&topf;",
+        "text": "𝕥"
+    },
+    {
+        "code": "&uopf;",
+        "text": "𝕦"
+    },
+    {
+        "code": "&vopf;",
+        "text": "𝕧"
+    },
+    {
+        "code": "&wopf;",
+        "text": "𝕨"
+    },
+    {
+        "code": "&xopf;",
+        "text": "𝕩"
+    },
+    {
+        "code": "&yopf;",
+        "text": "𝕪"
+    },
+    {
+        "code": "&zopf;",
+        "text": "𝕫"
+    }
+]

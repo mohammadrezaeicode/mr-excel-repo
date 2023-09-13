@@ -1,4 +1,5 @@
 import { MultiStyleRexValue, MultiStyleValue } from "../data-model/excel-table";
+import { spCh } from "./special-character";
 
 function splitBaseOnMatch(matchResult: string[], str: string) {
   let reduceDefault: {
@@ -210,39 +211,41 @@ export function generateMultiStyleValue(
       const matchElement = matchValue[index];
       const styleID = styleMatchValue[index];
       if (element.length > 0) {
-        result += `<r>
-        ${elementStyle}
-            <t xml:space="preserve" >${element}</t>
-        </r>`;
+        result +=
+          "<r>" +
+          " " +
+          elementStyle +
+          ' <t xml:space="preserve">' +
+          element +
+          "</t>" +
+          "</r>";
       }
       if (matchElement.length > 0) {
-        result += `
-                            <r>
-           ${styles[styleID]}
-            <t xml:space="preserve" >${matchElement}</t>
-        </r>
-                    `;
+        result +=
+          " <r> " +
+          styles[styleID] +
+          ' <t xml:space="preserve">' +
+          matchElement +
+          "</t>" +
+          " </r>";
       }
     }
     if (splitValue[length].length > 0) {
-      result = `<si>
-                    ${result}
-                    <r>
-        ${elementStyle}
-            <t>${splitValue[length]}</t>
-        </r>
-                    </si>`;
+      result =
+        "<si>" +
+        result +
+        "<r>" +
+        elementStyle +
+        "<t>" +
+        spCh(splitValue[length]) +
+        "</t>" +
+        "</r>" +
+        "</si>";
     } else {
-      result = `<si>
-                    ${result}
-                    </si>`;
+      result = "<si>" + result + "</si>";
     }
     return result;
   } else {
-    return `
-<si>
-    <t>${text}</t>
-</si>
-`;
+    return "<si><t>" + spCh(text) + "</t></si>";
   }
 }

@@ -44,6 +44,7 @@ const multi_value_1 = require("../utils/multi-value");
 const const_data_1 = require("../utils/content-generator/const-data");
 const image_1 = require("./image");
 const excel_util_1 = require("./excel-util");
+const special_character_1 = require("./special-character");
 function generateExcel(data) {
     return __awaiter(this, void 0, void 0, function* () {
         let cols = [...const_data_1.cols];
@@ -109,24 +110,28 @@ function generateExcel(data) {
                         "<font>" +
                         (styl.bold ? "<b/>" : "") +
                         (styl.italic ? "<i />" : "") +
-                        `${styl.underline || styl.doubleUnderline
-                            ? `<u ${styl.doubleUnderline ? ' val="double" ' : ""}/>`
-                            : ""}` +
+                        (styl.underline || styl.doubleUnderline
+                            ? "<u " + (styl.doubleUnderline ? ' val="double" ' : "") + "/>"
+                            : "") +
                         (styl.size ? '<sz val="' + styl.size + '" />' : "") +
                         (colors ? '<color rgb="' + colors.replace("#", "") + '" />' : "") +
                         (styl.fontFamily ? '<name val="' + styl.fontFamily + '" />' : "") +
                         "</font>";
-                res.commentSintax.value[cur] = `<rPr>
-            ${styl.bold ? `<b/>` : ""}
-            ${styl.italic ? `<i />` : ""}
-            ${styl.underline || styl.doubleUnderline
-                    ? `<u ${styl.doubleUnderline ? ' val="double" ' : ""}/>`
-                    : ""}
-            <sz val="${styl.size ? `${styl.size}` : "9"}" />
-            ${colors ? `<color rgb="${colors.replace("#", "")}" />` : ""}
-            <rFont val="${styl.fontFamily ? `${styl.fontFamily}` : "Tahoma"}" />
-        </rPr>
-        `;
+                res.commentSintax.value[cur] =
+                    "<rPr>" +
+                        (styl.bold ? "<b/>" : "") +
+                        (styl.italic ? "<i />" : "") +
+                        (styl.underline || styl.doubleUnderline
+                            ? "<u " + (styl.doubleUnderline ? 'val="double" ' : "") + "/>"
+                            : "") +
+                        '<sz val="' +
+                        (styl.size ? styl.size : "9") +
+                        '" />' +
+                        (colors ? '<color rgb="' + colors.replace("#", "") + '" />' : "") +
+                        '<rFont val="' +
+                        (styl.fontFamily ? styl.fontFamily : "Tahoma") +
+                        '" />' +
+                        "</rPr>";
             }
             let endPart = "/>";
             if (styl.alignment) {
@@ -308,9 +313,6 @@ function generateExcel(data) {
                         else {
                             type = "png";
                         }
-                        // if (type == 'ico') {
-                        //     type = 'png'
-                        // }
                         arrTypes.push(type);
                         return {
                             type,
@@ -388,7 +390,7 @@ function generateExcel(data) {
                             sharedString += (0, multi_value_1.generateMultiStyleValue)(title.multiStyleValue, title.text, styleMapper.commentSintax.value, tStyle, sheetData.useSplitBaseOnMatch);
                         }
                         else {
-                            sharedString += "<si><t>" + title.text + "</t></si>";
+                            sharedString += "<si><t>" + (0, special_character_1.spCh)(title.text) + "</t></si>";
                         }
                     }
                     rowCount += top + consommeRow + 1;
@@ -492,7 +494,7 @@ function generateExcel(data) {
                             sharedString += (0, multi_value_1.generateMultiStyleValue)(v.multiStyleValue, v.text, styleMapper.commentSintax.value, headerStyleKey ? headerStyleKey : "", sheetData.useSplitBaseOnMatch);
                         }
                         else {
-                            sharedString += "<si><t>" + v.text + "</t></si>";
+                            sharedString += "<si><t>" + (0, special_character_1.spCh)(v.text) + "</t></si>";
                         }
                         sharedStringMap[v.text] = v.text;
                         sharedStringIndex++;
@@ -599,7 +601,7 @@ function generateExcel(data) {
                             if (shiftCount) {
                                 keyIndex += shiftCount;
                             }
-                            const dataEl = mData[key];
+                            let dataEl = mData[key];
                             let cellStyle = rowStyle;
                             if (sheetData.styleCellCondition &&
                                 typeof sheetData.styleCellCondition == "function") {
@@ -629,95 +631,96 @@ function generateExcel(data) {
                                     }
                                 }
                             }
-                            if (typeof dataEl != "undefined") {
-                                const refString = cols[keyIndex] + "" + rowCount;
-                                if (typeof sheetData.commentCodition == "function") {
-                                    const checkCommentCondition = sheetData.commentCodition(dataEl, mData, key, rowCount, keyIndex, false);
-                                    if (checkCommentCondition) {
-                                        if (typeof mData.comment !== "object") {
-                                            mData.comment = {};
-                                        }
-                                        mData.comment[key] = checkCommentCondition;
+                            if (typeof dataEl == "undefined") {
+                                dataEl = "";
+                            }
+                            const refString = cols[keyIndex] + "" + rowCount;
+                            if (typeof sheetData.commentCodition == "function") {
+                                const checkCommentCondition = sheetData.commentCodition(dataEl, mData, key, rowCount, keyIndex, false);
+                                if (checkCommentCondition) {
+                                    if (typeof mData.comment !== "object") {
+                                        mData.comment = {};
                                     }
+                                    mData.comment[key] = checkCommentCondition;
                                 }
-                                if (typeof mData.comment == "object" && key in mData.comment) {
-                                    const cellComment = mData.comment[key];
-                                    hasComment = true;
-                                    const commentObj = (0, comment_1.commentConvertor)(cellComment, styleMapper.commentSintax.value, defaultCommentStyle);
-                                    if (commentObj.hasAuthour &&
-                                        typeof commentObj.author != "undefined") {
-                                        commentAuthor.push(commentObj.author.toString());
-                                    }
-                                    shapeCommentRowCol.push({
-                                        row: rowCount - 1,
-                                        col: keyIndex,
-                                    });
-                                    let authorId = commentAuthor.length;
-                                    if (commentObj.hasAuthour &&
-                                        typeof commentObj.author != "undefined") {
-                                        let auth = commentObj.author.toString();
-                                        const index = commentAuthor.indexOf(auth);
-                                        if (index < 0) {
-                                            commentAuthor.push(auth);
-                                        }
-                                        else {
-                                            authorId = index;
-                                        }
-                                    }
-                                    commentString += (0, comment_1.generateCommentTag)(refString, commentObj.commentStr, commentObj.commentStyl, authorId);
+                            }
+                            if (typeof mData.comment == "object" && key in mData.comment) {
+                                const cellComment = mData.comment[key];
+                                hasComment = true;
+                                const commentObj = (0, comment_1.commentConvertor)(cellComment, styleMapper.commentSintax.value, defaultCommentStyle);
+                                if (commentObj.hasAuthour &&
+                                    typeof commentObj.author != "undefined") {
+                                    commentAuthor.push(commentObj.author.toString());
                                 }
-                                const formula = formulaSheetObj && formulaSheetObj[refString];
-                                if (formula) {
-                                    sheetDataString += (0, generate_formula_cell_1.generateCellRowCol)(refString, formula).cell;
-                                    delete formulaSheetObj[refString];
-                                }
-                                else {
-                                    if (typeof dataEl == "string") {
-                                        sheetDataString +=
-                                            '<c r="' +
-                                                cols[keyIndex] +
-                                                rowCount +
-                                                '" t="s" ' +
-                                                (cellStyle && data.styles && data.styles[cellStyle]
-                                                    ? 's="' + data.styles[cellStyle].index + '"'
-                                                    : "") +
-                                                "><v>" +
-                                                sharedStringIndex +
-                                                "</v></c>";
-                                        if (typeof sheetData.multiStyleConditin == "function") {
-                                            const multi = sheetData.multiStyleConditin(dataEl, mData, key, rowCount, keyIndex, false);
-                                            if (multi) {
-                                                if (!("multiStyleValue" in mData) ||
-                                                    typeof mData.multiStyleValue == "undefined") {
-                                                    mData.multiStyleValue = {};
-                                                }
-                                                mData.multiStyleValue[key] = multi;
-                                            }
-                                        }
-                                        if ("multiStyleValue" in mData &&
-                                            mData.multiStyleValue &&
-                                            key in mData.multiStyleValue) {
-                                            sharedString += (0, multi_value_1.generateMultiStyleValue)(mData.multiStyleValue[key], dataEl, styleMapper.commentSintax.value, cellStyle ? cellStyle : "", sheetData.useSplitBaseOnMatch);
-                                        }
-                                        else {
-                                            sharedString += "<si><t>" + dataEl + "</t></si>";
-                                        }
-                                        sharedStringMap[dataEl] = dataEl;
-                                        sharedStringIndex++;
+                                shapeCommentRowCol.push({
+                                    row: rowCount - 1,
+                                    col: keyIndex,
+                                });
+                                let authorId = commentAuthor.length;
+                                if (commentObj.hasAuthour &&
+                                    typeof commentObj.author != "undefined") {
+                                    let auth = commentObj.author.toString();
+                                    const index = commentAuthor.indexOf(auth);
+                                    if (index < 0) {
+                                        commentAuthor.push(auth);
                                     }
                                     else {
-                                        sheetDataString +=
-                                            '<c r="' +
-                                                cols[keyIndex] +
-                                                rowCount +
-                                                '" ' +
-                                                (cellStyle && data.styles && data.styles[cellStyle]
-                                                    ? 's="' + data.styles[cellStyle].index + '"'
-                                                    : "") +
-                                                "><v>" +
-                                                dataEl +
-                                                "</v></c>";
+                                        authorId = index;
                                     }
+                                }
+                                commentString += (0, comment_1.generateCommentTag)(refString, commentObj.commentStr, commentObj.commentStyl, authorId);
+                            }
+                            const formula = formulaSheetObj && formulaSheetObj[refString];
+                            if (formula) {
+                                sheetDataString += (0, generate_formula_cell_1.generateCellRowCol)(refString, formula).cell;
+                                delete formulaSheetObj[refString];
+                            }
+                            else {
+                                if (typeof dataEl == "string") {
+                                    sheetDataString +=
+                                        '<c r="' +
+                                            cols[keyIndex] +
+                                            rowCount +
+                                            '" t="s" ' +
+                                            (cellStyle && data.styles && data.styles[cellStyle]
+                                                ? 's="' + data.styles[cellStyle].index + '"'
+                                                : "") +
+                                            "><v>" +
+                                            sharedStringIndex +
+                                            "</v></c>";
+                                    if (typeof sheetData.multiStyleConditin == "function") {
+                                        const multi = sheetData.multiStyleConditin(dataEl, mData, key, rowCount, keyIndex, false);
+                                        if (multi) {
+                                            if (!("multiStyleValue" in mData) ||
+                                                typeof mData.multiStyleValue == "undefined") {
+                                                mData.multiStyleValue = {};
+                                            }
+                                            mData.multiStyleValue[key] = multi;
+                                        }
+                                    }
+                                    if ("multiStyleValue" in mData &&
+                                        mData.multiStyleValue &&
+                                        key in mData.multiStyleValue) {
+                                        sharedString += (0, multi_value_1.generateMultiStyleValue)(mData.multiStyleValue[key], dataEl, styleMapper.commentSintax.value, cellStyle ? cellStyle : "", sheetData.useSplitBaseOnMatch);
+                                    }
+                                    else {
+                                        sharedString += "<si><t>" + (0, special_character_1.spCh)(dataEl) + "</t></si>";
+                                    }
+                                    sharedStringMap[dataEl] = dataEl;
+                                    sharedStringIndex++;
+                                }
+                                else {
+                                    sheetDataString +=
+                                        '<c r="' +
+                                            cols[keyIndex] +
+                                            rowCount +
+                                            '" ' +
+                                            (cellStyle && data.styles && data.styles[cellStyle]
+                                                ? 's="' + data.styles[cellStyle].index + '"'
+                                                : "") +
+                                            "><v>" +
+                                            dataEl +
+                                            "</v></c>";
                                 }
                             }
                         });
@@ -817,6 +820,7 @@ function generateExcel(data) {
             const filterMode = sheetData.sortAndfilter ? 'filterMode="1"' : "";
             let hasImages = false;
             let drawersContent = "";
+            let drawersRels = "";
             if (imagePromise) {
                 hasImages = true;
                 yield imagePromise.then((res) => {
@@ -861,12 +865,6 @@ function generateExcel(data) {
                         }
                         if (typeof to == "string" && to.length >= 2) {
                             var p = (0, excel_util_1.getColRowBaseOnRefString)(to, cols);
-                            // if (p.row == result.start.row) {
-                            //     p.row += 1
-                            // }
-                            // if (p.col == result.start.col) {
-                            //     p.col += 1
-                            // }
                             p.row += 1;
                             p.col += 1;
                             result.end = Object.assign({}, p);
@@ -890,88 +888,132 @@ function generateExcel(data) {
                             }
                         }
                         if (type == "one") {
-                            drawersContent += `<xdr:oneCellAnchor>
-        <xdr:from>
-            <xdr:col>${result.start.col}</xdr:col>
-            <xdr:colOff>${result.start.mT}</xdr:colOff>
-            <xdr:row>${result.start.row}</xdr:row>
-            <xdr:rowOff>${result.start.mL}</xdr:rowOff>
-        </xdr:from>
-        <xdr:ext cx="${extent.cx}" cy="${extent.cy}"/>
-        <xdr:pic>
-            <xdr:nvPicPr>
-                <xdr:cNvPr id="${index}" name="Picture ${index}">
-                </xdr:cNvPr>
-                <xdr:cNvPicPr preferRelativeResize="0" />
-            </xdr:nvPicPr>
-            <xdr:blipFill>
-                <a:blip
-                    xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"
-                    r:embed="rId${index}">
-                </a:blip>
-                <a:stretch>
-                    <a:fillRect />
-                </a:stretch>
-            </xdr:blipFill>
-            <xdr:spPr>
-                <a:prstGeom prst="rect">
-                    <a:avLst />
-                </a:prstGeom>
-                <a:noFill />
-            </xdr:spPr>
-        </xdr:pic>
-        <xdr:clientData />
-    </xdr:oneCellAnchor>`;
+                            drawersContent +=
+                                "<xdr:oneCellAnchor>" +
+                                    "<xdr:from>" +
+                                    "<xdr:col>" +
+                                    result.start.col +
+                                    "</xdr:col>" +
+                                    "<xdr:colOff>" +
+                                    result.start.mT +
+                                    "</xdr:colOff>" +
+                                    "<xdr:row>" +
+                                    result.start.row +
+                                    "</xdr:row>" +
+                                    "<xdr:rowOff>" +
+                                    result.start.mL +
+                                    "</xdr:rowOff>" +
+                                    "</xdr:from>" +
+                                    '<xdr:ext cx="' +
+                                    extent.cx +
+                                    '" cy="' +
+                                    extent.cy +
+                                    '"/>' +
+                                    "<xdr:pic>" +
+                                    "<xdr:nvPicPr>" +
+                                    '<xdr:cNvPr id="' +
+                                    index +
+                                    '" name="Picture ' +
+                                    index +
+                                    '">' +
+                                    "</xdr:cNvPr>" +
+                                    '<xdr:cNvPicPr preferRelativeResize="0" />' +
+                                    "</xdr:nvPicPr>" +
+                                    "<xdr:blipFill>" +
+                                    '<a:blip xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" r:embed="rId' +
+                                    index +
+                                    '">' +
+                                    "</a:blip>" +
+                                    "<a:stretch>" +
+                                    "<a:fillRect />" +
+                                    "</a:stretch>" +
+                                    "</xdr:blipFill>" +
+                                    "<xdr:spPr>" +
+                                    '<a:prstGeom prst="rect">' +
+                                    "<a:avLst />" +
+                                    "</a:prstGeom>" +
+                                    "<a:noFill />" +
+                                    "</xdr:spPr>" +
+                                    "</xdr:pic>" +
+                                    "<xdr:clientData />" +
+                                    "</xdr:oneCellAnchor>";
                         }
                         else {
-                            drawersContent += `<xdr:twoCellAnchor editAs="oneCell">
-        <xdr:from>
-            <xdr:col>${result.start.col}</xdr:col>
-            <xdr:colOff>${result.start.mT}</xdr:colOff>
-            <xdr:row>${result.start.row}</xdr:row>
-            <xdr:rowOff>${result.start.mL}</xdr:rowOff>
-        </xdr:from>
-        <xdr:to>
-            <xdr:col>${result.end.col}</xdr:col>
-            <xdr:colOff>${result.end.mB}</xdr:colOff>
-            <xdr:row>${result.end.row}</xdr:row>
-            <xdr:rowOff>${result.end.mR}</xdr:rowOff>
-        </xdr:to>
-        <xdr:pic>
-            <xdr:nvPicPr>
-                <xdr:cNvPr id="${index}" name="Picture ${index}">
-                </xdr:cNvPr>
-                <xdr:cNvPicPr preferRelativeResize="0" />
-            </xdr:nvPicPr>
-            <xdr:blipFill>
-                <a:blip
-                    xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"
-                    r:embed="rId${index}">
-                </a:blip>
-                <a:stretch>
-                    <a:fillRect />
-                </a:stretch>
-            </xdr:blipFill>
-            <xdr:spPr> 
-                <a:prstGeom prst="rect">
-                    <a:avLst />
-                </a:prstGeom>
-                <a:noFill />
-            </xdr:spPr>
-        </xdr:pic>
-        <xdr:clientData />
-    </xdr:twoCellAnchor>`;
+                            drawersContent +=
+                                '<xdr:twoCellAnchor editAs="oneCell">' +
+                                    "<xdr:from>" +
+                                    "<xdr:col>" +
+                                    result.start.col +
+                                    "</xdr:col>" +
+                                    "<xdr:colOff>" +
+                                    result.start.mT +
+                                    "</xdr:colOff>" +
+                                    "<xdr:row>" +
+                                    result.start.row +
+                                    "</xdr:row>" +
+                                    "<xdr:rowOff>" +
+                                    result.start.mL +
+                                    "</xdr:rowOff>" +
+                                    "</xdr:from>" +
+                                    "<xdr:to>" +
+                                    "<xdr:col>" +
+                                    result.end.col +
+                                    "</xdr:col>" +
+                                    "<xdr:colOff>" +
+                                    result.end.mB +
+                                    "</xdr:colOff>" +
+                                    "<xdr:row>" +
+                                    result.end.row +
+                                    "</xdr:row>" +
+                                    "<xdr:rowOff>" +
+                                    result.end.mR +
+                                    "</xdr:rowOff>" +
+                                    "</xdr:to>" +
+                                    "<xdr:pic>" +
+                                    "<xdr:nvPicPr>" +
+                                    '<xdr:cNvPr id="' +
+                                    index +
+                                    '" name="Picture ' +
+                                    index +
+                                    '">' +
+                                    "</xdr:cNvPr>" +
+                                    '<xdr:cNvPicPr preferRelativeResize="0" />' +
+                                    "</xdr:nvPicPr>" +
+                                    "<xdr:blipFill>" +
+                                    '<a:blip xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" r:embed="rId' +
+                                    index +
+                                    '">' +
+                                    "</a:blip>" +
+                                    "<a:stretch>" +
+                                    "<a:fillRect />" +
+                                    "</a:stretch>" +
+                                    "</xdr:blipFill>" +
+                                    "<xdr:spPr>" +
+                                    '<a:prstGeom prst="rect">' +
+                                    "<a:avLst />" +
+                                    "</a:prstGeom>" +
+                                    "<a:noFill />" +
+                                    "</xdr:spPr>" +
+                                    "</xdr:pic>" +
+                                    "<xdr:clientData />" +
+                                    "</xdr:twoCellAnchor>";
                         }
                         const name = "image" + index + "." + imageType;
                         xl_media_Folder === null || xl_media_Folder === void 0 ? void 0 : xl_media_Folder.file(name, v);
-                        drawerStr += `<Relationship Id="rId${index}"
-        Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image"
-        Target="../media/${name}" />`;
+                        drawerStr +=
+                            '<Relationship Id="rId' +
+                                index +
+                                '" ' +
+                                'Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" ' +
+                                'Target="../media/' +
+                                name +
+                                '" />';
                     });
-                    xl_drawings_relsFolder === null || xl_drawings_relsFolder === void 0 ? void 0 : xl_drawings_relsFolder.file("drawing1.xml.rels", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
-    ${drawerStr}
-</Relationships>`);
+                    drawersRels =
+                        '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
+                            '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+                            drawerStr +
+                            "</Relationships>";
                 });
             }
             mergesCellArray = [...new Set(mergesCellArray)];
@@ -982,6 +1024,7 @@ function generateExcel(data) {
                 sheetDataString,
                 hasComment,
                 drawersContent,
+                drawersRels,
                 hasImages,
                 commentString,
                 commentAuthor,
@@ -1126,104 +1169,104 @@ function generateExcel(data) {
             const sh = mapData[k];
             let sheetRelContentStr = "";
             if (sh.hasImages) {
-                const drawerName = `drawing${sheetDrawers.length + 1}.xml`;
+                const drawerName = "drawing" + (sheetDrawers.length + 1) + ".xml";
                 sheetDrawers.push(drawerName);
-                xl_drawingsFolder === null || xl_drawingsFolder === void 0 ? void 0 : xl_drawingsFolder.file(drawerName, `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<xdr:wsDr xmlns:xdr="http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing"
-    xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"
-    xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"
-    xmlns:c="http://schemas.openxmlformats.org/drawingml/2006/chart"
-    xmlns:cx="http://schemas.microsoft.com/office/drawing/2014/chartex"
-    xmlns:cx1="http://schemas.microsoft.com/office/drawing/2015/9/8/chartex"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:dgm="http://schemas.openxmlformats.org/drawingml/2006/diagram"
-    xmlns:x3Unk="http://schemas.microsoft.com/office/drawing/2010/slicer"
-    xmlns:sle15="http://schemas.microsoft.com/office/drawing/2012/slicer"
->
-${sh.drawersContent}
-</xdr:wsDr>`);
-                sheetRelContentStr += `<Relationship Id="rId2"
-        Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing"
-        Target="../drawings/${drawerName}" />`;
+                xl_drawingsFolder === null || xl_drawingsFolder === void 0 ? void 0 : xl_drawingsFolder.file(drawerName, '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
+                    '<xdr:wsDr xmlns:xdr="http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing" ' +
+                    ' xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" ' +
+                    ' xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" ' +
+                    ' xmlns:c="http://schemas.openxmlformats.org/drawingml/2006/chart" ' +
+                    ' xmlns:cx="http://schemas.microsoft.com/office/drawing/2014/chartex" ' +
+                    ' xmlns:cx1="http://schemas.microsoft.com/office/drawing/2015/9/8/chartex" ' +
+                    ' xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" ' +
+                    ' xmlns:dgm="http://schemas.openxmlformats.org/drawingml/2006/diagram" ' +
+                    ' xmlns:x3Unk="http://schemas.microsoft.com/office/drawing/2010/slicer" ' +
+                    ' xmlns:sle15="http://schemas.microsoft.com/office/drawing/2012/slicer">' +
+                    sh.drawersContent +
+                    "</xdr:wsDr>");
+                xl_drawings_relsFolder === null || xl_drawings_relsFolder === void 0 ? void 0 : xl_drawings_relsFolder.file(drawerName + ".rels", sh.drawersRels.toString());
+                sheetRelContentStr +=
+                    '<Relationship Id="rId2" ' +
+                        ' Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing" ' +
+                        ' Target="../drawings/' +
+                        drawerName +
+                        '" />';
             }
             if (sh.hasComment) {
                 commentId.push(iCo + 1);
                 let aurt = sh.commentAuthor;
-                xlFolder === null || xlFolder === void 0 ? void 0 : xlFolder.file(`comments${iCo + 1}.xml`, `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<comments xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"
-	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-     xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
-	<authors>
-        ${Array.isArray(aurt) && aurt.length > 0
-                    ? aurt.reduce((res, currr) => res + "<author>" + currr + "</author>", "")
-                    : `<author></author>`}
-	</authors>
-	<commentList>
-		${sh.commentString}
-	</commentList>
-</comments>`);
-                sheetRelContentStr += `  <Relationship Id="rId1"
-        Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments"
-        Target="../comments${iCo + 1}.xml" />
-    <Relationship Id="rId3"
-        Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing"
-        Target="../drawings/vmlDrawing${iCo + 1}.vml" />`;
-                //       xl_worksheets_relsFolder?.file(
-                //         "sheet" + (iCo + 1) + ".xml.rels",
-                //         `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-                // <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
-                //     <Relationship Id="rId1"
-                //         Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments"
-                //         Target="../comments${iCo + 1}.xml" />
-                //     ${
-                //       true
-                //         ? ""
-                //         : `<Relationship Id="rId2"
-                //         Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing"
-                //         Target="../drawings/drawing${iCo + 1}.xml" />`
-                //     }
-                //     <Relationship Id="rId3"
-                //         Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing"
-                //         Target="../drawings/vmlDrawing${iCo + 1}.vml" />
-                // </Relationships>`
-                //       );
-                xl_drawingsFolder === null || xl_drawingsFolder === void 0 ? void 0 : xl_drawingsFolder.file("vmlDrawing" + (iCo + 1) + ".vml", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<xml xmlns:p="http://schemas.openxmlformats.org/presentationml/2006/main" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:oa="urn:schemas-microsoft-com:office:activation" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:pvml="urn:schemas-microsoft-com:office:powerpoint">
- <o:shapelayout v:ext="edit">
-  <o:idmap v:ext="edit" data="1"/>
- </o:shapelayout><v:shapetype id="_x0000_t202" coordsize="21600,21600" o:spt="202"
-  path="m,l,21600r21600,l21600,xe">
-  <v:stroke joinstyle="miter"/>
-  <v:path gradientshapeok="t" o:connecttype="rect"/>
- </v:shapetype>${sh.shapeCommentRowCol.reduce((res, curr) => {
-                    return (res +
-                        `<v:shape id="_x0000_s1025" type="#_x0000_t202" style='position:absolute;
-  margin-left:77.25pt;margin-top:23.25pt;width:264pt;height:42.75pt;z-index:1;
-  visibility:hidden' fillcolor="#ffffe1">
-  <v:fill color2="#ffffe1"/>
-  <v:shadow on="t" color="black" obscured="t"/>
-  <v:path o:connecttype="none"/>
-  <v:textbox>
-   <div style='text-align:left'></div>
-  </v:textbox>
-  <x:ClientData ObjectType="Note">
-   <x:MoveWithCells/>
-   <x:SizeWithCells/>
-   <x:Anchor>
-    1, 15, 1, 10, 5, 15, 4, 4</x:Anchor>
-   <x:AutoFill>False</x:AutoFill>
-   <x:Row>${curr.row}</x:Row>
-   <x:Column>${curr.col}</x:Column>
-  </x:ClientData>
- </v:shape>`);
-                }, "")}
- </xml>`);
+                xlFolder === null || xlFolder === void 0 ? void 0 : xlFolder.file("comments" + (iCo + 1) + ".xml", '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
+                    '<comments xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" ' +
+                    ' xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" ' +
+                    ' xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">' +
+                    "<authors>" +
+                    (Array.isArray(aurt) && aurt.length > 0
+                        ? aurt.reduce((res, currr) => res + "<author>" + currr + "</author>", "")
+                        : "<author></author>") +
+                    "</authors>" +
+                    "<commentList>" +
+                    sh.commentString +
+                    "</commentList>" +
+                    "</comments>");
+                sheetRelContentStr +=
+                    '<Relationship Id="rId1" ' +
+                        'Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments" ' +
+                        'Target="../comments' +
+                        (iCo + 1) +
+                        '.xml" />' +
+                        '<Relationship Id="rId3" ' +
+                        'Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing" ' +
+                        'Target="../drawings/vmlDrawing' +
+                        (iCo + 1) +
+                        '.vml" />';
+                xl_drawingsFolder === null || xl_drawingsFolder === void 0 ? void 0 : xl_drawingsFolder.file("vmlDrawing" + (iCo + 1) + ".vml", '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
+                    '<xml xmlns:p="http://schemas.openxmlformats.org/presentationml/2006/main" ' +
+                    'xmlns:v="urn:schemas-microsoft-com:vml" ' +
+                    'xmlns:o="urn:schemas-microsoft-com:office:office" ' +
+                    'xmlns:oa="urn:schemas-microsoft-com:office:activation" ' +
+                    'xmlns:x="urn:schemas-microsoft-com:office:excel" ' +
+                    'xmlns:pvml="urn:schemas-microsoft-com:office:powerpoint">' +
+                    '  <o:shapelayout v:ext="edit">' +
+                    '    <o:idmap v:ext="edit" data="1"/>' +
+                    "  </o:shapelayout>" +
+                    '  <v:shapetype id="_x0000_t202" coordsize="21600,21600" o:spt="202" ' +
+                    '    path="m,l,21600r21600,l21600,xe">' +
+                    '    <v:stroke joinstyle="miter"/>' +
+                    '    <v:path gradientshapeok="t" o:connecttype="rect"/>' +
+                    "  </v:shapetype>" +
+                    sh.shapeCommentRowCol.reduce((res, curr) => {
+                        return (res +
+                            '<v:shape id="_x0000_s1025" type="#_x0000_t202" style=\'position:absolute;' +
+                            "margin-left:77.25pt;margin-top:23.25pt;width:264pt;height:42.75pt;z-index:1;" +
+                            'visibility:hidden\' fillcolor="#ffffe1">' +
+                            '  <v:fill color2="#ffffe1"/>' +
+                            '  <v:shadow on="t" color="black" obscured="t"/>' +
+                            '  <v:path o:connecttype="none"/>' +
+                            "  <v:textbox>" +
+                            "   <div style='text-align:left'></div>" +
+                            "  </v:textbox>" +
+                            '  <x:ClientData ObjectType="Note">' +
+                            "   <x:MoveWithCells/>" +
+                            "   <x:SizeWithCells/>" +
+                            "   <x:Anchor>" +
+                            "    1, 15, 1, 10, 5, 15, 4, 4</x:Anchor>" +
+                            "   <x:AutoFill>False</x:AutoFill>" +
+                            "   <x:Row>" +
+                            curr.row +
+                            "</x:Row>" +
+                            "   <x:Column>" +
+                            curr.col +
+                            "</x:Column>" +
+                            "  </x:ClientData>" +
+                            "</v:shape>");
+                    }, "") +
+                    "</xml>");
             }
             if (sh.hasImages || sh.hasComment) {
-                xl_worksheets_relsFolder === null || xl_worksheets_relsFolder === void 0 ? void 0 : xl_worksheets_relsFolder.file("sheet" + (iCo + 1) + ".xml.rels", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
-   ${sheetRelContentStr}
-</Relationships>`);
+                xl_worksheets_relsFolder === null || xl_worksheets_relsFolder === void 0 ? void 0 : xl_worksheets_relsFolder.file("sheet" + (iCo + 1) + ".xml.rels", '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
+                    '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"> ' +
+                    sheetRelContentStr +
+                    "</Relationships>");
             }
             xl_worksheetsFolder === null || xl_worksheetsFolder === void 0 ? void 0 : xl_worksheetsFolder.file(sh.key + ".xml", '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
                 '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"' +
@@ -1271,10 +1314,8 @@ ${sh.drawersContent}
             }
             else {
                 zip.generateAsync({ type: "blob" }).then(function (content) {
-                    // see FileSaver.js
                     Promise.resolve().then(() => __importStar(require("file-saver"))).then((module) => {
                         const { saveAs } = module;
-                        // Now you can use the saveAs function
                         saveAs(content, (data.fileName ? data.fileName : "tableRecord") + ".xlsx");
                     });
                 });

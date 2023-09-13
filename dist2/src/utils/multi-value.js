@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.generateMultiStyleValue = void 0;
+const special_character_1 = require("./special-character");
 function splitBaseOnMatch(matchResult, str) {
     let reduceDefault = {
         result: [],
@@ -181,42 +182,44 @@ function generateMultiStyleValue(multiStyle, text, styles, defStyleId, useSplitB
             const matchElement = matchValue[index];
             const styleID = styleMatchValue[index];
             if (element.length > 0) {
-                result += `<r>
-        ${elementStyle}
-            <t xml:space="preserve" >${element}</t>
-        </r>`;
+                result +=
+                    "<r>" +
+                        " " +
+                        elementStyle +
+                        ' <t xml:space="preserve">' +
+                        element +
+                        "</t>" +
+                        "</r>";
             }
             if (matchElement.length > 0) {
-                result += `
-                            <r>
-           ${styles[styleID]}
-            <t xml:space="preserve" >${matchElement}</t>
-        </r>
-                    `;
+                result +=
+                    " <r> " +
+                        styles[styleID] +
+                        ' <t xml:space="preserve">' +
+                        matchElement +
+                        "</t>" +
+                        " </r>";
             }
         }
         if (splitValue[length].length > 0) {
-            result = `<si>
-                    ${result}
-                    <r>
-        ${elementStyle}
-            <t>${splitValue[length]}</t>
-        </r>
-                    </si>`;
+            result =
+                "<si>" +
+                    result +
+                    "<r>" +
+                    elementStyle +
+                    "<t>" +
+                    (0, special_character_1.spCh)(splitValue[length]) +
+                    "</t>" +
+                    "</r>" +
+                    "</si>";
         }
         else {
-            result = `<si>
-                    ${result}
-                    </si>`;
+            result = "<si>" + result + "</si>";
         }
         return result;
     }
     else {
-        return `
-<si>
-    <t>${text}</t>
-</si>
-`;
+        return "<si><t>" + (0, special_character_1.spCh)(text) + "</t></si>";
     }
 }
 exports.generateMultiStyleValue = generateMultiStyleValue;

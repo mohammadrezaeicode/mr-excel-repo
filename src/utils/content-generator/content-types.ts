@@ -23,23 +23,31 @@ export function contentTypeGenerator(
       if (curr == "svg") {
         return (
           res +
-          `<Default Extension="png" ContentType="image/png"/>
-                    <Default Extension="svg" ContentType="image/svg+xml"/>`
+          '<Default Extension="png" ContentType="image/png"/>' +
+          ' <Default Extension="svg" ContentType="image/svg+xml"/>'
         );
       } else if (curr == "jpeg" || curr == "jpg") {
-        return res + `<Default Extension="${curr}" ContentType="image/jpeg"/>`;
+        return (
+          res + '<Default Extension="' + curr + '" ContentType="image/jpeg"/>'
+        );
       } else {
         return (
-          res + `<Default Extension="${curr}" ContentType="image/${curr}" />`
+          res +
+          '<Default Extension="' +
+          curr +
+          '" ContentType="image/' +
+          curr +
+          '" />'
         );
       }
     }, "") +
     commentId.reduce((res, curr) => {
       return (
         res +
-        `
-    <Override PartName="/xl/comments${curr}.xml"
-        ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.comments+xml" />`
+        '<Override PartName="/xl/comments' +
+        curr +
+        '.xml"' +
+        ' ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.comments+xml" />'
       );
     }, "") +
     sheetContentType +
@@ -51,8 +59,10 @@ export function contentTypeGenerator(
     sheetDrawers.reduce((res, cu) => {
       return (
         res +
-        `<Override PartName="/xl/drawings/${cu}"
-        ContentType="application/vnd.openxmlformats-officedocument.drawing+xml" />`
+        '<Override PartName="/xl/drawings/' +
+        cu +
+        '"' +
+        ' ContentType="application/vnd.openxmlformats-officedocument.drawing+xml" />'
       );
     }, "") +
     ' <Override PartName="/docProps/app.xml" ' +

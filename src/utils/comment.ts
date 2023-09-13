@@ -40,9 +40,7 @@ export function commentConvertor(
   };
 }
 export function splitBaseOnbreackline(str: string): string[] {
-  //     var str = `your text
-  //    that spans
-  //    multiple lines`
+
 
   // Split the string on \n or \r characters
   var separateLines = str.split(/\r?\n|\r|\n/g);
@@ -55,11 +53,14 @@ export function generateCommentTag(
   style: string,
   auIndex: number
 ) {
-  let result = `<comment ref="${ref}" authorId="${Math.max(
-    0,
-    auIndex - 1
-  )}" shapeId="0">
-            <text>`;
+  let result =
+    '<comment ref="' +
+    ref +
+    '" authorId="' +
+    Math.max(0, auIndex - 1) +
+    '" shapeId="0">' +
+    " <text>";
+;
   let bac = "";
   comment.forEach((v, vindex) => {
     let pr = "";
@@ -78,10 +79,11 @@ export function generateCommentTag(
   result += "</text></comment>";
   return result;
 }
-export const defaultCellCommentStyle = `<rPr>
-                        <b />
-                        <sz val="9" />
-                        <color rgb="000000" />
-                        <rFont val="Tahoma" />
-                    </rPr>
-            `;
+export const defaultCellCommentStyle =
+  "<rPr>" +
+  " <b />" +
+  ' <sz val="9" />' +
+  ' <color rgb="000000" />' +
+  ' <rFont val="Tahoma" />' +
+  "</rPr>";
+;

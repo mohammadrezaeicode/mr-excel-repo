@@ -1,5 +1,21 @@
 # Changelog
 
+## Version 2.11.0 (2023-09-13)
+
+### Bug Fixes
+
+- bug related to string with special character(&,<,...)
+
+### Improvement
+
+- improvement in generate file
+
+## Version 2.10.0 (2023-09-12)
+
+### improvement
+
+- Data Can Be Undefined
+
 ## Version 2.9.0 (2023-09-10)
 
 ### New Features
