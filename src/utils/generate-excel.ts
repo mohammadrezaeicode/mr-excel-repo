@@ -1,5 +1,6 @@
 import {
   AlignmentOptionKey,
+  ConditinalFormating,
   ExcelTable,
   FormatMap,
   Formula,
@@ -28,6 +29,15 @@ import { toDataURL2 } from "./image";
 import { getColRowBaseOnRefString } from "./excel-util";
 import { spCh } from "./special-character";
 export async function generateExcel(data: ExcelTable) {
+  const operatorMap: {
+    [key: string]: string;
+  } = {
+    lt: "lessThan",
+    gt: "greaterThan",
+    between: "between",
+    ct: "containsText",
+    eq: "equal",
+  };
   let cols: string[] = [...colsDef];
   if (data.numberOfColumn && data.numberOfColumn > 25) {
     cols = generateColumnName(cols, data.numberOfColumn);
@@ -54,9 +64,33 @@ export async function generateExcel(data: ExcelTable) {
   }
   const styleKeys = Object.keys(data.styles);
   const defaultCommentStyle = defaultCellCommentStyle;
+  const addCF = data.activateConditinalFormating
+    ? data.activateConditinalFormating
+    : false;
+  const cFMapIndex: {
+    [index: string]: number;
+  } = {};
   let styleMapper: StyleMapper = styleKeys.reduce(
     (res: StyleMapper, cur, index) => {
       const styl = data.styles![cur];
+      if (
+        addCF &&
+        typeof styl.type == "string" &&
+        styl.type &&
+        (styl.type == "conditinalFormating" || styl.type.toUpperCase() == "CF")
+      ) {
+        cFMapIndex[cur] = res.conditinalFormating.count;
+        let color = convertToHex(styl.color, data.backend);
+        let bgColor = convertToHex(styl.backgroundColor, data.backend);
+        res.conditinalFormating.value +=
+          '<dxf><font><color rgb="' +
+          color +
+          '"/></font><fill> <patternFill> <bgColor rgb="' +
+          bgColor +
+          '"/></patternFill></fill></dxf>';
+        res.conditinalFormating.count++;
+        return res;
+      }
       const indexes = {
         fillIndex: 0,
         fontIndex: 0,
@@ -236,6 +270,11 @@ export async function generateExcel(data: ExcelTable) {
       return res;
     },
     {
+      conditinalFormating: {
+        count: addCF ? 1 : 0,
+        value:
+          '<dxf><font><color rgb="FF9C0006"/></font><fill> <patternFill> <bgColor rgb="FFFFC7CE"/></patternFill></fill></dxf>',
+      },
       commentSintax: {
         value: {},
       },
@@ -262,7 +301,7 @@ export async function generateExcel(data: ExcelTable) {
     }
   );
 
-  xlFolder?.file("styles.xml", styleGenerator(styleMapper));
+  xlFolder?.file("styles.xml", styleGenerator(styleMapper, addCF));
 
   let sheetContentType =
     '<Override ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml" PartName="/xl/worksheets/sheet1.xml" />';
@@ -294,12 +333,17 @@ export async function generateExcel(data: ExcelTable) {
     let sheetSortFilter = "";
     let mergesCellArray: string[] = Object.assign([], sheetData.merges);
     let formulaSheetObj: Formula = Object.assign({}, sheetData.formula);
+    let conditinalFormating: ConditinalFormating[] = Object.assign(
+      [],
+      sheetData.conditinalFormating
+    );
     let hasComment = false;
     let commentAuthor: string[] = [];
     let commentString = "";
     let shapeCommentRowCol: ShapeRC[] = [];
     let objKey: string[] = [];
     let headerFormula: number[] = [];
+    let headerConditinalFormating: number[] = [];
     let mergeRowConditionMap: MergeRowConditionMap = {};
     let imagePromise;
     if (sheetData.images) {
@@ -437,6 +481,9 @@ export async function generateExcel(data: ExcelTable) {
         }
         if (v.formula) {
           headerFormula.push(innerIndex);
+        }
+        if (v.conditinalFormating) {
+          headerConditinalFormating.push(innerIndex);
         }
         objKey.push(v.label);
         if (
@@ -682,7 +729,12 @@ export async function generateExcel(data: ExcelTable) {
             if (shiftCount) {
               keyIndex += shiftCount;
             }
-            let dataEl = mData[key];
+            const cellValue = mData[key] * 1;
+            let dataEl =
+              sheetData.convertStringToNumber && !isNaN(cellValue)
+                ? cellValue
+                : mData[key];
+
             let cellStyle = rowStyle;
             if (
               sheetData.styleCellCondition &&
@@ -900,6 +952,19 @@ export async function generateExcel(data: ExcelTable) {
               ? { styleId: header.formula!.styleId }
               : {}),
           };
+        });
+      }
+      if (headerConditinalFormating.length > 0) {
+        headerConditinalFormating.forEach((v) => {
+          const header = sheetData.headers[v];
+          if (!header.conditinalFormating) {
+            return;
+          }
+          conditinalFormating.push({
+            ...header.conditinalFormating,
+            start: sheetData.withoutHeader ? cols[v] + "1" : cols[v] + "2",
+            end: cols[v] + "" + (rowCount - 1),
+          });
         });
       }
       if (formulaSheetObj) {
@@ -1177,6 +1242,164 @@ export async function generateExcel(data: ExcelTable) {
       });
     }
     mergesCellArray = [...new Set(mergesCellArray)];
+    let cFDataString: string = "";
+    let priorityCounter = 1;
+    if (conditinalFormating.length > 0) {
+      cFDataString = conditinalFormating.reduce((cf, cu) => {
+        if (cu.type == "cells") {
+          if (cu.operator == "ct") {
+            return (
+              cf +
+              `
+                    <conditionalFormatting sqref="${cu.start}:${cu.end}">
+    <cfRule type="containsText" dxfId="${
+      cu.styleId ? cFMapIndex[cu.styleId] : 0
+    }" priority="${
+                cu.priority ? cu.priority : priorityCounter++
+              }"  operator="containsText" text="${cu.value}">
+           <formula>NOT(ISERROR(SEARCH("${cu.value}",${cu.start})))</formula>
+    </cfRule>
+  </conditionalFormatting>`
+            );
+          }
+          if (
+            typeof cu.operator == "undefined" ||
+            typeof operatorMap[cu.operator] == "undefined"
+          ) {
+            return cf;
+          }
+          return (
+            cf +
+            `
+                    <conditionalFormatting sqref="${cu.start}:${cu.end}">
+    <cfRule type="cellIs" dxfId="${
+      cu.styleId ? cFMapIndex[cu.styleId] : 0
+    }" priority="${cu.priority ? cu.priority : priorityCounter++}" operator="${
+              operatorMap[cu.operator]
+            }">
+     ${
+       Array.isArray(cu.value)
+         ? cu.value.reduce((rC, cr) => {
+             return rC + `<formula>${cr.value}</formula>`;
+           }, "")
+         : `<formula>${cu.value}</formula>`
+     }
+    </cfRule>
+  </conditionalFormatting>`
+          );
+        } else if (cu.type == "top") {
+          return (
+            cf +
+            `<conditionalFormatting sqref="${cu.start}:${cu.end}">
+        <cfRule type="${cu.operator ? "aboveAverage" : "top10"}" dxfId="${
+              cu.styleId ? cFMapIndex[cu.styleId] : 0
+            }" priority="${cu.priority ? cu.priority : priorityCounter++}" ${
+              cu.bottom ? 'bottom="1"' : ""
+            } ${cu.percent ? 'percent="1"' : ""}  rank="${cu.value}" ${
+              cu.operator == "belowAverage" ? 'aboveAverage="0"' : ""
+            }/>
+    </conditionalFormatting>`
+          );
+        } else if (cu.type == "iconSet") {
+          let percentvalue = "";
+          if (typeof cu.operator == "undefined") {
+            return cf;
+          }
+          if (cu.operator.indexOf("5") == 0) {
+            percentvalue = `
+                <cfvo type="percent" val="0"/>
+                <cfvo type="percent" val="20"/>
+                <cfvo type="percent" val="40"/>
+                <cfvo type="percent" val="60"/>
+                <cfvo type="percent" val="80"/>`;
+          } else if (cu.operator.indexOf("4") == 0) {
+            percentvalue = `<cfvo type="percent" val="0"/>
+                <cfvo type="percent" val="25"/>
+                <cfvo type="percent" val="50"/>
+                <cfvo type="percent" val="75"/>`;
+          } else {
+            percentvalue = `<cfvo type="percent" val="0"/>
+                <cfvo type="percent" val="33"/>
+                <cfvo type="percent" val="67"/>`;
+          }
+          return (
+            cf +
+            `<conditionalFormatting sqref="${cu.start}:${cu.end}">
+        <cfRule type="iconSet" priority="${
+          cu.priority ? cu.priority : priorityCounter++
+        }">
+            <iconSet iconSet="${cu.operator}">
+                ${percentvalue}
+            </iconSet>
+        </cfRule>
+    </conditionalFormatting>`
+          );
+        } else if (cu.type == "colorScale") {
+          return (
+            cf +
+            `<conditionalFormatting sqref="${cu.start}:${cu.end}">
+        <cfRule type="colorScale" priority="${
+          cu.priority ? cu.priority : priorityCounter++
+        }">
+            <colorScale>
+                <cfvo type="min"/>
+                ${
+                  cu.operator == "percentile"
+                    ? `<cfvo type="percentile" val="${cu.value}"/>`
+                    : ""
+                }
+                <cfvo type="max"/>
+                ${
+                  cu.colors && Array.isArray(cu.colors)
+                    ? cu.colors.reduce((reColors, colorCu) => {
+                        return (
+                          reColors +
+                          `<color rgb="${convertToHex(
+                            colorCu,
+                            data.backend
+                          )}"/>`
+                        );
+                      }, "")
+                    : `<color rgb="FFF8696B"/>
+                <color rgb="FFFFEB84"/>
+                <color rgb="FF63BE7B"/>`
+                }
+            </colorScale>
+        </cfRule>
+    </conditionalFormatting>`
+          );
+        } else if (cu.type == "dataBar") {
+          return (
+            cf +
+            `<conditionalFormatting sqref="${cu.start}:${cu.end}">
+        <cfRule type="dataBar" priority="${
+          cu.priority ? cu.priority : priorityCounter++
+        }">
+            <dataBar>
+                <cfvo type="min"/>
+                <cfvo type="max"/>
+                ${
+                  cu.colors && Array.isArray(cu.colors)
+                    ? cu.colors.reduce((reColors, colorCu) => {
+                        return (
+                          reColors +
+                          `<color rgb="${convertToHex(
+                            colorCu,
+                            data.backend
+                          )}"/>`
+                        );
+                      }, "")
+                    : `<color rgb="FF638EC6"/>`
+                }
+            </dataBar>
+        </cfRule>
+    </conditionalFormatting>`
+          );
+        } else {
+          return cf;
+        }
+      }, "");
+    }
     mapData["sheet" + (index + 1)] = {
       indexId: indexId + 1,
       key: "sheet" + (index + 1),
@@ -1184,6 +1407,7 @@ export async function generateExcel(data: ExcelTable) {
       sheetDataString,
       hasComment,
       drawersContent,
+      cFDataString,
       drawersRels,
       hasImages,
       commentString,
@@ -1507,6 +1731,7 @@ export async function generateExcel(data: ExcelTable) {
         sh.protectionOption +
         sh.sheetSortFilter +
         sh.merges +
+        sh.cFDataString +
         (sh.hasImages ? '<drawing r:id="rId2" />' : "") +
         (sh.hasComment ? '<legacyDrawing r:id="rId3" />' : "") +
         "</worksheet>"

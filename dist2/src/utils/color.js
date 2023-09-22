@@ -79,7 +79,7 @@ function convertToHex(fgConvertor, backend) {
         const rgb = rgbToHex(fgConvertor);
         fgConvertor = rgb ? rgb : "";
     }
-    return fgConvertor;
+    return fgConvertor.replace("#", "");
 }
 exports.convertToHex = convertToHex;
 //# sourceMappingURL=color.js.map

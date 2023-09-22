@@ -31,6 +31,19 @@ declare interface Comment_2 {
 
 declare type CommentConditionFunction = (data: Header | string | number | undefined, object: null | Data, headerKey: string, rowIndex: number, colIndex: number, fromHeader: boolean) => Comment_2 | string | false | undefined | null;
 
+declare interface ConditinalFormating {
+    type: "cells" | "dataBar" | "iconSet" | "colorScale" | "top";
+    start: string;
+    end: string;
+    operator?: string;
+    value?: number | string;
+    priority?: number;
+    colors?: string[];
+    bottom?: boolean;
+    styleId?: string;
+    percent?: number;
+}
+
 export declare function convertTableToExcel(queryForTable?: string, table?: HTMLTableElement, keepStyle?: boolean, rowHeightScaleFunction?: RowHeightScaleFunction, colWidthScaleFunction?: ColWidthScaleFunction): Promise<string | number[] | Blob | Buffer | undefined>;
 
 declare interface Data extends DataOptions {
@@ -55,6 +68,7 @@ declare interface ExcelTableOption {
     notSave?: boolean;
     creator?: string;
     backend?: boolean;
+    activateConditinalFormating?: boolean;
     fileName?: string;
     generateType?: "nodebuffer" | "array" | "binarystring" | "base64";
     addDefaultTitleStyle?: boolean;
@@ -89,6 +103,7 @@ declare interface Header {
     size?: number;
     multiStyleValue?: MultiStyleValue;
     comment?: Comment_2 | string;
+    conditinalFormating?: ConditinalFormating;
     formula?: {
         type: FormulaType;
         styleId?: string;
@@ -150,8 +165,10 @@ declare interface Sheet extends SheetOption {
 
 declare interface SheetOption {
     withoutHeader?: boolean;
+    conditinalFormating?: ConditinalFormating[];
     multiStyleConditin?: MultiStyleConditinFunction;
     useSplitBaseOnMatch?: boolean;
+    convertStringToNumber?: boolean;
     images?: ImageTypes[];
     formula?: Formula;
     name?: string;
@@ -195,6 +212,7 @@ declare interface StyleBody {
     fg?: string;
     fontColor?: string;
     fontFamily?: string;
+    type?: string;
     size?: number;
     index?: number;
     alignment?: AlignmentOption;
@@ -204,6 +222,8 @@ declare interface StyleBody {
     underline?: boolean;
     italic?: boolean;
     doubleUnderline?: boolean;
+    color?: string;
+    backgroundColor?: string;
 }
 
 declare type StyleCellConditionFunction = (data: Header | string | number | undefined, object: Header | Data, colIndex: number, rowIndex: number, fromHeader: boolean, stylekeys: string[]) => string | null;

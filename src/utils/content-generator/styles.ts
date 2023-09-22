@@ -1,6 +1,6 @@
 import { StyleMapper } from "../../data-model/excel-table";
 
-export function styleGenerator(styles: StyleMapper) {
+export function styleGenerator(styles: StyleMapper, addCF: boolean) {
   return (
     '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
     '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"' +
@@ -70,8 +70,14 @@ export function styleGenerator(styles: StyleMapper) {
     " </cellXfs>" +
     ' <cellStyles count="1">' +
     ' <cellStyle xfId="0" name="Normal" builtinId="0" />' +
-    " </cellStyles>" +
-    ' <dxfs count="0" />' +
-    "</styleSheet>"
+    " </cellStyles> " +
+    (addCF
+      ? '<dxfs count="' +
+        styles.conditinalFormating.count +
+        '" >' +
+        styles.conditinalFormating.value +
+        "</dxfs>"
+      : '<dxfs count="0" />') +
+    " </styleSheet>"
   );
 }

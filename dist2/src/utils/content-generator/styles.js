@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.styleGenerator = void 0;
-function styleGenerator(styles) {
+function styleGenerator(styles, addCF) {
     return ('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
         '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"' +
         ' xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac"' +
@@ -70,9 +70,15 @@ function styleGenerator(styles) {
         " </cellXfs>" +
         ' <cellStyles count="1">' +
         ' <cellStyle xfId="0" name="Normal" builtinId="0" />' +
-        " </cellStyles>" +
-        ' <dxfs count="0" />' +
-        "</styleSheet>");
+        " </cellStyles> " +
+        (addCF
+            ? '<dxfs count="' +
+                styles.conditinalFormating.count +
+                '" >' +
+                styles.conditinalFormating.value +
+                "</dxfs>"
+            : '<dxfs count="0" />') +
+        " </styleSheet>");
 }
 exports.styleGenerator = styleGenerator;
 //# sourceMappingURL=styles.js.map

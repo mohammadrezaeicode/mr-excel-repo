@@ -1,6 +1,5 @@
 # Theme result Images
 
-
 ![black-white-text0](https://github.com/mohammadrezaeicode/open-screenshot-close/blob/main/done/bw0-400/black-white-text0.png?raw=true)
 
 ![black-white-text1](https://github.com/mohammadrezaeicode/open-screenshot-close/blob/main/done/bw0-400/black-white-text1.png?raw=true)

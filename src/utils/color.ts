@@ -86,5 +86,5 @@ export function convertToHex(
     const rgb = rgbToHex(fgConvertor);
     fgConvertor = rgb ? rgb : "";
   }
-  return fgConvertor;
+  return fgConvertor.replace("#", "");
 }

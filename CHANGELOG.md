@@ -1,5 +1,11 @@
 # Changelog
 
+##  Version 2.12.0 (2023-09-21)
+
+### New Features
+
+- We have added conditional formatting capabilities to the general base as well as to headers
+
 ## Version 2.11.0 (2023-09-13)
 
 ### Bug Fixes

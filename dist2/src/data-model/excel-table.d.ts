@@ -1,6 +1,18 @@
 export type ProtectionOption = {
     [key in ProtectionOptionKey]: "0" | "1" | 0 | 1;
 };
+export interface ConditinalFormating {
+    type: "cells" | "dataBar" | "iconSet" | "colorScale" | "top";
+    start: string;
+    end: string;
+    operator?: string;
+    value?: number | string;
+    priority?: number;
+    colors?: string[];
+    bottom?: boolean;
+    styleId?: string;
+    percent?: number;
+}
 export interface ImageTypes {
     url: string;
     from: string;
@@ -55,6 +67,7 @@ export interface Header {
     size?: number;
     multiStyleValue?: MultiStyleValue;
     comment?: Comment | string;
+    conditinalFormating?: ConditinalFormating;
     formula?: {
         type: FormulaType;
         styleId?: string;
@@ -118,8 +131,10 @@ export interface Title {
 }
 export interface SheetOption {
     withoutHeader?: boolean;
+    conditinalFormating?: ConditinalFormating[];
     multiStyleConditin?: MultiStyleConditinFunction;
     useSplitBaseOnMatch?: boolean;
+    convertStringToNumber?: boolean;
     images?: ImageTypes[];
     formula?: Formula;
     name?: string;
@@ -147,6 +162,10 @@ export interface HeaderRowOption {
     outlineLevel: "string";
 }
 export interface StyleMapper {
+    conditinalFormating: {
+        count: number;
+        value: string;
+    };
     commentSintax: {
         value: {
             [key: string]: string;
@@ -178,6 +197,7 @@ export interface StyleBody {
     fg?: string;
     fontColor?: string;
     fontFamily?: string;
+    type?: string;
     size?: number;
     index?: number;
     alignment?: AlignmentOption;
@@ -187,6 +207,8 @@ export interface StyleBody {
     underline?: boolean;
     italic?: boolean;
     doubleUnderline?: boolean;
+    color?: string;
+    backgroundColor?: string;
 }
 export interface Styles {
     [key: string]: StyleBody;
@@ -213,6 +235,7 @@ export interface ExcelTableOption {
     notSave?: boolean;
     creator?: string;
     backend?: boolean;
+    activateConditinalFormating?: boolean;
     fileName?: string;
     generateType?: "nodebuffer" | "array" | "binarystring" | "base64";
     addDefaultTitleStyle?: boolean;
