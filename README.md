@@ -3678,6 +3678,7 @@ ExcelTable.generateExcel(data);
 ![ex](https://github.com/mohammadrezaeicode/mr-excel-page-repo/blob/main/public/img/ex19.PNG?raw=true)
 
 </details>
+
 ## Image Option [⬆️](#table-of-contents)
 
 <a id="image-option"></a>
@@ -4005,6 +4006,12 @@ To migrate from Version 2 to Version 3, you need to follow the steps below:
   - Replace "color" with "color."
 
 ## Release Notes [⬆️](#table-of-contents)
+
+### Version 3.0.0 (2023-09-24)
+
+#### New Features
+
+- ability to read Excel files
 
 ### Version 2.12.0 (2023-09-21)
 
