@@ -258,8 +258,6 @@ export interface StyleMapper {
 }
 export type FormulaType = "AVERAGE" | "SUM" | "COUNT" | "MAX" | "MIN";
 export interface StyleBody {
-  fg?: string;
-  fontColor?: string;
   fontFamily?: string;
   type?: string;
   size?: number;

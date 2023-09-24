@@ -13,7 +13,7 @@
   "author": "M.R",
   "license": "ISC",
   "dependencies": {
-    "mr-excel": "^1.0.1"
+    "mr-excel": "^3.0.0"
   },
   "devDependencies": {
     "typescript": "^5.1.6"

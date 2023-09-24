@@ -15,6 +15,6 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.18.2",
-    "mr-excel": "^1.0.1"
+    "mr-excel": "^3.0.0"
   }
 }

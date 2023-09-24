@@ -6,6 +6,7 @@ import {
   createExcelTabelBaseOnDomElement,
 } from "./utils/create-excel-data";
 import { generateExcel as generateEx } from "./utils/generate-excel";
+import { extractExcelData as extractExcelDataUtil } from "./utils/read-utils";
 import { sideBySide } from "./utils/side-by-side";
 
 export const generateExcel = generateEx;
@@ -39,3 +40,5 @@ export function themeBaseGenerate(
 ) {
   return generateExcel(themeGenerator(data, index, option));
 }
+
+export const extractExcelData = extractExcelDataUtil;

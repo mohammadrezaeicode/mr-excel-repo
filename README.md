@@ -1,5 +1,42 @@
 # MR Excel
 
+MR-Excel is a JavaScript library designed for reading and writing Excel files. This library allows you to extract data from Excel files, and when it comes to writing, it offers a range of features such as commenting, styling, Formulas, merging cells,Grouping rows, conditional formatting (Excel), multi-style values, and functions that can be used for cell merging, adding styles and commenting functionalities.
+
+## Table of Contents
+
+<a id="table-of-contents"></a>
+
+> [!NOTE]
+> You can return to the table of contents by clicking on ⬆️
+
+- [**`Installation`**](#installation)
+- [**`Getting Started`**](#getting-started)
+- [**`generateExcel`**](#generate-excel)
+  - [**`How to use generateExcel`**](#generate-excel-usage)
+  - [**`General`**](#general-option)
+  - [**`Header`**](#header)
+  - [**`Formula`**](#formula)
+  - [**`Styles & Format`**](#styles-format)
+  - [**`Conditional Styling`**](#conditional-styling)
+  - [**`Conditinal Formating`**](#conditinal-formating)
+    - [**`On Column(Header)`**](#conditinal-formating-header)
+    - [**`General use`**](#conditinal-formating-general-use)
+  - [**`Multi Style value`**](#multi-style-value)
+  - [**`Merging Cells`**](#merging-cells)
+  - [**`Comment`**](#comment)
+  - [**`Group Rows`**](#group-rows)
+  - [**`Shift & Title`**](#shift-title)
+  - [**`Image Option`**](#image-option)
+- [**`convertTableToExcel`**](#convert-table-to-excel)
+  - [**`How to use convertTableToExcel`**](#convert-table-to-excel-usage)
+- [**`sideBySideLineByLine`**](#side-by-side-line-by-line)
+  - [**`How to use sideBySideLineByLine`**](#side-by-side-line-by-line-usage)
+- [**`themeBaseGenerate`**](#theme-base-generate)
+  - [**`How to use themeBaseGenerate`**](#theme-base-generate-usage)
+- [**`extractExcelData`**](#extract-excel-data)
+  - [**`How to use extractExcelData`**](#extract-excel-data-usage)
+- [**`Migrating from 2 to 3`**](#migrating)
+
 <details>
 
 <summary>IMAGES</summary>
@@ -42,25 +79,32 @@
 
 </details>
 
-## Introduction
+## Introduction [⬆️](#table-of-contents)
 
-Welcome to our JavaScript library designed to effortlessly generate .xlsx files from input objects. This versatile library offers exceptional flexibility and can seamlessly operate on both the client and backend sides of applications.
-
-Our library offers comprehensive support for a wide range of features, including data formatting, formulas, styles, merged cells, and grouped rows.[more info](https://mohammadrezaeicode.github.io/mr-excel-page/), [Express/backend example](https://github.com/mohammadrezaeicode/mr-excel-repo/tree/main/example/express), [TypeScript example](https://github.com/mohammadrezaeicode/mr-excel-repo/tree/main/example/typescript)
+Our library offers comprehensive support for a wide range of features, including data formatting, formulas, styles, merged cells, and grouped rows. [Express/backend example](https://github.com/mohammadrezaeicode/mr-excel-repo/tree/main/example/express), [TypeScript example](https://github.com/mohammadrezaeicode/mr-excel-repo/tree/main/example/typescript)
 
 In version 2.1.0, we introduced a new feature called "convertTableToExcel," which enables the generation of an Excel file from a specified table or DOM element (table). The provided query is expected to be a valid input for the querySelector method. This enhancement allows for greater flexibility and convenience when creating Excel files directly from HTML tables.
 
 We have four functions that are defined with specific use cases as follows:
 
 - **`generateExcel`**: This is the primary and most important function that serves as the entry point for all other functions. Its responsibility is to generate an Excel file based on the received input data. We will provide examples of the various options that can be utilized.
+  <a id="generate-excel"></a>
 
 - **`convertTableToExcel`**: This function is designed exclusively for **client-side** use. It requires passing a DOM element (a table element) as a parameter. The output of this function is an Excel file generated from the provided table.
+  <a id="convert-table-to-excel"></a>
 
 - **`sideBySideLineByLine`**: This function offers the capability to generate a single-sheet Excel file containing multiple tables side by side and line by line.
+  <a id="side-by-side-line-by-line"></a>
 
 - **`themeBaseGenerate`**: Within this function, we utilize color palettes from **https://colorhunt.co/**. It accepts data and a theme index as inputs, then generates an Excel file with the selected theme applied.[Themes](https://mohammadrezaeicode.github.io/mr-excel-them-page/)
+  <a id="theme-base-generate"></a>
 
-## Installation
+- **`extractExcelData`**: We provide 'extract-excel-data-usage,' which takes the URL of an Excel file that needs to be read, retrieves and reads the data, and returns an object containing the sheets as the result.
+  <a id="extract-excel-data"></a>
+
+## Installation [⬆️](#table-of-contents)
+
+<a id="installation"></a>
 
 **Via CDN**
 
@@ -101,11 +145,15 @@ npm install mr-excel
 
 Choose the package manager that suits your workflow, and effortlessly bring the power of our library into your project, enabling smooth generation of Excel tables with ease and efficiency.
 
-## Getting Started
+## Getting Started [⬆️](#table-of-contents)
+
+<a id="getting-started"></a>
 
 After adding the library to your project, generating XLSX files becomes straightforward. You can achieve this by creating a data object similar to the code snippet below:
 
-### themeBaseGenerate
+### How to use themeBaseGenerate
+
+<a id="theme-base-generate-usage"></a>
 
 ```javascript
 let data = {
@@ -361,7 +409,9 @@ let data = [
 ExcelTable.themeBaseGenerate(data, 12);
 ```
 
-### convertTableToExcel
+### How to use convertTableToExcel
+
+<a id="convert-table-to-excel-usage"></a>
 
 ```javascript
 ExcelTable.convertTableToExcel("#table");
@@ -386,7 +436,15 @@ ExcelTable.convertTableToExcel("#table", null, true, rowF, colF)
 
 </details>
 
-### sideBySideLineByLine
+### How to use extractExcelData
+
+```javascript
+ExcelTable.extractExcelData(your excel url);
+```
+
+### How to use sideBySideLineByLine
+
+<a id="side-by-side-line-by-line-usage"></a>
 
 `sideBySideLineByLine` is a new feature that enables the generation of multiple tables within a single Excel sheet.
 
@@ -527,6 +585,8 @@ ExcelTable.sideBySideLineByLine(sideData);
 
 ### generateExcel
 
+<a id="generate-excel-usage"></a>
+
 ```javascript
 //<https://colorhunt.co/palette/f9ed69f08a5db83b5e6a2c70>
 const colorPalette = {
@@ -541,7 +601,7 @@ const data = {
   modified: "2023-08-06T07:22:40Z",
   styles: {
     formulaStyle: {
-      fg: "B83B5E",
+      backgroundColor: "B83B5E",
       border: {
         full: {
           style: "medium",
@@ -550,13 +610,13 @@ const data = {
       },
     },
     headerStyle: {
-      fg: "F9ED69",
-      fontColor: "#F08A5D",
+      backgroundColor: "F9ED69",
+      color: "#F08A5D",
       bold: true,
     },
     rowStyle: {
-      fg: "#F08A5D",
-      fontColor: "F9ED69",
+      backgroundColor: "#F08A5D",
+      color: "F9ED69",
     },
   },
   sheet: [
@@ -695,7 +755,9 @@ const data = {
 ExcelTable.generateExcel(data);
 ```
 
-## General option
+## General option [⬆️](#table-of-contents)
+
+<a id="general-option"></a>
 
 Each sheet has options for customization. You can change the sheet name using name, adjust the tab name color with tabColor, control visibility with state, add protection to a sheet via protectionOption, and implement sorting and filtering using sortAndfilter. In the example below, we will demonstrate how to utilize these properties. Additionally, for Excel file information, we offer options such as creator, created, notSave, and modified.
 
@@ -1693,7 +1755,9 @@ ExcelTable.generateExcel(data).then((res) => {
 
 </details>
 
-## Header Option
+## Header Option [⬆️](#table-of-contents)
+
+<a id="header"></a>
 
 We offer specific header options for Excel headers. The header is a mandatory component, so the withoutHeader option cannot be used to omit it. The headerHeight option is employed to determine the height of the header row. Additionally, we provide the headerStyleKey property, which specifies the most commonly used style for each cell (its value corresponds to the style ID; detailed functionality is explained in the Styles section).
 
@@ -1713,15 +1777,15 @@ function e() {
       creator: "mr",
       styles: {
         headerStyle: {
-          fg: t.c2,
+          backgroundColor: t.c2,
           fontFamily: "Times New Roman",
-          fontColor: t.c4,
+          color: t.c4,
           size: 20,
         },
         formulaStyle: {
-          fg: t.c1,
+          backgroundColor: t.c1,
           fontFamily: "Times New Roman",
-          fontColor: t.c3,
+          color: t.c3,
           size: 15,
         },
       },
@@ -1781,7 +1845,9 @@ ExcelTable.generateExcel(data);
 
 </details>
 
-## Formula Option
+## Formula Option [⬆️](#table-of-contents)
+
+<a id="formula"></a>
 
 We provide two distinct methods for defining formulas: customization and column type. In the customization approach, if you employ a cell containing data that is used within the formula, the formula will display an instance of the formula. When using the customization type, it's important to specify the formula type, which can be any of the following: AVERAGE, SUM, COUNT, MAX, or MIN.
 
@@ -1799,14 +1865,14 @@ const data = {
   creator: "mr",
   styles: {
     headerStyle: {
-      fg: "2B2E4A",
+      backgroundColor: "2B2E4A",
       fontFamily: "Times New Roman",
-      fontColor: "E84545",
+      color: "E84545",
     },
     customFormulaStyle: {
-      fg: "E84545",
+      backgroundColor: "E84545",
       fontFamily: "Times New Roman",
-      fontColor: "2B2E4A",
+      color: "2B2E4A",
       size: 15,
       border: {
         full: {
@@ -1816,9 +1882,9 @@ const data = {
       },
     },
     formulaStyle: {
-      fg: "2B2E4A",
+      backgroundColor: "2B2E4A",
       fontFamily: "Times New Roman",
-      fontColor: "E84545",
+      color: "E84545",
       size: 15,
       border: {
         full: {
@@ -1976,7 +2042,9 @@ ExcelTable.generateExcel(data);
 
 </details>
 
-## Styles & Format Options
+## Styles & Format Options [⬆️](#table-of-contents)
+
+<a id="styles-format"></a>
 
 In the library, styles are defined with an ID that represents the desired style. This ID is then used to apply the corresponding style to cells. Each cell is associated with only one style. These styles encompass various attributes such as borders, alignment, text color, font family, font size, background, and bold, among others.
 
@@ -1988,8 +2056,8 @@ The format property is a distinct style attribute. Unlike other styles, the form
 ```javascript
 function e() {
   const t = { c1: "2C3639", c2: "3F4E4F", c3: "A27B5C", c4: "DCD7C9" },
-    n = { fg: t.c2, fontFamily: "Times New Roman", fontColor: t.c4 },
-    a = { fg: t.c4, fontFamily: "Times New Roman", fontColor: t.c2 };
+    n = { backgroundColor: t.c2, fontFamily: "Times New Roman", color: t.c4 },
+    a = { backgroundColor: t.c4, fontFamily: "Times New Roman", color: t.c2 };
   return {
     url: "https://colorhunt.co/palette/ffcfdffefdcae0f9b5a5dee5",
     imageFullName: "ex5.PNG",
@@ -2115,7 +2183,9 @@ ExcelTable.generateExcel(data);
 
 </details>
 
-## Merging Cells Options
+## Merging Cells Options [⬆️](#table-of-contents)
+
+<a id="merging-cells"></a>
 
 We offer options for merging rows of cells together. Additionally, we provide a function-based approach to facilitate cell merging.
 
@@ -2126,13 +2196,13 @@ We offer options for merging rows of cells together. Additionally, we provide a 
 function e() {
   const t = { c1: "DBE2EF", c2: "112D4E", c4: "F9F7F7" },
     n = {
-      fg: t.c2,
+      backgroundColor: t.c2,
       fontFamily: "Times New Roman",
-      fontColor: t.c4,
+      color: t.c4,
       border: { full: { style: "medium", color: t.c1 } },
       alignment: { horizontal: "left", vertical: "top" },
     },
-    a = { fg: t.c4, fontFamily: "Times New Roman", fontColor: t.c2 },
+    a = { backgroundColor: t.c4, fontFamily: "Times New Roman", color: t.c2 },
     l = [];
   let r = !1;
   return {
@@ -2279,7 +2349,9 @@ ExcelTable.generateExcel(data);
 
 </details>
 
-## Group Rows Options
+## Group Rows Options [⬆️](#table-of-contents)
+
+<a id="group-rows"></a>
 
 With this library, you can group rows together using two properties added to the data: outlineLevel and hidden. The outlineLevel represents the grouping level, while hidden represents whether the default state is collapsed or not. The key of this property is changeable, so in case of a conflict with your data, you have the flexibility to modify it. We will discuss how to change the key in the next section.
 
@@ -2290,12 +2362,16 @@ With this library, you can group rows together using two properties added to the
 function e() {
   const t = { c4: "FCD1D1", c2: "AEE1E1" },
     n = {
-      fg: t.c2,
+      backgroundColor: t.c2,
       fontFamily: "Times New Roman",
-      fontColor: "112D4E",
+      color: "112D4E",
       alignment: { horizontal: "left", vertical: "top" },
     },
-    a = { fg: t.c4, fontFamily: "Times New Roman", fontColor: "112D4E" };
+    a = {
+      backgroundColor: t.c4,
+      fontFamily: "Times New Roman",
+      color: "112D4E",
+    };
   return {
     imageFullName: "ex7.PNG",
     colorPalette: t,
@@ -2470,7 +2546,7 @@ ExcelTable.generateExcel(data);
 
 </details>
 
-## Complex Options
+## Complex Options [⬆️](#table-of-contents)
 
 In the examples below, we aim to define some fun scenarios that could be useful for more complex use cases.
 
@@ -2484,12 +2560,16 @@ You have the ability to change the key of reserved properties such as height, hi
 function e() {
   const t = { c4: "F08A5D", c2: "F9ED69" },
     n = {
-      fg: t.c2,
+      backgroundColor: t.c2,
       fontFamily: "Times New Roman",
-      fontColor: "6A2C70",
+      color: "6A2C70",
       alignment: { horizontal: "left", vertical: "center" },
     },
-    a = { fg: t.c4, fontFamily: "Times New Roman", fontColor: "6A2C70" };
+    a = {
+      backgroundColor: t.c4,
+      fontFamily: "Times New Roman",
+      color: "6A2C70",
+    };
   return {
     imageFullName: "ex8.PNG",
     colorPalette: t,
@@ -2682,8 +2762,9 @@ ExcelTable.generateExcel(data);
 
 </details>
 
-## Shift & Title Option
+## Shift & Title Option [⬆️](#table-of-contents)
 
+<a id="shift-title"></a>
 The shift feature allows you to adjust the starting point of generating an Excel file. The title option, on the other hand, is used when you want to include a title at the top of the generated file.
 
 ```javascript
@@ -2699,15 +2780,15 @@ function generateData() {
     },
   };
   const rowStyle = {
-    fg: colorPalette.c2,
+    backgroundColor: colorPalette.c2,
     fontFamily: "Times New Roman",
-    fontColor: "6A2C70",
+    color: "6A2C70",
     ...rowAlignment,
   };
   const headerStyle = {
-    fg: colorPalette.c4,
+    backgroundColor: colorPalette.c4,
     fontFamily: "Times New Roman",
-    fontColor: "#FFFFFF",
+    color: "#FFFFFF",
   };
   return {
     imageFullName: "ex10.PNG",
@@ -2717,18 +2798,18 @@ function generateData() {
       creator: "mr",
       styles: {
         "c0<0.3": {
-          fg: "DCD6F7",
-          fontColor: "424874s",
+          backgroundColor: "DCD6F7",
+          color: "424874s",
           ...rowAlignment,
         },
         male: {
-          fg: "95E1D3",
-          fontColor: "252A34",
+          backgroundColor: "95E1D3",
+          color: "252A34",
           ...rowAlignment,
         },
         female: {
-          fg: "F38181",
-          fontColor: "252A34",
+          backgroundColor: "F38181",
+          color: "252A34",
           ...rowAlignment,
         },
         rowStyle: {
@@ -2781,7 +2862,9 @@ const { data } = generateData();
 ExcelTable.generateExcel(data);
 ```
 
-## Comment Option
+## Comment Option [⬆️](#table-of-contents)
+
+<a id="comment"></a>
 
 After version 2.4.0 you can add comment on cells.
 
@@ -2798,15 +2881,15 @@ function generateData() {
     },
   };
   const rowStyle = {
-    fg: colorPalette.c2,
+    backgroundColor: colorPalette.c2,
     fontFamily: "Times New Roman",
-    fontColor: "6A2C70",
+    color: "6A2C70",
     ...rowAlignment,
   };
   const headerStyle = {
-    fg: colorPalette.c4,
+    backgroundColor: colorPalette.c4,
     fontFamily: "Times New Roman",
-    fontColor: "#FFFFFF",
+    color: "#FFFFFF",
   };
   return {
     imageFullName: "ex14.PNG",
@@ -2817,18 +2900,18 @@ function generateData() {
       creator: "mr",
       styles: {
         "c0<0.3": {
-          fg: "DCD6F7",
-          fontColor: "424874s",
+          backgroundColor: "DCD6F7",
+          color: "424874s",
           ...rowAlignment,
         },
         male: {
-          fg: "95E1D3",
-          fontColor: "252A34",
+          backgroundColor: "95E1D3",
+          color: "252A34",
           ...rowAlignment,
         },
         female: {
-          fg: "F38181",
-          fontColor: "252A34",
+          backgroundColor: "F38181",
+          color: "252A34",
           ...rowAlignment,
         },
         rowStyle: {
@@ -2927,7 +3010,9 @@ const { data } = generateData();
 ExcelTable.generateExcel(data);
 ```
 
-## Multi Style value Option
+## Multi Style value Option [⬆️](#table-of-contents)
+
+<a id="multi-style-value"></a>
 
 After version 2.4.0, We added Ability to change the style of each character of cells. (only text value)
 
@@ -2947,15 +3032,15 @@ function generateData() {
     },
   };
   const rowStyle = {
-    fg: colorPalette.c2,
+    backgroundColor: colorPalette.c2,
     fontFamily: "Times New Roman",
-    fontColor: "6A2C70",
+    color: "6A2C70",
     ...rowAlignment,
   };
   const headerStyle = {
-    fg: colorPalette.c4,
+    backgroundColor: colorPalette.c4,
     fontFamily: "Times New Roman",
-    fontColor: "#000000",
+    color: "#000000",
   };
   return {
     imageFullName: "ex15.PNG",
@@ -2967,31 +3052,31 @@ function generateData() {
       styles: {
         title: {
           size: 48,
-          fg: "E5BA73",
+          backgroundColor: "E5BA73",
           alignment: {
             horizontal: "left",
             vertical: "top",
           },
         },
         t2: {
-          fontColor: "FFFFFF",
+          color: "FFFFFF",
         },
         t1: {
-          fontColor: "555555",
+          color: "555555",
         },
         "c0<0.3": {
-          fg: "DCD6F7",
-          fontColor: "424874s",
+          backgroundColor: "DCD6F7",
+          color: "424874s",
           ...rowAlignment,
         },
         male: {
-          fg: "95E1D3",
-          fontColor: "252A34",
+          backgroundColor: "95E1D3",
+          color: "252A34",
           ...rowAlignment,
         },
         female: {
-          fg: "F38181",
-          fontColor: "252A34",
+          backgroundColor: "F38181",
+          color: "252A34",
           ...rowAlignment,
         },
         rowStyle: {
@@ -3112,8 +3197,17 @@ ExcelTable.generateExcel(data);
 function e() {
   const t = { c4: "00ADB5", c2: "393E46" },
     n = { alignment: { horizontal: "left", vertical: "center" } },
-    a = { fg: t.c2, fontFamily: "Times New Roman", fontColor: "6A2C70", ...n },
-    l = { fg: t.c4, fontFamily: "Times New Roman", fontColor: "#000000" };
+    a = {
+      backgroundColor: t.c2,
+      fontFamily: "Times New Roman",
+      color: "6A2C70",
+      ...n,
+    },
+    l = {
+      backgroundColor: t.c4,
+      fontFamily: "Times New Roman",
+      color: "#000000",
+    };
   return {
     imageFullName: "ex16.PNG",
     colorPalette: t,
@@ -3123,22 +3217,22 @@ function e() {
       creator: "mr",
       styles: {
         col2: {
-          fontColor: "#F9ED69",
+          color: "#F9ED69",
         },
         col1: {
-          fontColor: "#FF2E63",
+          color: "#FF2E63",
         },
         title: {
           size: 48,
-          fg: "F9ED69",
-          fontColor: "6A2C70",
+          backgroundColor: "F9ED69",
+          color: "6A2C70",
           alignment: { horizontal: "center", vertical: "center" },
         },
-        t2: { fontColor: "F08A5D" },
-        t1: { fontColor: "555555" },
-        "c0<0.3": { fg: "DCD6F7", fontColor: "424874s", ...n },
-        male: { fg: "95E1D3", fontColor: "252A34", ...n },
-        female: { fg: "F38181", fontColor: "252A34", ...n },
+        t2: { color: "F08A5D" },
+        t1: { color: "555555" },
+        "c0<0.3": { backgroundColor: "DCD6F7", color: "424874s", ...n },
+        male: { backgroundColor: "95E1D3", color: "252A34", ...n },
+        female: { backgroundColor: "F38181", color: "252A34", ...n },
         rowStyle: { ...a },
         headerStyle: { ...l },
       },
@@ -3294,7 +3388,9 @@ ExcelTable.generateExcel(data);
 
 </details>
 
-## Conditional Styling
+## Conditional Styling [⬆️](#table-of-contents)
+
+<a id="conditional-styling"></a>
 
 Using the 'styleCellCondition' option, you can apply styles to each cell based on specific conditions as needed.
 
@@ -3305,8 +3401,17 @@ Using the 'styleCellCondition' option, you can apply styles to each cell based o
 function e() {
   const t = { c4: "2B2E4A", c2: "E84545" },
     n = { alignment: { horizontal: "left", vertical: "center" } },
-    a = { fg: t.c2, fontFamily: "Times New Roman", fontColor: "6A2C70", ...n },
-    l = { fg: t.c4, fontFamily: "Times New Roman", fontColor: "#FFFFFF" };
+    a = {
+      backgroundColor: t.c2,
+      fontFamily: "Times New Roman",
+      color: "6A2C70",
+      ...n,
+    },
+    l = {
+      backgroundColor: t.c4,
+      fontFamily: "Times New Roman",
+      color: "#FFFFFF",
+    };
   return {
     imageFullName: "ex9.PNG",
     colorPalette: t,
@@ -3314,9 +3419,9 @@ function e() {
     data: {
       creator: "mr",
       styles: {
-        "c0<0.3": { fg: "DCD6F7", fontColor: "424874s", ...n },
-        male: { fg: "95E1D3", fontColor: "252A34", ...n },
-        female: { fg: "F38181", fontColor: "252A34", ...n },
+        "c0<0.3": { backgroundColor: "DCD6F7", color: "424874s", ...n },
+        male: { backgroundColor: "95E1D3", color: "252A34", ...n },
+        female: { backgroundColor: "F38181", color: "252A34", ...n },
         rowStyle: { ...a },
         headerStyle: { ...l },
       },
@@ -3357,7 +3462,225 @@ ExcelTable.generateExcel(data);
 
 </details>
 
-## Image Option
+## Conditinal Formating [⬆️](#table-of-contents)
+
+<a id="conditinal-formating"></a>
+
+You can apply Excel conditional formatting in two ways. One method is through the Header object, which affects a whole column. The other method is using the Sheet object, where you need to specify the start and end properties.
+
+## On Column(Header) [⬆️](#table-of-contents)
+
+<a id="conditinal-formating-header"></a>
+
+Here's an example of how to use conditional formatting on a header.
+
+<summary>Display code</summary>
+
+```javascript
+const data = {
+    activateConditinalFormating: true,
+    styles: {
+        ct: {
+            type: "conditinalFormating",
+            backgroundColor: "222831",
+            color: "EEEEEE"
+        }
+    },
+    sheet: [
+        {
+            headers: [
+                {
+                    label: "Column1", text: "Text1", conditinalFormating: {
+                        type: "iconSet",
+                        operator: "3Arrows" // 4Arrows, 5Arrows, 5ArrowsGray, 4ArrowsGray, 3ArrowsGray 
+                    }
+                },
+                {
+                    label: "Column2", text: "Text2",
+                    conditinalFormating: {
+                        type: "cells",
+                        operator: "ct",
+                        value: "a"
+                    }
+                },
+                {
+                    label: "Column3", text: "Text3",
+                    conditinalFormating: {
+                        type: "cells",
+                        operator: "gt", // lt, eq
+                        value: 10, styleId: 'ct'
+                    }
+                },
+                { label: "Column4", text: "Text4" },
+            ],
+            data: [
+                {
+                    "Column1": 42,
+                    "Column2": "John",
+                    "Column3": 7,
+                    "Column4": "Doe"
+                },
+                {
+                    "Column1": 25,
+                    "Column2": "Alice",
+                    "Column3": 13,
+                    "Column4": "Smith"
+                },
+                {
+                    "Column1": 33,
+                    "Column2": "Bob",
+                    "Column3": 18,
+                    "Column4": "Johnson"
+                },
+                {
+                    "Column1": 56,
+                    "Column2": "Eve",
+                    "Column3": 22,
+                    "Column4": "Brown"
+                }
+            ]
+        }
+    ]
+};
+       
+ExcelTable.generateExcel(data);
+```
+
+</details>
+<details>
+<summary>result image</summary>
+
+![ex](https://github.com/mohammadrezaeicode/mr-excel-page-repo/blob/main/public/img/ex18.PNG?raw=true)
+
+</details>
+
+## General use [⬆️](#table-of-contents)
+
+<a id="conditinal-formating-general-use"></a>
+
+General use and sheet objects offer the same functionality but are more flexible, allowing you to apply them to multiple columns and various other use cases
+
+<summary>Display code</summary>
+
+```javascript
+const data = {
+  activateConditinalFormating: true,
+  styles: {
+      ct: {
+          type: "conditinalFormating",
+          backgroundColor: "222831",
+          color: "EEEEEE"
+      }
+  },
+  sheet: [
+      {
+          conditinalFormating: [
+              {
+                  type: "dataBar",
+                  start: "A2",
+                  end: "B6"
+              }, {
+                  type: "colorScale",
+                  start: "C2",
+                  end: "C6"
+              }, {
+                  type: "top",
+                  start: "D2",
+                  end: "D6",
+                  value: 2
+              }, {
+                  type: "top",
+                  start: "E2",
+                  end: "E6",
+                  styleId: 'ct',
+                  value: 2,
+                  bottom: true
+              }, {
+                  type: "top",
+                  operator: "aboveAverage",
+                  start: "F2",
+                  end: "F6",
+                  value: 1
+              }, {
+                  type: "top",
+                  operator: "belowAverage",
+                  start: "G2",
+                  styleId: 'ct',
+                  end: "G6",
+                  value: 1
+              }],
+          headers: [
+              {
+                  label: "Column1", text: "Text1"
+              },
+              {
+                  label: "Column2", text: "Text2"
+              },
+              {
+                  label: "Column3", text: "Text3"
+              },
+              { label: "Column4", text: "Text4" },
+
+              { label: "Column5", text: "Text5" },
+              { label: "Column6", text: "Text6" },
+              { label: "Column7", text: "Text7" },
+          ],
+          data: [
+              {
+                  "Column1": 123,
+                  "Column2": 456,
+                  "Column3": 789,
+                  "Column4": 101,
+                  "Column5": 101,
+                  "Column6": 101,
+                  "Column7": 101
+              },
+              {
+                  "Column1": 234,
+                  "Column2": 567,
+                  "Column3": 890,
+                  "Column4": 202,
+                  "Column5": 202,
+                  "Column6": 202,
+                  "Column7": 202
+              },
+              {
+                  "Column1": 345,
+                  "Column2": 678,
+                  "Column3": 901,
+                  "Column4": 303,
+                  "Column5": 303,
+                  "Column6": 303,
+                  "Column7": 303
+              },
+              {
+                  "Column1": 456,
+                  "Column2": 789,
+                  "Column3": 123,
+                  "Column4": 404,
+                  "Column5": 404,
+                  "Column6": 404,
+                  "Column7": 404
+              },
+          ]
+
+      }
+  ]
+};
+        
+ExcelTable.generateExcel(data);
+```
+
+</details>
+<details>
+<summary>result image</summary>
+
+![ex](https://github.com/mohammadrezaeicode/mr-excel-page-repo/blob/main/public/img/ex19.PNG?raw=true)
+
+</details>
+## Image Option [⬆️](#table-of-contents)
+
+<a id="image-option"></a>
 
 After version 2.8.0, we introduced the ability to add images.
 
@@ -3485,14 +3808,7 @@ function generateData() {
 }
 const { data } = generateData();
 ExcelTable.generateExcel(data);
-
 ```
-
-</details>
-<details>
-<summary>result image</summary>
-
-![ex](https://github.com/mohammadrezaeicode/mr-excel-page-repo/blob/main/public/img/ex17.PNG?raw=true)
 
 </details>
 <details>
@@ -3503,6 +3819,9 @@ ExcelTable.generateExcel(data);
 </details>
 
 ### ExcelTable Object
+
+> [!NOTE]
+> The table in this section is currently outdated, but it will be updated soon.
 
 In the ExcelTable object, you'll find various properties that allow you to customize the behavior and appearance of the generated Excel file through the `generateExcel` function.
 
@@ -3526,12 +3845,15 @@ These properties provide you with the flexibility to customize various aspects o
 
 ### Styles Object
 
+> [!NOTE]
+> The table in this section is currently outdated, but it will be updated soon.
+
 To define the styling for your Excel file, you should utilize this option. The Styles object allows you to specify various formatting properties that will be applied to cells in the generated Excel file. Each property in the object corresponds to a specific style element, such as foreground color, font color, font family, size, alignment, border, and format. You can customize these properties according to your preferences to achieve the desired visual appearance for your Excel document.
 
 ```typescript
 [key: string]: {
-  fg?: string;
-  fontColor?: string;
+  backgroundColor?: string;
+  color?: string;
   fontFamily?: string;
   size?: number;
   index?: number;
@@ -3545,14 +3867,17 @@ To define the styling for your Excel file, you should utilize this option. The S
 }
 ```
 
-## Styles Object
+### Styles Object
+
+> [!NOTE]
+> The table in this section is currently outdated, but it will be updated soon.
 
 To define the styling for your Excel file, you should utilize this option. The Styles object allows you to specify various formatting properties that will be applied to cells in the generated Excel file. Each property in the object corresponds to a specific style element, such as foreground color, font color, font family, size, alignment, border, and format. You can customize these properties according to your preferences to achieve the desired visual appearance for your Excel document.
 
 | Name             | Type            | Description                                                                   |
 | ---------------- | --------------- | ----------------------------------------------------------------------------- |
-| fg?              | string          | Specifies the foreground color of the cell text.                              |
-| fontColor?       | string          | Defines the font color of the cell text.                                      |
+| backgroundColor? | string          | Specifies the foreground color of the cell text.                              |
+| color?           | string          | Defines the font color of the cell text.                                      |
 | fontFamily?      | string          | Sets the font family for the cell text.                                       |
 | size?            | number          | Specifies the font size of the cell text.                                     |
 | index?           | number          | Specifies the index of the style.                                             |
@@ -3567,6 +3892,9 @@ To define the styling for your Excel file, you should utilize this option. The S
 These properties allow you to customize the appearance of cells in your Excel document by applying various formatting styles.
 
 ### Sheet Object
+
+> [!NOTE]
+> The table in this section is currently outdated, but it will be updated soon.
 
 The Sheet object is used to define various options related to a specific sheet within the Excel file. It holds a significant role and can be considered one of the most crucial options.
 
@@ -3596,6 +3924,9 @@ These properties allow you to customize the behavior and appearance of individua
 
 ### Title
 
+> [!NOTE]
+> The table in this section is currently outdated, but it will be updated soon.
+
 The title option allows you to add a title at the starting point of the generated table.
 
 | Property     | Type   | Description                                            |
@@ -3612,6 +3943,9 @@ By using the `Title` interface and its properties, you can customize the appeara
 
 ### Border Object
 
+> [!NOTE]
+> The table in this section is currently outdated, but it will be updated soon.
+
 The `BorderOption` object enables you to add borders to your Excel cells conveniently. It provides a way to define border properties for various border directions.
 
 | Property | Type   | Description                                                                                                           |
@@ -3623,6 +3957,9 @@ The `BorderOption` object enables you to add borders to your Excel cells conveni
 By utilizing the `BorderOption` object, you can specify border color and style for different directions, enhancing the visual appearance of your Excel tables with well-defined cell borders.
 
 ### Formula Object
+
+> [!NOTE]
+> The table in this section is currently outdated, but it will be updated soon.
 
 The `Formula` object provides a way to define formulas for Excel cells. It comprises the following properties:
 
@@ -3637,6 +3974,9 @@ The `Formula` object provides a way to define formulas for Excel cells. It compr
 In the provided example, we've demonstrated how to define formulas for various cells using the `Formula` object. You can specify the formula type, range, and even apply specific styles to formula cells if desired.
 
 ### Alignment Object
+
+> [!NOTE]
+> The table in this section is currently outdated, but it will be updated soon.
 
 The library offers multiple options for aligning cells, giving you control over how content is displayed within cells. These alignment options can be configured using the following properties:
 
@@ -3654,9 +3994,19 @@ The library offers multiple options for aligning cells, giving you control over 
 
 These alignment options empower you to customize the appearance of cell content in your Excel sheets. By adjusting these properties, you can control the positioning, orientation, and overall style of data within your cells.
 
-## Release Notes
+## Migrating from 2 to 3 [⬆️](#table-of-contents)
 
-###  Version 2.12.0 (2023-09-21)
+<a id="migrating"></a>
+
+To migrate from Version 2 to Version 3, you need to follow the steps below:
+
+- If you have style changes, make the following adjustments:
+  - Change "backgroundColor" to "backgroundColor."
+  - Replace "color" with "color."
+
+## Release Notes [⬆️](#table-of-contents)
+
+### Version 2.12.0 (2023-09-21)
 
 #### New Features
 
@@ -3737,7 +4087,7 @@ These alignment options empower you to customize the appearance of cell content 
 
 #### Improvement
 
-- capability to use var and rgb for fg, border color and font color
+- capability to use var and rgb for backgroundColor, border color and font color
 
 ### Version 2.2.2 (2023-08-15)
 
@@ -3772,11 +4122,11 @@ These alignment options empower you to customize the appearance of cell content 
 
 - Updated the default value of the `generateType` property.
 
-## Changelog
+## Changelog [⬆️](#table-of-contents)
 
 For a detailed list of all changes, please refer to the [changelog](CHANGELOG.md).
 
-## Thank You
+## Thank You [⬆️](#table-of-contents)
 
 Thank you for choosing our library! We greatly value your feedback and suggestions as we continue to improve and enhance our product.
 

@@ -808,7 +808,7 @@ exports.ex = {
     data: {
         sheet: [
             {
-                headers: [
+                header: [
                     {
                         label: "name",
                         text: "Name",
@@ -830,7 +830,7 @@ exports.ex = {
                 ],
             },
             {
-                headers: [
+                header: [
                     {
                         label: "item",
                         text: "Item",
@@ -868,7 +868,7 @@ exports.ex1 = (function () {
             modified: "2023-08-06T07:22:40Z",
             styles: {
                 formulaStyle: {
-                    fg: colorPalette.c3,
+                    backgroundColor: colorPalette.c3,
                     border: {
                         full: {
                             style: "medium",
@@ -877,13 +877,13 @@ exports.ex1 = (function () {
                     },
                 },
                 headerStyle: {
-                    fg: colorPalette.c1,
-                    fontColor: colorPalette.c2,
+                    backgroundColor: colorPalette.c1,
+                    color: colorPalette.c2,
                     bold: true,
                 },
                 rowStyle: {
-                    fg: colorPalette.c2,
-                    fontColor: colorPalette.c1,
+                    backgroundColor: colorPalette.c2,
+                    color: colorPalette.c1,
                 },
             },
             sheet: [
@@ -906,7 +906,7 @@ exports.ex1 = (function () {
                         }
                     },
                     tabColor: colorPalette.c3,
-                    headers: [
+                    header: [
                         {
                             label: "test",
                             text: "Test",
@@ -968,7 +968,7 @@ exports.ex1 = (function () {
                     ],
                 },
                 {
-                    headers: [
+                    header: [
                         {
                             label: "test",
                             text: "Test",
@@ -1063,7 +1063,7 @@ exports.ex2 = {
                     autoFilter: "0",
                     pivotTables: "0",
                 },
-                headers: [
+                header: [
                     {
                         label: "id",
                         text: "ID",
@@ -1093,7 +1093,7 @@ exports.ex2 = {
             },
             {
                 state: "hidden",
-                headers: [
+                header: [
                     {
                         label: "id",
                         text: "ID",
@@ -1140,15 +1140,15 @@ exports.ex3 = (() => {
                 creator: "mr",
                 styles: {
                     headerStyle: {
-                        fg: colorPalette.c2,
+                        backgroundColor: colorPalette.c2,
                         fontFamily: "Times New Roman",
-                        fontColor: colorPalette.c4,
+                        color: colorPalette.c4,
                         size: 20,
                     },
                     formulaStyle: {
-                        fg: colorPalette.c1,
+                        backgroundColor: colorPalette.c1,
                         fontFamily: "Times New Roman",
-                        fontColor: colorPalette.c3,
+                        color: colorPalette.c3,
                         size: 15,
                     },
                 },
@@ -1156,7 +1156,7 @@ exports.ex3 = (() => {
                     {
                         headerStyleKey: "headerStyle",
                         headerHeight: 30,
-                        headers: [
+                        header: [
                             {
                                 label: "id",
                                 text: "ID",
@@ -1198,7 +1198,7 @@ exports.ex3 = (() => {
                         withoutHeader: true,
                         headerStyleKey: "headerStyle",
                         // headerHeight: 100,
-                        headers: [
+                        header: [
                             {
                                 label: "id",
                                 text: "ID",
@@ -1254,15 +1254,15 @@ exports.ex4 = (() => {
             creator: "mr",
             styles: {
                 headerStyle: {
-                    fg: colorPalette.c1,
+                    backgroundColor: colorPalette.c1,
                     fontFamily: "Times New Roman",
-                    fontColor: colorPalette.c2,
+                    color: colorPalette.c2,
                     // size: 20
                 },
                 customFormulaStyle: {
-                    fg: colorPalette.c2,
+                    backgroundColor: colorPalette.c2,
                     fontFamily: "Times New Roman",
-                    fontColor: colorPalette.c1,
+                    color: colorPalette.c1,
                     size: 15,
                     border: {
                         "BorderDirection": {
@@ -1272,9 +1272,9 @@ exports.ex4 = (() => {
                     },
                 },
                 formulaStyle: {
-                    fg: colorPalette.c1,
+                    backgroundColor: colorPalette.c1,
                     fontFamily: "Times New Roman",
-                    fontColor: colorPalette.c2,
+                    color: colorPalette.c2,
                     size: 15,
                     border: {
                         full: {
@@ -1325,7 +1325,7 @@ exports.ex4 = (() => {
                         },
                     },
                     headerStyleKey: "headerStyle",
-                    headers: [
+                    header: [
                         {
                             label: "Date",
                             text: "Date",
@@ -1420,14 +1420,14 @@ exports.ex5 = (() => {
             c4: "DCD7C9",
         };
         const rowStyle = {
-            fg: colorPalette.c2,
+            backgroundColor: colorPalette.c2,
             fontFamily: "Times New Roman",
-            fontColor: colorPalette.c4,
+            color: colorPalette.c4,
         };
         const headerStyle = {
-            fg: colorPalette.c4,
+            backgroundColor: colorPalette.c4,
             fontFamily: "Times New Roman",
-            fontColor: colorPalette.c2,
+            color: colorPalette.c2,
         };
         return {
             url: "https://colorhunt.co/palette/ffcfdffefdcae0f9b5a5dee5",
@@ -1485,7 +1485,7 @@ exports.ex5 = (() => {
                                 }
                             }
                         },
-                        headers: [
+                        header: [
                             { label: "Date", text: "Date" },
                             { label: "Time", text: "Time" },
                             { label: "Percentage", text: "Percentage" },
@@ -1564,9 +1564,9 @@ exports.ex6 = (() => {
             c4: "F9F7F7",
         };
         const rowStyle = {
-            fg: colorPalette.c2,
+            backgroundColor: colorPalette.c2,
             fontFamily: "Times New Roman",
-            fontColor: colorPalette.c4,
+            color: colorPalette.c4,
             border: {
                 full: {
                     style: "medium",
@@ -1579,9 +1579,9 @@ exports.ex6 = (() => {
             },
         };
         const headerStyle = {
-            fg: colorPalette.c4,
+            backgroundColor: colorPalette.c4,
             fontFamily: "Times New Roman",
-            fontColor: colorPalette.c2,
+            color: colorPalette.c2,
         };
         let merge = {};
         let mergeStart = false;
@@ -1658,7 +1658,7 @@ exports.ex6 = (() => {
                                 }
                             }
                         },
-                        headers: [
+                        header: [
                             { label: "Date", text: "Date" },
                             { label: "Time", text: "Time" },
                             { label: "Percentage", text: "Percentage" },
@@ -1754,18 +1754,18 @@ exports.ex7 = (() => {
             c2: "AEE1E1",
         };
         const rowStyle = {
-            fg: colorPalette.c2,
+            backgroundColor: colorPalette.c2,
             fontFamily: "Times New Roman",
-            fontColor: "112D4E",
+            color: "112D4E",
             alignment: {
                 horizontal: "left",
                 vertical: "top",
             },
         };
         const headerStyle = {
-            fg: colorPalette.c4,
+            backgroundColor: colorPalette.c4,
             fontFamily: "Times New Roman",
-            fontColor: "112D4E",
+            color: "112D4E",
         };
         return {
             imageFullName: "ex7.PNG",
@@ -1788,7 +1788,7 @@ exports.ex7 = (() => {
                                 return "rowStyle";
                             }
                         },
-                        headers: [
+                        header: [
                             { label: "ID", text: "ID" },
                             { label: "Name", text: "Name" },
                             { label: "Column 1", text: "Column 1" },
@@ -1946,18 +1946,18 @@ exports.ex8 = (() => {
             c2: "F9ED69",
         };
         const rowStyle = {
-            fg: colorPalette.c2,
+            backgroundColor: colorPalette.c2,
             fontFamily: "Times New Roman",
-            fontColor: "6A2C70",
+            color: "6A2C70",
             alignment: {
                 horizontal: "left",
                 vertical: "center",
             },
         };
         const headerStyle = {
-            fg: colorPalette.c4,
+            backgroundColor: colorPalette.c4,
             fontFamily: "Times New Roman",
-            fontColor: "6A2C70",
+            color: "6A2C70",
         };
         return {
             imageFullName: "ex8.PNG",
@@ -1985,7 +1985,7 @@ exports.ex8 = (() => {
                                 return "rowStyle";
                             }
                         },
-                        headers: [
+                        header: [
                             { label: "ID", text: "ID" },
                             { label: "Name", text: "Name" },
                             { label: "Column 1", text: "Column 1" },
@@ -2161,11 +2161,11 @@ exports.ex9 = (() => {
                 vertical: "center",
             },
         };
-        const rowStyle = Object.assign({ fg: colorPalette.c2, fontFamily: "Times New Roman", fontColor: "6A2C70" }, rowAlignment);
+        const rowStyle = Object.assign({ backgroundColor: colorPalette.c2, fontFamily: "Times New Roman", color: "6A2C70" }, rowAlignment);
         const headerStyle = {
-            fg: colorPalette.c4,
+            backgroundColor: colorPalette.c4,
             fontFamily: "Times New Roman",
-            fontColor: "#FFFFFF",
+            color: "#FFFFFF",
         };
         return {
             imageFullName: "ex9.PNG",
@@ -2174,9 +2174,9 @@ exports.ex9 = (() => {
             data: {
                 creator: "mr",
                 styles: {
-                    "c0<0.3": Object.assign({ fg: "DCD6F7", fontColor: "424874s" }, rowAlignment),
-                    male: Object.assign({ fg: "95E1D3", fontColor: "252A34" }, rowAlignment),
-                    female: Object.assign({ fg: "F38181", fontColor: "252A34" }, rowAlignment),
+                    "c0<0.3": Object.assign({ backgroundColor: "DCD6F7", color: "424874s" }, rowAlignment),
+                    male: Object.assign({ backgroundColor: "95E1D3", color: "252A34" }, rowAlignment),
+                    female: Object.assign({ backgroundColor: "F38181", color: "252A34" }, rowAlignment),
                     rowStyle: Object.assign({}, rowStyle),
                     headerStyle: Object.assign({}, headerStyle),
                 },
@@ -2204,7 +2204,7 @@ exports.ex9 = (() => {
                                 }
                             }
                         },
-                        headers: [
+                        header: [
                             { label: "c1", text: "**" },
                             { label: "c2", text: "++" },
                             { label: "c3", text: "Name" },

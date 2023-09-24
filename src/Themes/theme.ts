@@ -141,12 +141,12 @@ export const themeGenerator = function (
       data.styles = {};
     }
     data.styles["themeStyleHeader"] = {
-      fg: hColor,
-      fontColor: hColorText,
+      backgroundColor: hColor,
+      color: hColorText,
     };
     data.styles["themeStyleBody"] = {
-      fg: rColor,
-      fontColor: rColorText,
+      backgroundColor: rColor,
+      color: rColorText,
     };
     const shLength = data.sheet.length;
     for (let index = 0; index < shLength; index++) {

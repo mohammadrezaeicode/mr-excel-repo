@@ -142,11 +142,11 @@ function createExcelTabelBaseOnDomElement(queryForTable, table, keepStyle, rowHe
                             color: (0, color_1.rgbToHex)(styles.borderRightColor),
                         };
                     }
-                    let fg = (0, color_1.rgbToHex)(styles.backgroundColor);
-                    if (!fg && bgTr) {
-                        fg = bgTr;
+                    let backgroundColor = (0, color_1.rgbToHex)(styles.backgroundColor);
+                    if (!backgroundColor && bgTr) {
+                        backgroundColor = bgTr;
                     }
-                    let style = Object.assign(Object.assign(Object.assign(Object.assign({}, (fg ? { fg } : {})), { bold: parseInt(styles.fontWeight) > 500, size: parseInt(styles.fontSize.substring(0, styles.fontSize.indexOf("p"))) }), (border ? { border } : {})), { alignment: Object.assign({ horizontal: styles.textAlign, vertical: "center" }, (styles.direction == "rtl" ? { rtl: true } : { ltr: true })) });
+                    let style = Object.assign(Object.assign(Object.assign(Object.assign({}, (backgroundColor ? { backgroundColor } : {})), { bold: parseInt(styles.fontWeight) > 500, size: parseInt(styles.fontSize.substring(0, styles.fontSize.indexOf("p"))) }), (border ? { border } : {})), { alignment: Object.assign({ horizontal: styles.textAlign, vertical: "center" }, (styles.direction == "rtl" ? { rtl: true } : { ltr: true })) });
                     styleMap.header[rowIndex + "-" + index] = style;
                     cellStyleMap[rowIndex + "-" + index] = rowIndex + "-" + index;
                     let headWidth;
@@ -253,12 +253,12 @@ function createExcelTabelBaseOnDomElement(queryForTable, table, keepStyle, rowHe
                             color: (0, color_1.rgbToHex)(styles.borderRightColor),
                         };
                     }
-                    let fg = (0, color_1.rgbToHex)(styles.backgroundColor);
-                    if (!fg && bgTr) {
-                        fg = bgTr;
+                    let backgroundColor = (0, color_1.rgbToHex)(styles.backgroundColor);
+                    if (!backgroundColor && bgTr) {
+                        backgroundColor = bgTr;
                     }
-                    let style = Object.assign(Object.assign(Object.assign(Object.assign({}, (fg ? { fg } : {})), { bold: parseInt(styles.fontWeight) > 500, size: parseInt(styles.fontSize.substring(0, styles.fontSize.indexOf("p"))) }), (border ? { border } : {})), { 
-                        // fg: rgbToHex(styles.backgroundColor),
+                    let style = Object.assign(Object.assign(Object.assign(Object.assign({}, (backgroundColor ? { backgroundColor } : {})), { bold: parseInt(styles.fontWeight) > 500, size: parseInt(styles.fontSize.substring(0, styles.fontSize.indexOf("p"))) }), (border ? { border } : {})), { 
+                        // backgroundColor: rgbToHex(styles.backgroundColor),
                         // colspan: n.getAttribute("colspan"),
                         // rowspan: n.getAttribute("rowspan"),
                         alignment: Object.assign({ horizontal: styles.textAlign, vertical: "center", direction: styles.direction }, (styles.direction == "rtl" ? { rtl: true } : { ltr: true })) });

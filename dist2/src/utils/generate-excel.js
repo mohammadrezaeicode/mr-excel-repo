@@ -108,8 +108,8 @@ function generateExcel(data) {
                 borderIndex: 0,
                 formatIndex: 0,
             };
-            if (styl.fg) {
-                let fgConvertor = (0, color_1.convertToHex)(styl.fg, data.backend);
+            if (styl.backgroundColor) {
+                let fgConvertor = (0, color_1.convertToHex)(styl.backgroundColor, data.backend);
                 indexes.fillIndex = res.fill.count;
                 res.fill.count++;
                 res.fill.value =
@@ -122,14 +122,14 @@ function generateExcel(data) {
                         "</patternFill>" +
                         "</fill>";
             }
-            if (styl.fontColor ||
+            if (styl.color ||
                 styl.fontFamily ||
                 styl.size ||
                 styl.bold ||
                 styl.italic ||
                 styl.underline ||
                 styl.doubleUnderline) {
-                const colors = (0, color_1.convertToHex)(styl.fontColor, data.backend);
+                const colors = (0, color_1.convertToHex)(styl.color, data.backend);
                 indexes.fontIndex = res.font.count;
                 res.font.count++;
                 res.font.value =

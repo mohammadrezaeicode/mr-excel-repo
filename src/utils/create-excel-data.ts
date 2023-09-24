@@ -169,12 +169,12 @@ export function createExcelTabelBaseOnDomElement(
               color: rgbToHex(styles.borderRightColor)!,
             };
           }
-          let fg = rgbToHex(styles.backgroundColor);
-          if (!fg && bgTr) {
-            fg = bgTr;
+          let backgroundColor = rgbToHex(styles.backgroundColor);
+          if (!backgroundColor && bgTr) {
+            backgroundColor = bgTr;
           }
           let style = {
-            ...(fg ? { fg } : {}),
+            ...(backgroundColor ? { backgroundColor } : {}),
             bold: parseInt(styles.fontWeight) > 500,
             size: parseInt(
               styles.fontSize.substring(0, styles.fontSize.indexOf("p"))
@@ -303,18 +303,18 @@ export function createExcelTabelBaseOnDomElement(
               color: rgbToHex(styles.borderRightColor)!,
             };
           }
-          let fg = rgbToHex(styles.backgroundColor);
-          if (!fg && bgTr) {
-            fg = bgTr;
+          let backgroundColor = rgbToHex(styles.backgroundColor);
+          if (!backgroundColor && bgTr) {
+            backgroundColor = bgTr;
           }
           let style = {
-            ...(fg ? { fg } : {}),
+            ...(backgroundColor ? { backgroundColor } : {}),
             bold: parseInt(styles.fontWeight) > 500,
             size: parseInt(
               styles.fontSize.substring(0, styles.fontSize.indexOf("p"))
             ),
             ...(border ? { border } : {}),
-            // fg: rgbToHex(styles.backgroundColor),
+            // backgroundColor: rgbToHex(styles.backgroundColor),
             // colspan: n.getAttribute("colspan"),
             // rowspan: n.getAttribute("rowspan"),
             alignment: {

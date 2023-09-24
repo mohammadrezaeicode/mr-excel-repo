@@ -97,8 +97,8 @@ export async function generateExcel(data: ExcelTable) {
         borderIndex: 0,
         formatIndex: 0,
       };
-      if (styl.fg) {
-        let fgConvertor = convertToHex(styl.fg, data.backend);
+      if (styl.backgroundColor) {
+        let fgConvertor = convertToHex(styl.backgroundColor, data.backend);
         indexes.fillIndex = res.fill.count;
         res.fill.count++;
         res.fill.value =
@@ -112,7 +112,7 @@ export async function generateExcel(data: ExcelTable) {
           "</fill>";
       }
       if (
-        styl.fontColor ||
+        styl.color ||
         styl.fontFamily ||
         styl.size ||
         styl.bold ||
@@ -120,7 +120,7 @@ export async function generateExcel(data: ExcelTable) {
         styl.underline ||
         styl.doubleUnderline
       ) {
-        const colors = convertToHex(styl.fontColor, data.backend);
+        const colors = convertToHex(styl.color, data.backend);
 
         indexes.fontIndex = res.font.count;
         res.font.count++;

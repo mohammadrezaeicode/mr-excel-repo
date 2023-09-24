@@ -80,6 +80,10 @@ declare interface ExcelTableOption {
     styles?: Styles;
 }
 
+export declare const extractExcelData: typeof extractExcelData_2;
+
+declare function extractExcelData_2(uri: string): Promise<string>;
+
 declare interface Formula {
     [insertCell: string]: FormulaSetting;
 }
@@ -209,8 +213,6 @@ declare interface SortAndFilter {
 }
 
 declare interface StyleBody {
-    fg?: string;
-    fontColor?: string;
     fontFamily?: string;
     type?: string;
     size?: number;
