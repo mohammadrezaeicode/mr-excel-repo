@@ -35,6 +35,7 @@ MR-Excel is a JavaScript library designed for reading and writing Excel files. T
   - [**`How to use themeBaseGenerate`**](#theme-base-generate-usage)
 - [**`extractExcelData`**](#extract-excel-data)
   - [**`How to use extractExcelData`**](#extract-excel-data-usage)
+- [**`interface`**](#interface)
 - [**`Migrating from 2 to 3`**](#migrating)
 
 <details>
@@ -2767,6 +2768,9 @@ ExcelTable.generateExcel(data);
 <a id="shift-title"></a>
 The shift feature allows you to adjust the starting point of generating an Excel file. The title option, on the other hand, is used when you want to include a title at the top of the generated file.
 
+<details>
+<summary>Display code</summary>
+
 ```javascript
 function generateData() {
   const colorPalette = {
@@ -2862,11 +2866,16 @@ const { data } = generateData();
 ExcelTable.generateExcel(data);
 ```
 
+</details>
+
 ## Comment Option [⬆️](#table-of-contents)
 
 <a id="comment"></a>
 
 After version 2.4.0 you can add comment on cells.
+
+<details>
+<summary>Display code</summary>
 
 ```javascript
 function generateData() {
@@ -3009,6 +3018,8 @@ Header should start with ${textDataC0.toUpperCase()}`,
 const { data } = generateData();
 ExcelTable.generateExcel(data);
 ```
+
+</details>
 
 ## Multi Style value Option [⬆️](#table-of-contents)
 
@@ -3468,86 +3479,344 @@ ExcelTable.generateExcel(data);
 
 You can apply Excel conditional formatting in two ways. One method is through the Header object, which affects a whole column. The other method is using the Sheet object, where you need to specify the start and end properties.
 
+<details>
+<summary>Display code</summary>
+
+```javascript
+const data = {
+  activateConditinalFormating: true,
+  styles: {
+    ct: {
+      type: "conditinalFormating",
+      backgroundColor: "222831",
+      color: "EEEEEE",
+    },
+  },
+  sheet: [
+    {
+      conditinalFormating: [
+        {
+          type: "dataBar",
+          start: "A2",
+          end: "B6",
+        },
+        {
+          type: "colorScale",
+          start: "C2",
+          end: "C6",
+        },
+        {
+          type: "top",
+          start: "D2",
+          end: "D6",
+          value: 2,
+        },
+        {
+          type: "top",
+          start: "E2",
+          end: "E6",
+          styleId: "ct",
+          value: 2,
+          bottom: true,
+        },
+        {
+          type: "top",
+          operator: "aboveAverage",
+          start: "F2",
+          end: "F6",
+          value: 1,
+        },
+        {
+          type: "top",
+          operator: "belowAverage",
+          start: "G2",
+          styleId: "ct",
+          end: "G6",
+          value: 1,
+        },
+      ],
+      headers: [
+        {
+          label: "Column1",
+          text: "Text1",
+        },
+        {
+          label: "Column2",
+          text: "Text2",
+        },
+        {
+          label: "Column3",
+          text: "Text3",
+        },
+        { label: "Column4", text: "Text4" },
+
+        { label: "Column5", text: "Text5" },
+        { label: "Column6", text: "Text6" },
+        { label: "Column7", text: "Text7" },
+      ],
+      data: [
+        {
+          Column1: 123,
+          Column2: 456,
+          Column3: 789,
+          Column4: 101,
+          Column5: 101,
+          Column6: 101,
+          Column7: 101,
+        },
+        {
+          Column1: 234,
+          Column2: 567,
+          Column3: 890,
+          Column4: 202,
+          Column5: 202,
+          Column6: 202,
+          Column7: 202,
+        },
+        {
+          Column1: 345,
+          Column2: 678,
+          Column3: 901,
+          Column4: 303,
+          Column5: 303,
+          Column6: 303,
+          Column7: 303,
+        },
+        {
+          Column1: 456,
+          Column2: 789,
+          Column3: 123,
+          Column4: 404,
+          Column5: 404,
+          Column6: 404,
+          Column7: 404,
+        },
+      ],
+    },
+  ],
+};
+
+ExcelTable.generateExcel(data);
+```
+
+</details>
+
+<details>
+
+<summary>result image</summary>
+
+![ex](https://github.com/mohammadrezaeicode/mr-excel-page-repo/blob/main/public/img/ex19.PNG?raw=true)
+
+</details>
+
 ## On Column(Header) [⬆️](#table-of-contents)
 
 <a id="conditinal-formating-header"></a>
 
 Here's an example of how to use conditional formatting on a header.
 
+<details>
 <summary>Display code</summary>
 
 ```javascript
 const data = {
-    activateConditinalFormating: true,
-    styles: {
-        ct: {
-            type: "conditinalFormating",
-            backgroundColor: "222831",
-            color: "EEEEEE"
-        }
+  activateConditinalFormating: true,
+  styles: {
+    ct: {
+      type: "conditinalFormating",
+      backgroundColor: "222831",
+      color: "EEEEEE",
     },
-    sheet: [
+  },
+  sheet: [
+    {
+      headers: [
         {
-            headers: [
-                {
-                    label: "Column1", text: "Text1", conditinalFormating: {
-                        type: "iconSet",
-                        operator: "3Arrows" // 4Arrows, 5Arrows, 5ArrowsGray, 4ArrowsGray, 3ArrowsGray 
-                    }
-                },
-                {
-                    label: "Column2", text: "Text2",
-                    conditinalFormating: {
-                        type: "cells",
-                        operator: "ct",
-                        value: "a"
-                    }
-                },
-                {
-                    label: "Column3", text: "Text3",
-                    conditinalFormating: {
-                        type: "cells",
-                        operator: "gt", // lt, eq
-                        value: 10, styleId: 'ct'
-                    }
-                },
-                { label: "Column4", text: "Text4" },
-            ],
-            data: [
-                {
-                    "Column1": 42,
-                    "Column2": "John",
-                    "Column3": 7,
-                    "Column4": "Doe"
-                },
-                {
-                    "Column1": 25,
-                    "Column2": "Alice",
-                    "Column3": 13,
-                    "Column4": "Smith"
-                },
-                {
-                    "Column1": 33,
-                    "Column2": "Bob",
-                    "Column3": 18,
-                    "Column4": "Johnson"
-                },
-                {
-                    "Column1": 56,
-                    "Column2": "Eve",
-                    "Column3": 22,
-                    "Column4": "Brown"
-                }
-            ]
-        }
-    ]
+          label: "Column1",
+          text: "Text1",
+          conditinalFormating: { type: "dataBar" },
+        },
+        {
+          label: "Column2",
+          text: "Text2",
+          conditinalFormating: { type: "dataBar" },
+        },
+        {
+          label: "Column3",
+          text: "Text3",
+          conditinalFormating: { type: "colorScale" },
+        },
+        {
+          label: "Column4",
+          text: "Text4",
+          conditinalFormating: { type: "top", value: 2 },
+        },
+
+        {
+          label: "Column5",
+          text: "Text5",
+          conditinalFormating: {
+            type: "top",
+            styleId: "ct",
+            value: 2,
+            bottom: true,
+          },
+        },
+        {
+          label: "Column6",
+          text: "Text6",
+          conditinalFormating: {
+            type: "top",
+            operator: "aboveAverage",
+            value: 1,
+          },
+        },
+        {
+          label: "Column7",
+          text: "Text7",
+          conditinalFormating: {
+            type: "top",
+            operator: "belowAverage",
+            styleId: "ct",
+            value: 1,
+          },
+        },
+      ],
+      data: [
+        {
+          Column1: 123,
+          Column2: 456,
+          Column3: 789,
+          Column4: 101,
+          Column5: 101,
+          Column6: 101,
+          Column7: 101,
+        },
+        {
+          Column1: 234,
+          Column2: 567,
+          Column3: 890,
+          Column4: 202,
+          Column5: 202,
+          Column6: 202,
+          Column7: 202,
+        },
+        {
+          Column1: 345,
+          Column2: 678,
+          Column3: 901,
+          Column4: 303,
+          Column5: 303,
+          Column6: 303,
+          Column7: 303,
+        },
+        {
+          Column1: 456,
+          Column2: 789,
+          Column3: 123,
+          Column4: 404,
+          Column5: 404,
+          Column6: 404,
+          Column7: 404,
+        },
+      ],
+    },
+  ],
 };
-       
+ExcelTable.generateExcel(data);
+```
+
+</details>
+
+<details>
+
+<summary>result image</summary>
+
+![ex](https://github.com/mohammadrezaeicode/mr-excel-page-repo/blob/main/public/img/ex20.PNG?raw=true)
+
+</details>
+
+<details>
+<summary>Display code</summary>
+
+```javascript
+const data = {
+  activateConditinalFormating: true,
+  styles: {
+    ct: {
+      type: "conditinalFormating",
+      backgroundColor: "222831",
+      color: "EEEEEE",
+    },
+  },
+  sheet: [
+    {
+      headers: [
+        {
+          label: "Column1",
+          text: "Text1",
+          conditinalFormating: {
+            type: "iconSet",
+            operator: "3Arrows", // 4Arrows, 5Arrows, 5ArrowsGray, 4ArrowsGray, 3ArrowsGray
+          },
+        },
+        {
+          label: "Column2",
+          text: "Text2",
+          conditinalFormating: {
+            type: "cells",
+            operator: "ct",
+            value: "a",
+          },
+        },
+        {
+          label: "Column3",
+          text: "Text3",
+          conditinalFormating: {
+            type: "cells",
+            operator: "gt", // lt, eq
+            value: 10,
+            styleId: "ct",
+          },
+        },
+        { label: "Column4", text: "Text4" },
+      ],
+      data: [
+        {
+          Column1: 42,
+          Column2: "John",
+          Column3: 7,
+          Column4: "Doe",
+        },
+        {
+          Column1: 25,
+          Column2: "Alice",
+          Column3: 13,
+          Column4: "Smith",
+        },
+        {
+          Column1: 33,
+          Column2: "Bob",
+          Column3: 18,
+          Column4: "Johnson",
+        },
+        {
+          Column1: 56,
+          Column2: "Eve",
+          Column3: 22,
+          Column4: "Brown",
+        },
+      ],
+    },
+  ],
+};
+
 ExcelTable.generateExcel(data);
 ```
 
 </details>
 <details>
+
 <summary>result image</summary>
 
 ![ex](https://github.com/mohammadrezaeicode/mr-excel-page-repo/blob/main/public/img/ex18.PNG?raw=true)
@@ -3560,118 +3829,128 @@ ExcelTable.generateExcel(data);
 
 General use and sheet objects offer the same functionality but are more flexible, allowing you to apply them to multiple columns and various other use cases
 
+<details>
 <summary>Display code</summary>
 
 ```javascript
 const data = {
   activateConditinalFormating: true,
   styles: {
-      ct: {
-          type: "conditinalFormating",
-          backgroundColor: "222831",
-          color: "EEEEEE"
-      }
+    ct: {
+      type: "conditinalFormating",
+      backgroundColor: "222831",
+      color: "EEEEEE",
+    },
   },
   sheet: [
-      {
-          conditinalFormating: [
-              {
-                  type: "dataBar",
-                  start: "A2",
-                  end: "B6"
-              }, {
-                  type: "colorScale",
-                  start: "C2",
-                  end: "C6"
-              }, {
-                  type: "top",
-                  start: "D2",
-                  end: "D6",
-                  value: 2
-              }, {
-                  type: "top",
-                  start: "E2",
-                  end: "E6",
-                  styleId: 'ct',
-                  value: 2,
-                  bottom: true
-              }, {
-                  type: "top",
-                  operator: "aboveAverage",
-                  start: "F2",
-                  end: "F6",
-                  value: 1
-              }, {
-                  type: "top",
-                  operator: "belowAverage",
-                  start: "G2",
-                  styleId: 'ct',
-                  end: "G6",
-                  value: 1
-              }],
-          headers: [
-              {
-                  label: "Column1", text: "Text1"
-              },
-              {
-                  label: "Column2", text: "Text2"
-              },
-              {
-                  label: "Column3", text: "Text3"
-              },
-              { label: "Column4", text: "Text4" },
+    {
+      conditinalFormating: [
+        {
+          type: "dataBar",
+          start: "A2",
+          end: "B6",
+        },
+        {
+          type: "colorScale",
+          start: "C2",
+          end: "C6",
+        },
+        {
+          type: "top",
+          start: "D2",
+          end: "D6",
+          value: 2,
+        },
+        {
+          type: "top",
+          start: "E2",
+          end: "E6",
+          styleId: "ct",
+          value: 2,
+          bottom: true,
+        },
+        {
+          type: "top",
+          operator: "aboveAverage",
+          start: "F2",
+          end: "F6",
+          value: 1,
+        },
+        {
+          type: "top",
+          operator: "belowAverage",
+          start: "G2",
+          styleId: "ct",
+          end: "G6",
+          value: 1,
+        },
+      ],
+      headers: [
+        {
+          label: "Column1",
+          text: "Text1",
+        },
+        {
+          label: "Column2",
+          text: "Text2",
+        },
+        {
+          label: "Column3",
+          text: "Text3",
+        },
+        { label: "Column4", text: "Text4" },
 
-              { label: "Column5", text: "Text5" },
-              { label: "Column6", text: "Text6" },
-              { label: "Column7", text: "Text7" },
-          ],
-          data: [
-              {
-                  "Column1": 123,
-                  "Column2": 456,
-                  "Column3": 789,
-                  "Column4": 101,
-                  "Column5": 101,
-                  "Column6": 101,
-                  "Column7": 101
-              },
-              {
-                  "Column1": 234,
-                  "Column2": 567,
-                  "Column3": 890,
-                  "Column4": 202,
-                  "Column5": 202,
-                  "Column6": 202,
-                  "Column7": 202
-              },
-              {
-                  "Column1": 345,
-                  "Column2": 678,
-                  "Column3": 901,
-                  "Column4": 303,
-                  "Column5": 303,
-                  "Column6": 303,
-                  "Column7": 303
-              },
-              {
-                  "Column1": 456,
-                  "Column2": 789,
-                  "Column3": 123,
-                  "Column4": 404,
-                  "Column5": 404,
-                  "Column6": 404,
-                  "Column7": 404
-              },
-          ]
-
-      }
-  ]
+        { label: "Column5", text: "Text5" },
+        { label: "Column6", text: "Text6" },
+        { label: "Column7", text: "Text7" },
+      ],
+      data: [
+        {
+          Column1: 123,
+          Column2: 456,
+          Column3: 789,
+          Column4: 101,
+          Column5: 101,
+          Column6: 101,
+          Column7: 101,
+        },
+        {
+          Column1: 234,
+          Column2: 567,
+          Column3: 890,
+          Column4: 202,
+          Column5: 202,
+          Column6: 202,
+          Column7: 202,
+        },
+        {
+          Column1: 345,
+          Column2: 678,
+          Column3: 901,
+          Column4: 303,
+          Column5: 303,
+          Column6: 303,
+          Column7: 303,
+        },
+        {
+          Column1: 456,
+          Column2: 789,
+          Column3: 123,
+          Column4: 404,
+          Column5: 404,
+          Column6: 404,
+          Column7: 404,
+        },
+      ],
+    },
+  ],
 };
-        
+
 ExcelTable.generateExcel(data);
 ```
 
 </details>
+
 <details>
 <summary>result image</summary>
 
@@ -3819,43 +4098,296 @@ ExcelTable.generateExcel(data);
 
 </details>
 
-### ExcelTable Object
+## interface [⬆️](#table-of-contents)
 
-> [!NOTE]
-> The table in this section is currently outdated, but it will be updated soon.
+<a id="interface"></a>
 
-In the ExcelTable object, you'll find various properties that allow you to customize the behavior and appearance of the generated Excel file through the `generateExcel` function.
+This section introduces the primary interface of the library.
 
-| Name                  | Type    | Description                                                                                            |
-| --------------------- | ------- | ------------------------------------------------------------------------------------------------------ |
-| notSave?              | boolean | Controls whether the generated Excel file should be saved.                                             |
-| backend?              | boolean | For backend use cases, set to true.                                                                    |
-| addDefaultTitleStyle? | boolean | If set to true, generates default style for the title option.                                          |
-| fileName?             | string  | Name of the file that will be generated.                                                               |
-| generateType?         | string  | For backend use, specifies the type of generated file ("nodebuffer" triggers only if backend is true). |
-| creator?              | string  | Specifies the creator of the Excel file.                                                               |
-| created?              | string  | Sets the creation date of the Excel file.                                                              |
-| modified?             | string  | Sets the modification date of the Excel file.                                                          |
-| numberOfColumn?       | number  | Specifies the number of columns in the Excel file.                                                     |
-| createType?           | string  | Specifies the type of creation for the Excel file.                                                     |
-| mapSheetDataOption?   | any     | An option to define the type if needed for mapping sheet data.                                         |
-| styles?               | Styles  | Defines the styles to be applied to the Excel cells.                                                   |
-| sheet                 | Sheet[] | An array of sheets containing data and configuration settings.                                         |
+<details>
 
-These properties provide you with the flexibility to customize various aspects of the Excel file generated by the `generateExcel` function.
-
-### Styles Object
-
-> [!NOTE]
-> The table in this section is currently outdated, but it will be updated soon.
-
-To define the styling for your Excel file, you should utilize this option. The Styles object allows you to specify various formatting properties that will be applied to cells in the generated Excel file. Each property in the object corresponds to a specific style element, such as foreground color, font color, font family, size, alignment, border, and format. You can customize these properties according to your preferences to achieve the desired visual appearance for your Excel document.
+<summary>Display interfaces</summary>
 
 ```typescript
-[key: string]: {
-  backgroundColor?: string;
-  color?: string;
+export interface ExcelTable extends ExcelTableOption {
+  sheet: Sheet[];
+}
+export interface ExcelTableOption {
+  notSave?: boolean;
+  creator?: string;
+  backend?: boolean;
+  activateConditinalFormating?: boolean;
+  fileName?: string;
+  generateType?: "nodebuffer" | "array" | "binarystring" | "base64";
+  addDefaultTitleStyle?: boolean;
+  created?: string;
+  modified?: string;
+  numberOfColumn?: number;
+  createType?: string;
+  mapSheetDataOption?: any;
+  styles?: Styles;
+}
+export interface SheetOption {
+  withoutHeader?: boolean;
+  conditinalFormating?: ConditinalFormating[];
+  multiStyleConditin?: MultiStyleConditinFunction;
+  useSplitBaseOnMatch?: boolean;
+  convertStringToNumber?: boolean;
+  images?: ImageTypes[];
+  formula?: Formula;
+  name?: string;
+  title?: Title;
+  shiftTop?: number;
+  shiftLeft?: number;
+  selected?: boolean;
+  tabColor?: string;
+  merges?: string[];
+  headerStyleKey?: string;
+  mergeRowDataCondition?: MergeRowDataConditionFunction;
+  styleCellCondition?: StyleCellConditionFunction;
+  commentCodition?: CommentConditionFunction;
+  sortAndfilter?: SortAndFilter;
+  state?: "hidden" | "visible";
+  headerRowOption?: any;
+  protectionOption?: ProtectionOption;
+  headerHeight?: number;
+}
+export interface Sheet extends SheetOption {
+  headers: Header[];
+  data: Data[];
+}
+export interface Header {
+  label: string;
+  text: string;
+  size?: number;
+  multiStyleValue?: MultiStyleValue;
+  comment?: Comment | string;
+  conditinalFormating?: ConditinalFormating;
+  formula?: {
+    type: FormulaType;
+    styleId?: string;
+  };
+}
+export interface Data extends DataOptions {
+  [key: string]: string | number | any | undefined;
+}
+export interface DataOptions {
+  [key: string]:
+    | "0"
+    | "1"
+    | number
+    | string
+    | undefined
+    | MapComment
+    | MapMultiStyleValue;
+  outlineLevel?: number;
+  hidden?: "0" | "1" | number;
+  rowStyle?: string;
+  height?: number;
+  multiStyleValue?: MapMultiStyleValue;
+  comment?: MapComment;
+}
+export type ProtectionOption = {
+  [key in ProtectionOptionKey]: "0" | "1" | 0 | 1;
+};
+export interface ConditinalFormating {
+  type: "cells" | "dataBar" | "iconSet" | "colorScale" | "top";
+  start: string;
+  end: string;
+  operator?: string;
+  value?: number | string;
+  priority?: number;
+  colors?: string[];
+  bottom?: boolean;
+  styleId?: string;
+  percent?: number;
+}
+export interface ImageTypes {
+  url: string;
+  from: string;
+  to?: string;
+  type?: "one" | "two";
+  extent?: {
+    cx: number;
+    cy: number;
+  };
+  margin?: {
+    all?: number;
+    right?: number;
+    left?: number;
+    bottom?: number;
+    top?: number;
+  };
+}
+export interface SideBySide {
+  sheetName?: string;
+  spaceX?: number;
+  spaceY?: number;
+  headers: { label: string; text: string }[];
+  data: Data[];
+  headerIndex?: number;
+}
+export type ProtectionOptionKey =
+  | "sheet"
+  | "formatCells"
+  | "formatColumns"
+  | "formatRows"
+  | "insertColumns"
+  | "insertRows"
+  | "insertHyperlinks"
+  | "deleteColumns"
+  | "deleteRows"
+  | "sort"
+  | "autoFilter"
+  | "pivotTables";
+
+export type AlignmentOptionKey =
+  | "horizontal"
+  | "vertical"
+  | "wrapText"
+  | "shrinkToFit"
+  | "readingOrder"
+  | "textRotation"
+  | "indent";
+export interface AlignmentOption {
+  horizontal?: "center" | "left" | "right";
+  vertical?: "center" | "top" | "bottom";
+  wrapText?: "0" | "1" | 2 | 1;
+  shrinkToFit?: "0" | "1" | 2 | 1;
+  readingOrder?: "1" | "2" | 2 | 1;
+  textRotation?: number;
+  indent?: number;
+  rtl?: boolean;
+  ltr?: boolean;
+}
+export type BorderDirection = "full" | "top" | "left" | "right" | "bottom";
+export type BorderOption = {
+  [key in BorderDirection]?: {
+    color: string;
+    style:
+      | "slantDashDot"
+      | "dotted"
+      | "thick"
+      | "hair"
+      | "dashDot"
+      | "dashDotDot"
+      | "dashed"
+      | "thin"
+      | "mediumDashDot"
+      | "medium"
+      | "double"
+      | "mediumDashed";
+  };
+};
+export interface MultiStyleRexValue {
+  reg: RegExp | string;
+  styleId: string;
+}
+export interface Comment {
+  comment?: string;
+  styleId?: string;
+  author?: string;
+}
+export interface MultiStyleValue {
+  [key: string]: string | undefined | MultiStyleRexValue[];
+  reg?: MultiStyleRexValue[];
+}
+export interface MapMultiStyleValue {
+  [key: string]: MultiStyleValue;
+}
+export interface MapComment {
+  [key: string]: Comment | string;
+}
+export interface MergeRowConditionMap {
+  [columnKey: string]: {
+    inProgress: boolean;
+    start: number;
+  };
+}
+export type MultiStyleConditinFunction = (
+  data: Header | string | number | undefined,
+  object: null | Data,
+  headerKey: string,
+  rowIndex: number,
+  colIndex: number,
+  fromHeader: boolean
+) => MultiStyleValue | null;
+
+export type CommentConditionFunction = (
+  data: Header | string | number | undefined,
+  object: null | Data,
+  headerKey: string,
+  rowIndex: number,
+  colIndex: number,
+  fromHeader: boolean
+) => Comment | string | false | undefined | null;
+export type StyleCellConditionFunction = (
+  data: Header | string | number | undefined,
+  object: Header | Data,
+  colIndex: number,
+  rowIndex: number,
+  fromHeader: boolean,
+  stylekeys: string[]
+) => string | null;
+export type MergeRowDataConditionFunction = (
+  data: Header | string | number | undefined,
+  key: string | null,
+  index: number,
+  fromHeader: boolean
+) => boolean;
+export interface SortAndFilter {
+  mode: "all" | "ref";
+  ref?: string;
+}
+export interface Title {
+  shiftTop?: number;
+  shiftLeft?: number;
+  consommeRow?: number;
+  consommeCol?: number;
+  height?: number;
+  styleId?: string;
+  text?: string;
+  multiStyleValue?: MultiStyleValue;
+  comment?: Comment | string;
+}
+export interface HeaderRowOption {
+  outlineLevel: "string";
+}
+export interface StyleMapper {
+  conditinalFormating: {
+    count: number;
+    value: string;
+  };
+  commentSintax: {
+    value: {
+      [key: string]: string;
+    };
+  };
+  format: {
+    count: number;
+    value: string;
+  };
+  border: {
+    count: number;
+    value: string;
+  };
+  fill: {
+    count: number;
+    value: string;
+  };
+  font: {
+    count: number;
+    value: string;
+  };
+  cell: {
+    count: number;
+    value: string;
+  };
+}
+export type FormulaType = "AVERAGE" | "SUM" | "COUNT" | "MAX" | "MIN";
+export interface StyleBody {
   fontFamily?: string;
+  type?: string;
   size?: number;
   index?: number;
   alignment?: AlignmentOption;
@@ -3865,135 +4397,33 @@ To define the styling for your Excel file, you should utilize this option. The S
   underline?: boolean;
   italic?: boolean;
   doubleUnderline?: boolean;
+  color?: string;
+  backgroundColor?: string;
+}
+export interface Styles {
+  [key: string]: StyleBody;
+}
+export interface FormatMap {
+  [format: string]: {
+    key: number;
+    value?: string;
+  };
+}
+export interface FormulaSetting {
+  type: FormulaType;
+  start: string;
+  end: string;
+  styleId?: string;
+}
+export interface Formula {
+  [insertCell: string]: FormulaSetting;
+}
+export interface Theme extends ExcelTableOption {
+  sheet: SheetOption[];
 }
 ```
 
-### Styles Object
-
-> [!NOTE]
-> The table in this section is currently outdated, but it will be updated soon.
-
-To define the styling for your Excel file, you should utilize this option. The Styles object allows you to specify various formatting properties that will be applied to cells in the generated Excel file. Each property in the object corresponds to a specific style element, such as foreground color, font color, font family, size, alignment, border, and format. You can customize these properties according to your preferences to achieve the desired visual appearance for your Excel document.
-
-| Name             | Type            | Description                                                                   |
-| ---------------- | --------------- | ----------------------------------------------------------------------------- |
-| backgroundColor? | string          | Specifies the foreground color of the cell text.                              |
-| color?           | string          | Defines the font color of the cell text.                                      |
-| fontFamily?      | string          | Sets the font family for the cell text.                                       |
-| size?            | number          | Specifies the font size of the cell text.                                     |
-| index?           | number          | Specifies the index of the style.                                             |
-| alignment?       | AlignmentOption | Defines the cell alignment properties (horizontal and vertical).              |
-| border?          | BorderOption    | Specifies the border style for the cell.                                      |
-| bold?            | boolean         | Defines whether the cell text should be bold.                                 |
-| underline?       | boolean         | Defines whether the cell text should be underlined.                           |
-| italic?          | boolean         | Defines whether the cell text should be italic.                               |
-| doubleUnderline? | boolean         | Defines whether the cell text should have double underline.                   |
-| format           | string          | Determines the format of the cell content, such as date, time, currency, etc. |
-
-These properties allow you to customize the appearance of cells in your Excel document by applying various formatting styles.
-
-### Sheet Object
-
-> [!NOTE]
-> The table in this section is currently outdated, but it will be updated soon.
-
-The Sheet object is used to define various options related to a specific sheet within the Excel file. It holds a significant role and can be considered one of the most crucial options.
-
-| Name                   | Type                          | Description                                                                                                     |
-| ---------------------- | ----------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| withoutHeader?         | boolean                       | Specifies whether the sheet should be generated without a header row.                                           |
-| formula?               | Formula                       | Defines formulas to be applied to the sheet.                                                                    |
-| name?                  | string                        | Sets the name of the sheet.                                                                                     |
-| shiftTop?              | number                        | Shifts the start point from the top.                                                                            |
-| shiftLeft?             | number                        | Shifts the start point from the left.                                                                           |
-| title?                 | Title                         | Sets a title for the generated table (default; title consumes 2 rows and columns equal to header array length). |
-| selected?              | boolean                       | Determines if the sheet is selected when the Excel file is opened.                                              |
-| tabColor?              | string                        | Specifies the tab color of the sheet.                                                                           |
-| merges?                | string[]                      | Defines merged cell ranges within the sheet.                                                                    |
-| headerStyleKey?        | string                        | Sets the style for the header cells using a style ID.                                                           |
-| mergeRowDataCondition? | MergeRowDataConditionFunction | Defines a condition for merging rows.                                                                           |
-| styleCellCondition?    | StyleCellConditionFunction    | Sets styling conditions for individual cells.                                                                   |
-| sortAndfilter?         | SortAndFilter                 | Defines sorting and filtering options for the sheet.                                                            |
-| state?                 | "hidden" \| "visible"         | Determines the visibility of the sheet.                                                                         |
-| headerRowOption?       | any                           | Allows the definition of header row options (type to be defined if needed).                                     |
-| protectionOption?      | ProtectionOption              | Specifies protection options for the sheet.                                                                     |
-| headerHeight?          | number                        | Sets the height of the header row.                                                                              |
-| headers                | Header[]                      | Defines the headers for the sheet columns.                                                                      |
-| data                   | Data[]                        | Provides the data entries for the sheet.                                                                        |
-
-These properties allow you to customize the behavior and appearance of individual sheets within the Excel file generated using the library. You can set headers, apply formulas, define styles, manage merging cells, specify visibility, and much more to create Excel sheets that match your specific requirements.
-
-### Title
-
-> [!NOTE]
-> The table in this section is currently outdated, but it will be updated soon.
-
-The title option allows you to add a title at the starting point of the generated table.
-
-| Property     | Type   | Description                                            |
-| ------------ | ------ | ------------------------------------------------------ |
-| shiftTop?    | number | Shifts the title vertically from the top.              |
-| shiftLeft?   | number | Shifts the title horizontally from the left.           |
-| consommeRow? | number | Specifies the number of rows consumed by the title.    |
-| consommeCol? | number | Specifies the number of columns consumed by the title. |
-| height?      | number | Sets the height of the title row.                      |
-| styleId?     | string | Applies a style to the title using a style ID.         |
-| text?        | string | Specifies the text content of the title.               |
-
-By using the `Title` interface and its properties, you can customize the appearance and positioning of titles within your generated Excel tables.
-
-### Border Object
-
-> [!NOTE]
-> The table in this section is currently outdated, but it will be updated soon.
-
-The `BorderOption` object enables you to add borders to your Excel cells conveniently. It provides a way to define border properties for various border directions.
-
-| Property | Type   | Description                                                                                                           |
-| -------- | ------ | --------------------------------------------------------------------------------------------------------------------- |
-| key      | string | A `BorderDirection` value indicating the border direction. Possible values: "full", "top", "left", "right", "bottom". |
-| color    | string | The color of the border. Use a valid color code or name.                                                              |
-| style    | string | The style of the border. Choose from predefined styles such as "slantDashDot", "dotted", "thick", and more.           |
-
-By utilizing the `BorderOption` object, you can specify border color and style for different directions, enhancing the visual appearance of your Excel tables with well-defined cell borders.
-
-### Formula Object
-
-> [!NOTE]
-> The table in this section is currently outdated, but it will be updated soon.
-
-The `Formula` object provides a way to define formulas for Excel cells. It comprises the following properties:
-
-| Property   | Type                                            | Description                                                                                            |
-| ---------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| insertCell | string                                          | The cell where the formula will be inserted.                                                           |
-| type       | "AVERAGE" \| "SUM" \| "COUNT" \| "MAX" \| "MIN" | The type of formula to apply. Choose from options such as "AVERAGE", "SUM", "COUNT", "MAX", and "MIN". |
-| start      | string                                          | The starting cell for the formula range.                                                               |
-| end        | string                                          | The ending cell for the formula range.                                                                 |
-| styleId    | string (Optional)                               | The style ID to apply to cells with the formula. Use if you want to style formula cells.               |
-
-In the provided example, we've demonstrated how to define formulas for various cells using the `Formula` object. You can specify the formula type, range, and even apply specific styles to formula cells if desired.
-
-### Alignment Object
-
-> [!NOTE]
-> The table in this section is currently outdated, but it will be updated soon.
-
-The library offers multiple options for aligning cells, giving you control over how content is displayed within cells. These alignment options can be configured using the following properties:
-
-| Property     | Type                          | Description                                                                                         |
-| ------------ | ----------------------------- | --------------------------------------------------------------------------------------------------- |
-| horizontal   | "center" \| "left" \| "right" | The horizontal alignment of cell content. Choose from "center", "left", or "right".                 |
-| vertical     | "bottom" \| "top" \| "bottom" | The vertical alignment of cell content. Choose from "bottom", "top", or "bottom".                   |
-| wrapText     | "0" \| "1"                    | Whether to wrap text within cells. Use "0" for false or "1" for true.                               |
-| shrinkToFit  | "0" \| "1"                    | Whether to shrink cell content to fit within the cell. Use "0" for false or "1" for true.           |
-| readingOrder | "1" \| "2" \| 2 \| 1          | The reading order of cell content. Choose from "1" (left to right) or "2" (right to left).          |
-| textRotation | number                        | The degree of text rotation within cells. Use a number to represent the rotation angle.             |
-| indent       | number                        | The indentation level of cell content. Use a number to specify the indent.                          |
-| rtl          | boolean                       | Whether the cell content should be displayed right-to-left. Use "true" for right-to-left alignment. |
-| ltr          | boolean                       | Whether the cell content should be displayed left-to-right. Use "true" for left-to-right alignment. |
-
-These alignment options empower you to customize the appearance of cell content in your Excel sheets. By adjusting these properties, you can control the positioning, orientation, and overall style of data within your cells.
+</details>
 
 ## Migrating from 2 to 3 [⬆️](#table-of-contents)
 
