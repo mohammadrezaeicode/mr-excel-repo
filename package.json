@@ -1,6 +1,6 @@
 {
   "name": "mr-excel",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "main": "dist/excel-table.umd.js",
   "scripts": {
     "start": "tsc",
@@ -40,7 +40,8 @@
     "table-to-excel",
     "object-to-xlsx",
     "json-to-excel",
-    "excel-util"
+    "excel-util",
+    "read excel"
   ],
   "author": "M.Rezaei",
   "license": "ISC",

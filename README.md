@@ -4437,6 +4437,12 @@ To migrate from Version 2 to Version 3, you need to follow the steps below:
 
 ## Release Notes [⬆️](#table-of-contents)
 
+### Version 3.0.3 (2023-12-02)
+
+#### Bug Fixes
+
+- sheet option `selected` tab
+
 ### Version 3.0.0 (2023-09-24)
 
 #### New Features

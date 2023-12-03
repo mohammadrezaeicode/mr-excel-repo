@@ -302,6 +302,7 @@ function generateExcel(data) {
         let sheetNameApp = "";
         let indexId = 4;
         let selectedAdded = false;
+        let activeTabIndex = -1;
         let arrTypes = [];
         for (let index = 0; index < sheetLength; index++) {
             const sheetData = data.sheet[index];
@@ -864,7 +865,11 @@ function generateExcel(data) {
                     (index + 1) +
                     '.xml" />';
             sheetNameApp += "<vt:lpstr>" + ("sheet" + (index + 1)) + "</vt:lpstr>";
-            selectedAdded = selectedAdded || !!sheetData.selected;
+            // selectedAdded = selectedAdded || !!sheetData.selected;
+            if (sheetData.selected) {
+                selectedAdded = true;
+                activeTabIndex = index;
+            }
             const filterMode = sheetData.sortAndfilter ? 'filterMode="1"' : "";
             let hasImages = false;
             let drawersContent = "";
@@ -1281,6 +1286,11 @@ function generateExcel(data) {
             ' xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac"' +
             ' xmlns:xm="http://schemas.microsoft.com/office/excel/2006/main">' +
             " <workbookPr />" +
+            (selectedAdded
+                ? '<bookViews><workbookView xWindow="3540" yWindow="1365" windowWidth="21600" windowHeight="11325" activeTab="' +
+                    activeTabIndex +
+                    '"/></bookViews>'
+                : "") +
             " <sheets>" +
             "  " +
             workbookString +

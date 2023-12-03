@@ -320,6 +320,7 @@ export async function generateExcel(data: ExcelTable) {
   let sheetNameApp = "";
   let indexId = 4;
   let selectedAdded = false;
+  let activeTabIndex = -1;
   let arrTypes: string[] = [];
   interface ShapeRC {
     row: string | number;
@@ -383,7 +384,6 @@ export async function generateExcel(data: ExcelTable) {
       if (sheetData.title) {
         const title = sheetData.title;
         const commentTitle = title.comment;
-
         const top = title.shiftTop ? title.shiftTop : 0;
         const sL = sheetData.shiftLeft ? sheetData.shiftLeft : 0;
         const left = title.shiftLeft ? title.shiftLeft + sL : sL;
@@ -1025,7 +1025,11 @@ export async function generateExcel(data: ExcelTable) {
       (index + 1) +
       '.xml" />';
     sheetNameApp += "<vt:lpstr>" + ("sheet" + (index + 1)) + "</vt:lpstr>";
-    selectedAdded = selectedAdded || !!sheetData.selected;
+    // selectedAdded = selectedAdded || !!sheetData.selected;
+    if (sheetData.selected) {
+      selectedAdded=true;
+      activeTabIndex = index;
+    }
     const filterMode = sheetData.sortAndfilter ? 'filterMode="1"' : "";
     let hasImages = false;
     let drawersContent = "";
@@ -1519,6 +1523,11 @@ export async function generateExcel(data: ExcelTable) {
       ' xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac"' +
       ' xmlns:xm="http://schemas.microsoft.com/office/excel/2006/main">' +
       " <workbookPr />" +
+      (selectedAdded
+        ? '<bookViews><workbookView xWindow="3540" yWindow="1365" windowWidth="21600" windowHeight="11325" activeTab="' +
+          activeTabIndex +
+          '"/></bookViews>'
+        : "") +
       " <sheets>" +
       "  " +
       workbookString +
