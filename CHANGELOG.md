@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 3.0.3 (2023-12-02)
+
+### Bug Fixes
+
+- sheet option `selected` tab
+
 ##  Version 2.12.0 (2023-09-21)
 
 ### New Features
