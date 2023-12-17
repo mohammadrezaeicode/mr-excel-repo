@@ -21,6 +21,18 @@ declare type BorderOption = {
     };
 };
 
+declare interface Checkbox {
+    col: number;
+    row: number;
+    text: string;
+    link?: string;
+    checked?: boolean;
+    mixed?: boolean;
+    threeD?: boolean;
+    startStr?: string;
+    endStr?: string;
+}
+
 declare type ColWidthScaleFunction = (data: number, colIndex: number) => number;
 
 declare interface Comment_2 {
@@ -191,6 +203,7 @@ declare interface SheetOption {
     headerRowOption?: any;
     protectionOption?: ProtectionOption;
     headerHeight?: number;
+    checkbox?: Checkbox[];
 }
 
 declare interface SideBySide {

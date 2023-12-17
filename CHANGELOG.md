@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 3.0.3 (2023-12-12)
+
+### New Features
+
+- checkbox has been added to sheets
+
 ## Version 3.0.3 (2023-12-02)
 
 ### Bug Fixes

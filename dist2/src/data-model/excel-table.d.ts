@@ -153,6 +153,7 @@ export interface SheetOption {
     headerRowOption?: any;
     protectionOption?: ProtectionOption;
     headerHeight?: number;
+    checkbox?: Checkbox[];
 }
 export interface Sheet extends SheetOption {
     headers: Header[];
@@ -191,6 +192,17 @@ export interface StyleMapper {
         count: number;
         value: string;
     };
+}
+export interface Checkbox {
+    col: number;
+    row: number;
+    text: string;
+    link?: string;
+    checked?: boolean;
+    mixed?: boolean;
+    threeD?: boolean;
+    startStr?: string;
+    endStr?: string;
 }
 export type FormulaType = "AVERAGE" | "SUM" | "COUNT" | "MAX" | "MIN";
 export interface StyleBody {

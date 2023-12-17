@@ -4,7 +4,8 @@ export function contentTypeGenerator(
   sheetContentType: string,
   commentId: number[],
   arrTypes: string[],
-  sheetDrawers: string[]
+  sheetDrawers: string[],
+  checkboxForm: string[]
 ) {
   return (
     '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
@@ -65,6 +66,16 @@ export function contentTypeGenerator(
         ' ContentType="application/vnd.openxmlformats-officedocument.drawing+xml" />'
       );
     }, "") +
+    (checkboxForm.length > 0
+      ? checkboxForm.reduce((res, curr, index) => {
+          return (
+            res +
+            `<Override PartName="/xl/ctrlProps/ctrlProp${
+              index + 1
+            }.xml" ContentType="application/vnd.ms-excel.controlproperties+xml"/>`
+          );
+        }, "")
+      : "") +
     ' <Override PartName="/docProps/app.xml" ' +
     ' ContentType="application/vnd.openxmlformats-officedocument.extended-properties+xml" />' +
     "</Types>"

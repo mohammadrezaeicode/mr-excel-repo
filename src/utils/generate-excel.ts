@@ -326,12 +326,53 @@ export async function generateExcel(data: ExcelTable) {
     row: string | number;
     col: string | number;
   }
+  const formCtrlMap = {
+    checkbox: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<formControlPr xmlns="http://schemas.microsoft.com/office/spreadsheetml/2009/9/main" objectType="CheckBox" **value** **fmlaLink** lockText="1" noThreeD="1"/>`,
+  };
+  let shapeIdCounter = 1024;
+  const shapeMap = {
+    checkbox: `<v:shape id="***id***" type="#_x0000_t201" style='position:absolute;
+  margin-left:1.5pt;margin-top:1.5pt;width:63pt;height:16.5pt;z-index:1;
+  mso-wrap-style:tight' filled="f" fillcolor="window [65]" stroked="f"
+  strokecolor="windowText [64]" o:insetmode="auto">
+  <v:path shadowok="t" strokeok="t" fillok="t"/>
+  <o:lock v:ext="edit" rotation="t"/>
+  <v:textbox style='mso-direction-alt:auto' o:singleclick="f">
+   <div style='text-align:left'><font face="Segoe UI" size="160" color="auto">***text***</font></div>
+  </v:textbox>
+  <x:ClientData ObjectType="Checkbox">
+   <x:SizeWithCells/>
+   <x:Anchor>
+    0, 2, 0, 2, 0, 86, 1, 0</x:Anchor>
+   <x:AutoFill>False</x:AutoFill>
+   <x:AutoLine>False</x:AutoLine>
+   <x:TextVAlign>Center</x:TextVAlign>
+   <x:NoThreeD/>
+  </x:ClientData>
+ </v:shape>`,
+  };
+  const shapeTypeMap = {
+    checkbox: `<v:shapetype id="_x0000_t201" coordsize="21600,21600" o:spt="201"
+  path="m,l,21600r21600,l21600,xe">
+  <v:stroke joinstyle="miter"/>
+  <v:path shadowok="f" o:extrusionok="f" strokeok="f" fillok="f" o:connecttype="rect"/>
+  <o:lock v:ext="edit" shapetype="t"/>
+ </v:shapetype>`,
+  };
+
+  let checkboxForm: string[] = [];
   for (let index = 0; index < sheetLength; index++) {
     const sheetData = data.sheet[index];
     let rowCount = sheetData.shiftTop ? sheetData.shiftTop : 1;
     let sheetDataString = "";
     let sheetSizeString = "";
     let sheetSortFilter = "";
+    let hasCheckbox = false;
+    let checkboxDrawingContent = "";
+    let checkboxshap = "";
+    let formRel = "";
+    let checkboxSheetContent = "";
     let mergesCellArray: string[] = Object.assign([], sheetData.merges);
     let formulaSheetObj: Formula = Object.assign({}, sheetData.formula);
     let conditinalFormating: ConditinalFormating[] = Object.assign(
@@ -347,6 +388,199 @@ export async function generateExcel(data: ExcelTable) {
     let headerConditinalFormating: number[] = [];
     let mergeRowConditionMap: MergeRowConditionMap = {};
     let imagePromise;
+    if (sheetData.checkbox) {
+      hasCheckbox = true;
+      const strFormDef = formCtrlMap["checkbox"];
+      sheetData.checkbox.forEach((v, i) => {
+        let formCtlStr = strFormDef;
+        if (v.link) {
+          var linkAddress = getColRowBaseOnRefString(v.link, cols);
+          formCtlStr = formCtlStr.replace(
+            "**fmlaLink**",
+            'fmlaLink="$' +
+              cols[linkAddress.col] +
+              "$" +
+              (linkAddress.row + 1) +
+              '"'
+          );
+        } else {
+          formCtlStr = formCtlStr.replace("**fmlaLink**", "");
+        }
+        if (v.mixed) {
+          formCtlStr = formCtlStr.replace("**value**", 'checked="Mixed"');
+        } else {
+          if (v.checked) {
+            formCtlStr = formCtlStr.replace("**value**", 'checked="Checked"');
+          } else {
+            formCtlStr = formCtlStr.replace("**value**", "");
+          }
+        }
+        if (v.threeD) {
+          formCtlStr.replace('noThreeD="1"', "");
+        }
+        checkboxForm.push(formCtlStr);
+        shapeIdCounter++;
+        var shapeId = index + "" + shapeIdCounter++;
+        const sId = "_x0000_s" + shapeId;
+        checkboxshap += shapeMap["checkbox"]
+          .replace("***id***", sId)
+          .replace("***text***", v.text);
+
+        var from = v.startStr;
+        var to = v.endStr;
+        var resultVal = {
+          start: {
+            col: 0,
+            row: 0,
+          },
+          end: {
+            col: 1,
+            row: 1,
+          },
+        };
+        if (v.col && v.row) {
+          resultVal = {
+            start: {
+              col: v.col,
+              row: v.row - 1,
+            },
+            end: {
+              col: v.col,
+              row: v.row,
+            },
+          };
+        }
+        if (typeof from == "string" && from.length >= 2) {
+          var p = getColRowBaseOnRefString(from, cols);
+          resultVal.start = {
+            ...p,
+          };
+          resultVal.end = {
+            col: p.col + 1,
+            row: p.row + 1,
+          };
+        }
+        if (typeof to == "string" && to.length >= 2) {
+          var p = getColRowBaseOnRefString(to, cols);
+          p.row += 1;
+          p.col += 1;
+          resultVal.end = {
+            ...p,
+          };
+        }
+        //                         <xdr:from>
+        //     <xdr:col>${result.start.col}</xdr:col>
+        //     <xdr:colOff>${result.start.mT}</xdr:colOff>
+        //     <xdr:row>${result.start.row}</xdr:row>
+        //     <xdr:rowOff>${result.start.mL}</xdr:rowOff>
+        // </xdr:from>
+        // <xdr:to>
+        //     <xdr:col>${result.end.col}</xdr:col>
+        //     <xdr:colOff>${result.end.mB}</xdr:colOff>
+        //     <xdr:row>${result.end.row}</xdr:row>
+        //     <xdr:rowOff>${result.end.mR}</xdr:rowOff>
+        // </xdr:to>
+        checkboxSheetContent += `<mc:AlternateContent xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006">
+                    <mc:Choice Requires="x14">
+                        <control shapeId="${shapeId}" r:id="rId${
+          7 + i
+        }" name="${v.text}">
+                            <controlPr defaultSize="0" autoFill="0" autoLine="0" autoPict="0">
+                                <anchor moveWithCells="1">
+                                    <from>
+                                        <xdr:col>${
+                                          resultVal.start.col
+                                        }</xdr:col>
+                                        <xdr:colOff>19050</xdr:colOff>
+                                        <xdr:row>${
+                                          resultVal.start.row
+                                        }</xdr:row>
+                                        <xdr:rowOff>19050</xdr:rowOff>
+                                    </from>
+                                    <to>
+                                        <xdr:col>${resultVal.end.col}</xdr:col>
+                                        <xdr:colOff>819150</xdr:colOff>
+                                        <xdr:row>${resultVal.end.row}</xdr:row>
+                                        <xdr:rowOff>0</xdr:rowOff>
+                                    </to>
+                                </anchor>
+                            </controlPr>
+                        </control>
+                    </mc:Choice>
+                </mc:AlternateContent>`;
+        // .push(v.checked ? checkedStr : uncheckedStr)
+        formRel += `<Relationship Id="rId${7 + i}"
+        Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/ctrlProp"
+        Target="../ctrlProps/ctrlProp${checkboxForm.length}.xml" />`;
+        checkboxDrawingContent += ` <mc:AlternateContent xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006">
+        <mc:Choice xmlns:a14="http://schemas.microsoft.com/office/drawing/2010/main" Requires="a14">
+            <xdr:twoCellAnchor editAs="oneCell">
+                <xdr:from>
+                    <xdr:col>${resultVal.start.col}</xdr:col>
+                    <xdr:colOff>19050</xdr:colOff>
+                    <xdr:row>${resultVal.start.row}</xdr:row>
+                    <xdr:rowOff>19050</xdr:rowOff>
+                </xdr:from>
+                <xdr:to>
+                    <xdr:col>${resultVal.end.col}</xdr:col>
+                    <xdr:colOff>819150</xdr:colOff>
+                    <xdr:row>${resultVal.end.row}</xdr:row>
+                    <xdr:rowOff>0</xdr:rowOff>
+                </xdr:to>
+                <xdr:sp macro="" textlink="">
+                   <xdr:nvSpPr>
+                        <xdr:cNvPr id="${shapeId}" name="${v.text}" hidden="1">
+                            <a:extLst>
+                                <a:ext uri="">
+                                    <a14:compatExt spid="${sId}"/>
+                                </a:ext>
+                                <a:ext uri="">
+                                    <a16:creationId xmlns:a16="http://schemas.microsoft.com/office/drawing/2014/main" id=""/>
+                                </a:ext>
+                            </a:extLst>
+                        </xdr:cNvPr>
+                        <xdr:cNvSpPr/>
+                    </xdr:nvSpPr>
+                    <xdr:spPr bwMode="auto">
+                        <a:xfrm>
+                            <a:off x="0" y="0"/>
+                            <a:ext cx="0" cy="0"/>
+                        </a:xfrm>
+                        <a:prstGeom prst="rect">
+                            <a:avLst/>
+                        </a:prstGeom>
+                        <a:noFill/>
+                        <a:ln>
+                            <a:noFill/>
+                        </a:ln>
+                    </xdr:spPr>
+                    <xdr:txBody>
+                        <a:bodyPr vertOverflow="clip" wrap="square" lIns="27432" tIns="18288" rIns="0" bIns="18288" anchor="ctr" upright="1"/>
+                        <a:lstStyle/>
+                        <a:p>
+                            <a:pPr algn="l" rtl="0">
+                                <a:defRPr sz="1000"/>
+                            </a:pPr>
+                            <a:r>
+                                <a:rPr lang="en-US" sz="800" b="0" i="0" u="none" strike="noStrike" baseline="0">
+                                    <a:solidFill>
+                                        <a:srgbClr val="000000"/>
+                                    </a:solidFill>
+                                    <a:latin typeface="Segoe UI"/>
+                                    <a:cs typeface="Segoe UI"/>
+                                </a:rPr>
+                                <a:t>${v.text}</a:t>
+                            </a:r>
+                        </a:p>
+                    </xdr:txBody>
+                </xdr:sp>
+                <xdr:clientData/>
+            </xdr:twoCellAnchor>
+        </mc:Choice>
+        <mc:Fallback/>
+    </mc:AlternateContent>`;
+      });
+    }
     if (sheetData.images) {
       imagePromise = Promise.all([
         ...sheetData.images.map(async (v, i) => {
@@ -1027,7 +1261,7 @@ export async function generateExcel(data: ExcelTable) {
     sheetNameApp += "<vt:lpstr>" + ("sheet" + (index + 1)) + "</vt:lpstr>";
     // selectedAdded = selectedAdded || !!sheetData.selected;
     if (sheetData.selected) {
-      selectedAdded=true;
+      selectedAdded = true;
       activeTabIndex = index;
     }
     const filterMode = sheetData.sortAndfilter ? 'filterMode="1"' : "";
@@ -1037,7 +1271,6 @@ export async function generateExcel(data: ExcelTable) {
     if (imagePromise) {
       hasImages = true;
       await imagePromise.then((res) => {
-        console.log(res, "res");
         let drawerStr = "";
         res.forEach((val, i) => {
           const index = i + 1;
@@ -1414,6 +1647,12 @@ export async function generateExcel(data: ExcelTable) {
       cFDataString,
       drawersRels,
       hasImages,
+      hasCheckbox,
+      formRel,
+      checkboxDrawingContent,
+      checkboxForm,
+      checkboxSheetContent,
+      checkboxshap,
       commentString,
       commentAuthor,
       shapeCommentRowCol,
@@ -1622,6 +1861,41 @@ export async function generateExcel(data: ExcelTable) {
         ' Target="../drawings/' +
         drawerName +
         '" />';
+    } else if (sh.hasCheckbox) {
+      const drawerName = `drawing${sheetDrawers.length + 1}.xml`;
+      sheetDrawers.push(drawerName);
+      xl_drawingsFolder?.file(
+        drawerName,
+        `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xdr:wsDr xmlns:xdr="http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing"
+    xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"
+    xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"
+    xmlns:c="http://schemas.openxmlformats.org/drawingml/2006/chart"
+    xmlns:cx="http://schemas.microsoft.com/office/drawing/2014/chartex"
+    xmlns:cx1="http://schemas.microsoft.com/office/drawing/2015/9/8/chartex"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:dgm="http://schemas.openxmlformats.org/drawingml/2006/diagram"
+    xmlns:x3Unk="http://schemas.microsoft.com/office/drawing/2010/slicer"
+    xmlns:sle15="http://schemas.microsoft.com/office/drawing/2012/slicer"
+>
+${sh.checkboxDrawingContent}
+</xdr:wsDr>`
+      );
+      sheetRelContentStr += `<Relationship Id="rId3"
+        Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing"
+        Target="../drawings/vmlDrawing${iCo + 1}.vml" />
+        <Relationship Id="rId2"
+        Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing"
+        Target="../drawings/${drawerName}" />`;
+      sheetRelContentStr += sh.formRel;
+      xl_drawingsFolder?.file(
+        "vmlDrawing" + (iCo + 1) + ".vml",
+        `<xml xmlns:p="http://schemas.openxmlformats.org/presentationml/2006/main" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:oa="urn:schemas-microsoft-com:office:activation" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:pvml="urn:schemas-microsoft-com:office:powerpoint">
+ <o:shapelayout v:ext="edit">
+  <o:idmap v:ext="edit" data="1"/>
+ </o:shapelayout>${shapeTypeMap["checkbox"]}${sh.checkboxshap}
+ </xml>`
+      );
     }
 
     if (sh.hasComment) {
@@ -1659,8 +1933,7 @@ export async function generateExcel(data: ExcelTable) {
         '.vml" />';
       xl_drawingsFolder?.file(
         "vmlDrawing" + (iCo + 1) + ".vml",
-        '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
-          '<xml xmlns:p="http://schemas.openxmlformats.org/presentationml/2006/main" ' +
+        '<xml xmlns:p="http://schemas.openxmlformats.org/presentationml/2006/main" ' +
           'xmlns:v="urn:schemas-microsoft-com:vml" ' +
           'xmlns:o="urn:schemas-microsoft-com:office:office" ' +
           'xmlns:oa="urn:schemas-microsoft-com:office:activation" ' +
@@ -1705,7 +1978,7 @@ export async function generateExcel(data: ExcelTable) {
           "</xml>"
       );
     }
-    if (sh.hasImages || sh.hasComment) {
+    if (sh.hasImages || sh.hasComment || sh.hasCheckbox) {
       xl_worksheets_relsFolder?.file(
         "sheet" + (iCo + 1) + ".xml.rels",
         '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
@@ -1741,10 +2014,26 @@ export async function generateExcel(data: ExcelTable) {
         sh.sheetSortFilter +
         sh.merges +
         sh.cFDataString +
-        (sh.hasImages ? '<drawing r:id="rId2" />' : "") +
-        (sh.hasComment ? '<legacyDrawing r:id="rId3" />' : "") +
+        (sh.hasImages || sh.hasCheckbox ? '<drawing r:id="rId2" />' : "") +
+        (sh.hasComment || sh.hasCheckbox
+          ? '<legacyDrawing r:id="rId3" />'
+          : "") +
+        (sh.hasCheckbox
+          ? `<mc:AlternateContent xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006">
+        <mc:Choice Requires="x14">
+            <controls>
+                ${sh.checkboxSheetContent}
+</controls>
+ </mc:Choice>
+</mc:AlternateContent>`
+          : "") +
         "</worksheet>"
     );
+  });
+  var xlCtrlFolder = xlFolder?.folder("ctrlProps");
+
+  checkboxForm.forEach((v, index) => {
+    xlCtrlFolder?.file("ctrlProp" + (index + 1) + ".xml", v);
   });
   zip.file(
     "[Content_Types].xml",
@@ -1752,7 +2041,8 @@ export async function generateExcel(data: ExcelTable) {
       sheetContentType,
       commentId,
       [...new Set(arrTypes)],
-      sheetDrawers
+      sheetDrawers,
+      checkboxForm
     )
   );
   if (data.backend) {

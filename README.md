@@ -27,6 +27,7 @@ MR-Excel is a JavaScript library designed for reading and writing Excel files. T
   - [**`Group Rows`**](#group-rows)
   - [**`Shift & Title`**](#shift-title)
   - [**`Image Option`**](#image-option)
+  - [**`🆕Checkbox`**](#checkbox)
 - [**`convertTableToExcel`**](#convert-table-to-excel)
   - [**`How to use convertTableToExcel`**](#convert-table-to-excel-usage)
 - [**`sideBySideLineByLine`**](#side-by-side-line-by-line)
@@ -4098,6 +4099,94 @@ ExcelTable.generateExcel(data);
 
 </details>
 
+<a id="checkbox"></a>
+
+## 🆕Checkbox [⬆️](#table-of-contents)
+
+After version 3.1.0, `checkbox` has been added to sheets, allowing you to define checkboxes. However, please note that this feature does not work with `images` and `comments` when used together.
+
+<details>
+
+<summary>Display code</summary>
+
+```javascript
+const data = {
+  styles: {},
+  sheet: [
+    {
+      checkbox: [
+        {
+          col: 3,
+          row: 1,
+          text: "Checkbox 2",
+          link: "G3",
+        },
+        {
+          col: 1,
+          row: 2,
+          text: "Check",
+          threeD: true,
+        },
+        {
+          col: 5,
+          row: 1,
+          text: "Checkbox 2",
+          checked: true,
+        },
+        {
+          col: 1,
+          row: 12,
+          text: "Check",
+          mixed: true,
+        },
+      ],
+      headers: [{ label: "head1", text: "", comment: "" }],
+      data: [{ head1: "" }],
+    },
+    {
+      checkbox: [
+        {
+          col: 0,
+          row: 1,
+          text: "Checkbox 2",
+          mixed: true,
+        },
+        {
+          col: 1,
+          row: 2,
+          text: "Check",
+          link: "B3",
+        },
+        {
+          col: 5,
+          row: 1,
+          text: "Checkbox 2",
+          threeD: true,
+        },
+        {
+          col: 3,
+          row: 3,
+          text: "Check",
+          checked: true,
+        },
+      ],
+      headers: [{ label: "head1", text: "", comment: "" }],
+      data: [{ head1: "" }],
+    },
+  ],
+};
+
+ExcelTable.generateExcel(data);
+```
+
+</details>
+<details>
+<summary>result image</summary>
+
+![ex](https://github.com/mohammadrezaeicode/mr-excel-page-repo/blob/main/public/img/ex21.PNG?raw=true)
+
+</details>
+
 ## interface [⬆️](#table-of-contents)
 
 <a id="interface"></a>
@@ -4151,6 +4240,7 @@ export interface SheetOption {
   headerRowOption?: any;
   protectionOption?: ProtectionOption;
   headerHeight?: number;
+  checkbox?: Checkbox[];
 }
 export interface Sheet extends SheetOption {
   headers: Header[];
@@ -4279,6 +4369,17 @@ export type BorderOption = {
       | "mediumDashed";
   };
 };
+export interface Checkbox {
+  col: number;
+  row: number;
+  text: string;
+  link?: string;
+  checked?: boolean;
+  mixed?: boolean;
+  threeD?: boolean;
+  startStr?: string;
+  endStr?: string;
+}
 export interface MultiStyleRexValue {
   reg: RegExp | string;
   styleId: string;
