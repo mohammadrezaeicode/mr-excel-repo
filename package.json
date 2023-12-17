@@ -1,6 +1,6 @@
 {
   "name": "mr-excel",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "main": "dist/excel-table.umd.js",
   "scripts": {
     "start": "tsc",

@@ -136,13 +136,13 @@ npm install mr-excel
 Using **yarn**:
 
 ```terminal/bash
-npm install mr-excel
+yarn add mr-excel
 ```
 
 Alternatively, you have the option to use **pnpm**:
 
 ```terminal/bash
-npm install mr-excel
+pnpm install mr-excel
 ```
 
 Choose the package manager that suits your workflow, and effortlessly bring the power of our library into your project, enabling smooth generation of Excel tables with ease and efficiency.
