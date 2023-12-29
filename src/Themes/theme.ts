@@ -3,7 +3,6 @@ import {
   ExcelTable,
   Header,
   Sheet,
-  Theme,
 } from "../data-model/excel-table";
 import { generateContrastTextColor, hexToRgbNegative } from "../utils/color";
 import colorHunt from "./colorHunt.json";

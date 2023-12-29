@@ -1,5 +1,5 @@
 import { ThemeOption, themeGenerator } from "./Themes/theme";
-import { Data, ExcelTable, SideBySide, Theme } from "./data-model/excel-table";
+import { Data, ExcelTable, SideBySide } from "./data-model/excel-table";
 import {
   ColWidthScaleFunction,
   RowHeightScaleFunction,

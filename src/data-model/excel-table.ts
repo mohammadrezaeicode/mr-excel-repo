@@ -96,6 +96,13 @@ export interface DataOptions {
   multiStyleValue?: MapMultiStyleValue;
   comment?: MapComment;
 }
+export interface RowMap {
+  [rowNumber: number]: {
+    startTag: string;
+    endTag: string;
+    details: string;
+  };
+}
 export type ProtectionOption = {
   [key in ProtectionOptionKey]: "0" | "1" | 0 | 1;
 };
@@ -205,7 +212,6 @@ export interface Comment {
   author?: string;
 }
 
-
 export interface MergeRowConditionMap {
   [columnKey: string]: {
     inProgress: boolean;
@@ -273,6 +279,7 @@ export interface Checkbox {
   endStr?: string;
 }
 export type FormulaType = "AVERAGE" | "SUM" | "COUNT" | "MAX" | "MIN";
+export type RelativeFormulaType = "LEN";
 export interface FormatMap {
   [format: string]: {
     key: number;
@@ -287,6 +294,11 @@ export interface FormulaSetting {
   type: FormulaType;
   start: string;
   end: string;
+  styleId?: string;
+}
+export interface RelativeFormulaSetting {
+  type: RelativeFormulaType;
+  refrenceCell: string;
   styleId?: string;
 }
 export interface StyleMapper {

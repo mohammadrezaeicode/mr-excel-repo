@@ -6,6 +6,7 @@ import {
   Formula,
   MergeRowConditionMap,
   ProtectionOptionKey,
+  RowMap,
   StyleMapper,
 } from "../data-model/excel-table";
 import { generateColumnName } from "../utils/generate-column-name";
@@ -362,8 +363,12 @@ export async function generateExcel(data: ExcelTable) {
   };
 
   let checkboxForm: string[] = [];
+  let calcChainValue = "";
+  let needCalcChain = false;
   for (let index = 0; index < sheetLength; index++) {
     const sheetData = data.sheet[index];
+    const sheetDataId = index + 1;
+    let rowMap: RowMap = {};
     let rowCount = sheetData.shiftTop ? sheetData.shiftTop : 1;
     let sheetDataString = "";
     let sheetSizeString = "";
@@ -667,6 +672,27 @@ export async function generateExcel(data: ExcelTable) {
           );
         }
         if (typeof title.text == "string") {
+          rowMap[rowCount + top] = {
+            startTag:
+              '<row r="' +
+              (rowCount + top) +
+              '" ' +
+              height +
+              ' spans="1:' +
+              (left + consommeCol - 1) +
+              '">',
+            details:
+              '<c r="' +
+              refString +
+              '" ' +
+              (data.styles[tStyle]
+                ? ' s="' + data.styles[tStyle].index + '" '
+                : "") +
+              ' t="s"><v>' +
+              sharedStringIndex +
+              "</v></c>",
+            endTag: "</row>",
+          };
           titleRow +=
             '<row r="' +
             (rowCount + top) +
@@ -811,11 +837,17 @@ export async function generateExcel(data: ExcelTable) {
         }
         const formula = formulaSheetObj && formulaSheetObj[refString];
         if (formula) {
-          sheetDataString += generateCellRowCol(
+          const f = generateCellRowCol(
             refString,
             formula,
+            sheetDataId,
             data.styles
-          ).cell;
+          );
+          if (f.needCalcChain) {
+            needCalcChain = true;
+            calcChainValue += f.chainCell;
+          }
+          sheetDataString += f.cell;
           delete formulaSheetObj![refString];
         } else {
           sheetDataString +=
@@ -860,8 +892,7 @@ export async function generateExcel(data: ExcelTable) {
         }
       });
       if (!sheetData.withoutHeader) {
-        sheetDataString =
-          titleRow +
+        const rowTag =
           '<row r="' +
           rowCount +
           '" spans="1:' +
@@ -882,9 +913,13 @@ export async function generateExcel(data: ExcelTable) {
                 );
               }, "  ")
             : "") +
-          ">" +
-          sheetDataString +
-          "</row>";
+          ">";
+        rowMap[rowCount] = {
+          startTag: rowTag,
+          endTag: "</row>",
+          details: sheetDataString,
+        };
+        sheetDataString = titleRow + rowTag + sheetDataString + "</row>";
         rowCount++;
       } else {
         sheetDataString += titleRow;
@@ -945,7 +980,7 @@ export async function generateExcel(data: ExcelTable) {
             }
           }
           const rowStyle = mData.rowStyle;
-          sheetDataString +=
+          const rowTagStart =
             '<row r="' +
             rowCount +
             '" spans="1:' +
@@ -959,6 +994,8 @@ export async function generateExcel(data: ExcelTable) {
               : "") +
             (keyHidden in mData ? ' hidden="' + mData[keyHidden] + '"' : "") +
             " >";
+          sheetDataString += rowTagStart;
+          let rowDataString = "";
           objKey.forEach((key, keyIndex) => {
             if (shiftCount) {
               keyIndex += shiftCount;
@@ -1077,11 +1114,17 @@ export async function generateExcel(data: ExcelTable) {
             }
             const formula = formulaSheetObj && formulaSheetObj[refString];
             if (formula) {
-              sheetDataString += generateCellRowCol(refString, formula).cell;
+              const f = generateCellRowCol(refString, formula, sheetDataId);
+              if (f.needCalcChain) {
+                needCalcChain = true;
+                calcChainValue += f.chainCell;
+              }
+              sheetDataString += f.cell;
+              rowDataString += f.cell;
               delete formulaSheetObj![refString];
             } else {
               if (typeof dataEl == "string") {
-                sheetDataString +=
+                const localcell =
                   '<c r="' +
                   cols[keyIndex] +
                   rowCount +
@@ -1092,6 +1135,8 @@ export async function generateExcel(data: ExcelTable) {
                   "><v>" +
                   sharedStringIndex +
                   "</v></c>";
+                rowDataString += localcell;
+                sheetDataString += localcell;
                 if (typeof sheetData.multiStyleConditin == "function") {
                   const multi = sheetData.multiStyleConditin(
                     dataEl,
@@ -1129,7 +1174,7 @@ export async function generateExcel(data: ExcelTable) {
                 sharedStringMap[dataEl] = dataEl;
                 sharedStringIndex++;
               } else {
-                sheetDataString +=
+                const localcell =
                   '<c r="' +
                   cols[keyIndex] +
                   rowCount +
@@ -1140,6 +1185,8 @@ export async function generateExcel(data: ExcelTable) {
                   "><v>" +
                   dataEl +
                   "</v></c>";
+                sheetDataString += localcell;
+                rowDataString += localcell;
               }
             }
           });
@@ -1152,7 +1199,11 @@ export async function generateExcel(data: ExcelTable) {
               }
             });
           }
-
+          rowMap[rowCount] = {
+            startTag: rowTagStart,
+            endTag: "</row>",
+            details: rowDataString,
+          };
           rowCount++;
           sheetDataString += "</row>";
         });
@@ -1208,7 +1259,16 @@ export async function generateExcel(data: ExcelTable) {
             [row: number]: string;
           } = {};
           remindFormulaKey.forEach((v) => {
-            const f = generateCellRowCol(v, formulaSheetObj![v], data.styles);
+            const f = generateCellRowCol(
+              v,
+              formulaSheetObj![v],
+              sheetDataId,
+              data.styles
+            );
+            if (f.needCalcChain) {
+              needCalcChain = true;
+              calcChainValue += f.chainCell;
+            }
             if (!rF[f.row]) {
               rF[f.row] = f.cell;
             } else {
@@ -1217,14 +1277,27 @@ export async function generateExcel(data: ExcelTable) {
           });
           Object.keys(rF).forEach((v) => {
             const l = rF[v as keyof object];
-            sheetDataString +=
-              '<row r="' +
-              v +
-              '" spans="1:' +
-              colsLength +
-              '"  >' +
-              l +
-              "</row>";
+            debugger
+            let rowDataMap = rowMap[v as keyof object];
+            if (rowDataMap) {
+              const body =
+                rowDataMap.startTag +
+                rowDataMap.details +
+                l +
+                rowDataMap.endTag;
+              let reg = new RegExp(rowDataMap.startTag + "[\\n\\s\\S]*?</row>");
+              sheetDataString = sheetDataString.replace(reg, body);
+              console.log(sheetDataString);
+            } else {
+              sheetDataString +=
+                '<row r="' +
+                v +
+                '" spans="1:' +
+                colsLength +
+                '"  >' +
+                l +
+                "</row>";
+            }
           });
         }
       }
@@ -1706,7 +1779,20 @@ export async function generateExcel(data: ExcelTable) {
     };
     indexId++;
   }
+  if (needCalcChain) {
+    indexId++;
+    workbookRelString +=
+      '<Relationship Id="rId' +
+      indexId +
+      '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/calcChain" Target="calcChain.xml"/>';
+  }
 
+  xlFolder?.file(
+    "calcChain.xml",
+    '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<calcChain xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
+      calcChainValue +
+      "</calcChain>"
+  );
   let sheetKeys = Object.keys(mapData);
   // in _rels
   let relsFolder = zip.folder("_rels");
@@ -2042,7 +2128,8 @@ ${sh.checkboxDrawingContent}
       commentId,
       [...new Set(arrTypes)],
       sheetDrawers,
-      checkboxForm
+      checkboxForm,
+      needCalcChain
     )
   );
   if (data.backend) {
