@@ -279,7 +279,16 @@ export interface Checkbox {
   endStr?: string;
 }
 export type FormulaType = "AVERAGE" | "SUM" | "COUNT" | "MAX" | "MIN";
-export type RelativeFormulaType = "LEN";
+export type SingleRefFormulaType = "LEN"| "MODE"
+  | "POWER"
+  | "FLOOR"
+  | "CEILING"
+  | "ROUND"
+  | "SQRT"
+  | "COS"
+  | "SIN"
+  | "TAN"
+  | "COT";
 export interface FormatMap {
   [format: string]: {
     key: number;
@@ -287,18 +296,20 @@ export interface FormatMap {
   };
 }
 export interface Formula {
-  [insertCell: string]: FormulaSetting;
+  [insertCell: string]:
+    | FormulaSetting
+    | SingleRefFormulaSetting
 }
-
 export interface FormulaSetting {
   type: FormulaType;
   start: string;
   end: string;
   styleId?: string;
 }
-export interface RelativeFormulaSetting {
-  type: RelativeFormulaType;
+export interface SingleRefFormulaSetting {
+  type: SingleRefFormulaType;
   refrenceCell: string;
+  value?: number | string;
   styleId?: string;
 }
 export interface StyleMapper {

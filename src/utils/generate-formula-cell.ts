@@ -1,12 +1,12 @@
 import {
   FormulaSetting,
-  RelativeFormulaSetting,
+  SingleRefFormulaSetting,
   Styles,
 } from "../data-model/excel-table";
 
 export function generateCellRowCol(
   string: string,
-  formula: FormulaSetting | RelativeFormulaSetting,
+  formula: FormulaSetting | SingleRefFormulaSetting,
   sheetIndex: number,
   styles?: Styles
 ) {
@@ -15,19 +15,29 @@ export function generateCellRowCol(
   let row = parseInt(string.substr(column.length));
   let needCalcChain = false;
   let chainCell = "";
-  if ((<RelativeFormulaSetting>formula).refrenceCell) {
-    const form = <RelativeFormulaSetting>formula;
+  if ((<SingleRefFormulaSetting>formula).refrenceCell) {
+    const form = <SingleRefFormulaSetting>formula;
+    let value = "";
+    if (typeof form.value != "undefined") {
+      value = "," + form.value;
+    }
+    let className = "";
+    if (form.type == "COT") {
+      className = "_xlfn.";
+    }
     const styleString =
-      "styleId" in formula ? 's="' + styles![form.styleId!].index + '"' : "";
+      "styleId" in form ? 's="' + styles![form.styleId!].index + '"' : "";
     cell =
       '<c r="' +
       string +
       '" ' +
       styleString +
       "><f>" +
+      className +
       formula.type +
       "(" +
       form.refrenceCell +
+      value +
       ")</f></c>";
     chainCell = '<c r="' + string + '" i="' + sheetIndex + '"/>';
   } else {

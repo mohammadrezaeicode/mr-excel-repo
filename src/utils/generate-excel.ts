@@ -1253,7 +1253,9 @@ export async function generateExcel(data: ExcelTable) {
         });
       }
       if (formulaSheetObj) {
-        const remindFormulaKey = Object.keys(formulaSheetObj);
+        const remindFormulaKey = Object.keys(formulaSheetObj).sort((a, b) =>
+          a > b ? 1 : -1
+        );
         if (remindFormulaKey.length) {
           let rF: {
             [row: number]: string;
@@ -1276,9 +1278,9 @@ export async function generateExcel(data: ExcelTable) {
             }
           });
           Object.keys(rF).forEach((v) => {
-            const l = rF[v as keyof object];
-            debugger
-            let rowDataMap = rowMap[v as keyof object];
+            const val = v as keyof object;
+            const l = rF[val];
+            let rowDataMap = rowMap[val];
             if (rowDataMap) {
               const body =
                 rowDataMap.startTag +
@@ -1297,6 +1299,11 @@ export async function generateExcel(data: ExcelTable) {
                 '"  >' +
                 l +
                 "</row>";
+              rowMap[val] = {
+                startTag: '<row r="' + v + '" spans="1:' + colsLength + '"  >',
+                endTag: "</row>",
+                details: l,
+              };
             }
           });
         }
