@@ -278,8 +278,27 @@ export interface Checkbox {
   startStr?: string;
   endStr?: string;
 }
+export type NoArgFormulaType =
+  | "NOW"
+  | "TODAY"
+  | "NOW_YEAR"
+  | "NOW_HOUR"
+  | "NOW_SECOND"
+  | "NOW_MIN"
+  | "NOW_MONTH"
+  | "NOW_DAY"
+  | "NOW_WEEKDAY"
+  | "NOW_MINUTE";
 export type FormulaType = "AVERAGE" | "SUM" | "COUNT" | "MAX" | "MIN";
-export type SingleRefFormulaType = "LEN"| "MODE"
+export type SingleRefFormulaType =
+  | "LEN"
+  | "MODE"
+  | "UPPER"
+  | "LOWER"
+  | "PROPER"
+  | "RIGHT"
+  | "LEFT"
+  | "ABS"
   | "POWER"
   | "FLOOR"
   | "CEILING"
@@ -288,7 +307,9 @@ export type SingleRefFormulaType = "LEN"| "MODE"
   | "COS"
   | "SIN"
   | "TAN"
-  | "COT";
+  | "COT"
+  | "COUNTIF"
+  | "TRIM";
 export interface FormatMap {
   [format: string]: {
     key: number;
@@ -299,6 +320,8 @@ export interface Formula {
   [insertCell: string]:
     | FormulaSetting
     | SingleRefFormulaSetting
+    | NoArgFormulaSetting
+    | CustomFormulaSetting;
 }
 export interface FormulaSetting {
   type: FormulaType;
@@ -306,10 +329,21 @@ export interface FormulaSetting {
   end: string;
   styleId?: string;
 }
+export interface CustomFormulaSetting {
+  isArray?: boolean;
+  refrenceCells?: string;
+  formula: string;
+  returnType?: string;
+  styleId?: string;
+}
 export interface SingleRefFormulaSetting {
   type: SingleRefFormulaType;
   refrenceCell: string;
   value?: number | string;
+  styleId?: string;
+}
+export interface NoArgFormulaSetting {
+  noArgType: NoArgFormulaType;
   styleId?: string;
 }
 export interface StyleMapper {

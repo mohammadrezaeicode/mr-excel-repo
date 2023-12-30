@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 3.2.0 (2023-12-29)
+
+### New Features
+
+-Improvement in the formula section.
+
 ## Version 3.0.3 (2023-12-12)
 
 ### New Features

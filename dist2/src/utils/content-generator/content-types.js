@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.contentTypeGenerator = void 0;
-function contentTypeGenerator(sheetContentType, commentId, arrTypes, sheetDrawers, checkboxForm) {
+function contentTypeGenerator(sheetContentType, commentId, arrTypes, sheetDrawers, checkboxForm, needCalcChain) {
     return ('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
         '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">' +
         ' <Default Extension="rels"  ContentType="application/vnd.openxmlformats-package.relationships+xml"/>' +
@@ -43,6 +43,9 @@ function contentTypeGenerator(sheetContentType, commentId, arrTypes, sheetDrawer
         "<Override" +
         ' ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sharedStrings+xml"' +
         ' PartName="/xl/sharedStrings.xml" />' +
+        (needCalcChain
+            ? `<Override PartName="/xl/calcChain.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.calcChain+xml"/>`
+            : "") +
         ' <Override PartName="/docProps/core.xml" ' +
         ' ContentType="application/vnd.openxmlformats-package.core-properties+xml" />' +
         sheetDrawers.reduce((res, cu) => {

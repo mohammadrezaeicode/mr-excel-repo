@@ -2,7 +2,6 @@ import {
   AlignmentOptionKey,
   ConditinalFormating,
   ExcelTable,
-  FormatMap,
   Formula,
   MergeRowConditionMap,
   ProtectionOptionKey,
@@ -1289,7 +1288,6 @@ export async function generateExcel(data: ExcelTable) {
                 rowDataMap.endTag;
               let reg = new RegExp(rowDataMap.startTag + "[\\n\\s\\S]*?</row>");
               sheetDataString = sheetDataString.replace(reg, body);
-              console.log(sheetDataString);
             } else {
               sheetDataString +=
                 '<row r="' +

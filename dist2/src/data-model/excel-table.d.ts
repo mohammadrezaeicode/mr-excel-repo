@@ -1,6 +1,104 @@
+export interface ExcelTable extends ExcelTableOption {
+    sheet: Sheet[];
+}
+export interface ExcelTableOption {
+    notSave?: boolean;
+    creator?: string;
+    backend?: boolean;
+    activateConditinalFormating?: boolean;
+    fileName?: string;
+    generateType?: "nodebuffer" | "array" | "binarystring" | "base64";
+    addDefaultTitleStyle?: boolean;
+    created?: string;
+    modified?: string;
+    numberOfColumn?: number;
+    createType?: string;
+    mapSheetDataOption?: any;
+    styles?: Styles;
+}
+export interface Sheet extends SheetOption {
+    headers: Header[];
+    data: Data[];
+}
+export interface SheetOption {
+    withoutHeader?: boolean;
+    conditinalFormating?: ConditinalFormating[];
+    multiStyleConditin?: MultiStyleConditinFunction;
+    useSplitBaseOnMatch?: boolean;
+    convertStringToNumber?: boolean;
+    images?: ImageTypes[];
+    formula?: Formula;
+    name?: string;
+    title?: Title;
+    shiftTop?: number;
+    shiftLeft?: number;
+    selected?: boolean;
+    tabColor?: string;
+    merges?: string[];
+    headerStyleKey?: string;
+    mergeRowDataCondition?: MergeRowDataConditionFunction;
+    styleCellCondition?: StyleCellConditionFunction;
+    commentCodition?: CommentConditionFunction;
+    sortAndfilter?: SortAndFilter;
+    state?: "hidden" | "visible";
+    headerRowOption?: any;
+    protectionOption?: ProtectionOption;
+    headerHeight?: number;
+    checkbox?: Checkbox[];
+}
+export interface Header {
+    label: string;
+    text: string;
+    size?: number;
+    multiStyleValue?: MultiStyleValue;
+    comment?: Comment | string;
+    conditinalFormating?: ConditinalFormating;
+    formula?: {
+        type: FormulaType;
+        styleId?: string;
+    };
+}
+export interface StyleBody {
+    fontFamily?: string;
+    type?: string;
+    size?: number;
+    index?: number;
+    alignment?: AlignmentOption;
+    border?: BorderOption;
+    format?: string;
+    bold?: boolean;
+    underline?: boolean;
+    italic?: boolean;
+    doubleUnderline?: boolean;
+    color?: string;
+    backgroundColor?: string;
+}
+export interface Styles {
+    [key: string]: StyleBody;
+}
+export interface Data extends DataOptions {
+    [key: string]: string | number | any | undefined;
+}
+export interface DataOptions {
+    [key: string]: "0" | "1" | number | string | undefined | MapComment | MapMultiStyleValue;
+    outlineLevel?: number;
+    hidden?: "0" | "1" | number;
+    rowStyle?: string;
+    height?: number;
+    multiStyleValue?: MapMultiStyleValue;
+    comment?: MapComment;
+}
+export interface RowMap {
+    [rowNumber: number]: {
+        startTag: string;
+        endTag: string;
+        details: string;
+    };
+}
 export type ProtectionOption = {
     [key in ProtectionOptionKey]: "0" | "1" | 0 | 1;
 };
+export type ProtectionOptionKey = "sheet" | "formatCells" | "formatColumns" | "formatRows" | "insertColumns" | "insertRows" | "insertHyperlinks" | "deleteColumns" | "deleteRows" | "sort" | "autoFilter" | "pivotTables";
 export interface ConditinalFormating {
     type: "cells" | "dataBar" | "iconSet" | "colorScale" | "top";
     start: string;
@@ -41,7 +139,6 @@ export interface SideBySide {
     data: Data[];
     headerIndex?: number;
 }
-export type ProtectionOptionKey = "sheet" | "formatCells" | "formatColumns" | "formatRows" | "insertColumns" | "insertRows" | "insertHyperlinks" | "deleteColumns" | "deleteRows" | "sort" | "autoFilter" | "pivotTables";
 export type AlignmentOptionKey = "horizontal" | "vertical" | "wrapText" | "shrinkToFit" | "readingOrder" | "textRotation" | "indent";
 export interface AlignmentOption {
     horizontal?: "center" | "left" | "right";
@@ -61,20 +158,12 @@ export type BorderOption = {
         style: "slantDashDot" | "dotted" | "thick" | "hair" | "dashDot" | "dashDotDot" | "dashed" | "thin" | "mediumDashDot" | "medium" | "double" | "mediumDashed";
     };
 };
-export interface Header {
-    label: string;
-    text: string;
-    size?: number;
-    multiStyleValue?: MultiStyleValue;
-    comment?: Comment | string;
-    conditinalFormating?: ConditinalFormating;
-    formula?: {
-        type: FormulaType;
-        styleId?: string;
-    };
+export interface MapMultiStyleValue {
+    [key: string]: MultiStyleValue;
 }
-export interface Data extends DataOptions {
-    [key: string]: string | number | any | undefined;
+export interface MultiStyleValue {
+    [key: string]: string | undefined | MultiStyleRexValue[];
+    reg?: MultiStyleRexValue[];
 }
 export interface MultiStyleRexValue {
     reg: RegExp | string;
@@ -84,25 +173,6 @@ export interface Comment {
     comment?: string;
     styleId?: string;
     author?: string;
-}
-export interface MultiStyleValue {
-    [key: string]: string | undefined | MultiStyleRexValue[];
-    reg?: MultiStyleRexValue[];
-}
-export interface MapMultiStyleValue {
-    [key: string]: MultiStyleValue;
-}
-export interface MapComment {
-    [key: string]: Comment | string;
-}
-export interface DataOptions {
-    [key: string]: "0" | "1" | number | string | undefined | MapComment | MapMultiStyleValue;
-    outlineLevel?: number;
-    hidden?: "0" | "1" | number;
-    rowStyle?: string;
-    height?: number;
-    multiStyleValue?: MapMultiStyleValue;
-    comment?: MapComment;
 }
 export interface MergeRowConditionMap {
     [columnKey: string]: {
@@ -129,38 +199,54 @@ export interface Title {
     multiStyleValue?: MultiStyleValue;
     comment?: Comment | string;
 }
-export interface SheetOption {
-    withoutHeader?: boolean;
-    conditinalFormating?: ConditinalFormating[];
-    multiStyleConditin?: MultiStyleConditinFunction;
-    useSplitBaseOnMatch?: boolean;
-    convertStringToNumber?: boolean;
-    images?: ImageTypes[];
-    formula?: Formula;
-    name?: string;
-    title?: Title;
-    shiftTop?: number;
-    shiftLeft?: number;
-    selected?: boolean;
-    tabColor?: string;
-    merges?: string[];
-    headerStyleKey?: string;
-    mergeRowDataCondition?: MergeRowDataConditionFunction;
-    styleCellCondition?: StyleCellConditionFunction;
-    commentCodition?: CommentConditionFunction;
-    sortAndfilter?: SortAndFilter;
-    state?: "hidden" | "visible";
-    headerRowOption?: any;
-    protectionOption?: ProtectionOption;
-    headerHeight?: number;
-    checkbox?: Checkbox[];
-}
-export interface Sheet extends SheetOption {
-    headers: Header[];
-    data: Data[];
-}
 export interface HeaderRowOption {
     outlineLevel: "string";
+}
+export interface Checkbox {
+    col: number;
+    row: number;
+    text: string;
+    link?: string;
+    checked?: boolean;
+    mixed?: boolean;
+    threeD?: boolean;
+    startStr?: string;
+    endStr?: string;
+}
+export type NoArgFormulaType = "NOW" | "TODAY" | "NOW_YEAR" | "NOW_HOUR" | "NOW_SECOND" | "NOW_MIN" | "NOW_MONTH" | "NOW_DAY" | "NOW_WEEKDAY" | "NOW_MINUTE";
+export type FormulaType = "AVERAGE" | "SUM" | "COUNT" | "MAX" | "MIN";
+export type SingleRefFormulaType = "LEN" | "MODE" | "UPPER" | "LOWER" | "PROPER" | "RIGHT" | "LEFT" | "ABS" | "POWER" | "FLOOR" | "CEILING" | "ROUND" | "SQRT" | "COS" | "SIN" | "TAN" | "COT" | "COUNTIF" | "TRIM";
+export interface FormatMap {
+    [format: string]: {
+        key: number;
+        value?: string;
+    };
+}
+export interface Formula {
+    [insertCell: string]: FormulaSetting | SingleRefFormulaSetting | NoArgFormulaSetting | CustomFormulaSetting;
+}
+export interface FormulaSetting {
+    type: FormulaType;
+    start: string;
+    end: string;
+    styleId?: string;
+}
+export interface CustomFormulaSetting {
+    isArray?: boolean;
+    refrenceCells?: string;
+    formula: string;
+    returnType?: string;
+    styleId?: string;
+}
+export interface SingleRefFormulaSetting {
+    type: SingleRefFormulaType;
+    refrenceCell: string;
+    value?: number | string;
+    styleId?: string;
+}
+export interface NoArgFormulaSetting {
+    noArgType: NoArgFormulaType;
+    styleId?: string;
 }
 export interface StyleMapper {
     conditinalFormating: {
@@ -193,70 +279,7 @@ export interface StyleMapper {
         value: string;
     };
 }
-export interface Checkbox {
-    col: number;
-    row: number;
-    text: string;
-    link?: string;
-    checked?: boolean;
-    mixed?: boolean;
-    threeD?: boolean;
-    startStr?: string;
-    endStr?: string;
-}
-export type FormulaType = "AVERAGE" | "SUM" | "COUNT" | "MAX" | "MIN";
-export interface StyleBody {
-    fontFamily?: string;
-    type?: string;
-    size?: number;
-    index?: number;
-    alignment?: AlignmentOption;
-    border?: BorderOption;
-    format?: string;
-    bold?: boolean;
-    underline?: boolean;
-    italic?: boolean;
-    doubleUnderline?: boolean;
-    color?: string;
-    backgroundColor?: string;
-}
-export interface Styles {
-    [key: string]: StyleBody;
-}
-export interface FormatMap {
-    [format: string]: {
-        key: number;
-        value?: string;
-    };
-}
-export interface FormulaSetting {
-    type: FormulaType;
-    start: string;
-    end: string;
-    styleId?: string;
-}
-export interface Formula {
-    [insertCell: string]: FormulaSetting;
-}
-export interface Theme extends ExcelTableOption {
-    sheet: SheetOption[];
-}
-export interface ExcelTableOption {
-    notSave?: boolean;
-    creator?: string;
-    backend?: boolean;
-    activateConditinalFormating?: boolean;
-    fileName?: string;
-    generateType?: "nodebuffer" | "array" | "binarystring" | "base64";
-    addDefaultTitleStyle?: boolean;
-    created?: string;
-    modified?: string;
-    numberOfColumn?: number;
-    createType?: string;
-    mapSheetDataOption?: any;
-    styles?: Styles;
-}
-export interface ExcelTable extends ExcelTableOption {
-    sheet: Sheet[];
+export interface MapComment {
+    [key: string]: Comment | string;
 }
 //# sourceMappingURL=excel-table.d.ts.map

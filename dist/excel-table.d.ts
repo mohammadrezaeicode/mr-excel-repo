@@ -58,6 +58,14 @@ declare interface ConditinalFormating {
 
 export declare function convertTableToExcel(queryForTable?: string, table?: HTMLTableElement, keepStyle?: boolean, rowHeightScaleFunction?: RowHeightScaleFunction, colWidthScaleFunction?: ColWidthScaleFunction): Promise<string | number[] | Blob | Buffer | undefined>;
 
+declare interface CustomFormulaSetting {
+    isArray?: boolean;
+    refrenceCells?: string;
+    formula: string;
+    returnType?: string;
+    styleId?: string;
+}
+
 declare interface Data extends DataOptions {
     [key: string]: string | number | any | undefined;
 }
@@ -97,7 +105,7 @@ export declare const extractExcelData: typeof extractExcelData_2;
 declare function extractExcelData_2(uri: string): Promise<string>;
 
 declare interface Formula {
-    [insertCell: string]: FormulaSetting;
+    [insertCell: string]: FormulaSetting | SingleRefFormulaSetting | NoArgFormulaSetting | CustomFormulaSetting;
 }
 
 declare interface FormulaSetting {
@@ -166,6 +174,13 @@ declare interface MultiStyleValue {
     reg?: MultiStyleRexValue[];
 }
 
+declare interface NoArgFormulaSetting {
+    noArgType: NoArgFormulaType;
+    styleId?: string;
+}
+
+declare type NoArgFormulaType = "NOW" | "TODAY" | "NOW_YEAR" | "NOW_HOUR" | "NOW_SECOND" | "NOW_MIN" | "NOW_MONTH" | "NOW_DAY" | "NOW_WEEKDAY" | "NOW_MINUTE";
+
 declare type ProtectionOption = {
     [key in ProtectionOptionKey]: "0" | "1" | 0 | 1;
 };
@@ -219,6 +234,15 @@ declare interface SideBySide {
 }
 
 export declare function sideBySideLineByLine(data: SideBySide[][]): Promise<string | number[] | Blob | Buffer | undefined>;
+
+declare interface SingleRefFormulaSetting {
+    type: SingleRefFormulaType;
+    refrenceCell: string;
+    value?: number | string;
+    styleId?: string;
+}
+
+declare type SingleRefFormulaType = "LEN" | "MODE" | "UPPER" | "LOWER" | "PROPER" | "RIGHT" | "LEFT" | "ABS" | "POWER" | "FLOOR" | "CEILING" | "ROUND" | "SQRT" | "COS" | "SIN" | "TAN" | "COT" | "COUNTIF" | "TRIM";
 
 declare interface SortAndFilter {
     mode: "all" | "ref";

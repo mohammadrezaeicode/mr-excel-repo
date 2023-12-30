@@ -1,11 +1,12 @@
 {
   "name": "mr-excel",
-  "version": "3.1.1",
+  "version": "3.2.0",
   "main": "dist/excel-table.umd.js",
   "scripts": {
     "start": "tsc",
     "build": "webpack",
     "build1": "tsc && vite build",
+    "bb":"npm run build && npm run build1",
     "dev": "tsc -w"
   },
   "description": "A versatile JavaScript library for effortlessly generating .xlsx files from input objects. Seamlessly create Excel spreadsheets with data, formatting, formulas, and more.",

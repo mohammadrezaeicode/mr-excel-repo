@@ -16,6 +16,7 @@ MR-Excel is a JavaScript library designed for reading and writing Excel files. T
   - [**`General`**](#general-option)
   - [**`Header`**](#header)
   - [**`Formula`**](#formula)
+    - [**`🆕Time, Math, Custom Formula & etc`**](#new-formula)
   - [**`Styles & Format`**](#styles-format)
   - [**`Conditional Styling`**](#conditional-styling)
   - [**`Conditinal Formating`**](#conditinal-formating)
@@ -2041,6 +2042,314 @@ ExcelTable.generateExcel(data);
 <summary>result image</summary>
 
 ![ex](https://github.com/mohammadrezaeicode/mr-excel-page-repo/blob/main/public/img/ex4.PNG?raw=true)
+
+</details>
+
+<a id="new-formula"></a>
+
+### 🆕Time, Math, Custom Formula & etc [⬆️](#table-of-contents)
+
+We offer new formulas for mathematics, time, and more. Additionally, you can create complex formulas using the Custom Formula feature. One notable aspect of the Custom Formula feature is the ability to generate an array result formula. To achieve this, you must specify a range cell where the results are to be inserted and define the formula in the formula property. Moreover, you can use this feature to define a single result formula.
+
+<details>
+<summary>Display code</summary>
+
+```javascript
+const colorPalette = {
+    c1: "2B2E4A",
+    c2: "E84545",
+    c3: "903749",
+    c4: "53354A",
+};
+const t = { c1: "2C3639", c2: "3F4E4F", c3: "A27B5C", c4: "DCD7C9" },
+    n = { backgroundColor: t.c2, fontFamily: "Times New Roman", color: t.c4 },
+    a = { backgroundColor: t.c4, fontFamily: "Times New Roman", color: t.c2 };
+const data = {
+    creator: "mr",
+    styles: {
+        headerStyle: {
+            backgroundColor: "2B2E4A",
+            fontFamily: "Times New Roman",
+            color: "E84545",
+        },
+        Date: { ...n, format: "short_date" },
+        customFormulaStyle: {
+            backgroundColor: "E84545",
+            fontFamily: "Times New Roman",
+            color: "2B2E4A",
+            size: 15,
+            border: {
+                full: {
+                    color: "53354A",
+                    style: "dashDot",
+                },
+            },
+        },
+        formulaStyle: {
+            backgroundColor: "2B2E4A",
+            fontFamily: "Times New Roman",
+            color: "E84545",
+            size: 15,
+            border: {
+                full: {
+                    color: "903749",
+                    style: "medium",
+                },
+            },
+        },
+    },
+    sheet: [
+        {
+            formula: {
+                J7: {
+                    formula: "REPLACE(D3,1,1,\"replced\")",
+                    styleId: "customFormulaStyle"
+                },
+                H8: {
+                    formula: "CONCATENATE(D2, \" \", D5)",
+                    styleId: "customFormulaStyle"
+                },
+                "J2:J6": {
+                    formula: "YEAR(NOW()-A2:A6)",
+                    refrenceCells: "J2:J6"
+                },
+                "K2:K6": {
+                    formula: "LOWER(D2:D6)"
+                },
+                I2: {
+                    formula: "COUNT(A1:B8)",
+                    styleId: "customFormulaStyle"
+                },
+                H6: {
+                    noArgType: "HOUR",
+                    styleId: "customFormulaStyle"
+                },
+                H5: {
+                    noArgType: "NOW",
+                    styleId: "customFormulaStyle"
+                },
+                H4: {
+                    type: "TRIM",
+                    refrenceCell: "D3",
+                    styleId: "customFormulaStyle"
+                }, H7: {
+                    type: "SUMIF",
+                    refrenceCell: "B1:B5",
+                    value: "\">=5\"",
+                    styleId: "customFormulaStyle"
+                },
+                H3: {
+                    type: "COUNTIF",
+                    refrenceCell: "B1:B5",
+                    value: "\">=5\"",
+                    styleId: "customFormulaStyle"
+                },
+                H2: {
+                    type: "ABS",
+                    refrenceCell: "B5",
+                    styleId: "customFormulaStyle"
+                }, I1: {
+                    type: "PROPER",
+                    refrenceCell: "D1",
+                    styleId: "customFormulaStyle"
+                },
+                G11: {
+                    type: "UPPER",
+                    refrenceCell: "D1",
+                    styleId: "customFormulaStyle"
+                },
+                G10: {
+                    type: "TAN",
+                    refrenceCell: "B5",
+                    styleId: "customFormulaStyle"
+                },
+                G8: {
+                    type: "COS",
+                    refrenceCell: "B5",
+                    styleId: "customFormulaStyle"
+                },
+                G7: {
+                    type: "FLOOR",
+                    refrenceCell: "B5",
+                    value: 5,
+                    styleId: "customFormulaStyle"
+                },
+                G2: {
+                    type: "POWER",
+                    refrenceCell: "B2",
+                    value: 2,
+                    styleId: "customFormulaStyle"
+                },
+                G3: {
+                    type: "MOD",
+                    refrenceCell: "B3",
+                    value: 2,
+                    styleId: "customFormulaStyle"
+                },
+                G4: {
+                    type: "SQRT",
+                    refrenceCell: "B4",
+                    styleId: "customFormulaStyle"
+                },
+                G5: {
+                    type: "CEILING",
+                    refrenceCell: "B5",
+                    value: 5,
+                    styleId: "customFormulaStyle"
+                },
+                G6: {
+                    type: "ROUND",
+                    refrenceCell: "B5",
+                    value: 5,
+                    styleId: "customFormulaStyle"
+                },
+                G1: {
+                    type: "LEN",
+                    refrenceCell: "A1",
+                    styleId: "customFormulaStyle",
+                },
+                A8: {
+                    type: "SUM",
+                    start: "B2",
+                    end: "D3",
+                    styleId: "customFormulaStyle",
+                },
+                B8: {
+                    type: "AVERAGE",
+                    start: "A2",
+                    end: "F6",
+                    styleId: "customFormulaStyle",
+                },
+                C8: {
+                    type: "SUM",
+                    start: "A2",
+                    end: "F6",
+                    styleId: "customFormulaStyle",
+                },
+                D8: {
+                    type: "MAX",
+                    start: "A2",
+                    end: "F6",
+                    styleId: "customFormulaStyle",
+                },
+                E8: {
+                    type: "MIN",
+                    start: "A2",
+                    end: "F6",
+                    styleId: "customFormulaStyle",
+                },
+                F8: {
+                    type: "COUNT",
+                    start: "A2",
+                    end: "F6",
+                    styleId: "customFormulaStyle",
+                },
+            },
+            headerStyleKey: "headerStyle",
+            headers: [
+                {
+                    label: "Date",
+                    text: "Date",
+                    formula: {
+                        styleId: "formulaStyle",
+                        type: "COUNT",
+                    },
+                },
+                {
+                    label: "Column 1",
+                    text: "Column 1",
+                    formula: {
+                        styleId: "formulaStyle",
+                        type: "AVERAGE",
+                    },
+                },
+                {
+                    label: "Column 2",
+                    text: "Column 2",
+                    formula: {
+                        styleId: "formulaStyle",
+                        type: "SUM",
+                    },
+                },
+                {
+                    label: "Column 3",
+                    text: "Column 3",
+                    formula: {
+                        styleId: "formulaStyle",
+                        type: "MAX",
+                    },
+                },
+                {
+                    label: "Column 4",
+                    text: "Column 4",
+                    formula: {
+                        styleId: "formulaStyle",
+                        type: "MIN",
+                    },
+                },
+                {
+                    label: "Column 5",
+                    text: "Column 5",
+                    formula: {
+                        styleId: "formulaStyle",
+                        type: "COUNT",
+                    },
+                },
+            ],
+            data: [
+                {
+                    Date: "2023-08-01",
+                    "Column 1": 5,
+                    "Column 2": 10,
+                    "Column 3": "D15",
+                    "Column 4": 20,
+                    "Column 5": 25,
+                },
+                {
+                    Date: "2023-08-02",
+                    "Column 1": 7,
+                    "Column 2": 14,
+                    "Column 3": " D21 ",
+                    "Column 4": 28,
+                    "Column 5": 35,
+                },
+                {
+                    Date: "2023-08-03",
+                    "Column 1": 3,
+                    "Column 2": 6,
+                    "Column 3": " D9 ",
+                    "Column 4": 12,
+                    "Column 5": 15,
+                },
+                {
+                    Date: "2023-08-04",
+                    "Column 1": 12,
+                    "Column 2": 24,
+                    "Column 3": " D36 ",
+                    "Column 4": 48,
+                    "Column 5": 60,
+                },
+                {
+                    Date: "2023-08-05",
+                    "Column 1": 8,
+                    "Column 2": 16,
+                    "Column 3": "D24",
+                    "Column 4": 32,
+                    "Column 5": 40,
+                },
+            ],
+        },
+    ],
+};
+ExcelTable.generateExcel(data);
+```
+
+</details>
+
+<details>
+<summary>result image</summary>
+
+![ex](https://github.com/mohammadrezaeicode/mr-excel-page-repo/blob/main/public/img/ex22.PNG?raw=true)
 
 </details>
 
@@ -4537,6 +4846,12 @@ To migrate from Version 2 to Version 3, you need to follow the steps below:
   - Replace "color" with "color."
 
 ## Release Notes [⬆️](#table-of-contents)
+
+### Version 3.2.0 (2023-12-29)
+
+#### New Features
+
+-Improvement in the formula section.
 
 ### Version 3.0.3 (2023-12-02)
 
