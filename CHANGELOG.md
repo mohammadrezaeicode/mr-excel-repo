@@ -25,7 +25,7 @@ we have added the test and release packages. Additionally, we have addressed var
 
 ### New Features
 
--Improvement in the formula section.
+- Improvement in the formula section.
 
 ## Version 3.0.3 (2023-12-12)
 
