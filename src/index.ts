@@ -1,9 +1,9 @@
-import { ThemeOption, themeGenerator } from "./Themes/theme";
+import { ThemeOption, themeGenerator } from "./themes/theme";
 import { Data, ExcelTable, SideBySide } from "./data-model/excel-table";
 import {
   ColWidthScaleFunction,
   RowHeightScaleFunction,
-  createExcelTabelBaseOnDomElement,
+  createExcelTableBaseOnDomElement,
 } from "./utils/create-excel-data";
 import { generateExcel as generateEx } from "./utils/generate-excel";
 import { extractExcelData as extractExcelDataUtil } from "./utils/read-utils";
@@ -18,7 +18,7 @@ export function convertTableToExcel(
   rowHeightScaleFunction?: RowHeightScaleFunction,
   colWidthScaleFunction?: ColWidthScaleFunction
 ) {
-  const data = createExcelTabelBaseOnDomElement(
+  const data = createExcelTableBaseOnDomElement(
     queryForTable,
     table,
     keepStyle,

@@ -6,7 +6,7 @@ function sideBySide(data) {
     let tableIndex = 0;
     let rowTable = {};
     let counterRow = {};
-    let reseted = {};
+    let resetMap = {};
     for (let index = 0; index < lengthData; index++) {
         const element = data[index];
         const elementLength = element.length;
@@ -26,7 +26,7 @@ function sideBySide(data) {
                 rowTable[name] = {
                     headers: [],
                     data: [],
-                    labelConter: 0,
+                    labelCounter: 0,
                     seenAt: index,
                 };
                 firstTime = true;
@@ -37,32 +37,32 @@ function sideBySide(data) {
                     value: 0,
                 };
             }
-            if (!(name in reseted)) {
-                rowTable[name].labelConter = 0;
-                reseted[name] = true;
+            if (!(name in resetMap)) {
+                rowTable[name].labelCounter = 0;
+                resetMap[name] = true;
             }
             let newHeader = [];
             const headerLength = rowTable[name].headers.length;
             let headerAsRow = {};
             let withText = rowTable[name].seenAt == index;
             let header = mainData.headers.reduce((res, curr, index) => {
-                rowTable[name].labelConter++;
-                if (headerLength < rowTable[name].labelConter) {
+                rowTable[name].labelCounter++;
+                if (headerLength < rowTable[name].labelCounter) {
                     newHeader.push({
-                        label: "c" + rowTable[name].labelConter,
+                        label: "c" + rowTable[name].labelCounter,
                         text: withText ? curr.text : "",
                     });
                 }
-                headerAsRow["c" + rowTable[name].labelConter] = curr.text;
-                return Object.assign(Object.assign({}, res), { [curr.label]: "c" + rowTable[name].labelConter });
+                headerAsRow["c" + rowTable[name].labelCounter] = curr.text;
+                return Object.assign(Object.assign({}, res), { [curr.label]: "c" + rowTable[name].labelCounter });
             }, {});
             rowTable[name].headers.push(...newHeader);
             if (mainData.spaceX) {
                 for (let space = 0; space < mainData.spaceX; space++) {
-                    rowTable[name].labelConter++;
-                    if (headerLength <= rowTable[name].labelConter) {
+                    rowTable[name].labelCounter++;
+                    if (headerLength <= rowTable[name].labelCounter) {
                         rowTable[name].headers.push({
-                            label: "c" + rowTable[name].labelConter,
+                            label: "c" + rowTable[name].labelCounter,
                             text: "",
                         });
                     }
@@ -118,7 +118,7 @@ function sideBySide(data) {
                 index,
             };
         }
-        reseted = {};
+        resetMap = {};
     }
     let keys = Object.keys(rowTable);
     let sheet = [];

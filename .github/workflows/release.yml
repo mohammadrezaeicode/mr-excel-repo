@@ -1,0 +1,55 @@
+name: Release new Package
+on: 
+  push:
+    branches:
+    - main
+    paths:
+    - CHANGELOG.md
+jobs:
+  release:
+    name: Create release package
+    runs-on: ubuntu-latest
+    steps: 
+    - name: Checkout to code
+      uses: actions/checkout@v4
+    - name: install Node js Version 20.x
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x' 
+    - name: Run application
+      run: npm run start
+    - name: Retrieve Release Version
+      run: echo "PV=$(node version.js)" >> $GITHUB_ENV
+    # - run: git pull
+    # - run: git log -1 -- package.json
+    # - name: node test
+    #   run: node body.js >>test
+    - run: cat change-log
+    # - run: git log -p -1 -- package.json
+    - name: Retrieve Release Body
+      run:  |
+        {
+          echo 'PB<<EOF'
+          cat change-log
+          echo EOF
+        } >> $GITHUB_ENV
+    - name: Run application
+      run: npm run start   
+    # - name: Archive Release
+    #   uses: thedoctor0/zip-release@0.7.5
+    #   with:
+    #     filename: arc.zip
+    #     exclusions: '*.git* /*node_modules/* .github version.js'
+    # - name: Retrieve Version
+    #   run: echo "PV=$(node version.js)" >> $GITHUB_ENV
+    - run: echo ${{env.PV}}
+    - name: Create Github Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{env.PV}}
+        release_name: Release v${{env.PV}}
+        body: ${{env.PB}}
+
+

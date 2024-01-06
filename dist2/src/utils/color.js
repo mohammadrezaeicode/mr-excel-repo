@@ -1,10 +1,25 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.convertToHex = exports.rgbToHex = exports.hexToRgbNegative = exports.generateContrastTextColor = exports.hexToRgbArray = void 0;
+exports.exportedForTesting = exports.convertToHex = exports.rgbToHex = exports.hexToRgbNegative = exports.generateContrastTextColor = exports.hexToRgbArray = void 0;
 function removeSpace(str) {
     return str.replace(/ /g, "");
 }
+function extendHexValue(hex) {
+    hex = hex.replace(/^#/, "");
+    if (hex.length == 3) {
+        const s0 = hex.charAt(0);
+        const s1 = hex.charAt(1);
+        const s2 = hex.charAt(2);
+        return s0 + s0 + s1 + s1 + s2 + s2;
+    }
+    else {
+        return hex;
+    }
+}
 function hexToRgbArray(hex) {
+    if (/^#?([a-f\d]{3})$/i.test(hex)) {
+        hex = extendHexValue(hex);
+    }
     var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return result
         ? [
@@ -25,11 +40,14 @@ function generateContrastTextColor(b) {
         255;
     // Determine whether the text should be dark or light based on luminance
     const textColor = bgLuminance > 0.5 ? "rgb(0,0,0)" : "rgb(255,255,255)";
-    ;
     return textColor;
 }
 exports.generateContrastTextColor = generateContrastTextColor;
 function hexToRgbNegative(hex) {
+    // /(^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$)|(^#?([a-f\d]{3})$)/i;
+    if (/^#?([a-f\d]{3})$/i.test(hex)) {
+        hex = extendHexValue(hex);
+    }
     var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return result
         ? "rgb(" +
@@ -55,7 +73,9 @@ function rgbToHex(rgb) {
     let validate = spResult.reduce((r, c) => {
         return r && !Number.isNaN(Number(c));
     }, true);
-    if ((spResult.length == 4 && spResult[3] == "0") || !validate) {
+    if ((spResult.length == 4 && spResult[3] == "0") ||
+        (spResult.length != 3 && spResult.length != 4) ||
+        !validate) {
         return null;
     }
     return (valueToHex(spResult[0]) +
@@ -79,7 +99,12 @@ function convertToHex(fgConvertor, backend) {
         const rgb = rgbToHex(fgConvertor);
         fgConvertor = rgb ? rgb : "";
     }
-    return fgConvertor.replace("#", "");
+    return fgConvertor.replace(/^#/, "");
 }
 exports.convertToHex = convertToHex;
+exports.exportedForTesting = {
+    removeSpace,
+    valueToHex,
+    extendHexValue,
+};
 //# sourceMappingURL=color.js.map

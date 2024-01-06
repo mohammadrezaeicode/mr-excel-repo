@@ -133,7 +133,7 @@ const themeGenerator = function (inputData, index, option, filterKeys = []) {
         };
         const shLength = data.sheet.length;
         for (let index = 0; index < shLength; index++) {
-            data.sheet[index].styleCellCondition = function (data, object, colIndex, rowIndex, fromHeader, styleKeys) {
+            data.sheet[index].styleCellCondition = function (data, object, rowIndex, colIndex, fromHeader, styleKeys) {
                 if (fromHeader) {
                     return "themeStyleHeader";
                 }

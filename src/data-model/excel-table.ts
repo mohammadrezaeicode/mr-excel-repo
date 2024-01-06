@@ -5,7 +5,7 @@ export interface ExcelTableOption {
   notSave?: boolean;
   creator?: string;
   backend?: boolean;
-  activateConditinalFormating?: boolean;
+  activateConditionalFormatting?: boolean;
   fileName?: string;
   generateType?: "nodebuffer" | "array" | "binarystring" | "base64";
   addDefaultTitleStyle?: boolean;
@@ -23,8 +23,8 @@ export interface Sheet extends SheetOption {
 }
 export interface SheetOption {
   withoutHeader?: boolean;
-  conditinalFormating?: ConditinalFormating[];
-  multiStyleConditin?: MultiStyleConditinFunction;
+  conditionalFormatting?: ConditionalFormatting[];
+  multiStyleCondition?: MultiStyleConditionFunction;
   useSplitBaseOnMatch?: boolean;
   convertStringToNumber?: boolean;
   images?: ImageTypes[];
@@ -39,8 +39,8 @@ export interface SheetOption {
   headerStyleKey?: string;
   mergeRowDataCondition?: MergeRowDataConditionFunction;
   styleCellCondition?: StyleCellConditionFunction;
-  commentCodition?: CommentConditionFunction;
-  sortAndfilter?: SortAndFilter;
+  commentCondition?: CommentConditionFunction;
+  sortAndFilter?: SortAndFilter;
   state?: "hidden" | "visible";
   headerRowOption?: any;
   protectionOption?: ProtectionOption;
@@ -53,7 +53,7 @@ export interface Header {
   size?: number;
   multiStyleValue?: MultiStyleValue;
   comment?: Comment | string;
-  conditinalFormating?: ConditinalFormating;
+  conditionalFormatting?: ConditionalFormatting;
   formula?: {
     type: FormulaType;
     styleId?: string;
@@ -119,7 +119,7 @@ export type ProtectionOptionKey =
   | "sort"
   | "autoFilter"
   | "pivotTables";
-export interface ConditinalFormating {
+export interface ConditionalFormatting {
   type: "cells" | "dataBar" | "iconSet" | "colorScale" | "top";
   start: string;
   end: string;
@@ -218,7 +218,7 @@ export interface MergeRowConditionMap {
     start: number;
   };
 }
-export type MultiStyleConditinFunction = (
+export type MultiStyleConditionFunction = (
   data: Header | string | number | undefined,
   object: null | Data,
   headerKey: string,
@@ -238,10 +238,10 @@ export type CommentConditionFunction = (
 export type StyleCellConditionFunction = (
   data: Header | string | number | undefined,
   object: Header | Data,
-  colIndex: number,
   rowIndex: number,
+  colIndex: number,
   fromHeader: boolean,
-  stylekeys: string[]
+  styleKeys: string[]
 ) => string | null;
 export type MergeRowDataConditionFunction = (
   data: Header | string | number | undefined,
@@ -331,14 +331,14 @@ export interface FormulaSetting {
 }
 export interface CustomFormulaSetting {
   isArray?: boolean;
-  refrenceCells?: string;
+  referenceCells?: string;
   formula: string;
   returnType?: string;
   styleId?: string;
 }
 export interface SingleRefFormulaSetting {
   type: SingleRefFormulaType;
-  refrenceCell: string;
+  referenceCell: string;
   value?: number | string;
   styleId?: string;
 }
@@ -347,11 +347,11 @@ export interface NoArgFormulaSetting {
   styleId?: string;
 }
 export interface StyleMapper {
-  conditinalFormating: {
+  conditionalFormatting: {
     count: number;
     value: string;
   };
-  commentSintax: {
+  commentSyntax: {
     value: {
       [key: string]: string;
     };

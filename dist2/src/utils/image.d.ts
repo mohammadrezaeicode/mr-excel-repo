@@ -1,3 +1,2 @@
-export declare function toDataURL(url: string, callback: Function): void;
-export declare const toDataURL2: (url: string, name: string) => Promise<void | File>;
+export declare const toDataURL2: (url: string, name: string, isBackend?: boolean) => Promise<any>;
 //# sourceMappingURL=image.d.ts.map

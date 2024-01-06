@@ -821,7 +821,7 @@ export const ex: Example = {
   data: {
     sheet: [
       {
-        header: [
+        headers: [
           {
             label: "name",
             text: "Name",
@@ -843,7 +843,7 @@ export const ex: Example = {
         ],
       },
       {
-        header: [
+        headers: [
           {
             label: "item",
             text: "Item",
@@ -926,7 +926,7 @@ export const ex1: Example = (function () {
             }
           },
           tabColor: colorPalette.c3,
-          header: [
+          headers: [
             {
               label: "test",
               text: "Test",
@@ -988,7 +988,7 @@ export const ex1: Example = (function () {
           ],
         },
         {
-          header: [
+          headers: [
             {
               label: "test",
               text: "Test",
@@ -1087,7 +1087,7 @@ export const ex2: Example = {
           autoFilter: "0",
           pivotTables: "0",
         },
-        header: [
+        headers: [
           {
             label: "id",
             text: "ID",
@@ -1117,7 +1117,7 @@ export const ex2: Example = {
       },
       {
         state: "hidden",
-        header: [
+        headers: [
           {
             label: "id",
             text: "ID",
@@ -1181,7 +1181,7 @@ export const ex3: Example = (() => {
           {
             headerStyleKey: "headerStyle",
             headerHeight: 30,
-            header: [
+            headers: [
               {
                 label: "id",
                 text: "ID",
@@ -1223,7 +1223,7 @@ export const ex3: Example = (() => {
             withoutHeader: true,
             headerStyleKey: "headerStyle",
             // headerHeight: 100,
-            header: [
+            headers: [
               {
                 label: "id",
                 text: "ID",
@@ -1354,7 +1354,7 @@ export const ex4: Example = (() => {
             },
           },
           headerStyleKey: "headerStyle",
-          header: [
+          headers: [
             {
               label: "Date",
               text: "Date",
@@ -1540,7 +1540,7 @@ export const ex5: Example = (() => {
               }
             }
           },
-          header: [
+          headers: [
             { label: "Date", text: "Date" },
             { label: "Time", text: "Time" },
             { label: "Percentage", text: "Percentage" },
@@ -1743,7 +1743,7 @@ export const ex6: Example = (() => {
               }
             }
           },
-          header: [
+          headers: [
             { label: "Date", text: "Date" },
             { label: "Time", text: "Time" },
             { label: "Percentage", text: "Percentage" },
@@ -1888,7 +1888,7 @@ export const ex7: Example = (() => {
               return "rowStyle";
             }
           },
-          header: [
+          headers: [
             { label: "ID", text: "ID" },
             { label: "Name", text: "Name" },
             { label: "Column 1", text: "Column 1" },
@@ -2104,7 +2104,7 @@ export const ex8: Example = (() => {
                 return "rowStyle";
               }
             },
-            header: [
+            headers: [
               { label: "ID", text: "ID" },
               { label: "Name", text: "Name" },
               { label: "Column 1", text: "Column 1" },
@@ -2351,7 +2351,7 @@ export const ex9: Example = (() => {
                 }
               }
             },
-            header: [
+            headers: [
               { label: "c1", text: "**" },
               { label: "c2", text: "++" },
               { label: "c3", text: "Name" },

@@ -6,7 +6,7 @@ import {
 } from "../data-model/excel-table";
 import { rgbToHex } from "./color";
 
-function generatRowsBaseOnColAndRowSpan(
+function generateRowsBaseOnColAndRowSpan(
   col: number,
   row: number,
   start: number,
@@ -17,8 +17,6 @@ function generatRowsBaseOnColAndRowSpan(
   data: any
 ) {
   let rows = [];
-  let hasCol = true;
-  let hasRow = true;
   let type = "both";
   let mergeValue = [];
   if (!row || row === 0) {
@@ -78,9 +76,9 @@ export type RowHeightScaleFunction = (
   fromHeader: boolean
 ) => number;
 export type ColWidthScaleFunction = (data: number, colIndex: number) => number;
-export function createExcelTabelBaseOnDomElement(
-  queryForTable?: string,
-  table?: HTMLTableElement,
+export function createExcelTableBaseOnDomElement(
+  queryForTable?: string|null,
+  table?: HTMLTableElement|null,
   keepStyle?: boolean,
   rowHeightScaleFunction?: RowHeightScaleFunction,
   colWidthScaleFunction?: ColWidthScaleFunction
@@ -95,20 +93,14 @@ export function createExcelTabelBaseOnDomElement(
     nodes = table?.querySelectorAll("tr");
   }
   let head: any = [];
-  let datas: any = [];
+  let dataObjs: any = [];
   let styleMap: any = {
     header: {},
     rows: [],
   };
   let headerHeight = 40;
   if (nodes) {
-    // let header = []
-    // let data = []
     let headerSet = false;
-    let mergeMap = {};
-    // let headerLength = 0
-    // let head = []
-    // let datas = []
     let cellStyleMap: any = {};
     let headerLength = 0;
     nodes.forEach((tr, rowIndex) => {
@@ -134,54 +126,70 @@ export function createExcelTabelBaseOnDomElement(
           let styles = window.getComputedStyle(n, null);
           let border: BorderOption | null = null;
           if (styles.borderBottomWidth !== "0px") {
-            if (!border) {
-              border = {};
+            const borderBottomColor = rgbToHex(styles.borderBottomColor);
+            if (borderBottomColor) {
+              if (!border) {
+                border = {};
+              }
+              border["bottom"] = {
+                style: "thin",
+                color: borderBottomColor,
+              };
             }
-            border["bottom"] = {
-              style: "thin",
-              color: rgbToHex(styles.borderBottomColor)!,
-            };
           }
           if (styles.borderTopWidth !== "0px") {
-            if (!border) {
-              border = {};
+            const borderTopColor = rgbToHex(styles.borderTopColor);
+            if (borderTopColor) {
+              if (!border) {
+                border = {};
+              }
+              border["top"] = {
+                style: "thin",
+                color: borderTopColor,
+              };
             }
-            border["top"] = {
-              style: "thin",
-              color: rgbToHex(styles.borderTopColor)!,
-            };
           }
           if (styles.borderLeftWidth !== "0px") {
-            if (!border) {
-              border = {};
+            const borderLeftColor = rgbToHex(styles.borderLeftColor);
+            if (borderLeftColor) {
+              if (!border) {
+                border = {};
+              }
+              border["left"] = {
+                style: "thin",
+                color: borderLeftColor,
+              };
             }
-            border["left"] = {
-              style: "thin",
-              color: rgbToHex(styles.borderLeftColor)!,
-            };
           }
           if (styles.borderRightWidth !== "0px") {
-            if (!border) {
-              border = {};
+            const borderRightColor = rgbToHex(styles.borderRightColor);
+            if (borderRightColor) {
+              if (!border) {
+                border = {};
+              }
+              border["right"] = {
+                style: "thin",
+                color: borderRightColor,
+              };
             }
-            border["right"] = {
-              style: "thin",
-              color: rgbToHex(styles.borderRightColor)!,
-            };
           }
           let backgroundColor = rgbToHex(styles.backgroundColor);
           if (!backgroundColor && bgTr) {
             backgroundColor = bgTr;
           }
+          const fontSizeStyle = parseInt(
+            styles.fontSize.substring(0, styles.fontSize.indexOf("p"))
+          );
           let style = {
             ...(backgroundColor ? { backgroundColor } : {}),
             bold: parseInt(styles.fontWeight) > 500,
-            size: parseInt(
-              styles.fontSize.substring(0, styles.fontSize.indexOf("p"))
-            ),
+            ...(isNaN(fontSizeStyle) ? {} : { size: fontSizeStyle }),
             ...(border ? { border } : {}),
             alignment: {
-              horizontal: styles.textAlign,
+              ...(typeof styles.textAlign == "string" &&
+              styles.textAlign.length > 0
+                ? { horizontal: styles.textAlign }
+                : {}),
               vertical: "center",
               ...(styles.direction == "rtl" ? { rtl: true } : { ltr: true }),
             },
@@ -198,20 +206,22 @@ export function createExcelTabelBaseOnDomElement(
             headWidth =
               Number(styles.width.substring(0, styles.width.length - 2)) * 0.15;
           }
+          const colSpanValue = (n as any).getAttribute("colspan");
+          const rowSpanValue = (n as any).getAttribute("rowspan");
           head.push({
             label: "c" + index,
-            colspan: (n as any).getAttribute("colspan"),
-            rowspan: (n as any).getAttribute("rowspan"),
+            ...(colSpanValue ? { colspan: colSpanValue } : {}),
+            ...(rowSpanValue ? { rowspan: rowSpanValue } : {}),
             text: (n as any).textContent,
-            size: headWidth,
+            ...(isNaN(headWidth) || headWidth <= 0 ? {} : { size: headWidth }),
           });
         });
       } else {
         let data: any = {};
         let mergeString = "";
         let inMergeMode = false;
-        if (datas.length >= rowIndex) {
-          data = datas[rowIndex - 1];
+        if (dataObjs.length >= rowIndex) {
+          data = dataObjs[rowIndex - 1];
           mergeString =
             "mergeString" in data ? (data.mergeString as string) : "";
           inMergeMode = true;
@@ -234,7 +244,7 @@ export function createExcelTabelBaseOnDomElement(
             (n as any).getAttribute("colspan") ||
             (n as any).getAttribute("rowspan")
           ) {
-            let mergeData = generatRowsBaseOnColAndRowSpan(
+            let mergeData = generateRowsBaseOnColAndRowSpan(
               (n as any).getAttribute("colspan") * 1,
               (n as any).getAttribute("rowspan") * 1,
               index,
@@ -244,15 +254,15 @@ export function createExcelTabelBaseOnDomElement(
               mergeString,
               data
             );
-            if (datas.length < rowIndex) {
-              datas.push(...mergeData);
+            if (dataObjs.length < rowIndex) {
+              dataObjs.push(...mergeData);
             } else {
               mergeData.forEach((v, index) => {
-                if (datas.length < rowIndex + index) {
-                  datas.push(...mergeData);
+                if (dataObjs.length < rowIndex + index) {
+                  dataObjs.push(...mergeData);
                 } else {
-                  datas[rowIndex + index] = {
-                    ...datas[rowIndex + index],
+                  dataObjs[rowIndex + index] = {
+                    ...dataObjs[rowIndex + index],
                     ...v,
                   };
                 }
@@ -268,59 +278,74 @@ export function createExcelTabelBaseOnDomElement(
           }
           let border: BorderOption | null = null;
           if (styles.borderBottomWidth !== "0px") {
-            if (!border) {
-              border = {};
+            const borderBottomColor = rgbToHex(styles.borderBottomColor);
+            if (borderBottomColor) {
+              if (!border) {
+                border = {};
+              }
+              border["bottom"] = {
+                style: "thin",
+                color: borderBottomColor,
+              };
             }
-            border["bottom"] = {
-              style: "thin",
-              color: rgbToHex(styles.borderBottomColor)!,
-            };
           }
           if (styles.borderTopWidth !== "0px") {
-            if (!border) {
-              border = {};
+            const borderTopColor = rgbToHex(styles.borderTopColor);
+            if (borderTopColor) {
+              if (!border) {
+                border = {};
+              }
+              border["top"] = {
+                style: "thin",
+                color: borderTopColor,
+              };
             }
-            border["top"] = {
-              style: "thin",
-              color: rgbToHex(styles.borderTopColor)!,
-            };
           }
           if (styles.borderLeftWidth !== "0px") {
-            if (!border) {
-              border = {};
+            const borderLeftColor = rgbToHex(styles.borderLeftColor);
+            if (borderLeftColor) {
+              if (!border) {
+                border = {};
+              }
+              border["left"] = {
+                style: "thin",
+                color: borderLeftColor,
+              };
             }
-            border["left"] = {
-              style: "thin",
-              color: rgbToHex(styles.borderLeftColor)!,
-            };
           }
           if (styles.borderRightWidth !== "0px") {
-            if (!border) {
-              border = {};
+            const borderRightColor = rgbToHex(styles.borderRightColor);
+            if (borderRightColor) {
+              if (!border) {
+                border = {};
+              }
+              border["right"] = {
+                style: "thin",
+                color: borderRightColor,
+              };
             }
-            border["right"] = {
-              style: "thin",
-              color: rgbToHex(styles.borderRightColor)!,
-            };
           }
           let backgroundColor = rgbToHex(styles.backgroundColor);
           if (!backgroundColor && bgTr) {
             backgroundColor = bgTr;
           }
+          const fontSizeStyle = parseInt(
+            styles.fontSize.substring(0, styles.fontSize.indexOf("p"))
+          );
           let style = {
             ...(backgroundColor ? { backgroundColor } : {}),
             bold: parseInt(styles.fontWeight) > 500,
-            size: parseInt(
-              styles.fontSize.substring(0, styles.fontSize.indexOf("p"))
-            ),
+            ...(isNaN(fontSizeStyle) ? {} : { size: fontSizeStyle }),
             ...(border ? { border } : {}),
             // backgroundColor: rgbToHex(styles.backgroundColor),
             // colspan: n.getAttribute("colspan"),
             // rowspan: n.getAttribute("rowspan"),
             alignment: {
-              horizontal: styles.textAlign,
+              ...(typeof styles.textAlign == "string" &&
+              styles.textAlign.length > 0
+                ? { horizontal: styles.textAlign }
+                : {}),
               vertical: "center",
-              direction: styles.direction,
               ...(styles.direction == "rtl" ? { rtl: true } : { ltr: true }),
             },
           };
@@ -343,10 +368,13 @@ export function createExcelTabelBaseOnDomElement(
         } else {
           data.height = trEl.height.substring(0, trEl.height.length - 2);
         }
-        if (datas.length < rowIndex) {
-          datas.push(data);
+        if (typeof data.height == "string" && data.height.length == 0) {
+          delete data.height;
+        }
+        if (dataObjs.length < rowIndex) {
+          dataObjs.push(data);
         } else {
-          datas[rowIndex - 1] = data;
+          dataObjs[rowIndex - 1] = data;
         }
       }
     });
@@ -357,22 +385,22 @@ export function createExcelTabelBaseOnDomElement(
     styles: styleMap.header,
     sheet: [
       {
-        headerHeight,
+        ...(headerHeight ? { headerHeight } : {}),
         styleCellCondition: function (
           data: Header | string | number | undefined,
           object: Header | Data,
-          colIndex: number,
           rowIndex: number,
+          colIndex: number,
           fromHeader: boolean,
-          stylekeys: string[]
+          styleKeys: string[]
         ) {
           if (keepStyle) {
             if (fromHeader) {
-              return stylekeys.includes(rowIndex - 1 + "-" + colIndex)
+              return styleKeys.includes(rowIndex - 1 + "-" + colIndex)
                 ? rowIndex - 1 + "-" + colIndex
                 : "";
             } else {
-              return stylekeys.includes(rowIndex - 1 + "-" + colIndex)
+              return styleKeys.includes(rowIndex - 1 + "-" + colIndex)
                 ? rowIndex - 1 + "-" + colIndex
                 : "";
             }
@@ -380,7 +408,7 @@ export function createExcelTabelBaseOnDomElement(
             return null;
           }
         },
-        data: datas,
+        data: dataObjs,
         headers: head,
       },
     ],

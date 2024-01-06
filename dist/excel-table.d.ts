@@ -43,7 +43,7 @@ declare interface Comment_2 {
 
 declare type CommentConditionFunction = (data: Header | string | number | undefined, object: null | Data, headerKey: string, rowIndex: number, colIndex: number, fromHeader: boolean) => Comment_2 | string | false | undefined | null;
 
-declare interface ConditinalFormating {
+declare interface ConditionalFormatting {
     type: "cells" | "dataBar" | "iconSet" | "colorScale" | "top";
     start: string;
     end: string;
@@ -60,7 +60,7 @@ export declare function convertTableToExcel(queryForTable?: string, table?: HTML
 
 declare interface CustomFormulaSetting {
     isArray?: boolean;
-    refrenceCells?: string;
+    referenceCells?: string;
     formula: string;
     returnType?: string;
     styleId?: string;
@@ -88,7 +88,7 @@ declare interface ExcelTableOption {
     notSave?: boolean;
     creator?: string;
     backend?: boolean;
-    activateConditinalFormating?: boolean;
+    activateConditionalFormatting?: boolean;
     fileName?: string;
     generateType?: "nodebuffer" | "array" | "binarystring" | "base64";
     addDefaultTitleStyle?: boolean;
@@ -102,7 +102,7 @@ declare interface ExcelTableOption {
 
 export declare const extractExcelData: typeof extractExcelData_2;
 
-declare function extractExcelData_2(uri: string): Promise<string>;
+declare function extractExcelData_2(uri: string, isBackend?: boolean): Promise<unknown>;
 
 declare interface Formula {
     [insertCell: string]: FormulaSetting | SingleRefFormulaSetting | NoArgFormulaSetting | CustomFormulaSetting;
@@ -127,7 +127,7 @@ declare interface Header {
     size?: number;
     multiStyleValue?: MultiStyleValue;
     comment?: Comment_2 | string;
-    conditinalFormating?: ConditinalFormating;
+    conditionalFormatting?: ConditionalFormatting;
     formula?: {
         type: FormulaType;
         styleId?: string;
@@ -162,7 +162,7 @@ declare interface MapMultiStyleValue {
 
 declare type MergeRowDataConditionFunction = (data: Header | string | number | undefined, key: string | null, index: number, fromHeader: boolean) => boolean;
 
-declare type MultiStyleConditinFunction = (data: Header | string | number | undefined, object: null | Data, headerKey: string, rowIndex: number, colIndex: number, fromHeader: boolean) => MultiStyleValue | null;
+declare type MultiStyleConditionFunction = (data: Header | string | number | undefined, object: null | Data, headerKey: string, rowIndex: number, colIndex: number, fromHeader: boolean) => MultiStyleValue | null;
 
 declare interface MultiStyleRexValue {
     reg: RegExp | string;
@@ -196,8 +196,8 @@ declare interface Sheet extends SheetOption {
 
 declare interface SheetOption {
     withoutHeader?: boolean;
-    conditinalFormating?: ConditinalFormating[];
-    multiStyleConditin?: MultiStyleConditinFunction;
+    conditionalFormatting?: ConditionalFormatting[];
+    multiStyleCondition?: MultiStyleConditionFunction;
     useSplitBaseOnMatch?: boolean;
     convertStringToNumber?: boolean;
     images?: ImageTypes[];
@@ -212,8 +212,8 @@ declare interface SheetOption {
     headerStyleKey?: string;
     mergeRowDataCondition?: MergeRowDataConditionFunction;
     styleCellCondition?: StyleCellConditionFunction;
-    commentCodition?: CommentConditionFunction;
-    sortAndfilter?: SortAndFilter;
+    commentCondition?: CommentConditionFunction;
+    sortAndFilter?: SortAndFilter;
     state?: "hidden" | "visible";
     headerRowOption?: any;
     protectionOption?: ProtectionOption;
@@ -237,7 +237,7 @@ export declare function sideBySideLineByLine(data: SideBySide[][]): Promise<stri
 
 declare interface SingleRefFormulaSetting {
     type: SingleRefFormulaType;
-    refrenceCell: string;
+    referenceCell: string;
     value?: number | string;
     styleId?: string;
 }
@@ -265,7 +265,7 @@ declare interface StyleBody {
     backgroundColor?: string;
 }
 
-declare type StyleCellConditionFunction = (data: Header | string | number | undefined, object: Header | Data, colIndex: number, rowIndex: number, fromHeader: boolean, stylekeys: string[]) => string | null;
+declare type StyleCellConditionFunction = (data: Header | string | number | undefined, object: Header | Data, rowIndex: number, colIndex: number, fromHeader: boolean, styleKeys: string[]) => string | null;
 
 declare interface Styles {
     [key: string]: StyleBody;

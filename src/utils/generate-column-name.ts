@@ -1,13 +1,13 @@
 export function generateColumnName(
   cols: string[],
   num: number,
-  startletter: string = "",
+  startLetter: string = "",
   result: string[] = [],
-  nextIndex: number = 0
+  nextIndex: number = -1
 ): string[] {
   const length = cols.length;
   for (let index = 0; index < length; index++) {
-    result.push(startletter + cols[index]);
+    result.push(startLetter + cols[index]);
   }
   if (num < result.length) {
     return result;

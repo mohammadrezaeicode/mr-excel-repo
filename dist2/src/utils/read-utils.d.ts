@@ -1,2 +1,2 @@
-export declare function extractExcelData(uri: string): Promise<string>;
+export declare function extractExcelData(uri: string, isBackend?: boolean): Promise<unknown>;
 //# sourceMappingURL=read-utils.d.ts.map

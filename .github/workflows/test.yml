@@ -1,0 +1,23 @@
+name: Test
+on: push
+jobs:
+  test:
+    name: Test
+    timeout-minutes: 20
+    continue-on-error: true
+    strategy:
+      matrix:
+        os: [macos-latest, windows-latest, ubuntu-latest,macos-13]
+        version: ['14.x', '15.x', '16.x','17.x', '18.x','19.x','20.x']
+    runs-on: ${{ matrix.os }}
+    steps:
+    - name: Checkout to code
+      uses: actions/checkout@v4
+    - name: install Node js Version ${{ matrix.version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.version }}
+    - name: install dependency
+      run: npm install
+    - name: Run test
+      run: npm run test

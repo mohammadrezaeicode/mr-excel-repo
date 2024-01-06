@@ -12,10 +12,10 @@
   ],
   "author": "M.R",
   "license": "ISC",
-  "dependencies": {
-    "mr-excel": "^3.0.0"
-  },
   "devDependencies": {
     "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "mr-excel": "^3.2.0"
   }
 }

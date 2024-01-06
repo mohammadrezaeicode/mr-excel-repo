@@ -1,5 +1,7 @@
 # MR Excel
 
+![Test](https://github.com/mohammadrezaeicode/github-action/actions/workflows/test.yml/badge.svg)
+
 MR-Excel is a JavaScript library designed for reading and writing Excel files. This library allows you to extract data from Excel files, and when it comes to writing, it offers a range of features such as commenting, styling, Formulas, merging cells,Grouping rows, conditional formatting (Excel), multi-style values, and functions that can be used for cell merging, adding styles and commenting functionalities.
 
 ## Table of Contents
@@ -38,7 +40,8 @@ MR-Excel is a JavaScript library designed for reading and writing Excel files. T
 - [**`extractExcelData`**](#extract-excel-data)
   - [**`How to use extractExcelData`**](#extract-excel-data-usage)
 - [**`interface`**](#interface)
-- [**`Migrating from 2 to 3`**](#migrating)
+- [**`Migrating from 2 to 3`**](#migrating-3)
+- [**`Migrating from 3 to 4`**](#migrating-4)
 
 <details>
 
@@ -99,7 +102,7 @@ We have four functions that are defined with specific use cases as follows:
 - **`sideBySideLineByLine`**: This function offers the capability to generate a single-sheet Excel file containing multiple tables side by side and line by line.
   <a id="side-by-side-line-by-line"></a>
 
-- **`themeBaseGenerate`**: Within this function, we utilize color palettes from **https://colorhunt.co/**. It accepts data and a theme index as inputs, then generates an Excel file with the selected theme applied.[Themes](https://mohammadrezaeicode.github.io/mr-excel-them-page/)
+- **`themeBaseGenerate`**: Within this function, we utilize color palettes from **https://colorhunt.co/**. It accepts data and a theme index as inputs, then generates an Excel file with the selected theme applied.[Themes](https://mohammadrezaeicode.github.io/mr-excel-theme-page/)
   <a id="theme-base-generate"></a>
 
 - **`extractExcelData`**: We provide 'extract-excel-data-usage,' which takes the URL of an Excel file that needs to be read, retrieves and reads the data, and returns an object containing the sheets as the result.
@@ -762,7 +765,7 @@ ExcelTable.generateExcel(data);
 
 <a id="general-option"></a>
 
-Each sheet has options for customization. You can change the sheet name using name, adjust the tab name color with tabColor, control visibility with state, add protection to a sheet via protectionOption, and implement sorting and filtering using sortAndfilter. In the example below, we will demonstrate how to utilize these properties. Additionally, for Excel file information, we offer options such as creator, created, notSave, and modified.
+Each sheet has options for customization. You can change the sheet name using name, adjust the tab name color with tabColor, control visibility with state, add protection to a sheet via protectionOption, and implement sorting and filtering using sortAndFilter. In the example below, we will demonstrate how to utilize these properties. Additionally, for Excel file information, we offer options such as creator, created, notSave, and modified.
 
 > [!NOTE]
 > Please use the protectionOption only when necessary, as it may potentially lead to broken generated files. We recommend avoiding the use of other sheet options as well.
@@ -783,7 +786,7 @@ const data = {
     {
       name: "family record",
       tabColor: "#a1b4c6",
-      sortAndfilter: {
+      sortAndFilter: {
         mode: "all",
       },
       protectionOption: {
@@ -2111,7 +2114,7 @@ const data = {
                 },
                 "J2:J6": {
                     formula: "YEAR(NOW()-A2:A6)",
-                    refrenceCells: "J2:J6"
+                    referenceCells: "J2:J6"
                 },
                 "K2:K6": {
                     formula: "LOWER(D2:D6)"
@@ -3254,7 +3257,7 @@ function generateData() {
             // styleId: '',
             text: "Title",
           },
-          commentCodition: function (
+          commentCondition: function (
             data,
             object,
             headerKey,
@@ -3262,7 +3265,6 @@ function generateData() {
             colIndex,
             fromHeader
           ) {
-            console.log("called");
             if (fromHeader) {
               let textDataC0 = data.text.charAt(0);
               if (textDataC0.toUpperCase() != textDataC0) {
@@ -3429,7 +3431,7 @@ function generateData() {
             styleId: "title",
             text: "Title",
           },
-          commentCodition: function (
+          commentCondition: function (
             data,
             object,
             headerKey,
@@ -3437,7 +3439,6 @@ function generateData() {
             colIndex,
             fromHeader
           ) {
-            console.log("called");
             if (fromHeader) {
               let textDataC0 = data.text.charAt(0);
               if (textDataC0.toUpperCase() != textDataC0) {
@@ -3578,7 +3579,7 @@ function e() {
             styleId: "title",
             text: "Title 1",
           },
-          multiStyleConditin: function (
+          multiStyleCondition: function (
             data,
             object,
             headerKey,
@@ -3641,8 +3642,8 @@ function e() {
               return result.result;
             }
           },
-          commentCodition: function (o, r, i, s, u, c) {
-            if ((console.log("called"), c)) {
+          commentCondition: function (o, r, i, s, u, c) {
+            if ( c) {
               let d = o.text.charAt(0);
               if (d.toUpperCase() != d)
                 return {
@@ -3794,17 +3795,17 @@ You can apply Excel conditional formatting in two ways. One method is through th
 
 ```javascript
 const data = {
-  activateConditinalFormating: true,
+  activateConditionalFormatting: true,
   styles: {
     ct: {
-      type: "conditinalFormating",
+      type: "conditionalFormatting",
       backgroundColor: "222831",
       color: "EEEEEE",
     },
   },
   sheet: [
     {
-      conditinalFormating: [
+      conditionalFormatting: [
         {
           type: "dataBar",
           start: "A2",
@@ -3930,10 +3931,10 @@ Here's an example of how to use conditional formatting on a header.
 
 ```javascript
 const data = {
-  activateConditinalFormating: true,
+  activateConditionalFormatting: true,
   styles: {
     ct: {
-      type: "conditinalFormating",
+      type: "conditionalFormatting",
       backgroundColor: "222831",
       color: "EEEEEE",
     },
@@ -3944,28 +3945,28 @@ const data = {
         {
           label: "Column1",
           text: "Text1",
-          conditinalFormating: { type: "dataBar" },
+          conditionalFormatting: { type: "dataBar" },
         },
         {
           label: "Column2",
           text: "Text2",
-          conditinalFormating: { type: "dataBar" },
+          conditionalFormatting: { type: "dataBar" },
         },
         {
           label: "Column3",
           text: "Text3",
-          conditinalFormating: { type: "colorScale" },
+          conditionalFormatting: { type: "colorScale" },
         },
         {
           label: "Column4",
           text: "Text4",
-          conditinalFormating: { type: "top", value: 2 },
+          conditionalFormatting: { type: "top", value: 2 },
         },
 
         {
           label: "Column5",
           text: "Text5",
-          conditinalFormating: {
+          conditionalFormatting: {
             type: "top",
             styleId: "ct",
             value: 2,
@@ -3975,7 +3976,7 @@ const data = {
         {
           label: "Column6",
           text: "Text6",
-          conditinalFormating: {
+          conditionalFormatting: {
             type: "top",
             operator: "aboveAverage",
             value: 1,
@@ -3984,7 +3985,7 @@ const data = {
         {
           label: "Column7",
           text: "Text7",
-          conditinalFormating: {
+          conditionalFormatting: {
             type: "top",
             operator: "belowAverage",
             styleId: "ct",
@@ -4051,10 +4052,10 @@ ExcelTable.generateExcel(data);
 
 ```javascript
 const data = {
-  activateConditinalFormating: true,
+  activateConditionalFormatting: true,
   styles: {
     ct: {
-      type: "conditinalFormating",
+      type: "conditionalFormatting",
       backgroundColor: "222831",
       color: "EEEEEE",
     },
@@ -4065,7 +4066,7 @@ const data = {
         {
           label: "Column1",
           text: "Text1",
-          conditinalFormating: {
+          conditionalFormatting: {
             type: "iconSet",
             operator: "3Arrows", // 4Arrows, 5Arrows, 5ArrowsGray, 4ArrowsGray, 3ArrowsGray
           },
@@ -4073,7 +4074,7 @@ const data = {
         {
           label: "Column2",
           text: "Text2",
-          conditinalFormating: {
+          conditionalFormatting: {
             type: "cells",
             operator: "ct",
             value: "a",
@@ -4082,7 +4083,7 @@ const data = {
         {
           label: "Column3",
           text: "Text3",
-          conditinalFormating: {
+          conditionalFormatting: {
             type: "cells",
             operator: "gt", // lt, eq
             value: 10,
@@ -4144,17 +4145,17 @@ General use and sheet objects offer the same functionality but are more flexible
 
 ```javascript
 const data = {
-  activateConditinalFormating: true,
+  activateConditionalFormatting: true,
   styles: {
     ct: {
-      type: "conditinalFormating",
+      type: "conditionalFormatting",
       backgroundColor: "222831",
       color: "EEEEEE",
     },
   },
   sheet: [
     {
-      conditinalFormating: [
+      conditionalFormatting: [
         {
           type: "dataBar",
           start: "A2",
@@ -4496,9 +4497,9 @@ ExcelTable.generateExcel(data);
 
 </details>
 
-## interface [⬆️](#table-of-contents)
-
 <a id="interface"></a>
+
+## interface [⬆️](#table-of-contents)
 
 This section introduces the primary interface of the library.
 
@@ -4514,7 +4515,7 @@ export interface ExcelTableOption {
   notSave?: boolean;
   creator?: string;
   backend?: boolean;
-  activateConditinalFormating?: boolean;
+  activateConditionalFormatting?: boolean;
   fileName?: string;
   generateType?: "nodebuffer" | "array" | "binarystring" | "base64";
   addDefaultTitleStyle?: boolean;
@@ -4525,10 +4526,15 @@ export interface ExcelTableOption {
   mapSheetDataOption?: any;
   styles?: Styles;
 }
+
+export interface Sheet extends SheetOption {
+  headers: Header[];
+  data: Data[];
+}
 export interface SheetOption {
   withoutHeader?: boolean;
-  conditinalFormating?: ConditinalFormating[];
-  multiStyleConditin?: MultiStyleConditinFunction;
+  conditionalFormatting?: ConditionalFormatting[];
+  multiStyleCondition?: MultiStyleConditionFunction;
   useSplitBaseOnMatch?: boolean;
   convertStringToNumber?: boolean;
   images?: ImageTypes[];
@@ -4543,17 +4549,13 @@ export interface SheetOption {
   headerStyleKey?: string;
   mergeRowDataCondition?: MergeRowDataConditionFunction;
   styleCellCondition?: StyleCellConditionFunction;
-  commentCodition?: CommentConditionFunction;
-  sortAndfilter?: SortAndFilter;
+  commentCondition?: CommentConditionFunction;
+  sortAndFilter?: SortAndFilter;
   state?: "hidden" | "visible";
   headerRowOption?: any;
   protectionOption?: ProtectionOption;
   headerHeight?: number;
   checkbox?: Checkbox[];
-}
-export interface Sheet extends SheetOption {
-  headers: Header[];
-  data: Data[];
 }
 export interface Header {
   label: string;
@@ -4561,11 +4563,29 @@ export interface Header {
   size?: number;
   multiStyleValue?: MultiStyleValue;
   comment?: Comment | string;
-  conditinalFormating?: ConditinalFormating;
+  conditionalFormatting?: ConditionalFormatting;
   formula?: {
     type: FormulaType;
     styleId?: string;
   };
+}
+export interface StyleBody {
+  fontFamily?: string;
+  type?: string;
+  size?: number;
+  index?: number;
+  alignment?: AlignmentOption;
+  border?: BorderOption;
+  format?: string;
+  bold?: boolean;
+  underline?: boolean;
+  italic?: boolean;
+  doubleUnderline?: boolean;
+  color?: string;
+  backgroundColor?: string;
+}
+export interface Styles {
+  [key: string]: StyleBody;
 }
 export interface Data extends DataOptions {
   [key: string]: string | number | any | undefined;
@@ -4586,10 +4606,30 @@ export interface DataOptions {
   multiStyleValue?: MapMultiStyleValue;
   comment?: MapComment;
 }
+export interface RowMap {
+  [rowNumber: number]: {
+    startTag: string;
+    endTag: string;
+    details: string;
+  };
+}
 export type ProtectionOption = {
   [key in ProtectionOptionKey]: "0" | "1" | 0 | 1;
 };
-export interface ConditinalFormating {
+export type ProtectionOptionKey =
+  | "sheet"
+  | "formatCells"
+  | "formatColumns"
+  | "formatRows"
+  | "insertColumns"
+  | "insertRows"
+  | "insertHyperlinks"
+  | "deleteColumns"
+  | "deleteRows"
+  | "sort"
+  | "autoFilter"
+  | "pivotTables";
+export interface ConditionalFormatting {
   type: "cells" | "dataBar" | "iconSet" | "colorScale" | "top";
   start: string;
   end: string;
@@ -4626,20 +4666,6 @@ export interface SideBySide {
   data: Data[];
   headerIndex?: number;
 }
-export type ProtectionOptionKey =
-  | "sheet"
-  | "formatCells"
-  | "formatColumns"
-  | "formatRows"
-  | "insertColumns"
-  | "insertRows"
-  | "insertHyperlinks"
-  | "deleteColumns"
-  | "deleteRows"
-  | "sort"
-  | "autoFilter"
-  | "pivotTables";
-
 export type AlignmentOptionKey =
   | "horizontal"
   | "vertical"
@@ -4678,16 +4704,13 @@ export type BorderOption = {
       | "mediumDashed";
   };
 };
-export interface Checkbox {
-  col: number;
-  row: number;
-  text: string;
-  link?: string;
-  checked?: boolean;
-  mixed?: boolean;
-  threeD?: boolean;
-  startStr?: string;
-  endStr?: string;
+
+export interface MapMultiStyleValue {
+  [key: string]: MultiStyleValue;
+}
+export interface MultiStyleValue {
+  [key: string]: string | undefined | MultiStyleRexValue[];
+  reg?: MultiStyleRexValue[];
 }
 export interface MultiStyleRexValue {
   reg: RegExp | string;
@@ -4698,23 +4721,13 @@ export interface Comment {
   styleId?: string;
   author?: string;
 }
-export interface MultiStyleValue {
-  [key: string]: string | undefined | MultiStyleRexValue[];
-  reg?: MultiStyleRexValue[];
-}
-export interface MapMultiStyleValue {
-  [key: string]: MultiStyleValue;
-}
-export interface MapComment {
-  [key: string]: Comment | string;
-}
 export interface MergeRowConditionMap {
   [columnKey: string]: {
     inProgress: boolean;
     start: number;
   };
 }
-export type MultiStyleConditinFunction = (
+export type MultiStyleConditionFunction = (
   data: Header | string | number | undefined,
   object: null | Data,
   headerKey: string,
@@ -4734,10 +4747,10 @@ export type CommentConditionFunction = (
 export type StyleCellConditionFunction = (
   data: Header | string | number | undefined,
   object: Header | Data,
-  colIndex: number,
   rowIndex: number,
+  colIndex: number,
   fromHeader: boolean,
-  stylekeys: string[]
+  styleKeys: string[]
 ) => string | null;
 export type MergeRowDataConditionFunction = (
   data: Header | string | number | undefined,
@@ -4763,12 +4776,91 @@ export interface Title {
 export interface HeaderRowOption {
   outlineLevel: "string";
 }
+export interface Checkbox {
+  col: number;
+  row: number;
+  text: string;
+  link?: string;
+  checked?: boolean;
+  mixed?: boolean;
+  threeD?: boolean;
+  startStr?: string;
+  endStr?: string;
+}
+export type NoArgFormulaType =
+  | "NOW"
+  | "TODAY"
+  | "NOW_YEAR"
+  | "NOW_HOUR"
+  | "NOW_SECOND"
+  | "NOW_MIN"
+  | "NOW_MONTH"
+  | "NOW_DAY"
+  | "NOW_WEEKDAY"
+  | "NOW_MINUTE";
+export type FormulaType = "AVERAGE" | "SUM" | "COUNT" | "MAX" | "MIN";
+export type SingleRefFormulaType =
+  | "LEN"
+  | "MODE"
+  | "UPPER"
+  | "LOWER"
+  | "PROPER"
+  | "RIGHT"
+  | "LEFT"
+  | "ABS"
+  | "POWER"
+  | "FLOOR"
+  | "CEILING"
+  | "ROUND"
+  | "SQRT"
+  | "COS"
+  | "SIN"
+  | "TAN"
+  | "COT"
+  | "COUNTIF"
+  | "TRIM";
+export interface FormatMap {
+  [format: string]: {
+    key: number;
+    value?: string;
+  };
+}
+export interface Formula {
+  [insertCell: string]:
+    | FormulaSetting
+    | SingleRefFormulaSetting
+    | NoArgFormulaSetting
+    | CustomFormulaSetting;
+}
+export interface FormulaSetting {
+  type: FormulaType;
+  start: string;
+  end: string;
+  styleId?: string;
+}
+export interface CustomFormulaSetting {
+  isArray?: boolean;
+  referenceCells?: string;
+  formula: string;
+  returnType?: string;
+  styleId?: string;
+}
+export interface SingleRefFormulaSetting {
+  type: SingleRefFormulaType;
+  referenceCell: string;
+  value?: number | string;
+  styleId?: string;
+}
+export interface NoArgFormulaSetting {
+  noArgType: NoArgFormulaType;
+  styleId?: string;
+}
 export interface StyleMapper {
-  conditinalFormating: {
+  conditionalFormatting: {
     count: number;
     value: string;
   };
-  commentSintax: {
+  commentSyntax: {
     value: {
       [key: string]: string;
     };
@@ -4794,50 +4886,37 @@ export interface StyleMapper {
     value: string;
   };
 }
-export type FormulaType = "AVERAGE" | "SUM" | "COUNT" | "MAX" | "MIN";
-export interface StyleBody {
-  fontFamily?: string;
-  type?: string;
-  size?: number;
-  index?: number;
-  alignment?: AlignmentOption;
-  border?: BorderOption;
-  format?: string;
-  bold?: boolean;
-  underline?: boolean;
-  italic?: boolean;
-  doubleUnderline?: boolean;
-  color?: string;
-  backgroundColor?: string;
+export interface MapComment {
+  [key: string]: Comment | string;
 }
-export interface Styles {
-  [key: string]: StyleBody;
-}
-export interface FormatMap {
-  [format: string]: {
-    key: number;
-    value?: string;
-  };
-}
-export interface FormulaSetting {
-  type: FormulaType;
-  start: string;
-  end: string;
-  styleId?: string;
-}
-export interface Formula {
-  [insertCell: string]: FormulaSetting;
-}
-export interface Theme extends ExcelTableOption {
-  sheet: SheetOption[];
-}
+
 ```
 
 </details>
 
-## Migrating from 2 to 3 [⬆️](#table-of-contents)
+<a id="migrating-3"></a>
 
-<a id="migrating"></a>
+## Migrating from 3 to 4 [⬆️](#table-of-contents)
+
+To migrate from Version 3 to Version 4, follow the steps outlined below:
+
+- Interface & Type Change:
+  - activateConditionalFormatting to activateConditionalFormatting (ExcelTable)
+  - conditinalFormating to conditionalFormatting (ExcelTable->Sheet)
+  - multiStyleConditin to multiStyleCondition (ExcelTable->Sheet)
+  - commentCodition to commentCondition (ExcelTable->Sheet)
+  - sortAndFilter to sortAndFilter (ExcelTable->Sheet)
+  - conditinalFormating to conditionalFormatting (ExcelTable->Header)
+  - refrenceCells to referenceCells (in CustomFormulaSetting,SingleRefFormulaSetting)
+- Import Change:
+  - ConditinalFormating to ConditionalFormatting
+  - MultiStyleConditinFunction to MultiStyleConditionFunction
+- Input Order Change:
+  - in StyleCellConditionFunction order of rowIndex and colIndex changed
+
+<a id="migrating-3"></a>
+
+## Migrating from 2 to 3 [⬆️](#table-of-contents)
 
 To migrate from Version 2 to Version 3, you need to follow the steps below:
 
@@ -4847,11 +4926,30 @@ To migrate from Version 2 to Version 3, you need to follow the steps below:
 
 ## Release Notes [⬆️](#table-of-contents)
 
+### Version 4.0.0 (2023-1-6)
+
+#### New Features
+
+- Added tests
+- Release Github package
+
+#### Improvements
+
+- Reduced the size of the generated file.
+- more
+
+#### Bug Fixes
+
+- Corrected misspellings in interfaces.
+- Fixed extractExcelData where the value will now return, and you need to specify if you want to use it in the backend.
+- Resolved the issue of shifting the top in the sheet, fixing problems in units.
+- more
+
 ### Version 3.2.0 (2023-12-29)
 
 #### New Features
 
--Improvement in the formula section.
+- Improvement in the formula section.
 
 ### Version 3.0.3 (2023-12-02)
 

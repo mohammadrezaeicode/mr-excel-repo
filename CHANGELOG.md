@@ -1,5 +1,26 @@
 # Changelog
 
+## Version 4.0.0 (2023-1-6)
+
+we have added the test and release packages. Additionally, we have addressed various issues, such as misspelling in the interface, problems with the extractExcelData function, shift top sheet problem (unit problem), and more.
+
+### New Features
+
+- Added tests
+- Release Github package
+
+### Improvements
+
+- Reduced the size of the generated file.
+- more
+
+### Bug Fixes
+
+- Corrected misspellings in interfaces.
+- Fixed extractExcelData where the value will now return, and you need to specify if you want to use it in the backend.
+- Resolved the issue of shifting the top in the sheet, fixing problems in units.
+- more
+
 ## Version 3.2.0 (2023-12-29)
 
 ### New Features

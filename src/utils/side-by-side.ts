@@ -9,7 +9,7 @@ interface SideBySideRowTable {
   [key: string]: {
     headers: Header[];
     data: Data[];
-    labelConter: number;
+    labelCounter: number;
     seenAt: number;
     headerIndex?: number;
   };
@@ -25,7 +25,7 @@ export function sideBySide(data: SideBySide[][]): ExcelTable {
   let tableIndex = 0;
   let rowTable: SideBySideRowTable = {};
   let counterRow: SideBySideCounterRow = {};
-  let reseted: {
+  let resetMap: {
     [key: string]: boolean;
   } = {};
   for (let index = 0; index < lengthData; index++) {
@@ -48,7 +48,7 @@ export function sideBySide(data: SideBySide[][]): ExcelTable {
         rowTable[name] = {
           headers: [],
           data: [],
-          labelConter: 0,
+          labelCounter: 0,
           seenAt: index,
         };
         firstTime = true;
@@ -59,9 +59,9 @@ export function sideBySide(data: SideBySide[][]): ExcelTable {
           value: 0,
         };
       }
-      if (!(name in reseted)) {
-        rowTable[name].labelConter = 0;
-        reseted[name] = true;
+      if (!(name in resetMap)) {
+        rowTable[name].labelCounter = 0;
+        resetMap[name] = true;
       }
 
       let newHeader: Header[] = [];
@@ -73,26 +73,26 @@ export function sideBySide(data: SideBySide[][]): ExcelTable {
       let header: {
         [key: string]: string;
       } = mainData.headers.reduce((res, curr, index) => {
-        rowTable[name].labelConter++;
-        if (headerLength < rowTable[name].labelConter) {
+        rowTable[name].labelCounter++;
+        if (headerLength < rowTable[name].labelCounter) {
           newHeader.push({
-            label: "c" + rowTable[name].labelConter,
+            label: "c" + rowTable[name].labelCounter,
             text: withText ? curr.text : "",
           });
         }
-        headerAsRow["c" + rowTable[name].labelConter] = curr.text;
+        headerAsRow["c" + rowTable[name].labelCounter] = curr.text;
         return {
           ...res,
-          [curr.label]: "c" + rowTable[name].labelConter,
+          [curr.label]: "c" + rowTable[name].labelCounter,
         };
       }, {});
       rowTable[name].headers.push(...newHeader);
       if (mainData.spaceX) {
         for (let space = 0; space < mainData.spaceX; space++) {
-          rowTable[name].labelConter++;
-          if (headerLength <= rowTable[name].labelConter) {
+          rowTable[name].labelCounter++;
+          if (headerLength <= rowTable[name].labelCounter) {
             rowTable[name].headers.push({
-              label: "c" + rowTable[name].labelConter,
+              label: "c" + rowTable[name].labelCounter,
               text: "",
             });
           }
@@ -155,7 +155,7 @@ export function sideBySide(data: SideBySide[][]): ExcelTable {
         index,
       };
     }
-    reseted = {};
+    resetMap = {};
   }
   let keys = Object.keys(rowTable);
   let sheet: Sheet[] = [];

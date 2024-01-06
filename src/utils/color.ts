@@ -1,7 +1,21 @@
 function removeSpace(str: string) {
   return str.replace(/ /g, "");
 }
+function extendHexValue(hex: string) {
+  hex = hex.replace(/^#/, "");
+  if (hex.length == 3) {
+    const s0 = hex.charAt(0);
+    const s1 = hex.charAt(1);
+    const s2 = hex.charAt(2);
+    return s0 + s0 + s1 + s1 + s2 + s2;
+  } else {
+    return hex;
+  }
+}
 export function hexToRgbArray(hex: string): number[] {
+  if (/^#?([a-f\d]{3})$/i.test(hex)) {
+    hex = extendHexValue(hex);
+  }
   var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result
     ? [
@@ -22,11 +36,15 @@ export function generateContrastTextColor(b: string) {
     255;
 
   // Determine whether the text should be dark or light based on luminance
-  const textColor = bgLuminance > 0.5 ? "rgb(0,0,0)" : "rgb(255,255,255)"; ;
+  const textColor = bgLuminance > 0.5 ? "rgb(0,0,0)" : "rgb(255,255,255)";
 
   return textColor;
 }
 export function hexToRgbNegative(hex: string) {
+  // /(^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$)|(^#?([a-f\d]{3})$)/i;
+  if (/^#?([a-f\d]{3})$/i.test(hex)) {
+    hex = extendHexValue(hex);
+  }
   var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result
     ? "rgb(" +
@@ -53,7 +71,11 @@ export function rgbToHex(rgb: string): string | null {
   let validate = spResult.reduce((r, c) => {
     return r && !Number.isNaN(Number(c));
   }, true);
-  if ((spResult.length == 4 && spResult[3] == "0") || !validate) {
+  if (
+    (spResult.length == 4 && spResult[3] == "0") ||
+    (spResult.length != 3 && spResult.length != 4) ||
+    !validate
+  ) {
     return null;
   }
   return (
@@ -86,5 +108,11 @@ export function convertToHex(
     const rgb = rgbToHex(fgConvertor);
     fgConvertor = rgb ? rgb : "";
   }
-  return fgConvertor.replace("#", "");
+  return fgConvertor.replace(/^#/, "");
 }
+
+export const exportedForTesting = {
+  removeSpace,
+  valueToHex,
+  extendHexValue,
+};

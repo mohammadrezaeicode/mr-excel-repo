@@ -1,5 +1,5 @@
 /// <reference types="node" />
-import { ThemeOption } from "./Themes/theme";
+import { ThemeOption } from "./themes/theme";
 import { Data, ExcelTable, SideBySide } from "./data-model/excel-table";
 import { ColWidthScaleFunction, RowHeightScaleFunction } from "./utils/create-excel-data";
 import { generateExcel as generateEx } from "./utils/generate-excel";

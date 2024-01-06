@@ -5,7 +5,7 @@ export interface ExcelTableOption {
     notSave?: boolean;
     creator?: string;
     backend?: boolean;
-    activateConditinalFormating?: boolean;
+    activateConditionalFormatting?: boolean;
     fileName?: string;
     generateType?: "nodebuffer" | "array" | "binarystring" | "base64";
     addDefaultTitleStyle?: boolean;
@@ -22,8 +22,8 @@ export interface Sheet extends SheetOption {
 }
 export interface SheetOption {
     withoutHeader?: boolean;
-    conditinalFormating?: ConditinalFormating[];
-    multiStyleConditin?: MultiStyleConditinFunction;
+    conditionalFormatting?: ConditionalFormatting[];
+    multiStyleCondition?: MultiStyleConditionFunction;
     useSplitBaseOnMatch?: boolean;
     convertStringToNumber?: boolean;
     images?: ImageTypes[];
@@ -38,8 +38,8 @@ export interface SheetOption {
     headerStyleKey?: string;
     mergeRowDataCondition?: MergeRowDataConditionFunction;
     styleCellCondition?: StyleCellConditionFunction;
-    commentCodition?: CommentConditionFunction;
-    sortAndfilter?: SortAndFilter;
+    commentCondition?: CommentConditionFunction;
+    sortAndFilter?: SortAndFilter;
     state?: "hidden" | "visible";
     headerRowOption?: any;
     protectionOption?: ProtectionOption;
@@ -52,7 +52,7 @@ export interface Header {
     size?: number;
     multiStyleValue?: MultiStyleValue;
     comment?: Comment | string;
-    conditinalFormating?: ConditinalFormating;
+    conditionalFormatting?: ConditionalFormatting;
     formula?: {
         type: FormulaType;
         styleId?: string;
@@ -99,7 +99,7 @@ export type ProtectionOption = {
     [key in ProtectionOptionKey]: "0" | "1" | 0 | 1;
 };
 export type ProtectionOptionKey = "sheet" | "formatCells" | "formatColumns" | "formatRows" | "insertColumns" | "insertRows" | "insertHyperlinks" | "deleteColumns" | "deleteRows" | "sort" | "autoFilter" | "pivotTables";
-export interface ConditinalFormating {
+export interface ConditionalFormatting {
     type: "cells" | "dataBar" | "iconSet" | "colorScale" | "top";
     start: string;
     end: string;
@@ -180,9 +180,9 @@ export interface MergeRowConditionMap {
         start: number;
     };
 }
-export type MultiStyleConditinFunction = (data: Header | string | number | undefined, object: null | Data, headerKey: string, rowIndex: number, colIndex: number, fromHeader: boolean) => MultiStyleValue | null;
+export type MultiStyleConditionFunction = (data: Header | string | number | undefined, object: null | Data, headerKey: string, rowIndex: number, colIndex: number, fromHeader: boolean) => MultiStyleValue | null;
 export type CommentConditionFunction = (data: Header | string | number | undefined, object: null | Data, headerKey: string, rowIndex: number, colIndex: number, fromHeader: boolean) => Comment | string | false | undefined | null;
-export type StyleCellConditionFunction = (data: Header | string | number | undefined, object: Header | Data, colIndex: number, rowIndex: number, fromHeader: boolean, stylekeys: string[]) => string | null;
+export type StyleCellConditionFunction = (data: Header | string | number | undefined, object: Header | Data, rowIndex: number, colIndex: number, fromHeader: boolean, styleKeys: string[]) => string | null;
 export type MergeRowDataConditionFunction = (data: Header | string | number | undefined, key: string | null, index: number, fromHeader: boolean) => boolean;
 export interface SortAndFilter {
     mode: "all" | "ref";
@@ -233,14 +233,14 @@ export interface FormulaSetting {
 }
 export interface CustomFormulaSetting {
     isArray?: boolean;
-    refrenceCells?: string;
+    referenceCells?: string;
     formula: string;
     returnType?: string;
     styleId?: string;
 }
 export interface SingleRefFormulaSetting {
     type: SingleRefFormulaType;
-    refrenceCell: string;
+    referenceCell: string;
     value?: number | string;
     styleId?: string;
 }
@@ -249,11 +249,11 @@ export interface NoArgFormulaSetting {
     styleId?: string;
 }
 export interface StyleMapper {
-    conditinalFormating: {
+    conditionalFormatting: {
         count: number;
         value: string;
     };
-    commentSintax: {
+    commentSyntax: {
         value: {
             [key: string]: string;
         };

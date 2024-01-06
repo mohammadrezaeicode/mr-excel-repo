@@ -1,5 +1,5 @@
-import { MultiStyleRexValue, MultiStyleValue } from "../data-model/excel-table";
-import { spCh } from "./special-character";
+import { MultiStyleValue } from "../data-model/excel-table";
+import { specialCharacterConverter } from "./special-character";
 
 function splitBaseOnMatch(matchResult: string[], str: string) {
   let reduceDefault: {
@@ -22,14 +22,14 @@ function splitAndMatching(
   v: string | RegExp,
   val: string,
   text: string,
-  textSplited: boolean,
+  splittedText: boolean,
   splitValue: string[],
   matchValue: string[],
   styleMatchValue: string[],
   multiMode: boolean,
   useSplitBaseOnMatch?: boolean
 ) {
-  if (!textSplited) {
+  if (!splittedText) {
     let matchV;
     try {
       matchV = text.match(v);
@@ -70,7 +70,7 @@ function splitAndMatching(
     } else {
       splitValue.push(text);
     }
-    textSplited = true;
+    splittedText = true;
   } else {
     let newSplit: string[] = [];
     let newMatchValue: string[] = [];
@@ -133,7 +133,7 @@ function splitAndMatching(
   return {
     v,
     text,
-    textSplited,
+    splittedText,
     splitValue,
     matchValue,
     styleMatchValue,
@@ -153,7 +153,7 @@ export function generateMultiStyleValue(
     let matchValue: string[] = [];
     let styleMatchValue: string[] = [];
     let splitValue: string[] = [];
-    let textSplited = false;
+    let splittedText = false;
     const keys = Object.keys(multiStyle);
     keys.forEach((v) => {
       const val = multiStyle[v];
@@ -164,14 +164,14 @@ export function generateMultiStyleValue(
           v,
           typeof val == "string" ? val : "",
           text,
-          textSplited,
+          splittedText,
           splitValue,
           matchValue,
           styleMatchValue,
           false,
           useSplitBaseOnMatch
         );
-        textSplited = result.textSplited;
+        splittedText = result.splittedText;
         splitValue = result.splitValue;
         matchValue = result.matchValue;
         styleMatchValue = result.styleMatchValue;
@@ -189,14 +189,14 @@ export function generateMultiStyleValue(
             element.reg,
             element.styleId,
             text,
-            textSplited,
+            splittedText,
             splitValue,
             matchValue,
             styleMatchValue,
             true,
             useSplitBaseOnMatch
           );
-          textSplited = result.textSplited;
+          splittedText = result.splittedText;
           splitValue = result.splitValue;
           matchValue = result.matchValue;
           styleMatchValue = result.styleMatchValue;
@@ -213,21 +213,20 @@ export function generateMultiStyleValue(
       if (element.length > 0) {
         result +=
           "<r>" +
-          " " +
           elementStyle +
-          ' <t xml:space="preserve">' +
+          '<t xml:space="preserve">' +
           element +
           "</t>" +
           "</r>";
       }
       if (matchElement.length > 0) {
         result +=
-          " <r> " +
-          styles[styleID] +
-          ' <t xml:space="preserve">' +
+          "<r>" +
+          (styles[styleID] ? styles[styleID] : elementStyle) +
+          '<t xml:space="preserve">' +
           matchElement +
           "</t>" +
-          " </r>";
+          "</r>";
       }
     }
     if (splitValue[length].length > 0) {
@@ -237,7 +236,7 @@ export function generateMultiStyleValue(
         "<r>" +
         elementStyle +
         "<t>" +
-        spCh(splitValue[length]) +
+        specialCharacterConverter(splitValue[length]) +
         "</t>" +
         "</r>" +
         "</si>";
@@ -246,6 +245,11 @@ export function generateMultiStyleValue(
     }
     return result;
   } else {
-    return "<si><t>" + spCh(text) + "</t></si>";
+    return "<si><t>" + specialCharacterConverter(text) + "</t></si>";
   }
 }
+
+export const exportedForTesting = {
+  splitBaseOnMatch,
+  splitAndMatching,
+};

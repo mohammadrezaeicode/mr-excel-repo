@@ -152,8 +152,8 @@ export const themeGenerator = function (
       data.sheet[index].styleCellCondition = function (
         data,
         object,
-        colIndex,
         rowIndex,
+        colIndex,
         fromHeader,
         styleKeys
       ) {

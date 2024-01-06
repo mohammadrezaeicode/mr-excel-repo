@@ -47,6 +47,7 @@ const excel_util_1 = require("./excel-util");
 const special_character_1 = require("./special-character");
 function generateExcel(data) {
     return __awaiter(this, void 0, void 0, function* () {
+        const isBackend = data.backend;
         const operatorMap = {
             lt: "lessThan",
             gt: "greaterThan",
@@ -64,9 +65,9 @@ function generateExcel(data) {
         const sheetLength = data.sheet.length;
         // xl
         let xlFolder = zip.folder("xl");
-        let xl_media_Folder = xlFolder === null || xlFolder === void 0 ? void 0 : xlFolder.folder("media");
-        let xl_drawingsFolder = xlFolder === null || xlFolder === void 0 ? void 0 : xlFolder.folder("drawings");
-        let xl_drawings_relsFolder = xl_drawingsFolder === null || xl_drawingsFolder === void 0 ? void 0 : xl_drawingsFolder.folder("_rels");
+        let xl_media_Folder = null;
+        let xl_drawingsFolder = null;
+        let xl_drawings_relsFolder = null;
         if (!data.styles) {
             data.styles = {};
         }
@@ -80,8 +81,8 @@ function generateExcel(data) {
         }
         const styleKeys = Object.keys(data.styles);
         const defaultCommentStyle = comment_1.defaultCellCommentStyle;
-        const addCF = data.activateConditinalFormating
-            ? data.activateConditinalFormating
+        const addCF = data.activateConditionalFormatting
+            ? data.activateConditionalFormatting
             : false;
         const cFMapIndex = {};
         let styleMapper = styleKeys.reduce((res, cur, index) => {
@@ -89,17 +90,18 @@ function generateExcel(data) {
             if (addCF &&
                 typeof styl.type == "string" &&
                 styl.type &&
-                (styl.type == "conditinalFormating" || styl.type.toUpperCase() == "CF")) {
-                cFMapIndex[cur] = res.conditinalFormating.count;
-                let color = (0, color_1.convertToHex)(styl.color, data.backend);
-                let bgColor = (0, color_1.convertToHex)(styl.backgroundColor, data.backend);
-                res.conditinalFormating.value +=
+                (styl.type == "conditionalFormatting" ||
+                    styl.type.toUpperCase() == "CF")) {
+                cFMapIndex[cur] = res.conditionalFormatting.count;
+                let color = (0, color_1.convertToHex)(styl.color, isBackend);
+                let bgColor = (0, color_1.convertToHex)(styl.backgroundColor, isBackend);
+                res.conditionalFormatting.value +=
                     '<dxf><font><color rgb="' +
                         color +
                         '"/></font><fill> <patternFill> <bgColor rgb="' +
                         bgColor +
                         '"/></patternFill></fill></dxf>';
-                res.conditinalFormating.count++;
+                res.conditionalFormatting.count++;
                 return res;
             }
             const indexes = {
@@ -109,7 +111,7 @@ function generateExcel(data) {
                 formatIndex: 0,
             };
             if (styl.backgroundColor) {
-                let fgConvertor = (0, color_1.convertToHex)(styl.backgroundColor, data.backend);
+                let fgConvertor = (0, color_1.convertToHex)(styl.backgroundColor, isBackend);
                 indexes.fillIndex = res.fill.count;
                 res.fill.count++;
                 res.fill.value =
@@ -129,7 +131,7 @@ function generateExcel(data) {
                 styl.italic ||
                 styl.underline ||
                 styl.doubleUnderline) {
-                const colors = (0, color_1.convertToHex)(styl.color, data.backend);
+                const colors = (0, color_1.convertToHex)(styl.color, isBackend);
                 indexes.fontIndex = res.font.count;
                 res.font.count++;
                 res.font.value =
@@ -144,10 +146,10 @@ function generateExcel(data) {
                         (colors ? '<color rgb="' + colors.replace("#", "") + '" />' : "") +
                         (styl.fontFamily ? '<name val="' + styl.fontFamily + '" />' : "") +
                         "</font>";
-                res.commentSintax.value[cur] =
+                res.commentSyntax.value[cur] =
                     "<rPr>" +
                         (styl.bold ? "<b/>" : "") +
-                        (styl.italic ? "<i />" : "") +
+                        (styl.italic ? "<i/>" : "") +
                         (styl.underline || styl.doubleUnderline
                             ? "<u " + (styl.doubleUnderline ? 'val="double" ' : "") + "/>"
                             : "") +
@@ -193,7 +195,7 @@ function generateExcel(data) {
                             (borderObj.left || borderObj.full).style +
                             '">' +
                             '<color rgb="' +
-                            (0, color_1.convertToHex)((borderObj.left || borderObj.full).color, data.backend).replace("#", "") +
+                            (0, color_1.convertToHex)((borderObj.left || borderObj.full).color, isBackend).replace("#", "") +
                             '" />' +
                             "</left>";
                 }
@@ -203,7 +205,7 @@ function generateExcel(data) {
                             (borderObj.right || borderObj.full).style +
                             '">' +
                             '<color rgb="' +
-                            (0, color_1.convertToHex)((borderObj.right || borderObj.full).color, data.backend).replace("#", "") +
+                            (0, color_1.convertToHex)((borderObj.right || borderObj.full).color, isBackend).replace("#", "") +
                             '" />' +
                             "</right>";
                 }
@@ -213,7 +215,7 @@ function generateExcel(data) {
                             (borderObj.top || borderObj.full).style +
                             '">' +
                             '<color rgb="' +
-                            (0, color_1.convertToHex)((borderObj.top || borderObj.full).color, data.backend).replace("#", "") +
+                            (0, color_1.convertToHex)((borderObj.top || borderObj.full).color, isBackend).replace("#", "") +
                             '" />' +
                             "</top>";
                 }
@@ -223,7 +225,7 @@ function generateExcel(data) {
                             (borderObj.bottom || borderObj.full).style +
                             '">' +
                             '<color rgb="' +
-                            (0, color_1.convertToHex)((borderObj.bottom || borderObj.full).color, data.backend).replace("#", "") +
+                            (0, color_1.convertToHex)((borderObj.bottom || borderObj.full).color, isBackend).replace("#", "") +
                             '" />' +
                             "</bottom>";
                 }
@@ -263,11 +265,11 @@ function generateExcel(data) {
             res.cell.count++;
             return res;
         }, {
-            conditinalFormating: {
+            conditionalFormatting: {
                 count: addCF ? 1 : 0,
                 value: '<dxf><font><color rgb="FF9C0006"/></font><fill> <patternFill> <bgColor rgb="FFFFC7CE"/></patternFill></fill></dxf>',
             },
-            commentSintax: {
+            commentSyntax: {
                 value: {},
             },
             format: {
@@ -345,25 +347,27 @@ function generateExcel(data) {
             const sheetData = data.sheet[index];
             const sheetDataId = index + 1;
             let rowMap = {};
-            let rowCount = sheetData.shiftTop ? sheetData.shiftTop : 1;
+            let rowCount = sheetData.shiftTop && sheetData.shiftTop >= 0
+                ? sheetData.shiftTop + 1
+                : 1;
             let sheetDataString = "";
             let sheetSizeString = "";
             let sheetSortFilter = "";
             let hasCheckbox = false;
             let checkboxDrawingContent = "";
-            let checkboxshap = "";
+            let checkboxShape = "";
             let formRel = "";
             let checkboxSheetContent = "";
             let mergesCellArray = Object.assign([], sheetData.merges);
             let formulaSheetObj = Object.assign({}, sheetData.formula);
-            let conditinalFormating = Object.assign([], sheetData.conditinalFormating);
+            let conditionalFormatting = Object.assign([], sheetData.conditionalFormatting);
             let hasComment = false;
             let commentAuthor = [];
             let commentString = "";
             let shapeCommentRowCol = [];
             let objKey = [];
             let headerFormula = [];
-            let headerConditinalFormating = [];
+            let headerConditionalFormatting = [];
             let mergeRowConditionMap = {};
             let imagePromise;
             if (sheetData.checkbox) {
@@ -372,7 +376,7 @@ function generateExcel(data) {
                 sheetData.checkbox.forEach((v, i) => {
                     let formCtlStr = strFormDef;
                     if (v.link) {
-                        var linkAddress = (0, excel_util_1.getColRowBaseOnRefString)(v.link, cols);
+                        let linkAddress = (0, excel_util_1.getColRowBaseOnRefString)(v.link, cols);
                         formCtlStr = formCtlStr.replace("**fmlaLink**", 'fmlaLink="$' +
                             cols[linkAddress.col] +
                             "$" +
@@ -398,14 +402,14 @@ function generateExcel(data) {
                     }
                     checkboxForm.push(formCtlStr);
                     shapeIdCounter++;
-                    var shapeId = index + "" + shapeIdCounter++;
+                    let shapeId = index + "" + shapeIdCounter++;
                     const sId = "_x0000_s" + shapeId;
-                    checkboxshap += shapeMap["checkbox"]
+                    checkboxShape += shapeMap["checkbox"]
                         .replace("***id***", sId)
                         .replace("***text***", v.text);
-                    var from = v.startStr;
-                    var to = v.endStr;
-                    var resultVal = {
+                    let from = v.startStr;
+                    let to = v.endStr;
+                    let resultVal = {
                         start: {
                             col: 0,
                             row: 0,
@@ -428,7 +432,7 @@ function generateExcel(data) {
                         };
                     }
                     if (typeof from == "string" && from.length >= 2) {
-                        var p = (0, excel_util_1.getColRowBaseOnRefString)(from, cols);
+                        let p = (0, excel_util_1.getColRowBaseOnRefString)(from, cols);
                         resultVal.start = Object.assign({}, p);
                         resultVal.end = {
                             col: p.col + 1,
@@ -436,7 +440,7 @@ function generateExcel(data) {
                         };
                     }
                     if (typeof to == "string" && to.length >= 2) {
-                        var p = (0, excel_util_1.getColRowBaseOnRefString)(to, cols);
+                        let p = (0, excel_util_1.getColRowBaseOnRefString)(to, cols);
                         p.row += 1;
                         p.col += 1;
                         resultVal.end = Object.assign({}, p);
@@ -549,6 +553,9 @@ function generateExcel(data) {
                 });
             }
             if (sheetData.images) {
+                if (xl_media_Folder == null) {
+                    xl_media_Folder = xlFolder === null || xlFolder === void 0 ? void 0 : xlFolder.folder("media");
+                }
                 imagePromise = Promise.all([
                     ...sheetData.images.map((v, i) => __awaiter(this, void 0, void 0, function* () {
                         let indexx = v.url.lastIndexOf(".");
@@ -576,7 +583,7 @@ function generateExcel(data) {
                         arrTypes.push(type);
                         return {
                             type,
-                            image: yield (0, image_1.toDataURL2)(v.url, "image" + i + "." + type),
+                            image: yield (0, image_1.toDataURL2)(v.url, "image" + i + "." + type, isBackend),
                             obj: v,
                             i,
                         };
@@ -589,9 +596,13 @@ function generateExcel(data) {
                 if (sheetData.title) {
                     const title = sheetData.title;
                     const commentTitle = title.comment;
-                    const top = title.shiftTop ? title.shiftTop : 0;
-                    const sL = sheetData.shiftLeft ? sheetData.shiftLeft : 0;
-                    const left = title.shiftLeft ? title.shiftLeft + sL : sL;
+                    const top = title.shiftTop && title.shiftTop >= 0 ? title.shiftTop : 0;
+                    const sL = sheetData.shiftLeft && sheetData.shiftLeft >= 0
+                        ? sheetData.shiftLeft
+                        : 0;
+                    const left = title.shiftLeft && title.shiftLeft + sL >= 0
+                        ? title.shiftLeft + sL
+                        : sL;
                     const consommeRow = title.consommeRow ? title.consommeRow - 1 : 1;
                     const consommeCol = title.consommeCol ? title.consommeCol : colsLength;
                     const height = consommeRow == 0 && typeof title.height == "number"
@@ -605,10 +616,9 @@ function generateExcel(data) {
                         (rowCount + consommeRow + top));
                     if (typeof commentTitle != "undefined") {
                         hasComment = true;
-                        const commentObj = (0, comment_1.commentConvertor)(commentTitle, styleMapper.commentSintax.value, defaultCommentStyle);
+                        const commentObj = (0, comment_1.commentConvertor)(commentTitle, styleMapper.commentSyntax.value, defaultCommentStyle);
                         let authorId = commentAuthor.length;
-                        if (commentObj.hasAuthour &&
-                            typeof commentObj.author != "undefined") {
+                        if (commentObj.hasAuthor && typeof commentObj.author != "undefined") {
                             let auth = commentObj.author.toString();
                             const index = commentAuthor.indexOf(auth);
                             if (index < 0) {
@@ -622,7 +632,7 @@ function generateExcel(data) {
                             row: rowCount + top - 1,
                             col: left,
                         });
-                        commentString += (0, comment_1.generateCommentTag)(refString, commentObj.commentStr, commentObj.commentStyl, authorId);
+                        commentString += (0, comment_1.generateCommentTag)(refString, commentObj.commentStr, commentObj.commentStyle, authorId);
                     }
                     if (typeof title.text == "string") {
                         rowMap[rowCount + top] = {
@@ -666,10 +676,11 @@ function generateExcel(data) {
                         sharedStringIndex++;
                         sharedStringMap[title.text] = title.text;
                         if (title.multiStyleValue) {
-                            sharedString += (0, multi_value_1.generateMultiStyleValue)(title.multiStyleValue, title.text, styleMapper.commentSintax.value, tStyle, sheetData.useSplitBaseOnMatch);
+                            sharedString += (0, multi_value_1.generateMultiStyleValue)(title.multiStyleValue, title.text, styleMapper.commentSyntax.value, tStyle, sheetData.useSplitBaseOnMatch);
                         }
                         else {
-                            sharedString += "<si><t>" + (0, special_character_1.spCh)(title.text) + "</t></si>";
+                            sharedString +=
+                                "<si><t>" + (0, special_character_1.specialCharacterConverter)(title.text) + "</t></si>";
                         }
                     }
                     rowCount += top + consommeRow + 1;
@@ -678,7 +689,7 @@ function generateExcel(data) {
                     ? sheetData.headerStyleKey
                     : null;
                 let shiftCount = 0;
-                if (typeof sheetData.shiftLeft == "number") {
+                if (typeof sheetData.shiftLeft == "number" && sheetData.shiftLeft >= 0) {
                     shiftCount = sheetData.shiftLeft;
                 }
                 sheetData.headers.forEach((v, innerIndex) => {
@@ -688,8 +699,8 @@ function generateExcel(data) {
                     if (v.formula) {
                         headerFormula.push(innerIndex);
                     }
-                    if (v.conditinalFormating) {
-                        headerConditinalFormating.push(innerIndex);
+                    if (v.conditionalFormatting) {
+                        headerConditionalFormatting.push(innerIndex);
                     }
                     objKey.push(v.label);
                     if (sheetData.mergeRowDataCondition &&
@@ -705,7 +716,7 @@ function generateExcel(data) {
                     if (sheetData.styleCellCondition &&
                         typeof sheetData.styleCellCondition == "function") {
                         headerStyleKey =
-                            sheetData.styleCellCondition(v, v, innerIndex, rowCount, true, styleKeys) || headerStyleKey;
+                            sheetData.styleCellCondition(v, v, rowCount, innerIndex, true, styleKeys) || headerStyleKey;
                     }
                     if (v.size && v.size > 0) {
                         sheetSizeString +=
@@ -721,18 +732,17 @@ function generateExcel(data) {
                         return;
                     }
                     const refString = cols[innerIndex] + "" + rowCount;
-                    if (typeof sheetData.commentCodition == "function") {
-                        const checkCommentCondition = sheetData.commentCodition(v, null, v.label, rowCount, innerIndex, true);
+                    if (typeof sheetData.commentCondition == "function") {
+                        const checkCommentCondition = sheetData.commentCondition(v, null, v.label, rowCount, innerIndex, true);
                         if (checkCommentCondition) {
                             v.comment = checkCommentCondition;
                         }
                     }
                     if (v.comment) {
                         hasComment = true;
-                        const commentObj = (0, comment_1.commentConvertor)(v.comment, styleMapper.commentSintax.value, defaultCommentStyle);
+                        const commentObj = (0, comment_1.commentConvertor)(v.comment, styleMapper.commentSyntax.value, defaultCommentStyle);
                         let authorId = commentAuthor.length;
-                        if (commentObj.hasAuthour &&
-                            typeof commentObj.author != "undefined") {
+                        if (commentObj.hasAuthor && typeof commentObj.author != "undefined") {
                             let auth = commentObj.author.toString();
                             const index = commentAuthor.indexOf(auth);
                             if (index < 0) {
@@ -746,7 +756,7 @@ function generateExcel(data) {
                             row: rowCount - 1,
                             col: innerIndex,
                         });
-                        commentString += (0, comment_1.generateCommentTag)(refString, commentObj.commentStr, commentObj.commentStyl, authorId);
+                        commentString += (0, comment_1.generateCommentTag)(refString, commentObj.commentStr, commentObj.commentStyle, authorId);
                     }
                     const formula = formulaSheetObj && formulaSheetObj[refString];
                     if (formula) {
@@ -771,17 +781,18 @@ function generateExcel(data) {
                                 't="s"><v>' +
                                 sharedStringIndex +
                                 "</v></c>";
-                        if (typeof sheetData.multiStyleConditin == "function") {
-                            const multi = sheetData.multiStyleConditin(v, null, v.label, rowCount, innerIndex, true);
+                        if (typeof sheetData.multiStyleCondition == "function") {
+                            const multi = sheetData.multiStyleCondition(v, null, v.label, rowCount, innerIndex, true);
                             if (multi) {
                                 v.multiStyleValue = multi;
                             }
                         }
                         if (v.multiStyleValue) {
-                            sharedString += (0, multi_value_1.generateMultiStyleValue)(v.multiStyleValue, v.text, styleMapper.commentSintax.value, headerStyleKey ? headerStyleKey : "", sheetData.useSplitBaseOnMatch);
+                            sharedString += (0, multi_value_1.generateMultiStyleValue)(v.multiStyleValue, v.text, styleMapper.commentSyntax.value, headerStyleKey ? headerStyleKey : "", sheetData.useSplitBaseOnMatch);
                         }
                         else {
-                            sharedString += "<si><t>" + (0, special_character_1.spCh)(v.text) + "</t></si>";
+                            sharedString +=
+                                "<si><t>" + (0, special_character_1.specialCharacterConverter)(v.text) + "</t></si>";
                         }
                         sharedStringMap[v.text] = v.text;
                         sharedStringIndex++;
@@ -831,9 +842,9 @@ function generateExcel(data) {
                     const rowLength = sheetData.data.length;
                     sheetData.data.forEach((mData, innerIndex) => {
                         if (mData.mergeType) {
-                            for (let iindex = 0; iindex < mData.mergeType.length; iindex++) {
-                                const mergeType = mData.mergeType[iindex];
-                                const mergeStart = mData.mergeStart[iindex];
+                            for (let iIndex = 0; iIndex < mData.mergeType.length; iIndex++) {
+                                const mergeType = mData.mergeType[iIndex];
+                                const mergeStart = mData.mergeStart[iIndex];
                                 const mergeValue = mData.mergeValue[index];
                                 let mergeStr = "";
                                 if (mergeType == "both") {
@@ -899,7 +910,7 @@ function generateExcel(data) {
                             if (sheetData.styleCellCondition &&
                                 typeof sheetData.styleCellCondition == "function") {
                                 cellStyle =
-                                    sheetData.styleCellCondition(dataEl, mData, keyIndex, rowCount, false, styleKeys) || rowStyle;
+                                    sheetData.styleCellCondition(dataEl, mData, rowCount, keyIndex, false, styleKeys) || rowStyle;
                             }
                             if (sheetData.mergeRowDataCondition &&
                                 typeof sheetData.mergeRowDataCondition == "function") {
@@ -928,8 +939,8 @@ function generateExcel(data) {
                                 dataEl = "";
                             }
                             const refString = cols[keyIndex] + "" + rowCount;
-                            if (typeof sheetData.commentCodition == "function") {
-                                const checkCommentCondition = sheetData.commentCodition(dataEl, mData, key, rowCount, keyIndex, false);
+                            if (typeof sheetData.commentCondition == "function") {
+                                const checkCommentCondition = sheetData.commentCondition(dataEl, mData, key, rowCount, keyIndex, false);
                                 if (checkCommentCondition) {
                                     if (typeof mData.comment !== "object") {
                                         mData.comment = {};
@@ -940,8 +951,8 @@ function generateExcel(data) {
                             if (typeof mData.comment == "object" && key in mData.comment) {
                                 const cellComment = mData.comment[key];
                                 hasComment = true;
-                                const commentObj = (0, comment_1.commentConvertor)(cellComment, styleMapper.commentSintax.value, defaultCommentStyle);
-                                if (commentObj.hasAuthour &&
+                                const commentObj = (0, comment_1.commentConvertor)(cellComment, styleMapper.commentSyntax.value, defaultCommentStyle);
+                                if (commentObj.hasAuthor &&
                                     typeof commentObj.author != "undefined") {
                                     commentAuthor.push(commentObj.author.toString());
                                 }
@@ -950,7 +961,7 @@ function generateExcel(data) {
                                     col: keyIndex,
                                 });
                                 let authorId = commentAuthor.length;
-                                if (commentObj.hasAuthour &&
+                                if (commentObj.hasAuthor &&
                                     typeof commentObj.author != "undefined") {
                                     let auth = commentObj.author.toString();
                                     const index = commentAuthor.indexOf(auth);
@@ -961,7 +972,7 @@ function generateExcel(data) {
                                         authorId = index;
                                     }
                                 }
-                                commentString += (0, comment_1.generateCommentTag)(refString, commentObj.commentStr, commentObj.commentStyl, authorId);
+                                commentString += (0, comment_1.generateCommentTag)(refString, commentObj.commentStr, commentObj.commentStyle, authorId);
                             }
                             const formula = formulaSheetObj && formulaSheetObj[refString];
                             if (formula) {
@@ -988,8 +999,8 @@ function generateExcel(data) {
                                         "</v></c>";
                                     rowDataString += localcell;
                                     sheetDataString += localcell;
-                                    if (typeof sheetData.multiStyleConditin == "function") {
-                                        const multi = sheetData.multiStyleConditin(dataEl, mData, key, rowCount, keyIndex, false);
+                                    if (typeof sheetData.multiStyleCondition == "function") {
+                                        const multi = sheetData.multiStyleCondition(dataEl, mData, key, rowCount, keyIndex, false);
                                         if (multi) {
                                             if (!("multiStyleValue" in mData) ||
                                                 typeof mData.multiStyleValue == "undefined") {
@@ -1001,10 +1012,11 @@ function generateExcel(data) {
                                     if ("multiStyleValue" in mData &&
                                         mData.multiStyleValue &&
                                         key in mData.multiStyleValue) {
-                                        sharedString += (0, multi_value_1.generateMultiStyleValue)(mData.multiStyleValue[key], dataEl, styleMapper.commentSintax.value, cellStyle ? cellStyle : "", sheetData.useSplitBaseOnMatch);
+                                        sharedString += (0, multi_value_1.generateMultiStyleValue)(mData.multiStyleValue[key], dataEl, styleMapper.commentSyntax.value, cellStyle ? cellStyle : "", sheetData.useSplitBaseOnMatch);
                                     }
                                     else {
-                                        sharedString += "<si><t>" + (0, special_character_1.spCh)(dataEl) + "</t></si>";
+                                        sharedString +=
+                                            "<si><t>" + (0, special_character_1.specialCharacterConverter)(dataEl) + "</t></si>";
                                     }
                                     sharedStringMap[dataEl] = dataEl;
                                     sharedStringIndex++;
@@ -1040,8 +1052,8 @@ function generateExcel(data) {
                         rowCount++;
                         sheetDataString += "</row>";
                     });
-                    if (sheetData.sortAndfilter) {
-                        if (sheetData.sortAndfilter.mode == "all") {
+                    if (sheetData.sortAndFilter) {
+                        if (sheetData.sortAndFilter.mode == "all") {
                             sheetSortFilter +=
                                 '<autoFilter ref="A1:' +
                                     cols[colsLength - 1] +
@@ -1050,29 +1062,31 @@ function generateExcel(data) {
                                     '" />';
                         }
                         else {
-                            if (typeof sheetData.sortAndfilter.ref == "string" &&
-                                sheetData.sortAndfilter.ref.length > 0) {
+                            if (typeof sheetData.sortAndFilter.ref == "string" &&
+                                sheetData.sortAndFilter.ref.length > 0) {
                                 sheetSortFilter +=
-                                    '<autoFilter ref="' + sheetData.sortAndfilter.ref + '" />';
+                                    '<autoFilter ref="' + sheetData.sortAndFilter.ref + '" />';
                             }
                         }
                     }
                 }
                 if (headerFormula.length > 0) {
                     headerFormula.forEach((v) => {
-                        const header = sheetData.headers[v];
-                        formulaSheetObj[cols[v] + "" + rowCount] = Object.assign({ start: sheetData.withoutHeader ? cols[v] + "1" : cols[v] + "2", end: cols[v] + "" + (rowCount - 1), type: header.formula.type }, (header.formula.styleId
+                        const shiftLeftValue = sheetData.shiftLeft ? sheetData.shiftLeft : 0;
+                        const header = sheetData.headers[v - shiftLeftValue];
+                        const columnRef = cols[v];
+                        formulaSheetObj[columnRef + "" + rowCount] = Object.assign({ start: sheetData.withoutHeader ? columnRef + "1" : columnRef + "2", end: columnRef + "" + (rowCount - 1), type: header.formula.type }, (header.formula.styleId
                             ? { styleId: header.formula.styleId }
                             : {}));
                     });
                 }
-                if (headerConditinalFormating.length > 0) {
-                    headerConditinalFormating.forEach((v) => {
+                if (headerConditionalFormatting.length > 0) {
+                    headerConditionalFormatting.forEach((v) => {
                         const header = sheetData.headers[v];
-                        if (!header.conditinalFormating) {
+                        if (!header.conditionalFormatting) {
                             return;
                         }
-                        conditinalFormating.push(Object.assign(Object.assign({}, header.conditinalFormating), { start: sheetData.withoutHeader ? cols[v] + "1" : cols[v] + "2", end: cols[v] + "" + (rowCount - 1) }));
+                        conditionalFormatting.push(Object.assign(Object.assign({}, header.conditionalFormatting), { start: sheetData.withoutHeader ? cols[v] + "1" : cols[v] + "2", end: cols[v] + "" + (rowCount - 1) }));
                     });
                 }
                 if (formulaSheetObj) {
@@ -1157,7 +1171,7 @@ function generateExcel(data) {
                 selectedAdded = true;
                 activeTabIndex = index;
             }
-            const filterMode = sheetData.sortAndfilter ? 'filterMode="1"' : "";
+            const filterMode = sheetData.sortAndFilter ? 'filterMode="1"' : "";
             let hasImages = false;
             let drawersContent = "";
             let drawersRels = "";
@@ -1167,20 +1181,20 @@ function generateExcel(data) {
                     let drawerStr = "";
                     res.forEach((val, i) => {
                         const index = i + 1;
-                        var v = val.image;
-                        var from = val.obj.from;
-                        var to = val.obj.to;
-                        var margin = val.obj.margin;
-                        var imageType = val.type;
-                        var type = val.obj.type;
-                        var extent = val.obj.extent;
+                        let v = val.image;
+                        let from = val.obj.from;
+                        let to = val.obj.to;
+                        let margin = val.obj.margin;
+                        let imageType = val.type;
+                        let type = val.obj.type;
+                        let extent = val.obj.extent;
                         if (typeof extent == "undefined") {
                             extent = {
                                 cx: 200000,
                                 cy: 200000,
                             };
                         }
-                        var result = {
+                        let result = {
                             start: {
                                 col: 0,
                                 row: 0,
@@ -1195,7 +1209,7 @@ function generateExcel(data) {
                             },
                         };
                         if (typeof from == "string" && from.length >= 2) {
-                            var p = (0, excel_util_1.getColRowBaseOnRefString)(from, cols);
+                            let p = (0, excel_util_1.getColRowBaseOnRefString)(from, cols);
                             result.start = Object.assign({}, p);
                             result.end = {
                                 col: p.col + 1,
@@ -1203,7 +1217,7 @@ function generateExcel(data) {
                             };
                         }
                         if (typeof to == "string" && to.length >= 2) {
-                            var p = (0, excel_util_1.getColRowBaseOnRefString)(to, cols);
+                            let p = (0, excel_util_1.getColRowBaseOnRefString)(to, cols);
                             p.row += 1;
                             p.col += 1;
                             result.end = Object.assign({}, p);
@@ -1358,8 +1372,8 @@ function generateExcel(data) {
             mergesCellArray = [...new Set(mergesCellArray)];
             let cFDataString = "";
             let priorityCounter = 1;
-            if (conditinalFormating.length > 0) {
-                cFDataString = conditinalFormating.reduce((cf, cu) => {
+            if (conditionalFormatting.length > 0) {
+                cFDataString = conditionalFormatting.reduce((cf, cu) => {
                     if (cu.type == "cells") {
                         if (cu.operator == "ct") {
                             return (cf +
@@ -1438,7 +1452,7 @@ function generateExcel(data) {
                 ${cu.colors && Array.isArray(cu.colors)
                                 ? cu.colors.reduce((reColors, colorCu) => {
                                     return (reColors +
-                                        `<color rgb="${(0, color_1.convertToHex)(colorCu, data.backend)}"/>`);
+                                        `<color rgb="${(0, color_1.convertToHex)(colorCu, isBackend)}"/>`);
                                 }, "")
                                 : `<color rgb="FFF8696B"/>
                 <color rgb="FFFFEB84"/>
@@ -1457,7 +1471,7 @@ function generateExcel(data) {
                 ${cu.colors && Array.isArray(cu.colors)
                                 ? cu.colors.reduce((reColors, colorCu) => {
                                     return (reColors +
-                                        `<color rgb="${(0, color_1.convertToHex)(colorCu, data.backend)}"/>`);
+                                        `<color rgb="${(0, color_1.convertToHex)(colorCu, isBackend)}"/>`);
                                 }, "")
                                 : `<color rgb="FF638EC6"/>`}
             </dataBar>
@@ -1468,6 +1482,12 @@ function generateExcel(data) {
                         return cf;
                     }
                 }, "");
+            }
+            if ((hasCheckbox || hasComment || hasImages) && xl_drawingsFolder == null) {
+                xl_drawingsFolder = xlFolder === null || xlFolder === void 0 ? void 0 : xlFolder.folder("drawings");
+            }
+            if (hasImages && xl_drawings_relsFolder == null) {
+                xl_drawings_relsFolder = xl_drawingsFolder === null || xl_drawingsFolder === void 0 ? void 0 : xl_drawingsFolder.folder("_rels");
             }
             mapData["sheet" + (index + 1)] = {
                 indexId: indexId + 1,
@@ -1484,7 +1504,7 @@ function generateExcel(data) {
                 checkboxDrawingContent,
                 checkboxForm,
                 checkboxSheetContent,
-                checkboxshap,
+                checkboxShape,
                 commentString,
                 commentAuthor,
                 shapeCommentRowCol,
@@ -1539,10 +1559,10 @@ function generateExcel(data) {
                 '<Relationship Id="rId' +
                     indexId +
                     '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/calcChain" Target="calcChain.xml"/>';
+            xlFolder === null || xlFolder === void 0 ? void 0 : xlFolder.file("calcChain.xml", '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<calcChain xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
+                calcChainValue +
+                "</calcChain>");
         }
-        xlFolder === null || xlFolder === void 0 ? void 0 : xlFolder.file("calcChain.xml", '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<calcChain xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
-            calcChainValue +
-            "</calcChain>");
         let sheetKeys = Object.keys(mapData);
         // in _rels
         let relsFolder = zip.folder("_rels");
@@ -1637,7 +1657,6 @@ function generateExcel(data) {
         // xl/worksheets
         let xl_worksheetsFolder = xlFolder === null || xlFolder === void 0 ? void 0 : xlFolder.folder("worksheets");
         let commentId = [];
-        const xl_worksheets_relsFolder = xl_worksheetsFolder === null || xl_worksheetsFolder === void 0 ? void 0 : xl_worksheetsFolder.folder("_rels");
         let sheetDrawers = [];
         sheetKeys.forEach((k, iCo) => {
             const sh = mapData[k];
@@ -1693,7 +1712,7 @@ ${sh.checkboxDrawingContent}
                 xl_drawingsFolder === null || xl_drawingsFolder === void 0 ? void 0 : xl_drawingsFolder.file("vmlDrawing" + (iCo + 1) + ".vml", `<xml xmlns:p="http://schemas.openxmlformats.org/presentationml/2006/main" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:oa="urn:schemas-microsoft-com:office:activation" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:pvml="urn:schemas-microsoft-com:office:powerpoint">
  <o:shapelayout v:ext="edit">
   <o:idmap v:ext="edit" data="1"/>
- </o:shapelayout>${shapeTypeMap["checkbox"]}${sh.checkboxshap}
+ </o:shapelayout>${shapeTypeMap["checkbox"]}${sh.checkboxShape}
  </xml>`);
             }
             if (sh.hasComment) {
@@ -1766,6 +1785,7 @@ ${sh.checkboxDrawingContent}
                     "</xml>");
             }
             if (sh.hasImages || sh.hasComment || sh.hasCheckbox) {
+                const xl_worksheets_relsFolder = xl_worksheetsFolder === null || xl_worksheetsFolder === void 0 ? void 0 : xl_worksheetsFolder.folder("_rels");
                 xl_worksheets_relsFolder === null || xl_worksheets_relsFolder === void 0 ? void 0 : xl_worksheets_relsFolder.file("sheet" + (iCo + 1) + ".xml.rels", '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
                     '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"> ' +
                     sheetRelContentStr +
@@ -1811,12 +1831,14 @@ ${sh.checkboxDrawingContent}
                     : "") +
                 "</worksheet>");
         });
-        var xlCtrlFolder = xlFolder === null || xlFolder === void 0 ? void 0 : xlFolder.folder("ctrlProps");
-        checkboxForm.forEach((v, index) => {
-            xlCtrlFolder === null || xlCtrlFolder === void 0 ? void 0 : xlCtrlFolder.file("ctrlProp" + (index + 1) + ".xml", v);
-        });
+        if (checkboxForm.length > 0) {
+            let xlCtrlFolder = xlFolder === null || xlFolder === void 0 ? void 0 : xlFolder.folder("ctrlProps");
+            checkboxForm.forEach((v, index) => {
+                xlCtrlFolder === null || xlCtrlFolder === void 0 ? void 0 : xlCtrlFolder.file("ctrlProp" + (index + 1) + ".xml", v);
+            });
+        }
         zip.file("[Content_Types].xml", (0, content_types_1.contentTypeGenerator)(sheetContentType, commentId, [...new Set(arrTypes)], sheetDrawers, checkboxForm, needCalcChain));
-        if (data.backend) {
+        if (isBackend) {
             return zip
                 .generateAsync({
                 type: data.generateType ? data.generateType : "nodebuffer",

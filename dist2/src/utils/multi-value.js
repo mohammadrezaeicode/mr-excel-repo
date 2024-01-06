@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.generateMultiStyleValue = void 0;
+exports.exportedForTesting = exports.generateMultiStyleValue = void 0;
 const special_character_1 = require("./special-character");
 function splitBaseOnMatch(matchResult, str) {
     let reduceDefault = {
@@ -16,8 +16,8 @@ function splitBaseOnMatch(matchResult, str) {
     res.result.push(res.str);
     return res.result;
 }
-function splitAndMatching(v, val, text, textSplited, splitValue, matchValue, styleMatchValue, multiMode, useSplitBaseOnMatch) {
-    if (!textSplited) {
+function splitAndMatching(v, val, text, splittedText, splitValue, matchValue, styleMatchValue, multiMode, useSplitBaseOnMatch) {
+    if (!splittedText) {
         let matchV;
         try {
             matchV = text.match(v);
@@ -63,7 +63,7 @@ function splitAndMatching(v, val, text, textSplited, splitValue, matchValue, sty
         else {
             splitValue.push(text);
         }
-        textSplited = true;
+        splittedText = true;
     }
     else {
         let newSplit = [];
@@ -132,7 +132,7 @@ function splitAndMatching(v, val, text, textSplited, splitValue, matchValue, sty
     return {
         v,
         text,
-        textSplited,
+        splittedText,
         splitValue,
         matchValue,
         styleMatchValue,
@@ -144,7 +144,7 @@ function generateMultiStyleValue(multiStyle, text, styles, defStyleId, useSplitB
         let matchValue = [];
         let styleMatchValue = [];
         let splitValue = [];
-        let textSplited = false;
+        let splittedText = false;
         const keys = Object.keys(multiStyle);
         keys.forEach((v) => {
             const val = multiStyle[v];
@@ -152,8 +152,8 @@ function generateMultiStyleValue(multiStyle, text, styles, defStyleId, useSplitB
                 return;
             }
             else {
-                let result = splitAndMatching(v, typeof val == "string" ? val : "", text, textSplited, splitValue, matchValue, styleMatchValue, false, useSplitBaseOnMatch);
-                textSplited = result.textSplited;
+                let result = splitAndMatching(v, typeof val == "string" ? val : "", text, splittedText, splitValue, matchValue, styleMatchValue, false, useSplitBaseOnMatch);
+                splittedText = result.splittedText;
                 splitValue = result.splitValue;
                 matchValue = result.matchValue;
                 styleMatchValue = result.styleMatchValue;
@@ -167,8 +167,8 @@ function generateMultiStyleValue(multiStyle, text, styles, defStyleId, useSplitB
                     if (typeof element.reg == "string") {
                         element.reg = new RegExp(element.reg, "g");
                     }
-                    let result = splitAndMatching(element.reg, element.styleId, text, textSplited, splitValue, matchValue, styleMatchValue, true, useSplitBaseOnMatch);
-                    textSplited = result.textSplited;
+                    let result = splitAndMatching(element.reg, element.styleId, text, splittedText, splitValue, matchValue, styleMatchValue, true, useSplitBaseOnMatch);
+                    splittedText = result.splittedText;
                     splitValue = result.splitValue;
                     matchValue = result.matchValue;
                     styleMatchValue = result.styleMatchValue;
@@ -184,21 +184,20 @@ function generateMultiStyleValue(multiStyle, text, styles, defStyleId, useSplitB
             if (element.length > 0) {
                 result +=
                     "<r>" +
-                        " " +
                         elementStyle +
-                        ' <t xml:space="preserve">' +
+                        '<t xml:space="preserve">' +
                         element +
                         "</t>" +
                         "</r>";
             }
             if (matchElement.length > 0) {
                 result +=
-                    " <r> " +
-                        styles[styleID] +
-                        ' <t xml:space="preserve">' +
+                    "<r>" +
+                        (styles[styleID] ? styles[styleID] : elementStyle) +
+                        '<t xml:space="preserve">' +
                         matchElement +
                         "</t>" +
-                        " </r>";
+                        "</r>";
             }
         }
         if (splitValue[length].length > 0) {
@@ -208,7 +207,7 @@ function generateMultiStyleValue(multiStyle, text, styles, defStyleId, useSplitB
                     "<r>" +
                     elementStyle +
                     "<t>" +
-                    (0, special_character_1.spCh)(splitValue[length]) +
+                    (0, special_character_1.specialCharacterConverter)(splitValue[length]) +
                     "</t>" +
                     "</r>" +
                     "</si>";
@@ -219,8 +218,12 @@ function generateMultiStyleValue(multiStyle, text, styles, defStyleId, useSplitB
         return result;
     }
     else {
-        return "<si><t>" + (0, special_character_1.spCh)(text) + "</t></si>";
+        return "<si><t>" + (0, special_character_1.specialCharacterConverter)(text) + "</t></si>";
     }
 }
 exports.generateMultiStyleValue = generateMultiStyleValue;
+exports.exportedForTesting = {
+    splitBaseOnMatch,
+    splitAndMatching,
+};
 //# sourceMappingURL=multi-value.js.map
