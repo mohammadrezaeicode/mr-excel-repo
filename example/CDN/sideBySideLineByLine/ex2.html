@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 1-Theme Base</title>
+    <style>
+        body {
+            background: #222831;
+            color: #F6F6F6;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        button {
+            border: none;
+            padding: 5px;
+            border-radius: 4px;
+            background: #F6F6F6;
+        }
+    </style>
+</head>
+
+<body>
+    <p>For generate Excel please click the below button</p>
+    <button onclick="generateExcel()">Generate Excel</button>
+    <script src="../../../dist/excel-table.umd.js"></script>
+    <script>
+        const sideData = [
+            [
+                {
+                    sheetName: "sheetName",
+                    spaceX: 1,
+                    spaceY: 1,
+                    headers: [
+                        {
+                            label: "id",
+                            text: "id",
+                        },
+                    ],
+                    data: [
+                        { id: 11 },
+                        { id: 10 },
+                        { id: 9 },
+                        { id: 8 },
+                        { id: 7 },
+                        { id: 6 },
+                        { id: 5 },
+                        { id: 4 },
+                        { id: 3 },
+                        { id: 2 },
+                        { id: 1 },
+                    ],
+                },
+                {
+                    sheetName: "sheetName",
+                    spaceX: 1,
+                    spaceY: 1,
+                    headers: [
+                        {
+                            label: "el",
+                            text: "el",
+                        },
+                    ],
+                    data: [
+                        { el: 11 },
+                        { el: 10 },
+                        { el: 9 },
+                        { el: 8 },
+                        { el: 7 },
+                        { el: 4 },
+                        { el: 3 },
+                        { el: 2 },
+                        { el: 1 },
+                    ],
+                },
+            ],
+
+            [
+                {
+                    sheetName: "sheetName2",
+                    spaceX: 1,
+                    spaceY: 1,
+                    headers: [
+                        {
+                            label: "id",
+                            text: "id",
+                        },
+                        { label: "test", text: "test" },
+                    ],
+                    data: [
+                        { id: 1 },
+                        { id: 2 },
+                        { id: 3 },
+                        { id: 4 },
+                        { id: 5 },
+                        { id: 6 },
+                        { id: 7 },
+                        { id: 8 },
+                        { id: 9 },
+                        { id: 10 },
+                        { id: 11 },
+                    ],
+                },
+                {
+                    sheetName: "sheetName1",
+                    spaceX: 1,
+                    spaceY: 1,
+                    headers: [
+                        {
+                            label: "id",
+                            text: "id",
+                        },
+                        { label: "test", text: "test" },
+                    ],
+                    data: [
+                        { id: 1 },
+                        { id: 2 },
+                        { id: 3 },
+                        { id: 4 },
+                        { id: 5 },
+                        { id: 6 },
+                        { id: 7 },
+                        { id: 8 },
+                        { id: 9 },
+                        { id: 10 },
+                        { id: 11 },
+                    ],
+                },
+                {
+                    sheetName: "sheetName",
+                    spaceX: 1,
+                    spaceY: 1,
+                    headers: [
+                        {
+                            label: "id",
+                            text: "id",
+                        },
+                        { label: "test", text: "test" },
+                    ],
+                    data: [
+                        { test: "test14", id: "u1i1r23" },
+                        { test: "test13", id: "u2i2r24" },
+                        { test: "test12", id: "u3i3r25" },
+                        { test: "test11", id: "u4i4r26" },
+                        { test: "test10", id: "u5i5r27" },
+                        { test: "test9", id: "u6i6r28" },
+                        { test: "test8", id: "u7i7r29" },
+                        { test: "test7", id: "u8i8r30" },
+                        { test: "test6", id: "u9i9r31" },
+                        { test: "test5", id: "ui1010r32" },
+                        { test: "test4", id: "ui1111r33" },
+                        { test: "test3" },
+                        { test: "test2" },
+                        { test: "test1" },
+                    ],
+                },
+            ],
+        ];
+        function generateExcel() {
+            ExcelTable.sideBySideLineByLine(sideData);
+
+        }
+    </script>
+</body>
+
+</html>

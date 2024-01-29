@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 20</title>
+    <style>
+        body {
+            background: #222831;
+            color: #F6F6F6;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        button {
+            border: none;
+            padding: 5px;
+            border-radius: 4px;
+            background: #F6F6F6;
+        }
+
+        .link-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 5px;
+
+            color: #F6F6F6;
+        }
+
+        .link-container a {
+            color: #F6F6F6;
+        }
+    </style>
+</head>
+
+<body>
+    <p>For generate Excel please click the below button</p>
+    <button onclick="generateExcel()">Generate Excel</button>
+    <div class="link-container">Links: <a href="https://colorhunt.co">Color</a>
+        <p> | </p><a
+            href="https://github.com/mohammadrezaeicode/mr-excel-page-repo/blob/main/public/img/ex20.PNG?raw=true">Result</a>
+    </div>
+    <script src="../../../dist/excel-table.umd.js"></script>
+    <script>
+        const data = {
+            activateConditionalFormatting: true,
+            styles: {
+                ct: {
+                    type: "conditionalFormatting",
+                    backgroundColor: "222831",
+                    color: "EEEEEE",
+                },
+            },
+            sheet: [
+                {
+                    headers: [
+                        {
+                            label: "Column1",
+                            text: "Text1",
+                            conditionalFormatting: { type: "dataBar" },
+                        },
+                        {
+                            label: "Column2",
+                            text: "Text2",
+                            conditionalFormatting: { type: "dataBar" },
+                        },
+                        {
+                            label: "Column3",
+                            text: "Text3",
+                            conditionalFormatting: { type: "colorScale" },
+                        },
+                        {
+                            label: "Column4",
+                            text: "Text4",
+                            conditionalFormatting: { type: "top", value: 2 },
+                        },
+
+                        {
+                            label: "Column5",
+                            text: "Text5",
+                            conditionalFormatting: {
+                                type: "top",
+                                styleId: "ct",
+                                value: 2,
+                                bottom: true,
+                            },
+                        },
+                        {
+                            label: "Column6",
+                            text: "Text6",
+                            conditionalFormatting: {
+                                type: "top",
+                                operator: "aboveAverage",
+                                value: 1,
+                            },
+                        },
+                        {
+                            label: "Column7",
+                            text: "Text7",
+                            conditionalFormatting: {
+                                type: "top",
+                                operator: "belowAverage",
+                                styleId: "ct",
+                                value: 1,
+                            },
+                        },
+                    ],
+                    data: [
+                        {
+                            Column1: 123,
+                            Column2: 456,
+                            Column3: 789,
+                            Column4: 101,
+                            Column5: 101,
+                            Column6: 101,
+                            Column7: 101,
+                        },
+                        {
+                            Column1: 234,
+                            Column2: 567,
+                            Column3: 890,
+                            Column4: 202,
+                            Column5: 202,
+                            Column6: 202,
+                            Column7: 202,
+                        },
+                        {
+                            Column1: 345,
+                            Column2: 678,
+                            Column3: 901,
+                            Column4: 303,
+                            Column5: 303,
+                            Column6: 303,
+                            Column7: 303,
+                        },
+                        {
+                            Column1: 456,
+                            Column2: 789,
+                            Column3: 123,
+                            Column4: 404,
+                            Column5: 404,
+                            Column6: 404,
+                            Column7: 404,
+                        },
+                    ],
+                },
+            ],
+        };
+        function generateExcel() {
+            ExcelTable.generateExcel(data);
+        }
+
+    </script>
+</body>
+
+</html>

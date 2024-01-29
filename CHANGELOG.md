@@ -1,6 +1,36 @@
 # Changelog
 
-## Version 4.0.0 (2023-1-6)
+## Version 5.0.0 (2024-01-28)
+
+### New Features
+
+- **`New Function`**
+  - `addGlobalOptions`: This function stores options, and by passing a defined key to `generateExcel`, the options will be applied.
+  - `Validator Functions`: This function is experimental and not yet complete. It is intended for validating the `ExcelData` object.
+- **`New Property`**
+  - The `backgroundImage` property allows adding an image to the background.(Sheet propperty)
+  - `pageOption`: This property has the following capabilities:
+    - Define page margins.
+    - Add a header.
+    - Add a footer.
+    - Change from portrait to landscape orientation.
+  - `viewOption`: With this property, it is possible to:
+    - Change the workbook view.
+    - Hide the grid.
+    - Hide headlines.
+    - Hide the ruler.
+    - Enable frozen ability.
+    - Enable split ability.
+  - `rtl`: This will change the sheet direction to right-to-left.
+  - `pageBreak`: These properties help customize the page break line.
+  - `asTable`: The result will be generated as a table.
+
+### Improvements
+
+- Reduced the size of the main bundle from 431KB to 181KB.
+- Reduced the overall package size.
+
+## Version 4.0.0 (2024-1-6)
 
 we have added the test and release packages. Additionally, we have addressed various issues, such as misspelling in the interface, problems with the extractExcelData function, shift top sheet problem (unit problem), and more.
 

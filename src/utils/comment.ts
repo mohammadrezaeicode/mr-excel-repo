@@ -1,4 +1,4 @@
-import { Comment } from "../data-model/excel-table";
+import { type Comment } from "../data-model/excel-table";
 
 export function commentConvertor(
   commentValue: Comment | string,

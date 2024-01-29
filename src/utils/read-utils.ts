@@ -31,7 +31,7 @@ function getRValue(element: string) {
   return null; // Return null if 'r' attribute is not found
 }
 
-import JSZip from "jszip";
+// import JSZip from "jszip";
 import { cols } from "./content-generator/const-data";
 import { getColRowBaseOnRefString } from "./excel-util";
 type ExtractedData = (string | null)[][];
@@ -68,12 +68,11 @@ export async function extractExcelData(
       });
     }
     if (filename.indexOf("xl/worksheets/sheet") == 0) {
-      let key=filename.substring(14, filename.lastIndexOf("."))
-      if(nameMap.has(key)){
-        key=nameMap.get(key)!
+      let key = filename.substring(14, filename.lastIndexOf("."));
+      if (nameMap.has(key)) {
+        key = nameMap.get(key)!;
       }
-      sheetResultData[key] =
-        resultData;
+      sheetResultData[key] = resultData;
     }
   }
   return await fetch(uri)
@@ -87,6 +86,8 @@ export async function extractExcelData(
       return res.blob();
     })
     .then(async (res) => {
+      const module = await import("jszip");
+      const JSZip = module.default;
       let fileCounter = 0;
       return await new Promise((resolve, reject) => {
         JSZip.loadAsync(res).then(function (zip) {

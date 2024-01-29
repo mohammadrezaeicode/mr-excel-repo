@@ -1,12 +1,16 @@
 import {
-  AlignmentOptionKey,
-  ConditionalFormatting,
-  ExcelTable,
-  Formula,
-  MergeRowConditionMap,
-  ProtectionOptionKey,
-  RowMap,
-  StyleMapper,
+  type AlignmentOptionKey,
+  type AsTableOption,
+  type ConditionalFormatting,
+  type ExcelTable,
+  type Formula,
+  type HeaderFooterLocationMap,
+  type HeaderFooterOption,
+  type HeaderFooterTypes,
+  type MergeRowConditionMap,
+  type ProtectionOptionKey,
+  type RowMap,
+  type StyleMapper,
 } from "../data-model/excel-table";
 import { generateColumnName } from "../utils/generate-column-name";
 
@@ -28,12 +32,29 @@ import {
 import { toDataURL2 } from "./image";
 import { getColRowBaseOnRefString } from "./excel-util";
 import { specialCharacterConverter } from "./special-character";
-import JSZip from "jszip";
-export async function generateExcel(data: ExcelTable) {
-  const isBackend=data.backend
-  const operatorMap: {
-    [key: string]: string;
-  } = {
+import { applyConfig } from "./store";
+import type JSZip from "jszip";
+export async function generateExcel(data: ExcelTable, styleKey: string = "") {
+  if (typeof styleKey == "string" && styleKey.length > 0) {
+    data = applyConfig(styleKey, data);
+  }
+  if (typeof data.creator == "string" && data.creator.trim().length <= 0) {
+    throw 'length of "creator" most be bigger then 0';
+  }
+  if (
+    typeof data.created == "string" &&
+    new Date(data.created).toString() == "Invalid Date"
+  ) {
+    throw '"created" is not valid date';
+  }
+  if (
+    typeof data.modified == "string" &&
+    new Date(data.modified).toString() == "Invalid Date"
+  ) {
+    throw '"modified" is not valid date';
+  }
+  const isBackend = data.backend;
+  const operatorMap: Record<string, string> = {
     lt: "lessThan",
     gt: "greaterThan",
     between: "between",
@@ -70,12 +91,48 @@ export async function generateExcel(data: ExcelTable) {
   const addCF = data.activateConditionalFormatting
     ? data.activateConditionalFormatting
     : false;
-  const cFMapIndex: {
-    [index: string]: number;
-  } = {};
+  const headerFooterStyle: Record<string, string> = {};
+  const cFMapIndex: Record<string, number> = {};
   let styleMapper: StyleMapper = styleKeys.reduce(
     (res: StyleMapper, cur, index) => {
       const styl = data.styles![cur];
+      if (styl.type && (styl.type == "headerFooter" || styl.type == "HF")) {
+        let result = "";
+        let fontProcessLeft = "-";
+        let fontProcessRight = "Regular";
+        if (styl.fontFamily) {
+          fontProcessLeft = styl.fontFamily;
+        }
+        if (styl.bold) {
+          fontProcessRight = "Bold";
+        }
+        if (styl.italic) {
+          if (fontProcessRight == "Regular") {
+            fontProcessRight = "";
+          }
+          fontProcessRight += "Italic";
+        }
+        if (fontProcessLeft != "-" || fontProcessRight != "Regular") {
+          result =
+            "&amp;" + '"' + fontProcessLeft + "," + fontProcessRight + '"';
+        }
+        if (styl.size) {
+          result += "&amp;" + styl.size;
+        }
+        if (styl.doubleUnderline) {
+          result += "&amp;E";
+        } else if (styl.underline) {
+          result += "&amp;U";
+        }
+        if (styl.color) {
+          const convertedColor = convertToHex(styl.color, isBackend);
+          if (typeof convertedColor == "string" && convertedColor.length > 0) {
+            result += "&amp;K" + convertedColor.toUpperCase();
+          }
+        }
+        headerFooterStyle[cur] = result;
+        return res;
+      }
       if (
         addCF &&
         typeof styl.type == "string" &&
@@ -326,13 +383,15 @@ export async function generateExcel(data: ExcelTable) {
   let selectedAdded = false;
   let activeTabIndex = -1;
   let arrTypes: string[] = [];
+  let imageCounter = 1;
   interface ShapeRC {
     row: string | number;
     col: string | number;
   }
   const formCtrlMap = {
-    checkbox: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<formControlPr xmlns="http://schemas.microsoft.com/office/spreadsheetml/2009/9/main" objectType="CheckBox" **value** **fmlaLink** lockText="1" noThreeD="1"/>`,
+    checkbox:
+      '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
+      '<formControlPr xmlns="http://schemas.microsoft.com/office/spreadsheetml/2009/9/main" objectType="CheckBox" **value** **fmlaLink** lockText="1" noThreeD="1"/>',
   };
   let shapeIdCounter = 1024;
   const shapeMap = {
@@ -368,10 +427,17 @@ export async function generateExcel(data: ExcelTable) {
   let checkboxForm: string[] = [];
   let calcChainValue = "";
   let needCalcChain = false;
+  let xl_tableFolder: JSZip | null | undefined = null;
   for (let index = 0; index < sheetLength; index++) {
     const sheetData = data.sheet[index];
     const sheetDataId = index + 1;
     let rowMap: RowMap = {};
+    let sheetDimensions = {
+      start: "",
+      end: "",
+    };
+    const asTable = sheetData.asTable;
+    let sheetDataTableColumns = "";
     let rowCount =
       sheetData.shiftTop && sheetData.shiftTop >= 0
         ? sheetData.shiftTop + 1
@@ -379,6 +445,9 @@ export async function generateExcel(data: ExcelTable) {
     let sheetDataString = "";
     let sheetSizeString = "";
     let sheetSortFilter = "";
+    let splitOption = "";
+    let sheetViewProperties = "";
+    let viewType: string = "";
     let hasCheckbox = false;
     let checkboxDrawingContent = "";
     let checkboxShape = "";
@@ -398,7 +467,323 @@ export async function generateExcel(data: ExcelTable) {
     let headerFormula: number[] = [];
     let headerConditionalFormatting: number[] = [];
     let mergeRowConditionMap: MergeRowConditionMap = {};
-    let imagePromise;
+    let sheetHeaderFooter = "";
+    let isPortrait = false;
+    // let hasHeaderFooter = false
+    let sheetBreakLine = "";
+    if (sheetData.rtl) {
+      sheetViewProperties += ' rightToLeft="1" ';
+    }
+    if (sheetData.pageBreak) {
+      const pageBreak = sheetData.pageBreak;
+      if (pageBreak.row && Array.isArray(pageBreak.row)) {
+        viewType = "pageBreakPreview";
+        const rowLength = pageBreak.row.length;
+        sheetBreakLine +=
+          '<rowBreaks count="' +
+          rowLength +
+          '" manualBreakCount="' +
+          rowLength +
+          '">' +
+          pageBreak.row.reduce(
+            (result, current) =>
+              result + '<brk id="' + current + '" max="16383" man="1"/>',
+            ""
+          ) +
+          "</rowBreaks>";
+      }
+      if (pageBreak.column && Array.isArray(pageBreak.column)) {
+        viewType = "pageBreakPreview";
+        const columnLength = pageBreak.column.length;
+        sheetBreakLine +=
+          '<colBreaks count="' +
+          columnLength +
+          '" manualBreakCount="' +
+          columnLength +
+          '">' +
+          pageBreak.column.reduce(
+            (result, current) =>
+              result + '<brk id="' + current + '" max="16383" man="1"/>',
+            ""
+          ) +
+          "</colBreaks>";
+      }
+    }
+    let sheetMargin = "";
+    if (sheetData.pageOption) {
+      const pageOption = sheetData.pageOption;
+      if (pageOption.isPortrait) {
+        isPortrait = true;
+      }
+      if (pageOption.margin) {
+        const margin = pageOption.margin;
+        let result = {
+          left: 0.7,
+          right: 0.7,
+          top: 0.75,
+          bottom: 0.75,
+          header: 0.3,
+          footer: 0.3,
+        };
+        Object.keys(result).forEach((marginKey) => {
+          if (typeof margin[marginKey as keyof object] == "number") {
+            result[marginKey as keyof object] =
+              margin[marginKey as keyof object];
+          }
+        });
+        sheetMargin =
+          '<pageMargins left="' +
+          result["left"] +
+          '" right="' +
+          result["right"] +
+          '" top="' +
+          result["top"] +
+          '" bottom="' +
+          result["bottom"] +
+          '" header="' +
+          result["header"] +
+          '" footer="' +
+          result["footer"] +
+          '"/>';
+      }
+      let typeKeeper = "";
+      let odd = "";
+      let even = "";
+      let first = "";
+      const keyKey = ["header", "footer"];
+      keyKey.forEach((keyObj) => {
+        const endTag = keyObj.charAt(0).toUpperCase() + keyObj.substring(1);
+        if (pageOption[keyObj as keyof object]) {
+          // hasHeaderFooter = true
+          const element = pageOption[keyObj as keyof object];
+          if (typeof element == "object") {
+            Object.keys(element).forEach((typeHF) => {
+              if (typeKeeper.indexOf(typeHF) < 0) {
+                typeKeeper += typeHF;
+              }
+              const typeObj = element[typeHF];
+              let node = "";
+              Object.keys(typeObj)
+                .reduce((resultKey, currentKey) => {
+                  if (currentKey == "l") {
+                    resultKey.splice(0, 0, currentKey);
+                  } else if (currentKey == "c") {
+                    resultKey.splice(1, 0, currentKey);
+                  } else if (currentKey == "r") {
+                    resultKey.splice(2, 0, currentKey);
+                  }
+                  return resultKey;
+                }, [] as string[])
+                .forEach((direction) => {
+                  const dirObj = <HeaderFooterOption>typeObj[direction];
+                  node += "&amp;" + direction.toUpperCase();
+                  if (dirObj.styleId && headerFooterStyle[dirObj.styleId]) {
+                    node += headerFooterStyle[dirObj.styleId];
+                  }
+                  if (dirObj.text) {
+                    node += dirObj.text;
+                  }
+                });
+              node =
+                "<" +
+                typeHF +
+                endTag +
+                ">" +
+                node +
+                "</" +
+                typeHF +
+                endTag +
+                ">";
+              if (typeHF == "odd") {
+                odd += node;
+              } else if (typeHF == "even") {
+                even += node;
+              } else if (typeHF == "first") {
+                first += node;
+              } else {
+                throw "type error";
+              }
+            });
+          }
+        }
+      });
+      sheetHeaderFooter = odd + even + first;
+      if (sheetHeaderFooter.length > 0) {
+        isPortrait = true;
+        const oddEvenFlag =
+          typeKeeper.length == "oddeven".length ||
+          typeKeeper.length == "oddevenfirst".length
+            ? ' differentOddEven="1"'
+            : "";
+        const firstFlag =
+          typeKeeper.indexOf("first") >= 0 ? ' differentFirst="1"' : "";
+        sheetHeaderFooter =
+          "<headerFooter" +
+          oddEvenFlag +
+          firstFlag +
+          ">" +
+          sheetHeaderFooter +
+          "</headerFooter>";
+      }
+    }
+    if (sheetData.viewOption) {
+      let splitState = "";
+      const viewOption = sheetData.viewOption;
+      if (viewOption.type) {
+        viewType = viewOption.type;
+      }
+      if (viewOption.hideRuler) {
+        sheetViewProperties += ' showRuler="0" ';
+      }
+      if (viewOption.hideGrid) {
+        sheetViewProperties += ' showGridLines="0" ';
+      }
+      if (viewOption.hideHeadlines) {
+        sheetViewProperties += ' showRowColHeaders="0" ';
+      }
+      let split = viewOption.splitOption;
+      if (typeof split == "undefined") {
+        isPortrait = false;
+        if (typeof viewOption.frozenOption == "object") {
+          const frozen = viewOption.frozenOption;
+          splitState = ' state="frozen" ';
+          if (frozen.type == "R" || frozen.type == "ROW") {
+            let fIndex;
+            if (typeof frozen.index == "object") {
+              fIndex = frozen.index.r;
+            } else {
+              fIndex = frozen.index;
+            }
+            split = {
+              startAt: {
+                b: "A" + (fIndex + 1),
+              },
+              type: "H",
+              split: fIndex,
+            };
+          } else if (frozen.type == "C" || frozen.type == "COLUMN") {
+            let fIndex;
+            if (typeof frozen.index == "object") {
+              fIndex = frozen.index.c;
+            } else {
+              fIndex = frozen.index;
+            }
+            if (fIndex > cols.length - 1) {
+              cols = generateColumnName(cols, fIndex);
+            }
+            split = {
+              type: "V",
+              startAt: {
+                r: cols[fIndex] + 1,
+              },
+              split: fIndex,
+            };
+          } else if (frozen.type == "B" || frozen.type == "BOTH") {
+            let two = "";
+            let splitO;
+            if (typeof frozen.index == "number") {
+              splitO = frozen.index;
+              two = cols[frozen.index] + (frozen.index + 1);
+            } else {
+              splitO = {
+                y: frozen.index.r,
+                x: frozen.index.c,
+              };
+              two = cols[frozen.index.c] + (frozen.index.r + 1);
+            }
+            split = {
+              startAt: {
+                two,
+              },
+              type: "B",
+              split: splitO,
+            };
+          }
+        }
+      }
+      if (split) {
+        if (split.type == "H" || split.type == "HORIZONTAL") {
+          let ref;
+          if (split.startAt) {
+            ref = split.startAt.b;
+            if (split.startAt.t) {
+              sheetViewProperties += ' topLeftCell="' + split.startAt.t + '"';
+            }
+          }
+          if (!ref) {
+            ref = "A1";
+          }
+          splitOption =
+            '<pane ySplit="' +
+            ((typeof split.split == "object" && split.split.y) || split.split) +
+            '" topLeftCell="' +
+            ref +
+            '" activePane="bottomLeft"' +
+            splitState +
+            "/>"; //<selection pane="bottomLeft" activeCell="'+split.ref+'"/>
+          // if (split.selection) {
+          //     hasSplitSelection = true
+          //     const selectionResult = selectionPaneGenerator(split.selection)
+          //     splitOption += '" activePane="' + selectionResult.mode + '"/>'
+          //     splitOption += selectionResult.splitOption
+          // } else {
+          //     splitOption += '" activePane="bottomLeft"/>'
+          // }
+        } else if (split.type == "V" || split.type == "VERTICAL") {
+          let ref;
+          if (split.startAt) {
+            ref = split.startAt.r;
+            if (split.startAt.l) {
+              sheetViewProperties += ' topLeftCell="' + split.startAt.l + '"';
+            }
+          }
+          if (!ref) {
+            ref = "A1";
+          }
+          splitOption =
+            '<pane xSplit="' +
+            ((typeof split.split == "object" && split.split.x) || split.split) +
+            '" topLeftCell="' +
+            ref +
+            '" activePane="topLeft"' +
+            splitState +
+            "/>"; //<selection pane="bottomLeft" activeCell="'+split.ref+'"/>
+          // if (split.selection) {
+          //     hasSplitSelection = true
+          //     const selectionResult = selectionPaneGenerator(split.selection)
+          //     splitOption += '" activePane="' + selectionResult.mode + '"/>'
+          //     splitOption += selectionResult.splitOption
+          // } else {
+          //     splitOption += '" activePane="topLeft"/>'
+          // }
+        } else {
+          let ref;
+          if (split.startAt) {
+            ref = split.startAt.two;
+            if (split.startAt.one) {
+              sheetViewProperties += ' topLeftCell="' + split.startAt.one + '"';
+            }
+          }
+          if (!ref) {
+            ref = "A1";
+          }
+          splitOption =
+            '<pane xSplit="' +
+            ((typeof split.split == "object" && split.split.x) || split.split) +
+            '" ySplit="' +
+            ((typeof split.split == "object" && split.split.y) || split.split) +
+            '" topLeftCell="' +
+            ref +
+            '" activePane="bottomLeft"' +
+            splitState +
+            "/>";
+        }
+      }
+    }
+
+    if (isPortrait) {
+      viewType = "pageLayout";
+    }
     if (sheetData.checkbox) {
       hasCheckbox = true;
       const strFormDef = formCtrlMap["checkbox"];
@@ -592,16 +977,58 @@ export async function generateExcel(data: ExcelTable) {
     </mc:AlternateContent>`;
       });
     }
+    let backgroundImagePromise;
+    if (sheetData.backgroundImage) {
+      if (xl_media_Folder == null) {
+        xl_media_Folder = xlFolder?.folder("media");
+      }
+      const urlImg = sheetData.backgroundImage;
+      backgroundImagePromise = new Promise(async (resolve, reject) => {
+        let indexImageType = urlImg.lastIndexOf(".");
+        let type;
+        if (indexImageType > 0) {
+          type = urlImg.substring(indexImageType + 1).toLowerCase();
+          if (type.length > 4) {
+            if (type.indexOf("gif") >= 0) {
+              type = "gif";
+            } else if (type.indexOf("jpg") >= 0) {
+              type = "jpg";
+            } else if (type.indexOf("jpeg") >= 0) {
+              type = "jpeg";
+            } else {
+              type = "png";
+            }
+          }
+        } else {
+          type = "png";
+        }
+        const ref = imageCounter++;
+        const name = "image" + ref + "." + type;
+        const image = await toDataURL2(urlImg, name, isBackend);
+        if (!image) {
+          reject("image not load");
+        }
+
+        arrTypes.push(type);
+        resolve({
+          name,
+          type,
+          image,
+          ref,
+        });
+      });
+    }
+    let imagePromise;
     if (sheetData.images) {
       if (xl_media_Folder == null) {
         xl_media_Folder = xlFolder?.folder("media");
       }
       imagePromise = Promise.all([
         ...sheetData.images.map(async (v, i) => {
-          let indexx = v.url.lastIndexOf(".");
+          let indexImageType = v.url.lastIndexOf(".");
           let type;
-          if (indexx > 0) {
-            type = v.url.substring(indexx + 1).toLowerCase();
+          if (indexImageType > 0) {
+            type = v.url.substring(indexImageType + 1).toLowerCase();
             if (type.length > 4) {
               if (type.indexOf("gif") >= 0) {
                 type = "gif";
@@ -617,17 +1044,19 @@ export async function generateExcel(data: ExcelTable) {
             type = "png";
           }
           arrTypes.push(type);
+          const name = "image" + imageCounter++ + "." + type;
           return {
             type,
-            image: await toDataURL2(v.url, "image" + i + "." + type, isBackend),
+            image: await toDataURL2(v.url, name, isBackend),
             obj: v,
             i,
+            name,
           };
         }),
       ]);
     }
-    const colsLength = sheetData.headers.length;
-    if (Array.isArray(sheetData.headers) && colsLength) {
+    if (Array.isArray(sheetData.headers) && sheetData.headers.length) {
+      const colsLength = sheetData.headers.length;
       let titleRow = "";
       if (sheetData.title) {
         const title = sheetData.title;
@@ -748,7 +1177,28 @@ export async function generateExcel(data: ExcelTable) {
       if (typeof sheetData.shiftLeft == "number" && sheetData.shiftLeft >= 0) {
         shiftCount = sheetData.shiftLeft;
       }
+      if (asTable) {
+        sheetDataTableColumns +=
+          '<tableColumns count="' + sheetData.headers.length + '">';
+        if (!xl_tableFolder) {
+          xl_tableFolder = xlFolder?.folder("tables");
+        }
+      }
+      sheetDimensions.start = cols[shiftCount] + "" + rowCount;
+      sheetDimensions.end =
+        cols[shiftCount + sheetData.headers.length - 1] +
+        "" +
+        (rowCount + sheetData.data.length);
+
       sheetData.headers.forEach((v, innerIndex) => {
+        if (asTable) {
+          sheetDataTableColumns +=
+            '<tableColumn id="' +
+            (innerIndex + 1) +
+            '" name="' +
+            v.text +
+            '"/>';
+        }
         if (shiftCount) {
           innerIndex += shiftCount;
         }
@@ -902,6 +1352,9 @@ export async function generateExcel(data: ExcelTable) {
           sharedStringIndex++;
         }
       });
+      if (asTable) {
+        sheetDataTableColumns += "</tableColumns>";
+      }
       if (!sheetData.withoutHeader) {
         const rowTag =
           '<row r="' +
@@ -919,7 +1372,7 @@ export async function generateExcel(data: ExcelTable) {
                   " " +
                   curr +
                   '="' +
-                  sheetData.headerRowOption[curr] +
+                  sheetData.headerRowOption![curr as keyof object] +
                   '" '
                 );
               }, "  ")
@@ -937,16 +1390,17 @@ export async function generateExcel(data: ExcelTable) {
       }
       if (Array.isArray(sheetData.data)) {
         const keyOutline =
-          data.mapSheetDataOption && data.mapSheetDataOption.outlineLevel
-            ? data.mapSheetDataOption.outlineLevel
+          sheetData.mapSheetDataOption &&
+          sheetData.mapSheetDataOption.outlineLevel
+            ? sheetData.mapSheetDataOption.outlineLevel
             : "outlineLevel";
         const keyHidden =
-          data.mapSheetDataOption && data.mapSheetDataOption.hidden
-            ? data.mapSheetDataOption.hidden
+          sheetData.mapSheetDataOption && sheetData.mapSheetDataOption.hidden
+            ? sheetData.mapSheetDataOption.hidden
             : "hidden";
         const keyHeight =
-          data.mapSheetDataOption && data.mapSheetDataOption.height
-            ? data.mapSheetDataOption.height
+          sheetData.mapSheetDataOption && sheetData.mapSheetDataOption.height
+            ? sheetData.mapSheetDataOption.height
             : "height";
         const rowLength = sheetData.data.length;
         sheetData.data.forEach((mData, innerIndex) => {
@@ -1240,9 +1694,9 @@ export async function generateExcel(data: ExcelTable) {
       }
       if (headerFormula.length > 0) {
         headerFormula.forEach((v) => {
-          const shiftLeftValue=sheetData.shiftLeft?sheetData.shiftLeft:0
+          const shiftLeftValue = sheetData.shiftLeft ? sheetData.shiftLeft : 0;
           const header = sheetData.headers[v - shiftLeftValue];
-          const columnRef=cols[v]
+          const columnRef = cols[v];
           formulaSheetObj![columnRef + "" + rowCount] = {
             start: sheetData.withoutHeader ? columnRef + "1" : columnRef + "2",
             end: columnRef + "" + (rowCount - 1),
@@ -1358,6 +1812,14 @@ export async function generateExcel(data: ExcelTable) {
       activeTabIndex = index;
     }
     const filterMode = sheetData.sortAndFilter ? 'filterMode="1"' : "";
+    let backgroundImageRef = -1;
+    if (backgroundImagePromise) {
+      await backgroundImagePromise.then((res) => {
+        let result = res as any;
+        backgroundImageRef = result.ref;
+        xl_media_Folder?.file(result.name, result.image);
+      });
+    }
     let hasImages = false;
     let drawersContent = "";
     let drawersRels: string = "";
@@ -1368,6 +1830,7 @@ export async function generateExcel(data: ExcelTable) {
         res.forEach((val, i) => {
           const index = i + 1;
           let v = val.image;
+          const name = val.name;
           let from = val.obj.from;
           let to = val.obj.to;
           let margin = val.obj.margin;
@@ -1553,7 +2016,6 @@ export async function generateExcel(data: ExcelTable) {
               "<xdr:clientData />" +
               "</xdr:twoCellAnchor>";
           }
-          const name = "image" + index + "." + imageType;
           xl_media_Folder?.file(name, v!);
           drawerStr +=
             '<Relationship Id="rId' +
@@ -1580,16 +2042,24 @@ export async function generateExcel(data: ExcelTable) {
           if (cu.operator == "ct") {
             return (
               cf +
-              `
-                    <conditionalFormatting sqref="${cu.start}:${cu.end}">
-    <cfRule type="containsText" dxfId="${
-      cu.styleId ? cFMapIndex[cu.styleId] : 0
-    }" priority="${
-                cu.priority ? cu.priority : priorityCounter++
-              }"  operator="containsText" text="${cu.value}">
-           <formula>NOT(ISERROR(SEARCH("${cu.value}",${cu.start})))</formula>
-    </cfRule>
-  </conditionalFormatting>`
+              '<conditionalFormatting sqref="' +
+              cu.start +
+              ":" +
+              cu.end +
+              '">' +
+              '<cfRule type="containsText" dxfId="' +
+              (cu.styleId && cFMapIndex[cu.styleId]
+                ? cFMapIndex[cu.styleId]
+                : 0) +
+              '" priority="' +
+              (cu.priority ? cu.priority : priorityCounter++) +
+              '"  operator="containsText" text="' +
+              cu.value +
+              '"><formula>NOT(ISERROR(SEARCH("' +
+              cu.value +
+              '",' +
+              cu.start +
+              ")))</formula></cfRule></conditionalFormatting>"
             );
           }
           if (
@@ -1600,130 +2070,127 @@ export async function generateExcel(data: ExcelTable) {
           }
           return (
             cf +
-            `
-                    <conditionalFormatting sqref="${cu.start}:${cu.end}">
-    <cfRule type="cellIs" dxfId="${
-      cu.styleId ? cFMapIndex[cu.styleId] : 0
-    }" priority="${cu.priority ? cu.priority : priorityCounter++}" operator="${
-              operatorMap[cu.operator]
-            }">
-     ${
-       Array.isArray(cu.value)
-         ? cu.value.reduce((rC, cr) => {
-             return rC + `<formula>${cr.value}</formula>`;
-           }, "")
-         : `<formula>${cu.value}</formula>`
-     }
-    </cfRule>
-  </conditionalFormatting>`
+            '<conditionalFormatting sqref="' +
+            cu.start +
+            ":" +
+            cu.end +
+            '"><cfRule type="cellIs" dxfId="' +
+            (cu.styleId && typeof cFMapIndex[cu.styleId] != "undefined"
+              ? cFMapIndex[cu.styleId]
+              : 0) +
+            '" priority="' +
+            (cu.priority ? cu.priority : priorityCounter++) +
+            '" operator="' +
+            operatorMap[cu.operator] +
+            '">' +
+            (Array.isArray(cu.value)
+              ? cu.value.reduce((rC, cr) => {
+                  return rC + "<formula>" + cr.value + "</formula>";
+                }, "")
+              : "<formula>" + cu.value + "</formula>") +
+            "</cfRule></conditionalFormatting>"
           );
         } else if (cu.type == "top") {
           return (
             cf +
-            `<conditionalFormatting sqref="${cu.start}:${cu.end}">
-        <cfRule type="${cu.operator ? "aboveAverage" : "top10"}" dxfId="${
-              cu.styleId ? cFMapIndex[cu.styleId] : 0
-            }" priority="${cu.priority ? cu.priority : priorityCounter++}" ${
-              cu.bottom ? 'bottom="1"' : ""
-            } ${cu.percent ? 'percent="1"' : ""}  rank="${cu.value}" ${
-              cu.operator == "belowAverage" ? 'aboveAverage="0"' : ""
-            }/>
-    </conditionalFormatting>`
+            '<conditionalFormatting sqref="' +
+            cu.start +
+            ":" +
+            cu.end +
+            '"><cfRule type="' +
+            (cu.operator ? "aboveAverage" : "top10") +
+            '" dxfId="' +
+            (cu.styleId && typeof cFMapIndex[cu.styleId] != "undefined"
+              ? cFMapIndex[cu.styleId]
+              : 0) +
+            '" priority="' +
+            (cu.priority ? cu.priority : priorityCounter++) +
+            '" ' +
+            (cu.bottom ? 'bottom="1"' : "") +
+            " " +
+            (cu.percent ? 'percent="1"' : "") +
+            '  rank="' +
+            cu.value +
+            '" ' +
+            (cu.operator == "belowAverage" ? 'aboveAverage="0"' : "") +
+            "/></conditionalFormatting>"
           );
         } else if (cu.type == "iconSet") {
-          let percentvalue = "";
+          let percentValue = "";
           if (typeof cu.operator == "undefined") {
             return cf;
           }
           if (cu.operator.indexOf("5") == 0) {
-            percentvalue = `
-                <cfvo type="percent" val="0"/>
-                <cfvo type="percent" val="20"/>
-                <cfvo type="percent" val="40"/>
-                <cfvo type="percent" val="60"/>
-                <cfvo type="percent" val="80"/>`;
+            percentValue =
+              '<cfvo type="percent" val="0"/><cfvo type="percent" val="20"/><cfvo type="percent" val="40"/><cfvo type="percent" val="60"/><cfvo type="percent" val="80"/>';
           } else if (cu.operator.indexOf("4") == 0) {
-            percentvalue = `<cfvo type="percent" val="0"/>
-                <cfvo type="percent" val="25"/>
-                <cfvo type="percent" val="50"/>
-                <cfvo type="percent" val="75"/>`;
+            percentValue =
+              '<cfvo type="percent" val="0"/><cfvo type="percent" val="25"/><cfvo type="percent" val="50"/><cfvo type="percent" val="75"/>';
           } else {
-            percentvalue = `<cfvo type="percent" val="0"/>
-                <cfvo type="percent" val="33"/>
-                <cfvo type="percent" val="67"/>`;
+            percentValue =
+              '<cfvo type="percent" val="0"/><cfvo type="percent" val="33"/><cfvo type="percent" val="67"/>';
           }
           return (
             cf +
-            `<conditionalFormatting sqref="${cu.start}:${cu.end}">
-        <cfRule type="iconSet" priority="${
-          cu.priority ? cu.priority : priorityCounter++
-        }">
-            <iconSet iconSet="${cu.operator}">
-                ${percentvalue}
-            </iconSet>
-        </cfRule>
-    </conditionalFormatting>`
+            '<conditionalFormatting sqref="' +
+            cu.start +
+            ":" +
+            cu.end +
+            '"><cfRule type="iconSet" priority="' +
+            (cu.priority ? cu.priority : priorityCounter++) +
+            '"><iconSet iconSet="' +
+            cu.operator +
+            '">' +
+            percentValue +
+            "</iconSet></cfRule></conditionalFormatting>"
           );
         } else if (cu.type == "colorScale") {
           return (
             cf +
-            `<conditionalFormatting sqref="${cu.start}:${cu.end}">
-        <cfRule type="colorScale" priority="${
-          cu.priority ? cu.priority : priorityCounter++
-        }">
-            <colorScale>
-                <cfvo type="min"/>
-                ${
-                  cu.operator == "percentile"
-                    ? `<cfvo type="percentile" val="${cu.value}"/>`
-                    : ""
-                }
-                <cfvo type="max"/>
-                ${
-                  cu.colors && Array.isArray(cu.colors)
-                    ? cu.colors.reduce((reColors, colorCu) => {
-                        return (
-                          reColors +
-                          `<color rgb="${convertToHex(
-                            colorCu,
-                            isBackend
-                          )}"/>`
-                        );
-                      }, "")
-                    : `<color rgb="FFF8696B"/>
-                <color rgb="FFFFEB84"/>
-                <color rgb="FF63BE7B"/>`
-                }
-            </colorScale>
-        </cfRule>
-    </conditionalFormatting>`
+            '<conditionalFormatting sqref="' +
+            cu.start +
+            ":" +
+            cu.end +
+            '"><cfRule type="colorScale" priority="' +
+            (cu.priority ? cu.priority : priorityCounter++) +
+            '"><colorScale><cfvo type="min"/>' +
+            (cu.operator == "percentile"
+              ? '<cfvo type="percentile" val="' + cu.value + '"/>'
+              : "") +
+            '<cfvo type="max"/>' +
+            (cu.colors && Array.isArray(cu.colors)
+              ? cu.colors.reduce((reColors, colorCu) => {
+                  return (
+                    reColors +
+                    '<color rgb="' +
+                    convertToHex(colorCu, isBackend) +
+                    '"/>'
+                  );
+                }, "")
+              : '<color rgb="FFF8696B"/><color rgb="FFFFEB84"/><color rgb="FF63BE7B"/>') +
+            "</colorScale></cfRule></conditionalFormatting>"
           );
         } else if (cu.type == "dataBar") {
           return (
             cf +
-            `<conditionalFormatting sqref="${cu.start}:${cu.end}">
-        <cfRule type="dataBar" priority="${
-          cu.priority ? cu.priority : priorityCounter++
-        }">
-            <dataBar>
-                <cfvo type="min"/>
-                <cfvo type="max"/>
-                ${
-                  cu.colors && Array.isArray(cu.colors)
-                    ? cu.colors.reduce((reColors, colorCu) => {
-                        return (
-                          reColors +
-                          `<color rgb="${convertToHex(
-                            colorCu,
-                            isBackend
-                          )}"/>`
-                        );
-                      }, "")
-                    : `<color rgb="FF638EC6"/>`
-                }
-            </dataBar>
-        </cfRule>
-    </conditionalFormatting>`
+            '<conditionalFormatting sqref="' +
+            cu.start +
+            ":" +
+            cu.end +
+            '"><cfRule type="dataBar" priority="' +
+            (cu.priority ? cu.priority : priorityCounter++) +
+            '"><dataBar><cfvo type="min"/><cfvo type="max"/>' +
+            (cu.colors && Array.isArray(cu.colors)
+              ? cu.colors.reduce((reColors, colorCu) => {
+                  return (
+                    reColors +
+                    '<color rgb="' +
+                    convertToHex(colorCu, isBackend) +
+                    '"/>'
+                  );
+                }, "")
+              : '<color rgb="FF638EC6"/>') +
+            "</dataBar></cfRule></conditionalFormatting>"
           );
         } else {
           return cf;
@@ -1732,7 +2199,7 @@ export async function generateExcel(data: ExcelTable) {
     }
     if ((hasCheckbox || hasComment || hasImages) && xl_drawingsFolder == null) {
       xl_drawingsFolder = xlFolder?.folder("drawings");
-    } 
+    }
     if (hasImages && xl_drawings_relsFolder == null) {
       xl_drawings_relsFolder = xl_drawingsFolder?.folder("_rels");
     }
@@ -1740,10 +2207,19 @@ export async function generateExcel(data: ExcelTable) {
       indexId: indexId + 1,
       key: "sheet" + (index + 1),
       sheetName: shName,
+      sheetDataTableColumns,
+      backgroundImageRef,
+      sheetDimensions,
+      asTable: asTable ? asTable : false,
       sheetDataString,
+      sheetBreakLine,
+      viewType,
       hasComment,
       drawersContent,
       cFDataString,
+      sheetMargin,
+      sheetHeaderFooter,
+      isPortrait,
       drawersRels,
       hasImages,
       hasCheckbox,
@@ -1755,6 +2231,8 @@ export async function generateExcel(data: ExcelTable) {
       commentString,
       commentAuthor,
       shapeCommentRowCol,
+      splitOption,
+      sheetViewProperties,
       sheetSizeString:
         sheetSizeString.length > 0
           ? "<cols>" + sheetSizeString + "</cols>"
@@ -1778,14 +2256,13 @@ export async function generateExcel(data: ExcelTable) {
             }, '<mergeCells count="' + mergesCellArray.length + '">') +
             " </mergeCells>"
           : "",
-      selectedView: sheetData.selected
-        ? "<sheetViews>" +
-          '<sheetView tabSelected="1" workbookViewId="0">' +
-          '<selection activeCell="A0" sqref="A0" />' +
-          "</sheetView>" +
-          "</sheetViews>"
-        : "<sheetViews>" + '<sheetView workbookViewId="0" />' + "</sheetViews>",
-
+      selectedView: !!sheetData.selected,
+      // ? "<sheetViews>" +
+      //   '<sheetView tabSelected="1" workbookViewId="0">' +
+      //   '<selection activeCell="A0" sqref="A0" />' +
+      //   "</sheetView>" +
+      //   "</sheetViews>"
+      // : "<sheetViews>" + '<sheetView workbookViewId="0" />' + "</sheetViews>"
       sheetSortFilter,
       tabColor: sheetData.tabColor
         ? '<sheetPr codeName="' +
@@ -1932,17 +2409,60 @@ export async function generateExcel(data: ExcelTable) {
   xl_themeFolder?.file(
     "theme1.xml",
     '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
-      '<a:theme xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"  name="Office Theme"><a:themeElements><a:clrScheme name="Office"><a:dk1><a:sysClr val="windowText" lastClr="000000"/></a:dk1><a:lt1><a:sysClr val="window" lastClr="FFFFFF"/></a:lt1><a:dk2><a:srgbClr val="44546A"/></a:dk2><a:lt2><a:srgbClr val="E7E6E6"/></a:lt2><a:accent1><a:srgbClr val="5B9BD5"/></a:accent1><a:accent2><a:srgbClr val="ED7D31"/></a:accent2><a:accent3><a:srgbClr val="A5A5A5"/></a:accent3><a:accent4><a:srgbClr val="FFC000"/></a:accent4><a:accent5><a:srgbClr val="4472C4"/></a:accent5><a:accent6><a:srgbClr val="70AD47"/></a:accent6><a:hlink><a:srgbClr val="0563C1"/></a:hlink><a:folHlink><a:srgbClr val="954F72"/></a:folHlink></a:clrScheme><a:fontScheme name="Office"><a:majorFont><a:latin typeface="Calibri Light" panose="020F0302020204030204"/><a:ea typeface=""/><a:cs typeface=""/><a:font script="Jpan" typeface="游ゴシック Light"/><a:font script="Hang" typeface="맑은 고딕"/><a:font script="Hans" typeface="等线 Light"/><a:font script="Hant" typeface="新細明體"/><a:font script="Arab" typeface="Times New Roman"/><a:font script="Hebr" typeface="Times New Roman"/><a:font script="Thai" typeface="Tahoma"/><a:font script="Ethi" typeface="Nyala"/><a:font script="Beng" typeface="Vrinda"/><a:font script="Gujr" typeface="Shruti"/><a:font script="Khmr" typeface="MoolBoran"/><a:font script="Knda" typeface="Tunga"/><a:font script="Guru" typeface="Raavi"/><a:font script="Cans" typeface="Euphemia"/><a:font script="Cher" typeface="Plantagenet Cherokee"/><a:font script="Yiii" typeface="Microsoft Yi Baiti"/><a:font script="Tibt" typeface="Microsoft Himalaya"/><a:font script="Thaa" typeface="MV Boli"/><a:font script="Deva" typeface="Mangal"/><a:font script="Telu" typeface="Gautami"/><a:font script="Taml" typeface="Latha"/><a:font script="Syrc" typeface="Estrangelo Edessa"/><a:font script="Orya" typeface="Kalinga"/><a:font script="Mlym" typeface="Kartika"/><a:font script="Laoo" typeface="DokChampa"/><a:font script="Sinh" typeface="Iskoola Pota"/><a:font script="Mong" typeface="Mongolian Baiti"/><a:font script="Viet" typeface="Times New Roman"/><a:font script="Uigh" typeface="Microsoft Uighur"/><a:font script="Geor" typeface="Sylfaen"/></a:majorFont><a:minorFont><a:latin typeface="Calibri" panose="020F0502020204030204"/><a:ea typeface=""/><a:cs typeface=""/><a:font script="Jpan" typeface="游ゴシック"/><a:font script="Hang" typeface="맑은 고딕"/><a:font script="Hans" typeface="等线"/><a:font script="Hant" typeface="新細明體"/><a:font script="Arab" typeface="Arial"/><a:font script="Hebr" typeface="Arial"/><a:font script="Thai" typeface="Tahoma"/><a:font script="Ethi" typeface="Nyala"/><a:font script="Beng" typeface="Vrinda"/><a:font script="Gujr" typeface="Shruti"/><a:font script="Khmr" typeface="DaunPenh"/><a:font script="Knda" typeface="Tunga"/><a:font script="Guru" typeface="Raavi"/><a:font script="Cans" typeface="Euphemia"/><a:font script="Cher" typeface="Plantagenet Cherokee"/><a:font script="Yiii" typeface="Microsoft Yi Baiti"/><a:font script="Tibt" typeface="Microsoft Himalaya"/><a:font script="Thaa" typeface="MV Boli"/><a:font script="Deva" typeface="Mangal"/><a:font script="Telu" typeface="Gautami"/><a:font script="Taml" typeface="Latha"/><a:font script="Syrc" typeface="Estrangelo Edessa"/><a:font script="Orya" typeface="Kalinga"/><a:font script="Mlym" typeface="Kartika"/><a:font script="Laoo" typeface="DokChampa"/><a:font script="Sinh" typeface="Iskoola Pota"/><a:font script="Mong" typeface="Mongolian Baiti"/><a:font script="Viet" typeface="Arial"/><a:font script="Uigh" typeface="Microsoft Uighur"/><a:font script="Geor" typeface="Sylfaen"/></a:minorFont></a:fontScheme><a:fmtScheme name="Office"><a:fillStyleLst><a:solidFill><a:schemeClr val="phClr"/></a:solidFill><a:gradFill rotWithShape="1"><a:gsLst><a:gs pos="0"><a:schemeClr val="phClr"><a:lumMod val="110000"/><a:satMod val="105000"/><a:tint val="67000"/></a:schemeClr></a:gs><a:gs pos="50000"><a:schemeClr val="phClr"><a:lumMod val="105000"/><a:satMod val="103000"/><a:tint val="73000"/></a:schemeClr></a:gs><a:gs pos="100000"><a:schemeClr val="phClr"><a:lumMod val="105000"/><a:satMod val="109000"/><a:tint val="81000"/></a:schemeClr></a:gs></a:gsLst><a:lin ang="5400000" scaled="0"/></a:gradFill><a:gradFill rotWithShape="1"><a:gsLst><a:gs pos="0"><a:schemeClr val="phClr"><a:satMod val="103000"/><a:lumMod val="102000"/><a:tint val="94000"/></a:schemeClr></a:gs><a:gs pos="50000"><a:schemeClr val="phClr"><a:satMod val="110000"/><a:lumMod val="100000"/><a:shade val="100000"/></a:schemeClr></a:gs><a:gs pos="100000"><a:schemeClr val="phClr"><a:lumMod val="99000"/><a:satMod val="120000"/><a:shade val="78000"/></a:schemeClr></a:gs></a:gsLst><a:lin ang="5400000" scaled="0"/></a:gradFill></a:fillStyleLst><a:lnStyleLst><a:ln w="6350" cap="flat" cmpd="sng" algn="ctr"><a:solidFill><a:schemeClr val="phClr"/></a:solidFill><a:prstDash val="solid"/><a:miter lim="800000"/></a:ln><a:ln w="12700" cap="flat" cmpd="sng" algn="ctr"><a:solidFill><a:schemeClr val="phClr"/></a:solidFill><a:prstDash val="solid"/><a:miter lim="800000"/></a:ln><a:ln w="19050" cap="flat" cmpd="sng" algn="ctr"><a:solidFill><a:schemeClr val="phClr"/></a:solidFill><a:prstDash val="solid"/><a:miter lim="800000"/></a:ln></a:lnStyleLst><a:effectStyleLst><a:effectStyle><a:effectLst/></a:effectStyle><a:effectStyle><a:effectLst/></a:effectStyle><a:effectStyle><a:effectLst><a:outerShdw blurRad="57150" dist="19050" dir="5400000" algn="ctr" rotWithShape="0"><a:srgbClr val="000000"><a:alpha val="63000"/></a:srgbClr></a:outerShdw></a:effectLst></a:effectStyle></a:effectStyleLst><a:bgFillStyleLst><a:solidFill><a:schemeClr val="phClr"/></a:solidFill><a:solidFill><a:schemeClr val="phClr"><a:tint val="95000"/><a:satMod val="170000"/></a:schemeClr></a:solidFill><a:gradFill rotWithShape="1"><a:gsLst><a:gs pos="0"><a:schemeClr val="phClr"><a:tint val="93000"/><a:satMod val="150000"/><a:shade val="98000"/><a:lumMod val="102000"/></a:schemeClr></a:gs><a:gs pos="50000"><a:schemeClr val="phClr"><a:tint val="98000"/><a:satMod val="130000"/><a:shade val="90000"/><a:lumMod val="103000"/></a:schemeClr></a:gs><a:gs pos="100000"><a:schemeClr val="phClr"><a:shade val="63000"/><a:satMod val="120000"/></a:schemeClr></a:gs></a:gsLst><a:lin ang="5400000" scaled="0"/></a:gradFill></a:bgFillStyleLst></a:fmtScheme></a:themeElements><a:objectDefaults/><a:extraClrSchemeLst/><a:extLst><a:ext uri="{05A4C25C-085E-4340-85A3-A5531E510DB2}"><thm15:themeFamily xmlns:thm15="http://schemas.microsoft.com/office/thememl/2012/main" name="Office Theme" id="{62F939B6-93AF-4DB8-9C6B-D6C7DFDC589F}" vid="{4A3C46E8-61CC-4603-A589-7422A47A8E4A}"/></a:ext></a:extLst></a:theme>'
+      '<a:theme xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"  name="Office Theme"><a:themeElements><a:clrScheme name="Office"><a:dk1><a:sysClr val="windowText" lastClr="000000"/></a:dk1><a:lt1><a:sysClr val="window" lastClr="FFFFFF"/></a:lt1><a:dk2><a:srgbClr val="44546A"/></a:dk2><a:lt2><a:srgbClr val="E7E6E6"/></a:lt2><a:accent1><a:srgbClr val="5B9BD5"/></a:accent1><a:accent2><a:srgbClr val="ED7D31"/></a:accent2><a:accent3><a:srgbClr val="A5A5A5"/></a:accent3><a:accent4><a:srgbClr val="FFC000"/></a:accent4><a:accent5><a:srgbClr val="4472C4"/></a:accent5><a:accent6><a:srgbClr val="70AD47"/></a:accent6><a:hlink><a:srgbClr val="0563C1"/></a:hlink><a:folHlink><a:srgbClr val="954F72"/></a:folHlink></a:clrScheme><a:fontScheme name="Office"><a:majorFont><a:latin typeface="Calibri Light" panose="020F0302020204030204"/><a:ea typeface=""/><a:cs typeface=""/><a:font script="Jpan" typeface="游ゴシック Light"/><a:font script="Hang" typeface="맑은 고딕"/><a:font script="Hans" typeface="等线 Light"/><a:font script="Hant" typeface="新細明體"/><a:font script="Arab" typeface="Times New Roman"/><a:font script="Hebr" typeface="Times New Roman"/><a:font script="Thai" typeface="Tahoma"/><a:font script="Ethi" typeface="Nyala"/><a:font script="Beng" typeface="Vrinda"/><a:font script="Gujr" typeface="Shruti"/><a:font script="Khmr" typeface="MoolBoran"/><a:font script="Knda" typeface="Tunga"/><a:font script="Guru" typeface="Raavi"/><a:font script="Cans" typeface="Euphemia"/><a:font script="Cher" typeface="Plantagenet Cherokee"/><a:font script="Yiii" typeface="Microsoft Yi Baiti"/><a:font script="Tibt" typeface="Microsoft Himalaya"/><a:font script="Thaa" typeface="MV Boli"/><a:font script="Deva" typeface="Mangal"/><a:font script="Telu" typeface="Gautami"/><a:font script="Taml" typeface="Latha"/><a:font script="Syrc" typeface="Estrangelo Edessa"/><a:font script="Orya" typeface="Kalinga"/><a:font script="Mlym" typeface="Kartika"/><a:font script="Laoo" typeface="DokChampa"/><a:font script="Sinh" typeface="Iskoola Pota"/><a:font script="Mong" typeface="Mongolian Baiti"/><a:font script="Viet" typeface="Times New Roman"/><a:font script="Uigh" typeface="Microsoft Uighur"/><a:font script="Geor" typeface="Sylfaen"/></a:majorFont><a:minorFont><a:latin typeface="Calibri" panose="020F0502020204030204"/><a:ea typeface=""/><a:cs typeface=""/><a:font script="Jpan" typeface="游ゴシック"/><a:font script="Hang" typeface="맑은 고딕"/><a:font script="Hans" typeface="等线"/><a:font script="Hant" typeface="新細明體"/><a:font script="Arab" typeface="Arial"/><a:font script="Hebr" typeface="Arial"/><a:font script="Thai" typeface="Tahoma"/><a:font script="Ethi" typeface="Nyala"/><a:font script="Beng" typeface="Vrinda"/><a:font script="Gujr" typeface="Shruti"/><a:font script="Khmr" typeface="DaunPenh"/><a:font script="Knda" typeface="Tunga"/><a:font script="Guru" typeface="Raavi"/><a:font script="Cans" typeface="Euphemia"/><a:font script="Cher" typeface="Plantagenet Cherokee"/><a:font script="Yiii" typeface="Microsoft Yi Baiti"/><a:font script="Tibt" typeface="Microsoft Himalaya"/><a:font script="Thaa" typeface="MV Boli"/><a:font script="Deva" typeface="Mangal"/><a:font script="Telu" typeface="Gautami"/><a:font script="Taml" typeface="Latha"/><a:font script="Syrc" typeface="Estrangelo Edessa"/><a:font script="Orya" typeface="Kalinga"/><a:font script="Mlym" typeface="Kartika"/><a:font script="Laoo" typeface="DokChampa"/><a:font script="Sinh" typeface="Iskoola Pota"/><a:font script="Mong" typeface="Mongolian Baiti"/><a:font script="Viet" typeface="Arial"/><a:font script="Uigh" typeface="Microsoft Uighur"/><a:font script="Geor" typeface="Sylfaen"/></a:minorFont></a:fontScheme><a:fmtScheme name="Office"><a:fillStyleLst><a:solidFill><a:schemeClr val="phClr"/></a:solidFill><a:gradFill rotWithShape="1"><a:gsLst><a:gs pos="0"><a:schemeClr val="phClr"><a:lumMod val="110000"/><a:satMod val="105000"/><a:tint val="67000"/></a:schemeClr></a:gs><a:gs pos="50000"><a:schemeClr val="phClr"><a:lumMod val="105000"/><a:satMod val="103000"/><a:tint val="73000"/></a:schemeClr></a:gs><a:gs pos="100000"><a:schemeClr val="phClr"><a:lumMod val="105000"/><a:satMod val="109000"/><a:tint val="81000"/></a:schemeClr></a:gs></a:gsLst><a:lin ang="5400000" scaled="0"/></a:gradFill><a:gradFill rotWithShape="1"><a:gsLst><a:gs pos="0"><a:schemeClr val="phClr"><a:satMod val="103000"/><a:lumMod val="102000"/><a:tint val="94000"/></a:schemeClr></a:gs><a:gs pos="50000"><a:schemeClr val="phClr"><a:satMod val="110000"/><a:lumMod val="100000"/><a:shade val="100000"/></a:schemeClr></a:gs><a:gs pos="100000"><a:schemeClr val="phClr"><a:lumMod val="99000"/><a:satMod val="120000"/><a:shade val="78000"/></a:schemeClr></a:gs></a:gsLst><a:lin ang="5400000" scaled="0"/></a:gradFill></a:fillStyleLst><a:lnStyleLst><a:ln w="6350" cap="flat" cmpd="sng" algn="ctr"><a:solidFill><a:schemeClr val="phClr"/></a:solidFill><a:prstDash val="solid"/><a:miter lim="800000"/></a:ln><a:ln w="12700" cap="flat" cmpd="sng" algn="ctr"><a:solidFill><a:schemeClr val="phClr"/></a:solidFill><a:prstDash val="solid"/><a:miter lim="800000"/></a:ln><a:ln w="19050" cap="flat" cmpd="sng" algn="ctr"><a:solidFill><a:schemeClr val="phClr"/></a:solidFill><a:prstDash val="solid"/><a:miter lim="800000"/></a:ln></a:lnStyleLst><a:effectStyleLst><a:effectStyle><a:effectLst/></a:effectStyle><a:effectStyle><a:effectLst/></a:effectStyle><a:effectStyle><a:effectLst><a:outerShdw blurRad="57150" dist="19050" dir="5400000" algn="ctr" rotWithShape="0"><a:srgbClr val="000000"><a:alpha val="63000"/></a:srgbClr></a:outerShdw></a:effectLst></a:effectStyle></a:effectStyleLst><a:bgFillStyleLst><a:solidFill><a:schemeClr val="phClr"/></a:solidFill><a:solidFill><a:schemeClr val="phClr"><a:tint val="95000"/><a:satMod val="170000"/></a:schemeClr></a:solidFill><a:gradFill rotWithShape="1"><a:gsLst><a:gs pos="0"><a:schemeClr val="phClr"><a:tint val="93000"/><a:satMod val="150000"/><a:shade val="98000"/><a:lumMod val="102000"/></a:schemeClr></a:gs><a:gs pos="50000"><a:schemeClr val="phClr"><a:tint val="98000"/><a:satMod val="130000"/><a:shade val="90000"/><a:lumMod val="103000"/></a:schemeClr></a:gs><a:gs pos="100000"><a:schemeClr val="phClr"><a:shade val="63000"/><a:satMod val="120000"/></a:schemeClr></a:gs></a:gsLst><a:lin ang="5400000" scaled="0"/></a:gradFill></a:bgFillStyleLst></a:fmtScheme></a:themeElements><a:objectDefaults/><a:extraClrSchemeLst/></a:theme>'
   );
 
   // xl/worksheets
   let xl_worksheetsFolder = xlFolder?.folder("worksheets");
   let commentId: number[] = [];
 
+  let tableRef: string[] = [];
   let sheetDrawers: string[] = [];
   sheetKeys.forEach((k, iCo) => {
     const sh = mapData[k];
     let sheetRelContentStr = "";
+    const sheetDataTableColumns = <string>sh.sheetDataTableColumns;
+    if (sheetDataTableColumns.length > 0) {
+      tableRef.push("table" + (iCo + 1) + ".xml");
+      const asTableOption: AsTableOption = <AsTableOption>sh.asTable;
+      const dimensions = <{ start: string; end: string }>sh.sheetDimensions;
+      xl_tableFolder?.file(
+        "table" + (iCo + 1) + ".xml",
+        '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
+          '<table xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="xr xr3" xmlns:xr="http://schemas.microsoft.com/office/spreadsheetml/2014/revision" xmlns:xr3="http://schemas.microsoft.com/office/spreadsheetml/2016/revision3" id="' +
+          (iCo + 1) +
+          '"  name="Table' +
+          (iCo + 1) +
+          '" displayName="Table' +
+          (iCo + 1) +
+          '" ref="' +
+          dimensions.start +
+          ":" +
+          dimensions.end +
+          '" totalsRowShown="0"><autoFilter ref="' +
+          dimensions.start +
+          ":" +
+          dimensions.end +
+          '"/>' +
+          sheetDataTableColumns +
+          '<tableStyleInfo name="TableStyle' +
+          (asTableOption.type ? asTableOption.type : "Medium") +
+          (asTableOption.styleNumber ? asTableOption.styleNumber : 2) +
+          '" showFirstColumn="' +
+          (asTableOption.firstColumn ? asTableOption.firstColumn : "0") +
+          '" showLastColumn="' +
+          (asTableOption.lastColumn ? asTableOption.lastColumn : "0") +
+          '" showRowStripes="' +
+          (asTableOption.rowStripes ? asTableOption.rowStripes : "1") +
+          '" showColumnStripes="' +
+          (asTableOption.columnStripes ? asTableOption.columnStripes : "0") +
+          '"/></table>'
+      );
+      sheetRelContentStr +=
+        '<Relationship Id="rId15" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/table" Target="../tables/table' +
+        (iCo + 1) +
+        '.xml"/>';
+    }
     if (sh.hasImages) {
       const drawerName = "drawing" + (sheetDrawers.length + 1) + ".xml";
       sheetDrawers.push(drawerName);
@@ -1974,7 +2494,7 @@ export async function generateExcel(data: ExcelTable) {
         drawerName +
         '" />';
     } else if (sh.hasCheckbox) {
-      const drawerName = `drawing${sheetDrawers.length + 1}.xml`;
+      const drawerName = "drawing" + (sheetDrawers.length + 1) + ".xml";
       sheetDrawers.push(drawerName);
       xl_drawingsFolder?.file(
         drawerName,
@@ -2090,7 +2610,18 @@ ${sh.checkboxDrawingContent}
           "</xml>"
       );
     }
-    if (sh.hasImages || sh.hasComment || sh.hasCheckbox) {
+    if (<number>sh.backgroundImageRef > 0) {
+      sheetRelContentStr +=
+        '<Relationship Id="rId16" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/image' +
+        sh.backgroundImageRef +
+        '.png"/>';
+    }
+    if (
+      sh.hasImages ||
+      sh.hasComment ||
+      sh.hasCheckbox ||
+      sheetDataTableColumns.length > 0
+    ) {
       const xl_worksheets_relsFolder = xl_worksheetsFolder?.folder("_rels");
       xl_worksheets_relsFolder?.file(
         "sheet" + (iCo + 1) + ".xml.rels",
@@ -2099,6 +2630,27 @@ ${sh.checkboxDrawingContent}
           sheetRelContentStr +
           "</Relationships>"
       );
+    }
+    let sheetViews = "";
+    if (sh.selectedView || sh.splitOption) {
+      sheetViews =
+        '<sheetViews><sheetView tabSelected="1"' +
+        sh.sheetViewProperties +
+        ((<string>sh.viewType).length > 0
+          ? ' view="' + sh.viewType + '"'
+          : "") +
+        ' workbookViewId="0">' +
+        sh.splitOption +
+        (sh.selectedView ? '<selection activeCell="A0" sqref="A0" />' : "") +
+        "</sheetView></sheetViews>";
+    } else {
+      sheetViews =
+        '<sheetViews><sheetView workbookViewId="0"' +
+        sh.sheetViewProperties +
+        ((<string>sh.viewType).length > 0
+          ? ' view="' + sh.viewType + '"'
+          : "") +
+        "/></sheetViews>";
     }
     xl_worksheetsFolder?.file(
       sh.key + ".xml",
@@ -2117,7 +2669,7 @@ ${sh.checkboxDrawingContent}
         ' xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac"' +
         ' xmlns:xm="http://schemas.microsoft.com/office/excel/2006/main">' +
         sh.tabColor +
-        sh.selectedView +
+        sheetViews +
         '<sheetFormatPr customHeight="1" defaultColWidth="12.63" defaultRowHeight="15.75" />' +
         sh.sheetSizeString +
         "<sheetData>" +
@@ -2140,6 +2692,16 @@ ${sh.checkboxDrawingContent}
  </mc:Choice>
 </mc:AlternateContent>`
           : "") +
+        sh.sheetMargin +
+        (sh.isPortrait || (<string>sh.sheetBreakLine).length > 0
+          ? '<pageSetup orientation="portrait" r:id="rId' + (iCo + 1) + '"/>'
+          : "") +
+        sh.sheetBreakLine +
+        sh.sheetHeaderFooter +
+        (<number>sh.backgroundImageRef > 0 ? '<picture r:id="rId16"/>' : "") +
+        (sheetDataTableColumns.length > 0
+          ? '<tableParts count="1"> <tablePart r:id="rId15"/></tableParts>'
+          : "") +
         "</worksheet>"
     );
   });
@@ -2158,7 +2720,8 @@ ${sh.checkboxDrawingContent}
       [...new Set(arrTypes)],
       sheetDrawers,
       checkboxForm,
-      needCalcChain
+      needCalcChain,
+      tableRef
     )
   );
   if (isBackend) {

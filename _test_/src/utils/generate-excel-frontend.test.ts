@@ -474,7 +474,6 @@ describe("generateExcel data tests", () => {
   //      let result: ResponseApi = <ResponseApi>(
   //        await readGeneratedFile(res, true)
   //      );
-  //      console.log(result.fileList);
   //      expect(result.fileList).toEqual([
   //        "xl/",
   //        "xl/styles.xml",
@@ -541,7 +540,6 @@ describe("generateExcel data tests", () => {
   //      let result: ResponseApi = <ResponseApi>(
   //        await readGeneratedFile(res, true)
   //      );
-  //      console.log(result.fileList);
   //      expect(result.fileList).toEqual([
   //        "xl/",
   //        "xl/styles.xml",

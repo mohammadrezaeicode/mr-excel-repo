@@ -1,9 +1,9 @@
 import {
-  CustomFormulaSetting,
-  FormulaSetting,
-  NoArgFormulaSetting,
-  SingleRefFormulaSetting,
-  Styles,
+ type CustomFormulaSetting,
+ type FormulaSetting,
+ type NoArgFormulaSetting,
+ type SingleRefFormulaSetting,
+ type Styles,
 } from "../data-model/excel-table";
 
 export function generateCellRowCol(

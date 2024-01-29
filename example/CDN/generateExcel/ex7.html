@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example 7</title>
+    <style>
+        body {
+            background: #222831;
+            color: #F6F6F6;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        button {
+            border: none;
+            padding: 5px;
+            border-radius: 4px;
+            background: #F6F6F6;
+        }
+
+        .link-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 5px;
+
+            color: #F6F6F6;
+        }
+
+        .link-container a {
+            color: #F6F6F6;
+        }
+    </style>
+</head>
+
+<body>
+    <p>For generate Excel please click the below button</p>
+    <button onclick="generateExcel()">Generate Excel</button>
+    <div class="link-container">Links: <a href="https://colorhunt.co/palette/fcd1d1ece2e1d3e0dcaee1e1">Color</a>
+        <p> | </p><a
+            href="https://github.com/mohammadrezaeicode/mr-excel-page-repo/blob/main/public/img/ex7.PNG?raw=true">Result</a>
+    </div>
+    <script src="../../../dist/excel-table.umd.js"></script>
+    <script>
+        const colorPalette = {
+            c4: 'FCD1D1',
+            c2: 'AEE1E1'
+        }
+        const rowStyle = {
+            backgroundColor: colorPalette.c2,
+            fontFamily: 'Times New Roman',
+            color: '112D4E',
+            alignment: {
+                horizontal: 'left',
+                vertical: 'top'
+            }
+        }
+        const headerStyle = {
+            backgroundColor: colorPalette.c4,
+            fontFamily: 'Times New Roman',
+            color: '112D4E'
+        }
+        const data = {
+            creator: 'mr',
+            styles: {
+                rowStyle: {
+                    ...rowStyle
+                },
+                headerStyle: {
+                    ...headerStyle
+                }
+            },
+            sheet: [
+                {
+                    styleCellCondition(data, fullData, rowIndex, colIndex, fromHeader) {
+                        if (fromHeader) {
+                            return 'headerStyle'
+                        } else {
+                            return 'rowStyle'
+                        }
+                    },
+                    headers: [
+                        { label: 'ID', text: 'ID' },
+                        { label: 'Name', text: 'Name' },
+                        { label: 'Column 1', text: 'Column 1' },
+                        { label: 'Column 2', text: 'Column 2' },
+                        { label: 'Column 3', text: 'Column 3' },
+                        { label: 'Column 4', text: 'Column 4' },
+                        { label: 'Column 5', text: 'Column 5' }
+                    ],
+                    data: [
+                        {
+                            ID: 1,
+                            Name: 'Category A',
+                            'Column 1': 10,
+                            'Column 2': 20,
+                            'Column 3': 30,
+                            'Column 4': 40,
+                            'Column 5': 50,
+                            outlineLevel: 1
+                        },
+                        {
+                            ID: 2,
+                            Name: 'Item 1',
+                            'Column 1': 5,
+                            'Column 2': 10,
+                            'Column 3': 15,
+                            'Column 4': 20,
+                            'Column 5': 25,
+                            outlineLevel: 2
+                        },
+                        {
+                            ID: 3,
+                            Name: 'Item 2',
+                            'Column 1': 3,
+                            'Column 2': 6,
+                            'Column 3': 9,
+                            'Column 4': 12,
+                            'Column 5': 15,
+                            outlineLevel: 2
+                        },
+                        {
+                            ID: 4,
+                            Name: 'Item 3',
+                            'Column 1': 2,
+                            'Column 2': 4,
+                            'Column 3': 6,
+                            'Column 4': 8,
+                            'Column 5': 10,
+                            outlineLevel: 2
+                        },
+                        {
+                            ID: 5,
+                            Name: 'Category B',
+                            'Column 1': 20,
+                            'Column 2': 40,
+                            'Column 3': 60,
+                            'Column 4': 80,
+                            'Column 5': 100,
+                            outlineLevel: 1
+                        },
+                        {
+                            ID: 6,
+                            Name: 'Item 1',
+                            'Column 1': 10,
+                            'Column 2': 20,
+                            'Column 3': 30,
+                            'Column 4': 40,
+                            'Column 5': 50,
+                            hidden: 1,
+                            outlineLevel: 2
+                        },
+                        {
+                            ID: 7,
+                            Name: 'Item 2',
+                            'Column 1': 6,
+                            'Column 2': 12,
+                            'Column 3': 18,
+                            'Column 4': 24,
+                            'Column 5': 30,
+                            hidden: 1,
+                            outlineLevel: 2
+                        },
+                        {
+                            ID: 8,
+                            Name: 'Item 3',
+                            'Column 1': 4,
+                            'Column 2': 8,
+                            'Column 3': 12,
+                            'Column 4': 16,
+                            'Column 5': 20,
+                            hidden: 1,
+                            outlineLevel: 2
+                        },
+                        {
+                            ID: 9,
+                            Name: 'Category C',
+                            'Column 1': 30,
+                            'Column 2': 60,
+                            'Column 3': 90,
+                            'Column 4': 120,
+                            'Column 5': 150,
+                            outlineLevel: 1
+                        },
+                        {
+                            ID: 10,
+                            Name: 'Item 1',
+                            'Column 1': 15,
+                            'Column 2': 30,
+                            'Column 3': 45,
+                            'Column 4': 60,
+                            'Column 5': 75,
+                            outlineLevel: 2
+                        },
+                        {
+                            ID: 11,
+                            Name: 'Item 2',
+                            'Column 1': 9,
+                            'Column 2': 18,
+                            'Column 3': 27,
+                            'Column 4': 36,
+                            'Column 5': 45,
+                            outlineLevel: 2
+                        },
+                        {
+                            ID: 12,
+                            Name: 'Item 3',
+                            'Column 1': 6,
+                            'Column 2': 12,
+                            'Column 3': 18,
+                            'Column 4': 24,
+                            'Column 5': 30,
+                            outlineLevel: 2
+                        },
+                        {
+                            ID: 13,
+                            Name: 'Summary',
+                            'Column 1': 60,
+                            'Column 2': 120,
+                            'Column 3': 180,
+                            'Column 4': 240,
+                            'Column 5': 300,
+                            outlineLevel: 3
+                        }
+                    ]
+                }
+            ]
+        }
+
+
+        function generateExcel() {
+            ExcelTable.generateExcel(data);
+        }
+
+    </script>
+</body>
+
+</html>

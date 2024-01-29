@@ -13,7 +13,6 @@ export interface ExcelTableOption {
   modified?: string;
   numberOfColumn?: number;
   createType?: string;
-  mapSheetDataOption?: any;
   styles?: Styles;
 }
 
@@ -23,12 +22,19 @@ export interface Sheet extends SheetOption {
 }
 export interface SheetOption {
   withoutHeader?: boolean;
+  mapSheetDataOption?: {
+    outlineLevel?: string;
+    hidden?: string;
+    height?: string;
+  };
+  backgroundImage?: string;
   conditionalFormatting?: ConditionalFormatting[];
   multiStyleCondition?: MultiStyleConditionFunction;
   useSplitBaseOnMatch?: boolean;
   convertStringToNumber?: boolean;
   images?: ImageTypes[];
   formula?: Formula;
+  pageOption?: PageOption;
   name?: string;
   title?: Title;
   shiftTop?: number;
@@ -42,10 +48,86 @@ export interface SheetOption {
   commentCondition?: CommentConditionFunction;
   sortAndFilter?: SortAndFilter;
   state?: "hidden" | "visible";
-  headerRowOption?: any;
+  headerRowOption?: object;
   protectionOption?: ProtectionOption;
   headerHeight?: number;
   checkbox?: Checkbox[];
+  viewOption?: ViewOption;
+  rtl?: boolean;
+  pageBreak?: PageBreak;
+  asTable?: AsTableOption;
+}
+export interface AsTableOption {
+  type?: "Light" | "Medium" | "Dark";
+  styleNumber?: number;
+  firstColumn?: boolean;
+  lastColumn?: boolean;
+  rowStripes?: boolean;
+  columnStripes?: boolean;
+}
+export interface PageBreak {
+  row?: number[];
+  column?: number[];
+}
+export interface ViewStart {
+  t?: string;
+  b?: string;
+  r?: string;
+  l?: string;
+  one?: string;
+  two?: string;
+}
+export interface ViewOption {
+  type?: "pageLayout" | "pageBreakPreview";
+  hideGrid?: boolean;
+  hideHeadlines?: boolean;
+  hideRuler?: boolean;
+  frozenOption?: {
+    type: "ROW" | "COLUMN" | "BOTH" | "R" | "C" | "B";
+    index:
+      | number
+      | {
+          r: number;
+          c: number;
+        };
+  };
+  splitOption?: {
+    type: "VERTICAL" | "HORIZONTAL" | "BOTH" | "V" | "H" | "B";
+    startAt?: ViewStart;
+    split:
+      | number
+      | {
+          x: number;
+          y: number;
+        };
+  };
+}
+export interface HeaderFooterOption {
+  text?: string;
+  styleId?: string;
+}
+export interface HeaderFooterLocationMap {
+  l?: HeaderFooterOption;
+  c?: HeaderFooterOption;
+  r?: HeaderFooterOption;
+}
+export interface HeaderFooterTypes {
+  odd?: HeaderFooterLocationMap;
+  even?: HeaderFooterLocationMap;
+  first?: HeaderFooterLocationMap;
+}
+export interface PageOption {
+  margin?: {
+    left?: number;
+    right?: number;
+    top?: number;
+    bottom?: number;
+    header?: number;
+    footer?: number;
+  };
+  header?: HeaderFooterTypes;
+  footer?: HeaderFooterTypes;
+  isPortrait: boolean;
 }
 export interface Header {
   label: string;
@@ -53,15 +135,16 @@ export interface Header {
   size?: number;
   multiStyleValue?: MultiStyleValue;
   comment?: Comment | string;
-  conditionalFormatting?: ConditionalFormatting;
+  conditionalFormatting?: ConditionalFormattingOption;
   formula?: {
     type: FormulaType;
     styleId?: string;
   };
 }
+export type StyleType = "conditionalFormatting" | "CF" | "headerFooter" | "HF";
 export interface StyleBody {
   fontFamily?: string;
-  type?: string;
+  type?: StyleType;
   size?: number;
   index?: number;
   alignment?: AlignmentOption;
@@ -119,10 +202,8 @@ export type ProtectionOptionKey =
   | "sort"
   | "autoFilter"
   | "pivotTables";
-export interface ConditionalFormatting {
+export interface ConditionalFormattingOption {
   type: "cells" | "dataBar" | "iconSet" | "colorScale" | "top";
-  start: string;
-  end: string;
   operator?: string;
   value?: number | string;
   priority?: number;
@@ -130,6 +211,10 @@ export interface ConditionalFormatting {
   bottom?: boolean;
   styleId?: string;
   percent?: number;
+}
+export interface ConditionalFormatting extends ConditionalFormattingOption {
+  start: string;
+  end: string;
 }
 export interface ImageTypes {
   url: string;
@@ -164,11 +249,13 @@ export type AlignmentOptionKey =
   | "readingOrder"
   | "textRotation"
   | "indent";
+export type AlignmentHorizontal = "center" | "left" | "right";
+export type AlignmentVertical = "center" | "top" | "bottom";
 export interface AlignmentOption {
-  horizontal?: "center" | "left" | "right";
-  vertical?: "center" | "top" | "bottom";
-  wrapText?: "0" | "1" | 2 | 1;
-  shrinkToFit?: "0" | "1" | 2 | 1;
+  horizontal?: AlignmentHorizontal;
+  vertical?: AlignmentVertical;
+  wrapText?: "0" | "1" | 0 | 1;
+  shrinkToFit?: "0" | "1" | 0 | 1;
   readingOrder?: "1" | "2" | 2 | 1;
   textRotation?: number;
   indent?: number;
@@ -281,6 +368,7 @@ export interface Checkbox {
 export type NoArgFormulaType =
   | "NOW"
   | "TODAY"
+  | "HOUR"
   | "NOW_YEAR"
   | "NOW_HOUR"
   | "NOW_SECOND"
@@ -300,6 +388,7 @@ export type SingleRefFormulaType =
   | "LEFT"
   | "ABS"
   | "POWER"
+  | "MOD"
   | "FLOOR"
   | "CEILING"
   | "ROUND"
@@ -309,6 +398,7 @@ export type SingleRefFormulaType =
   | "TAN"
   | "COT"
   | "COUNTIF"
+  | "SUMIF"
   | "TRIM";
 export interface FormatMap {
   [format: string]: {
@@ -377,7 +467,16 @@ export interface StyleMapper {
     value: string;
   };
 }
-
 export interface MapComment {
   [key: string]: Comment | string;
+}
+export interface ThemeOption {
+  headerIndex?: number;
+  rowIndex?: number;
+  negativeColor?: boolean;
+  headerColor?: string;
+  rowColor?: string;
+  headerBackgroundColor?: string;
+  rowBackgroundColor?: string;
+  fileName?: string;
 }

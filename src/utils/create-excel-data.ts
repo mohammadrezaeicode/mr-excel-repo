@@ -1,8 +1,8 @@
 import {
-  BorderOption,
-  Data,
-  ExcelTable,
-  Header,
+  type BorderOption,
+  type Data,
+  type ExcelTable,
+  type Header,
 } from "../data-model/excel-table";
 import { rgbToHex } from "./color";
 

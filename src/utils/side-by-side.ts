@@ -1,9 +1,9 @@
 import {
-  Data,
-  ExcelTable,
-  Header,
-  Sheet,
-  SideBySide,
+ type Data,
+ type ExcelTable,
+ type Header,
+ type Sheet,
+ type SideBySide,
 } from "../data-model/excel-table";
 interface SideBySideRowTable {
   [key: string]: {

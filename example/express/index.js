@@ -1,6 +1,6 @@
 import express from "express";
-import ExcelTable from "mr-excel";
-import * as examplae from "./exx.js";
+import * as ExcelTable from "mr-excel";
+import * as example from "./example.js";
 const app = express();
 app.get("/", async (req, response) => {
   response.setHeader(
@@ -8,28 +8,31 @@ app.get("/", async (req, response) => {
     "attachment; filename=" + "Report.xlsx"
   );
   const result = await ExcelTable.generateExcel({
-    ...examplae.ex.data,
+    ...example.ex1(),
     backend: true,
     generateType: "nodebuffer",
   });
   response.send(result);
 });
+import fs from 'fs'
 app.get("/ex/:id", async (req, response) => {
   let ex;
-  if (typeof req.params.id !== "undefined" && examplae[("ex" + req.params.id)]) {
-    ex = examplae["ex" + req.params.id];
+  if (typeof req.params.id !== "undefined" && example["ex" + req.params.id]) {
+    ex = example["ex" + req.params.id];
   } else {
-    ex = examplae["ex0"];
+    ex = example["ex1"];
   }
   response.setHeader(
     "Content-Disposition",
     "attachment; filename=" + "Report.xlsx"
   );
-  const result = await ExcelTable.generateExcel({
-    ...ex.data,
+  const data = {
+    ...ex(),
     backend: true,
     generateType: "nodebuffer",
-  });
+  };
+  fs.writeFileSync("data.json",JSON.stringify(data))
+  const result = await ExcelTable.generateExcel(data);
   response.send(result);
 });
 app.listen(3000, function () {

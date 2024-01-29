@@ -1,4 +1,4 @@
-import { MultiStyleValue } from "../data-model/excel-table";
+import { type MultiStyleValue } from "../data-model/excel-table";
 import { specialCharacterConverter } from "./special-character";
 
 function splitBaseOnMatch(matchResult: string[], str: string) {

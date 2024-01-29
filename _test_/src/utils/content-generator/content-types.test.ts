@@ -7,7 +7,7 @@ describe("contentTypeGenerator function tests", () => {
   });
   test("test data", () => {
     expect(
-      contentTypeGenerator("sheetContentType", [], [], [], [], false)
+      contentTypeGenerator("sheetContentType", [], [], [], [], false,[])
     ).toBe(
       '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
         '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">' +
@@ -37,7 +37,7 @@ describe("contentTypeGenerator function tests", () => {
         ["svg", "png", "jpg", "jpeg", "gif", "iop"],
         ["drawing1.xml", "drawing2.xml"],
         ["x", "y"],
-        true
+        true,[]
       )
     ).toBe(
       '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +

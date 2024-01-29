@@ -1,4 +1,4 @@
-import { StyleMapper } from "../../data-model/excel-table";
+import { type StyleMapper } from "../../data-model/excel-table";
 
 export function styleGenerator(styles: StyleMapper, addCF: boolean) {
   return (

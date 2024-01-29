@@ -542,7 +542,6 @@ describe("generateExcel data tests", () => {
       expect(sheet[4][4]).toBe("this is test title");
       expect(sheet[6][2]).toBe("test");
       expect(sheet[7][2]).toBe("test1");
-      console.log(sheet[8]);
       expect(sheet[8][2]).toBe(null);
     });
   });
@@ -632,7 +631,6 @@ describe("generateExcel data tests", () => {
     await generateExcel(excelTable).then(async (res) => {
       expect(res).not.toBeNull();
       let result: ResponseApi = <ResponseApi>await readGeneratedFile(res, true);
-      console.log(result.fileList);
       expect(result.fileList).toEqual([
         "xl/",
         "xl/styles.xml",

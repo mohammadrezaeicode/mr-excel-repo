@@ -4,7 +4,8 @@ export function contentTypeGenerator(
   arrTypes: string[],
   sheetDrawers: string[],
   checkboxForm: string[],
-  needCalcChain: boolean
+  needCalcChain: boolean,
+  tableRef: string[]
 ) {
   let typeCheck: {
     [key: string]: boolean;
@@ -63,6 +64,16 @@ export function contentTypeGenerator(
       );
     }, "") +
     sheetContentType +
+    (tableRef.length > 0
+      ? tableRef.reduce((res, cur) => {
+          return (
+            res +
+            '<Override PartName="/xl/tables/' +
+            cur +
+            '" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.table+xml"/>'
+          );
+        }, "")
+      : "") +
     "<Override" +
     ' ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sharedStrings+xml"' +
     ' PartName="/xl/sharedStrings.xml" />' +

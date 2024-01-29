@@ -1,2 +1,0 @@
-export declare function contentTypeGenerator(sheetContentType: string, commentId: number[], arrTypes: string[], sheetDrawers: string[], checkboxForm: string[], needCalcChain: boolean): string;
-//# sourceMappingURL=content-types.d.ts.map

@@ -1,0 +1,21 @@
+name: Publish Package to npmjs
+on:
+    release:
+        types: [published]
+jobs:
+    publish:
+        name: Publish to NPM
+        runs-on: ubuntu-latest
+        steps:    
+        - name: Checkout to code
+          uses: actions/checkout@v4
+        - name: install Node js Version 20.x
+          uses: actions/setup-node@v4
+          with:
+            node-version: '20.x'
+            registry-url: 'https://registry.npmjs.org'
+        - run: npm ci
+        - name: publish to npm
+          run: npm publish
+          env:
+             NODE_AUTH_TOCKEN: ${{secrets.NPM_TOKEN}}

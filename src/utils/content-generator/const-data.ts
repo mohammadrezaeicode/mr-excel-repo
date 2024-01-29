@@ -1,4 +1,4 @@
-import { FormatMap } from "../../data-model/excel-table";
+import { type FormatMap } from "../../data-model/excel-table";
 
 export const formatMap: FormatMap = {
   time: {

@@ -1,11 +1,11 @@
 import {
-  Data,
-  ExcelTable,
-  Header,
-  Sheet,
+  type Data,
+  type ExcelTable,
+  type Header,
+  type Sheet,
+  type ThemeOption,
 } from "../data-model/excel-table";
 import { generateContrastTextColor, hexToRgbNegative } from "../utils/color";
-import colorHunt from "./colorHunt.json";
 interface HuntColor {
   color1: string;
   color2: string;
@@ -13,16 +13,7 @@ interface HuntColor {
   color4: string;
   url: string;
 }
-export interface ThemeOption {
-  hIndex?: number;
-  rIndex?: number;
-  nColor?: boolean;
-  hColor?: string;
-  rColor?: string;
-  fieName?: string;
-}
 function titleCase(value: string): string {
-  // let value = "asdFd";
   let result = "";
   if (value.indexOf("_") > 0) {
     if (value.replace(/[a-z]/g, "").length == value.length) {
@@ -53,12 +44,13 @@ function createHeaderBaseOnObject(obj: Object, filterKeys: string[]): Header[] {
   }, init);
   return headers;
 }
-export const themeGenerator = function (
+export const themeGenerator = async function (
   inputData: ExcelTable | Data[] | Data[][],
   index: number,
   option?: ThemeOption,
   filterKeys = []
-): ExcelTable {
+): Promise<ExcelTable> {
+  const colorHunt: any = (await import("./colorHunt")).colorHuntTheme;
   let data: ExcelTable;
   if (typeof inputData == "object" && Array.isArray(inputData)) {
     if (inputData.length > 0) {
@@ -103,49 +95,55 @@ export const themeGenerator = function (
     data = inputData;
   }
   if (index < colorHunt.length) {
-    let rColorKey = ("color" +
-      (option && option.rIndex
-        ? option.rIndex
+    let rowColorKey = ("color" +
+      (option && option.rowIndex
+        ? option.rowIndex
         : 4
       ).toString()) as keyof HuntColor;
-    let hColorKey = ("color" +
-      (option && option.hIndex
-        ? option.hIndex
+    let headerColorKey = ("color" +
+      (option && option.headerIndex
+        ? option.headerIndex
         : 1
       ).toString()) as keyof HuntColor;
     let huntColor: HuntColor = colorHunt[index];
 
-    let hColor = huntColor[hColorKey];
-    let rColor = huntColor[rColorKey];
-    let hColorText;
-    if (option?.hColor) {
-      hColorText = option?.hColor;
+    let headerColor =
+      option && option.headerBackgroundColor
+        ? option.headerBackgroundColor
+        : huntColor[headerColorKey];
+    let rowColor =
+      option && option.rowBackgroundColor
+        ? option.rowBackgroundColor
+        : huntColor[rowColorKey];
+    let headerColorText;
+    if (option && option.headerColor) {
+      headerColorText = option?.headerColor;
     } else {
-      hColorText =
-        option && option.nColor
-          ? hexToRgbNegative(hColor)
-          : generateContrastTextColor(hColor);
+      headerColorText =
+        option && option.negativeColor
+          ? hexToRgbNegative(headerColor)
+          : generateContrastTextColor(headerColor);
     }
-    let rColorText;
-    if (option?.rColor) {
-      rColorText = option?.rColor;
+    let rowColorText;
+    if (option && option.rowColor) {
+      rowColorText = option?.rowColor;
     } else {
-      rColorText =
-        option && option.nColor
-          ? hexToRgbNegative(rColor)
-          : generateContrastTextColor(rColor);
+      rowColorText =
+        option && option.negativeColor
+          ? hexToRgbNegative(rowColor)
+          : generateContrastTextColor(rowColor);
     }
 
     if (typeof data.styles == "undefined") {
       data.styles = {};
     }
     data.styles["themeStyleHeader"] = {
-      backgroundColor: hColor,
-      color: hColorText,
+      backgroundColor: headerColor,
+      color: headerColorText,
     };
     data.styles["themeStyleBody"] = {
-      backgroundColor: rColor,
-      color: rColorText,
+      backgroundColor: rowColor,
+      color: rowColorText,
     };
     const shLength = data.sheet.length;
     for (let index = 0; index < shLength; index++) {
@@ -165,8 +163,8 @@ export const themeGenerator = function (
       };
     }
   }
-  if (typeof option?.fieName == "string") {
-    data.fileName = option.fieName;
+  if (typeof option?.fileName == "string") {
+    data.fileName = option.fileName;
   }
   return data;
 };

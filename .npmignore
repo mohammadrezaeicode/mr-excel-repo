@@ -1,2 +1,5 @@
 example
 _test_
+coverage
+.github
+*.backup
