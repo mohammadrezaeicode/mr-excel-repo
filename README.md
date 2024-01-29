@@ -1,6 +1,6 @@
 # MR Excel `5.0.0`
 
-![Test](https://github.com/mohammadrezaeicode/github-action/actions/workflows/test.yml/badge.svg) [![Publish Package to NPM](https://github.com/mohammadrezaeicode/mr-excel-repo/actions/workflows/publish.yaml/badge.svg)](https://github.com/mohammadrezaeicode/mr-excel-repo/actions/workflows/publish.yaml)
+![Test](https://github.com/mohammadrezaeicode/github-action/actions/workflows/test.yml/badge.svg)
 
 MR-Excel is a JavaScript library designed for reading and writing Excel files. This library allows you to extract data from Excel files, and when it comes to writing, it offers a range of features such as commenting, styling, Formulas, merging cells,Grouping rows, conditional formatting (Excel), multi-style values, and functions that can be used for cell merging, adding styles and commenting functionalities. `Since version 5.0.0, we exclusively build via Vite. The path of the TypeScript interface has been updated (link). For further details, refer to the TypeScript example.` **Example: [Express](https://github.com/mohammadrezaeicode/mr-excel-repo/tree/main/example/express) | [CDN](https://github.com/mohammadrezaeicode/mr-excel-repo/tree/main/example/CDN) | [Typescript](https://github.com/mohammadrezaeicode/mr-excel-repo/tree/main/example/typescript) | [Angular](https://github.com/mohammadrezaeicode/mr-excel-repo/tree/main/example/angular)**
 
