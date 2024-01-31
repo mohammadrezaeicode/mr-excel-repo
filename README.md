@@ -416,7 +416,7 @@ ExcelTable.themeBaseGenerate(data, 12);
 
 </details>
 
-[More Example]("./example/CDN/themeBaseGenerates")
+[More Example](example/CDN/themeBaseGenerates)
 
 ### How to use convertTableToExcel
 
@@ -598,7 +598,7 @@ ExcelTable.sideBySideLineByLine(sideData);
 
 </details>
 
-[More Example]("./example/CDN/sideBySideLineByLine")
+[More Example](example/CDN/sideBySideLineByLine)
 
 ### generateExcel
 
