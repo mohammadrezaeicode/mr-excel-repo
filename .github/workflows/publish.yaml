@@ -19,4 +19,4 @@ jobs:
         - name: publish to npm
           run: npm publish
           env:
-             NODE_AUTH_TOCKEN: ${{secrets.NPM_TOKEN}}
+             NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
