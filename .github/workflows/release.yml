@@ -1,4 +1,4 @@
-name: Release new Package
+name: Release & Publish Package
 on: 
   push:
     branches:
@@ -35,5 +35,22 @@ jobs:
         tag_name: ${{env.PV}}
         release_name: Release v${{env.PV}}
         body: ${{env.PB}}
+  publish:
+    name: Publish to NPM
+    needs: release
+    runs-on: ubuntu-latest
+    steps:    
+    - name: Checkout to code
+      uses: actions/checkout@v4
+    - name: install Node js Version 20.x
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        registry-url: 'https://registry.npmjs.org'
+    - run: npm ci
+    - name: publish to npm
+      run: npm publish
+      env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
 
 

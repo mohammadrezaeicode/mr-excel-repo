@@ -1004,7 +1004,7 @@ export async function generateExcel(data: ExcelTable, styleKey: string = "") {
         }
         const ref = imageCounter++;
         const name = "image" + ref + "." + type;
-        const image = await toDataURL2(urlImg, name, isBackend);
+        const image = await toDataURL2(urlImg, name, isBackend,data.fetch);
         if (!image) {
           reject("image not load");
         }
@@ -1047,7 +1047,7 @@ export async function generateExcel(data: ExcelTable, styleKey: string = "") {
           const name = "image" + imageCounter++ + "." + type;
           return {
             type,
-            image: await toDataURL2(v.url, name, isBackend),
+            image: await toDataURL2(v.url, name, isBackend, data.fetch),
             obj: v,
             i,
             name,

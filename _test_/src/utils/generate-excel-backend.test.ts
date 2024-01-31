@@ -3,6 +3,7 @@ import { generateExcel } from "../../../src/utils/generate-excel";
 import { Data, ExcelTable, Header } from "../../../src/data-model/excel-table";
 import { extractExcelData } from "../../../src/utils/read-utils";
 import { readGeneratedFile } from "../read";
+import { callApi } from "./call-api";
 // not completed
 interface ResponseApi {
   data: {
@@ -604,6 +605,7 @@ describe("generateExcel data tests", () => {
     });
     excelTable = {
       backend: true,
+      fetch:callApi,
       notSave: true,
       sheet: [
         {
@@ -669,7 +671,7 @@ describe("generateExcel data tests", () => {
       expect(sheet[1][0]).toBe("test");
       expect(sheet[2][0]).toBe("test1");
     });
-  });
+  },10000);
   test("test for checkbox", async () => {
     let excelTable: ExcelTable = {
       backend: true,

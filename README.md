@@ -1,6 +1,6 @@
 # MR Excel `5.0.0`
 
-![Test](https://github.com/mohammadrezaeicode/github-action/actions/workflows/test.yml/badge.svg)
+![Test](https://github.com/mohammadrezaeicode/github-action/actions/workflows/test.yml/badge.svg) [![Release & Publish](https://github.com/mohammadrezaeicode/mr-excel-repo/actions/workflows/release.yml/badge.svg)](https://github.com/mohammadrezaeicode/mr-excel-repo/actions/workflows/release.yml)
 
 MR-Excel is a JavaScript library designed for reading and writing Excel files. This library allows you to extract data from Excel files, and when it comes to writing, it offers a range of features such as commenting, styling, Formulas, merging cells,Grouping rows, conditional formatting (Excel), multi-style values, and functions that can be used for cell merging, adding styles and commenting functionalities. `Since version 5.0.0, we exclusively build via Vite. The path of the TypeScript interface has been updated (link). For further details, refer to the TypeScript example.` **Example: [Express](https://github.com/mohammadrezaeicode/mr-excel-repo/tree/main/example/express) | [CDN](https://github.com/mohammadrezaeicode/mr-excel-repo/tree/main/example/CDN) | [Typescript](https://github.com/mohammadrezaeicode/mr-excel-repo/tree/main/example/typescript) | [Angular](https://github.com/mohammadrezaeicode/mr-excel-repo/tree/main/example/angular)**
 
@@ -17,6 +17,7 @@ MR-Excel is a JavaScript library designed for reading and writing Excel files. T
 - [**`generateExcel`**](#generate-excel)
   - [**`How to use generateExcel`**](#generate-excel-usage)
   - [**`General`**](#general-option)
+  - [**`🆕 fetch`**](#fetch)
   - [**`Header`**](#header)
   - [**`Formula`**](#formula)
     - [**`Time, Math, Custom Formula & etc`**](#new-formula)
@@ -1763,6 +1764,37 @@ ExcelTable.generateExcel(data).then((res) => {
 ![ex](https://github.com/mohammadrezaeicode/mr-excel-page-repo/blob/main/public/img/ex2.PNG?raw=true)
 
 </details>
+
+<a id="fetch"></a>
+
+## 🆕 fetch Option [⬆️](#table-of-contents)
+
+mr-Excel uses fetch (if the images option is used). If it is used with Node lower than 18.0.0, you may encounter problems. To fix this problem, you can add the fetch option. Here’s an example of how the function should look like:
+
+```javascript
+import fetch from "cross-fetch";
+export async function callApi(url) {
+  return await fetch(url).then((res) => {
+    return res.arrayBuffer();
+  });
+}
+const data = {
+  fetch: callApi,
+  ...
+  sheet: [
+    {
+      images: [
+        {
+          url: "https://mohammadrezaeicode.github.io/mr-excel-page/img/ezgif.com-gif-maker.gif",
+          from: "H1",
+          type: "one",
+        },
+      ],
+      ...
+    },
+  ],
+};
+```
 
 ## Header Option [⬆️](#table-of-contents)
 
@@ -7753,6 +7785,7 @@ export interface ExcelTableOption {
   creator?: string;
   backend?: boolean;
   activateConditionalFormatting?: boolean;
+  fetch?: Function;
   fileName?: string;
   generateType?: "nodebuffer" | "array" | "binarystring" | "base64";
   addDefaultTitleStyle?: boolean;
@@ -7760,7 +7793,6 @@ export interface ExcelTableOption {
   modified?: string;
   numberOfColumn?: number;
   createType?: string;
-  mapSheetDataOption?: any;
   styles?: Styles;
 }
 
@@ -7770,12 +7802,19 @@ export interface Sheet extends SheetOption {
 }
 export interface SheetOption {
   withoutHeader?: boolean;
+  mapSheetDataOption?: {
+    outlineLevel?: string;
+    hidden?: string;
+    height?: string;
+  };
+  backgroundImage?: string;
   conditionalFormatting?: ConditionalFormatting[];
   multiStyleCondition?: MultiStyleConditionFunction;
   useSplitBaseOnMatch?: boolean;
   convertStringToNumber?: boolean;
   images?: ImageTypes[];
   formula?: Formula;
+  pageOption?: PageOption;
   name?: string;
   title?: Title;
   shiftTop?: number;
@@ -7789,10 +7828,86 @@ export interface SheetOption {
   commentCondition?: CommentConditionFunction;
   sortAndFilter?: SortAndFilter;
   state?: "hidden" | "visible";
-  headerRowOption?: any;
+  headerRowOption?: object;
   protectionOption?: ProtectionOption;
   headerHeight?: number;
   checkbox?: Checkbox[];
+  viewOption?: ViewOption;
+  rtl?: boolean;
+  pageBreak?: PageBreak;
+  asTable?: AsTableOption;
+}
+export interface AsTableOption {
+  type?: "Light" | "Medium" | "Dark";
+  styleNumber?: number;
+  firstColumn?: boolean;
+  lastColumn?: boolean;
+  rowStripes?: boolean;
+  columnStripes?: boolean;
+}
+export interface PageBreak {
+  row?: number[];
+  column?: number[];
+}
+export interface ViewStart {
+  t?: string;
+  b?: string;
+  r?: string;
+  l?: string;
+  one?: string;
+  two?: string;
+}
+export interface ViewOption {
+  type?: "pageLayout" | "pageBreakPreview";
+  hideGrid?: boolean;
+  hideHeadlines?: boolean;
+  hideRuler?: boolean;
+  frozenOption?: {
+    type: "ROW" | "COLUMN" | "BOTH" | "R" | "C" | "B";
+    index:
+      | number
+      | {
+          r: number;
+          c: number;
+        };
+  };
+  splitOption?: {
+    type: "VERTICAL" | "HORIZONTAL" | "BOTH" | "V" | "H" | "B";
+    startAt?: ViewStart;
+    split:
+      | number
+      | {
+          x: number;
+          y: number;
+        };
+  };
+}
+export interface HeaderFooterOption {
+  text?: string;
+  styleId?: string;
+}
+export interface HeaderFooterLocationMap {
+  l?: HeaderFooterOption;
+  c?: HeaderFooterOption;
+  r?: HeaderFooterOption;
+}
+export interface HeaderFooterTypes {
+  odd?: HeaderFooterLocationMap;
+  even?: HeaderFooterLocationMap;
+  first?: HeaderFooterLocationMap;
+}
+export interface PageOption {
+  margin?: {
+    left?: number;
+    right?: number;
+    top?: number;
+    bottom?: number;
+    header?: number;
+    footer?: number;
+  };
+  header?: HeaderFooterTypes;
+  footer?: HeaderFooterTypes;
+  isPortrait: boolean;
 }
 export interface Header {
   label: string;
@@ -7800,15 +7915,16 @@ export interface Header {
   size?: number;
   multiStyleValue?: MultiStyleValue;
   comment?: Comment | string;
-  conditionalFormatting?: ConditionalFormatting;
+  conditionalFormatting?: ConditionalFormattingOption;
   formula?: {
     type: FormulaType;
     styleId?: string;
   };
 }
+export type StyleType = "conditionalFormatting" | "CF" | "headerFooter" | "HF";
 export interface StyleBody {
   fontFamily?: string;
-  type?: string;
+  type?: StyleType;
   size?: number;
   index?: number;
   alignment?: AlignmentOption;
@@ -7866,10 +7982,8 @@ export type ProtectionOptionKey =
   | "sort"
   | "autoFilter"
   | "pivotTables";
-export interface ConditionalFormatting {
+export interface ConditionalFormattingOption {
   type: "cells" | "dataBar" | "iconSet" | "colorScale" | "top";
-  start: string;
-  end: string;
   operator?: string;
   value?: number | string;
   priority?: number;
@@ -7877,6 +7991,10 @@ export interface ConditionalFormatting {
   bottom?: boolean;
   styleId?: string;
   percent?: number;
+}
+export interface ConditionalFormatting extends ConditionalFormattingOption {
+  start: string;
+  end: string;
 }
 export interface ImageTypes {
   url: string;
@@ -7911,11 +8029,13 @@ export type AlignmentOptionKey =
   | "readingOrder"
   | "textRotation"
   | "indent";
+export type AlignmentHorizontal = "center" | "left" | "right";
+export type AlignmentVertical = "center" | "top" | "bottom";
 export interface AlignmentOption {
-  horizontal?: "center" | "left" | "right";
-  vertical?: "center" | "top" | "bottom";
-  wrapText?: "0" | "1" | 2 | 1;
-  shrinkToFit?: "0" | "1" | 2 | 1;
+  horizontal?: AlignmentHorizontal;
+  vertical?: AlignmentVertical;
+  wrapText?: "0" | "1" | 0 | 1;
+  shrinkToFit?: "0" | "1" | 0 | 1;
   readingOrder?: "1" | "2" | 2 | 1;
   textRotation?: number;
   indent?: number;
@@ -7958,6 +8078,7 @@ export interface Comment {
   styleId?: string;
   author?: string;
 }
+
 export interface MergeRowConditionMap {
   [columnKey: string]: {
     inProgress: boolean;
@@ -8027,6 +8148,7 @@ export interface Checkbox {
 export type NoArgFormulaType =
   | "NOW"
   | "TODAY"
+  | "HOUR"
   | "NOW_YEAR"
   | "NOW_HOUR"
   | "NOW_SECOND"
@@ -8046,6 +8168,7 @@ export type SingleRefFormulaType =
   | "LEFT"
   | "ABS"
   | "POWER"
+  | "MOD"
   | "FLOOR"
   | "CEILING"
   | "ROUND"
@@ -8055,6 +8178,7 @@ export type SingleRefFormulaType =
   | "TAN"
   | "COT"
   | "COUNTIF"
+  | "SUMIF"
   | "TRIM";
 export interface FormatMap {
   [format: string]: {
@@ -8126,8 +8250,18 @@ export interface StyleMapper {
 export interface MapComment {
   [key: string]: Comment | string;
 }
-```
+export interface ThemeOption {
+  headerIndex?: number;
+  rowIndex?: number;
+  negativeColor?: boolean;
+  headerColor?: string;
+  rowColor?: string;
+  headerBackgroundColor?: string;
+  rowBackgroundColor?: string;
+  fileName?: string;
+}
 
+```
 </details>
 
 <a id="migrate"></a>
@@ -8183,6 +8317,12 @@ To migrate from Version 2 to Version 3, you need to follow the steps below:
   - Replace "color" with "color."
 
 ## Release Notes [⬆️](#table-of-contents)
+
+### Version 5.1.0 (2024-01-31)
+
+#### New Features
+
+- The `fetch` option allows you to use your method to retrieve images and .xlsx files
 
 ### Version 5.0.0 (2024-01-28)
 

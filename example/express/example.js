@@ -1,4 +1,10 @@
 //<https: //colorhunt.co/palette/f9ed69f08a5db83b5e6a2c70>
+import fetch from "cross-fetch";
+export async function callApi(url) {
+  return await fetch(url).then((res) => {
+    return res.arrayBuffer();
+  });
+}
 export function ex1() {
   const data = {
     creator: "mr",
@@ -148,7 +154,7 @@ export function ex1() {
       },
     ],
   };
-return data;
+  return data;
 }
 export function ex2() {
   const data = {
@@ -1119,8 +1125,8 @@ export function ex2() {
       },
     ],
   };
-  
-return data;
+
+  return data;
 }
 export function ex3() {
   const color = { c1: "08D9D6", c2: "252A34", c3: "FF2E63", c4: "EAEAEA" };
@@ -1341,11 +1347,10 @@ export function ex3() {
       },
     ],
   };
-  
-return data;
+
+  return data;
 }
 export function ex4() {
-  
   const colorPalette = {
     c1: "2B2E4A",
     c2: "E84545",
@@ -1504,7 +1509,7 @@ export function ex4() {
       },
     ],
   };
-return data;
+  return data;
 }
 export function ex5() {
   const colorPalette = {
@@ -1660,7 +1665,7 @@ export function ex5() {
       },
     ],
   };
-return data;
+  return data;
 }
 export function ex6() {
   const colorPalette = {
@@ -1851,7 +1856,7 @@ export function ex6() {
       },
     ],
   };
-return data;
+  return data;
 }
 export function ex7() {
   const colorPalette = {
@@ -2038,7 +2043,7 @@ export function ex7() {
       },
     ],
   };
-return data;
+  return data;
 }
 export function ex8() {
   const colorPalette = {
@@ -2243,7 +2248,7 @@ export function ex8() {
       },
     ],
   };
-return data;
+  return data;
 }
 export function ex9() {
   const colorPalette = {
@@ -2327,7 +2332,7 @@ export function ex9() {
       },
     ],
   };
-return data;
+  return data;
 }
 export function ex10() {
   const colorPalette = {
@@ -2413,7 +2418,7 @@ export function ex10() {
       },
     ],
   };
-return data;
+  return data;
 }
 export function ex11() {
   const colorPalette = {
@@ -2509,7 +2514,7 @@ export function ex11() {
       },
     ],
   };
-return data;
+  return data;
 }
 export function ex14() {
   const colorPalette = {
@@ -2639,7 +2644,7 @@ export function ex14() {
       },
     ],
   };
-return data;
+  return data;
 }
 export function ex15() {
   const colorPalette = {
@@ -2804,7 +2809,7 @@ export function ex15() {
       },
     ],
   };
-return data;
+  return data;
 }
 export function ex16() {
   const color = { c4: "00ADB5", c2: "393E46" };
@@ -2980,11 +2985,12 @@ export function ex16() {
       },
     ],
   };
-return data;
+  return data;
 }
 export function ex17() {
   const data = {
     creator: "mr",
+    fetch: callApi,
     sheet: [
       {
         images: [
@@ -3094,7 +3100,7 @@ export function ex17() {
       },
     ],
   };
-return data;
+  return data;
 }
 export function ex18() {
   const data = {
@@ -3167,7 +3173,7 @@ export function ex18() {
       },
     ],
   };
-return data;
+  return data;
 }
 export function ex19() {
   const data = {
@@ -3281,7 +3287,7 @@ export function ex19() {
       },
     ],
   };
-return data;
+  return data;
 }
 export function ex20() {
   const data = {
@@ -3387,7 +3393,7 @@ export function ex20() {
       },
     ],
   };
-return data;
+  return data;
 }
 export function ex21() {
   const data = {
@@ -3455,7 +3461,7 @@ export function ex21() {
       },
     ],
   };
-return data;
+  return data;
 }
 export function ex22() {
   const colorPalette = {
@@ -3746,7 +3752,7 @@ export function ex22() {
       },
     ],
   };
-return data;
+  return data;
 }
 // export function ex23() {
 //   const colorPalette = {
@@ -4108,7 +4114,7 @@ export function ex24() {
       },
     ],
   };
-return data;
+  return data;
 }
 export function ex25() {
   const colorPalette = {
@@ -4344,7 +4350,7 @@ export function ex25() {
       },
     ],
   };
-return data;
+  return data;
 }
 export function ex26() {
   const colorPalette = {
@@ -4553,7 +4559,7 @@ export function ex26() {
       },
     ],
   };
-return data;
+  return data;
 }
 export function ex27() {
   const colorPalette = {
@@ -4761,7 +4767,7 @@ export function ex27() {
       },
     ],
   };
-return data;
+  return data;
 }
 export function ex28() {
   const colorPalette = {
@@ -4971,7 +4977,7 @@ export function ex28() {
       },
     ],
   };
-return data;
+  return data;
 }
 export function ex29() {
   const colorPalette = {
@@ -5181,7 +5187,7 @@ export function ex29() {
       },
     ],
   };
-return data;
+  return data;
 }
 export function ex30() {
   const colorPalette = {
@@ -5407,7 +5413,7 @@ export function ex30() {
       },
     ],
   };
-return data;
+  return data;
 }
 export function ex31() {
   const colorPalette = {
@@ -5634,7 +5640,7 @@ export function ex31() {
       },
     ],
   };
-return data;
+  return data;
 }
 export function ex32() {
   const colorPalette = {
@@ -5861,7 +5867,7 @@ export function ex32() {
       },
     ],
   };
-return data;
+  return data;
 }
 export function ex33() {
   const colorPalette = {
@@ -6091,7 +6097,7 @@ export function ex33() {
       },
     ],
   };
-return data;
+  return data;
 }
 export function ex34() {
   const colorPalette = {
@@ -6309,7 +6315,7 @@ export function ex34() {
       },
     ],
   };
-return data;
+  return data;
 }
 export function ex35() {
   const colorPalette = {

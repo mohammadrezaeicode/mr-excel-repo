@@ -40,8 +40,17 @@ interface ExtractResult {
 }
 export async function extractExcelData(
   uri: string,
-  isBackend: boolean = false
+  isBackend: boolean = false,
+  fetchFunc?: Function
 ) {
+  let apiCaller: Function;
+  let convertCall = false;
+  if (typeof fetchFunc == "function") {
+    apiCaller = fetchFunc;
+    convertCall = true;
+  } else {
+    apiCaller = fetch;
+  }
   let queueSheet: {
     filename: string;
     fileData: any;
@@ -75,17 +84,20 @@ export async function extractExcelData(
       sheetResultData[key] = resultData;
     }
   }
-  return await fetch(uri)
+  return await apiCaller(uri)
     .then((res: any) => {
       if (res == null || res == undefined) {
         throw "response is null";
+      }
+      if (convertCall) {
+        return res;
       }
       if (isBackend) {
         return res.arrayBuffer();
       }
       return res.blob();
     })
-    .then(async (res) => {
+    .then(async (res: any) => {
       const module = await import("jszip");
       const JSZip = module.default;
       let fileCounter = 0;
@@ -197,7 +209,7 @@ export async function extractExcelData(
         });
       });
     })
-    .catch((e) => {
+    .catch((e: any) => {
       throw e;
     });
 }

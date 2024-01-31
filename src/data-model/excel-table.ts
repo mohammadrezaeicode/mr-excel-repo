@@ -6,6 +6,7 @@ export interface ExcelTableOption {
   creator?: string;
   backend?: boolean;
   activateConditionalFormatting?: boolean;
+  fetch?: Function;
   fileName?: string;
   generateType?: "nodebuffer" | "array" | "binarystring" | "base64";
   addDefaultTitleStyle?: boolean;

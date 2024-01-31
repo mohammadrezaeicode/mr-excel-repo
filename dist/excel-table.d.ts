@@ -177,6 +177,7 @@ declare interface ExcelTableOption {
     creator?: string;
     backend?: boolean;
     activateConditionalFormatting?: boolean;
+    fetch?: Function;
     fileName?: string;
     generateType?: "nodebuffer" | "array" | "binarystring" | "base64";
     addDefaultTitleStyle?: boolean;
@@ -189,7 +190,7 @@ declare interface ExcelTableOption {
 
 export declare const extractExcelData: typeof extractExcelData_2;
 
-declare function extractExcelData_2(uri: string, isBackend?: boolean): Promise<unknown>;
+declare function extractExcelData_2(uri: string, isBackend?: boolean, fetchFunc?: Function): Promise<any>;
 
 declare interface FormatMap {
     [format: string]: {

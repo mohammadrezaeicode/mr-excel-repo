@@ -1,5 +1,6 @@
 import { describe, expect, test } from "@jest/globals";
 import { extractExcelData } from "../../../src/utils/read-utils";
+import { callApi } from "./call-api";
 interface ResponseApi {
   data: {
     [sheetName: string]: string[][];
@@ -14,7 +15,8 @@ describe("toDataURL2 data tests", () => {
   test("use valid url input- generated via lib", async () => {
     await extractExcelData(
       "https://github.com/mohammadrezaeicode/mr-excel-page-repo/blob/main/public/x.xlsx?raw=true",
-      true
+      true,
+      callApi
     ).then((res: any) => {
       let resp = <ResponseApi>res;
       expect(typeof resp).toBe("object");
@@ -50,7 +52,8 @@ describe("toDataURL2 data tests", () => {
   test("use valid url input - generated via program", async () => {
     await extractExcelData(
       "https://github.com/mohammadrezaeicode/mr-excel-page-repo/blob/main/public/y.xlsx?raw=true",
-      true
+      true,
+      callApi
     ).then((res: any) => {
       let resp = <ResponseApi>res;
       expect(typeof resp).toBe("object");

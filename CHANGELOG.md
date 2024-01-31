@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 5.1.0 (2024-01-31)
+
+### New Features
+
+- The `fetch` option allows you to use your method to retrieve images and .xlsx files
+
 ## Version 5.0.0 (2024-01-28)
 
 ### New Features

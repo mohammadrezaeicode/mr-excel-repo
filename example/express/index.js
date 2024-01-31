@@ -35,6 +35,19 @@ app.get("/ex/:id", async (req, response) => {
   const result = await ExcelTable.generateExcel(data);
   response.send(result);
 });
+app.get("/read/:id", async (req, response) => {
+  let paths;
+  if (req.params.id=='x') {
+    paths =
+      "https://github.com/mohammadrezaeicode/mr-excel-page-repo/blob/main/public/x.xlsx?raw=true";
+  } else {
+    paths =
+      "https://github.com/mohammadrezaeicode/mr-excel-page-repo/blob/main/public/y.xlsx?raw=true";
+  }
+  response.setHeader("Content-Type", "application/json");
+  const result = await ExcelTable.extractExcelData(paths,true,example.callApi);
+  response.send({ ...result, sheetName: Array.from(result.sheetName) });
+});
 app.listen(3000, function () {
   console.log("run on 3000");
 });
