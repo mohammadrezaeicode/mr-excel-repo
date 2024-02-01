@@ -1,6 +1,6 @@
 {
   "name": "mr-excel",
-  "version": "5.1.0",
+  "version": "5.1.1",
   "main": "dist/excel-table.mjs",
   "types": "dist/excel-table.d.ts",
   "scripts": {

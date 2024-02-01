@@ -69,7 +69,7 @@ We have four functions that are defined with specific use cases as follows:
 
 - **`convertTableToExcel`**: This function is designed exclusively for **client-side** use. It requires passing a DOM element (a table element) as a parameter. The output of this function is an Excel file generated from the provided table.
 
-  <a id="side-by-side-line-by-line"></a>
+<a id="side-by-side-line-by-line"></a>
 
 - **`sideBySideLineByLine`**: This function offers the capability to generate a single-sheet Excel file containing multiple tables side by side and line by line.
 
@@ -154,9 +154,9 @@ Ensure you choose the appropriate method based on your installation preferences 
 
 After adding the library to your project, generating XLSX files becomes straightforward. You can achieve this by creating a data object similar to the code snippet below:
 
-### How to use themeBaseGenerate
-
 <a id="theme-base-generate-usage"></a>
+
+### How to use themeBaseGenerate
 
 <details>
 <summary>Display Code</summary>
@@ -417,11 +417,11 @@ ExcelTable.themeBaseGenerate(data, 12);
 
 </details>
 
-[More Example](example/CDN/themeBaseGenerates)
-
-### How to use convertTableToExcel
+[More Example](example/CDN/themeBaseGenerate)
 
 <a id="convert-table-to-excel-usage"></a>
+
+### How to use convertTableToExcel
 
 ```javascript
 ExcelTable.convertTableToExcel("#table");
@@ -452,9 +452,9 @@ ExcelTable.convertTableToExcel("#table", null, true, rowF, colF)
 ExcelTable.extractExcelData(your excel url);
 ```
 
-### How to use sideBySideLineByLine
-
 <a id="side-by-side-line-by-line-usage"></a>
+
+### How to use sideBySideLineByLine
 
 `sideBySideLineByLine` is a new feature that enables the generation of multiple tables within a single Excel sheet.
 
@@ -601,9 +601,9 @@ ExcelTable.sideBySideLineByLine(sideData);
 
 [More Example](example/CDN/sideBySideLineByLine)
 
-### generateExcel
-
 <a id="generate-excel-usage"></a>
+
+### generateExcel
 
 <details>
 
@@ -770,9 +770,11 @@ ExcelTable.generateExcel(data);
 
 </details>
 
-## General option [⬆️](#table-of-contents)
+[More Example](example/CDN/generateExcel)
 
 <a id="general-option"></a>
+
+## General option [⬆️](#table-of-contents)
 
 Each sheet has options for customization. You can change the sheet name using name, adjust the tab name color with tabColor, control visibility with state, add protection to a sheet via protectionOption, and implement sorting and filtering using sortAndFilter. In the example below, we will demonstrate how to utilize these properties. Additionally, for Excel file information, we offer options such as creator, created, notSave, and modified.
 
@@ -1796,9 +1798,9 @@ const data = {
 };
 ```
 
-## Header Option [⬆️](#table-of-contents)
-
 <a id="header"></a>
+
+## Header Option [⬆️](#table-of-contents)
 
 We offer specific header options for Excel headers. The header is a mandatory component, so the withoutHeader option cannot be used to omit it. The headerHeight option is employed to determine the height of the header row. Additionally, we provide the headerStyleKey property, which specifies the most commonly used style for each cell (its value corresponds to the style ID; detailed functionality is explained in the Styles section).
 
@@ -2041,9 +2043,9 @@ ExcelTable.generateExcel(data);
 
 </details>
 
-## Formula Option [⬆️](#table-of-contents)
-
 <a id="formula"></a>
+
+## Formula Option [⬆️](#table-of-contents)
 
 We provide two distinct methods for defining formulas: customization and column type. In the customization approach, if you employ a cell containing data that is used within the formula, the formula will display an instance of the formula. When using the customization type, it's important to specify the formula type, which can be any of the following: AVERAGE, SUM, COUNT, MAX, or MIN.
 
@@ -2548,9 +2550,9 @@ ExcelTable.generateExcel(data);
 
 </details>
 
-## Styles & Format Options [⬆️](#table-of-contents)
-
 <a id="styles-format"></a>
+
+## Styles & Format Options [⬆️](#table-of-contents)
 
 In the library, styles are defined with an ID that represents the desired style. This ID is then used to apply the corresponding style to cells. Each cell is associated with only one style. These styles encompass various attributes such as borders, alignment, text color, font family, font size, background, and bold, among others.
 
@@ -2725,9 +2727,9 @@ ExcelTable.generateExcel(data);
 
 </details>
 
-## Merging Cells Options [⬆️](#table-of-contents)
-
 <a id="merging-cells"></a>
+
+## Merging Cells Options [⬆️](#table-of-contents)
 
 We offer options for merging rows of cells together. Additionally, we provide a function-based approach to facilitate cell merging.
 
@@ -2935,9 +2937,9 @@ ExcelTable.generateExcel(data);
 
 </details>
 
-## Group Rows Options [⬆️](#table-of-contents)
-
 <a id="group-rows"></a>
+
+## Group Rows Options [⬆️](#table-of-contents)
 
 With this library, you can group rows together using two properties added to the data: outlineLevel and hidden. The outlineLevel represents the grouping level, while hidden represents whether the default state is collapsed or not. The key of this property is changeable, so in case of a conflict with your data, you have the flexibility to modify it. We will discuss how to change the key in the next section.
 
@@ -3366,9 +3368,10 @@ ExcelTable.generateExcel(data);
 
 </details>
 
+<a id="shift-title"></a>
+
 ## Shift & Title Option [⬆️](#table-of-contents)
 
-<a id="shift-title"></a>
 The shift feature allows you to adjust the starting point of generating an Excel file. The title option, on the other hand, is used when you want to include a title at the top of the generated file.
 
 <details>
@@ -3463,9 +3466,9 @@ ExcelTable.generateExcel(data);
 
 </details>
 
-## Comment Option [⬆️](#table-of-contents)
-
 <a id="comment"></a>
+
+## Comment Option [⬆️](#table-of-contents)
 
 After version 2.4.0 you can add comment on cells.
 
@@ -3612,9 +3615,9 @@ ExcelTable.generateExcel(data);
 
 </details>
 
-## Multi Style value Option [⬆️](#table-of-contents)
-
 <a id="multi-style-value"></a>
+
+## Multi Style value Option [⬆️](#table-of-contents)
 
 After version 2.4.0, We added Ability to change the style of each character of cells. (only text value)
 
@@ -3974,9 +3977,9 @@ ExcelTable.generateExcel(data);
 
 </details>
 
-## Conditional Styling [⬆️](#table-of-contents)
-
 <a id="conditional-styling"></a>
+
+## Conditional Styling [⬆️](#table-of-contents)
 
 Using the 'styleCellCondition' option, you can apply styles to each cell based on specific conditions as needed.
 
@@ -4070,9 +4073,9 @@ ExcelTable.generateExcel(data);
 
 </details>
 
-## Conditinal Formating [⬆️](#table-of-contents)
-
 <a id="conditinal-formating"></a>
+
+## Conditinal Formating [⬆️](#table-of-contents)
 
 You can apply Excel conditional formatting in two ways. One method is through the Header object, which affects a whole column. The other method is using the Sheet object, where you need to specify the start and end properties.
 
@@ -4206,9 +4209,9 @@ ExcelTable.generateExcel(data);
 
 </details>
 
-## On Column(Header) [⬆️](#table-of-contents)
-
 <a id="conditinal-formating-header"></a>
+
+### On Column(Header) [⬆️](#table-of-contents)
 
 Here's an example of how to use conditional formatting on a header.
 
@@ -4420,9 +4423,9 @@ ExcelTable.generateExcel(data);
 
 </details>
 
-## General use [⬆️](#table-of-contents)
-
 <a id="conditinal-formating-general-use"></a>
+
+### General use [⬆️](#table-of-contents)
 
 General use and sheet objects offer the same functionality but are more flexible, allowing you to apply them to multiple columns and various other use cases
 
@@ -4555,9 +4558,9 @@ ExcelTable.generateExcel(data);
 
 </details>
 
-## Image Option [⬆️](#table-of-contents)
-
 <a id="image-option"></a>
+
+## Image Option [⬆️](#table-of-contents)
 
 After version 2.8.0, we introduced the ability to add images.
 

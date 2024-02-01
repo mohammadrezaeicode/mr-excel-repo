@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 5.1.1 (2024-01-31)
+
+### Bug Fixes
+
+- Fixed README.md
+
 ## Version 5.1.0 (2024-01-31)
 
 ### New Features
