@@ -69,6 +69,9 @@
     "url": "https://github.com/mohammadrezaeicode/mr-excel-repo.git/issues",
     "email": "mohammadrezaeicode@gmail.com"
   },
+  "publishConfig": {
+    "@mohammadrezaeicode:registry": "https://npm.pkg.github.com"
+  },
   "homepage": "https://github.com/mohammadrezaeicode/mr-excel-repo#readme",
   "dependencies": {
     "file-saver": "2.0.5",
