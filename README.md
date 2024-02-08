@@ -47,6 +47,8 @@ MR-Excel is a JavaScript library designed for reading and writing Excel files. T
   - [**`How to use themeBaseGenerate`**](#theme-base-generate-usage)
 - [**`extractExcelData`**](#extract-excel-data)
   - [**`How to use extractExcelData`**](#extract-excel-data-usage)
+- [**`🆕 generateCSV && generateText`**](#generate-csv-txt)
+  - [**`🆕 How to use generateCSV && generateText`**](#generate-csv-txt-usage)
 - [**`interface`**](#interface)
 - [**`Migrate Version`**](#migrate)
   - [**`Migrating from 4 to 5`**](#migrating-4)
@@ -80,6 +82,10 @@ We have four functions that are defined with specific use cases as follows:
 <a id="extract-excel-data"></a>
 
 - **`extractExcelData`**: We provide 'extract-excel-data-usage,' which takes the URL of an Excel file that needs to be read, retrieves and reads the data, and returns an object containing the sheets as the result.
+
+<a id="generate-csv-txt"></a>
+
+- **`🆕 generateCSV && generateText`**:The generateCSV function produces a .csv file based on the excelTable output, while the generateText function generates a .txt file. This function includes a boolean property; if set to true, the generated files will be compressed into a zip file. It is important to note that .csv and .txt files do not support styles, formulas, and other similar features.
 
 <a id="installation"></a>
 
@@ -446,11 +452,152 @@ ExcelTable.convertTableToExcel("#table", null, true, rowF, colF)
 
 </details>
 
+<a id="extract-excel-data-usage"></a>
+
 ### How to use extractExcelData
 
 ```javascript
 ExcelTable.extractExcelData(your excel url);
 ```
+
+<a id="generate-csv-txt-usage"></a>
+
+### 🆕 How to use generateCSV && generateText
+
+<details>
+
+<summary>Display Code</summary>
+
+```javascript
+const data = {
+  sheet: [
+      {
+          headers: [
+              {
+                  label: "test",
+                  text: "Test",
+              },
+              {
+                  label: "_id",
+                  text: "ID",
+                  formula: {
+                      type: "MAX",
+                      styleId: "formulaStyle",
+                  },
+              },
+          ],
+          data: [
+              {
+                  _id: 0.3,
+                  test: "test1",
+              },
+              {
+                  _id: 2,
+                  test: "test2",
+              },
+              {
+                  _id: 3,
+                  test: "test3",
+              },
+              {
+                  _id: 4,
+                  test: "test4",
+              },
+              {
+                  _id: 5,
+                  test: "test5",
+              },
+              {
+                  _id: 6,
+                  test: "test6",
+              },
+              {
+                  _id: 7,
+                  test: "test7",
+              },
+              {
+                  _id: 8,
+                  test: "test8",
+              },
+              {
+                  _id: 9,
+                  test: "test9",
+              },
+              {
+                  _id: 10,
+                  test: "test10",
+              },
+              {
+                  _id: 11,
+                  test: "test11",
+              },
+          ],
+      },
+      {
+          headers: [
+              {
+                  label: "test",
+                  text: "Test",
+              },
+              {
+                  label: "_id",
+                  text: "ID",
+              },
+          ],
+          data: [
+              {
+                  _id: 1,
+                  test: "test1",
+              },
+              {
+                  _id: 2,
+                  test: "test2",
+              },
+              {
+                  _id: 3,
+                  test: "test3",
+              },
+              {
+                  _id: 4,
+                  test: "test4",
+              },
+              {
+                  _id: 5,
+                  test: "test5",
+              },
+              {
+                  _id: 6,
+                  test: "test6",
+              },
+              {
+                  _id: 7,
+                  test: "test7",
+              },
+              {
+                  _id: 8,
+                  test: "test8",
+              },
+              {
+                  _id: 9,
+                  test: "test9",
+              },
+              {
+                  _id: 10,
+                  test: "test10",
+              },
+              {
+                  _id: 11,
+                  test: "test11",
+              },
+          ],
+      },
+  ],
+};
+ExcelTable.generateCSV(data, true);
+ExcelTable.generateText(data, true);   
+```
+
+</details>
 
 <a id="side-by-side-line-by-line-usage"></a>
 
@@ -8320,6 +8467,12 @@ To migrate from Version 2 to Version 3, you need to follow the steps below:
   - Replace "color" with "color."
 
 ## Release Notes [⬆️](#table-of-contents)
+
+## Version 5.2.0 (2024-02-08)
+
+### New Features
+
+- `generateCSV` & `generateText` functions create files in different formats, namely `.csv` and `.txt`
 
 ### Version 5.1.0 (2024-01-31)
 

@@ -4,9 +4,7 @@ import {
   type ConditionalFormatting,
   type ExcelTable,
   type Formula,
-  type HeaderFooterLocationMap,
   type HeaderFooterOption,
-  type HeaderFooterTypes,
   type MergeRowConditionMap,
   type ProtectionOptionKey,
   type RowMap,
@@ -876,105 +874,53 @@ export async function generateExcel(data: ExcelTable, styleKey: string = "") {
         //     <xdr:row>${result.end.row}</xdr:row>
         //     <xdr:rowOff>${result.end.mR}</xdr:rowOff>
         // </xdr:to>
-        checkboxSheetContent += `<mc:AlternateContent xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006">
-                    <mc:Choice Requires="x14">
-                        <control shapeId="${shapeId}" r:id="rId${
-          7 + i
-        }" name="${v.text}">
-                            <controlPr defaultSize="0" autoFill="0" autoLine="0" autoPict="0">
-                                <anchor moveWithCells="1">
-                                    <from>
-                                        <xdr:col>${
-                                          resultVal.start.col
-                                        }</xdr:col>
-                                        <xdr:colOff>19050</xdr:colOff>
-                                        <xdr:row>${
-                                          resultVal.start.row
-                                        }</xdr:row>
-                                        <xdr:rowOff>19050</xdr:rowOff>
-                                    </from>
-                                    <to>
-                                        <xdr:col>${resultVal.end.col}</xdr:col>
-                                        <xdr:colOff>819150</xdr:colOff>
-                                        <xdr:row>${resultVal.end.row}</xdr:row>
-                                        <xdr:rowOff>0</xdr:rowOff>
-                                    </to>
-                                </anchor>
-                            </controlPr>
-                        </control>
-                    </mc:Choice>
-                </mc:AlternateContent>`;
+        checkboxSheetContent +=
+          '<mc:AlternateContent xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"><mc:Choice Requires="x14"><control shapeId="' +
+          shapeId +
+          '" r:id="rId' +
+          (7 + i) +
+          '" name="' +
+          v.text +
+          '"><controlPr defaultSize="0" autoFill="0" autoLine="0" autoPict="0"><anchor moveWithCells="1"><from><xdr:col>' +
+          resultVal.start.col +
+          "</xdr:col><xdr:colOff>19050</xdr:colOff><xdr:row>" +
+          resultVal.start.row +
+          "</xdr:row><xdr:rowOff>19050</xdr:rowOff></from><to><xdr:col>" +
+          resultVal.end.col +
+          "</xdr:col><xdr:colOff>819150</xdr:colOff><xdr:row>" +
+          resultVal.end.row +
+          "</xdr:row><xdr:rowOff>0</xdr:rowOff></to></anchor></controlPr></control></mc:Choice></mc:AlternateContent>";
         // .push(v.checked ? checkedStr : uncheckedStr)
-        formRel += `<Relationship Id="rId${7 + i}"
-        Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/ctrlProp"
-        Target="../ctrlProps/ctrlProp${checkboxForm.length}.xml" />`;
-        checkboxDrawingContent += ` <mc:AlternateContent xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006">
-        <mc:Choice xmlns:a14="http://schemas.microsoft.com/office/drawing/2010/main" Requires="a14">
-            <xdr:twoCellAnchor editAs="oneCell">
-                <xdr:from>
-                    <xdr:col>${resultVal.start.col}</xdr:col>
-                    <xdr:colOff>19050</xdr:colOff>
-                    <xdr:row>${resultVal.start.row}</xdr:row>
-                    <xdr:rowOff>19050</xdr:rowOff>
-                </xdr:from>
-                <xdr:to>
-                    <xdr:col>${resultVal.end.col}</xdr:col>
-                    <xdr:colOff>819150</xdr:colOff>
-                    <xdr:row>${resultVal.end.row}</xdr:row>
-                    <xdr:rowOff>0</xdr:rowOff>
-                </xdr:to>
-                <xdr:sp macro="" textlink="">
-                   <xdr:nvSpPr>
-                        <xdr:cNvPr id="${shapeId}" name="${v.text}" hidden="1">
-                            <a:extLst>
-                                <a:ext uri="">
-                                    <a14:compatExt spid="${sId}"/>
-                                </a:ext>
-                                <a:ext uri="">
-                                    <a16:creationId xmlns:a16="http://schemas.microsoft.com/office/drawing/2014/main" id=""/>
-                                </a:ext>
-                            </a:extLst>
-                        </xdr:cNvPr>
-                        <xdr:cNvSpPr/>
-                    </xdr:nvSpPr>
-                    <xdr:spPr bwMode="auto">
-                        <a:xfrm>
-                            <a:off x="0" y="0"/>
-                            <a:ext cx="0" cy="0"/>
-                        </a:xfrm>
-                        <a:prstGeom prst="rect">
-                            <a:avLst/>
-                        </a:prstGeom>
-                        <a:noFill/>
-                        <a:ln>
-                            <a:noFill/>
-                        </a:ln>
-                    </xdr:spPr>
-                    <xdr:txBody>
-                        <a:bodyPr vertOverflow="clip" wrap="square" lIns="27432" tIns="18288" rIns="0" bIns="18288" anchor="ctr" upright="1"/>
-                        <a:lstStyle/>
-                        <a:p>
-                            <a:pPr algn="l" rtl="0">
-                                <a:defRPr sz="1000"/>
-                            </a:pPr>
-                            <a:r>
-                                <a:rPr lang="en-US" sz="800" b="0" i="0" u="none" strike="noStrike" baseline="0">
-                                    <a:solidFill>
-                                        <a:srgbClr val="000000"/>
-                                    </a:solidFill>
-                                    <a:latin typeface="Segoe UI"/>
-                                    <a:cs typeface="Segoe UI"/>
-                                </a:rPr>
-                                <a:t>${v.text}</a:t>
-                            </a:r>
-                        </a:p>
-                    </xdr:txBody>
-                </xdr:sp>
-                <xdr:clientData/>
-            </xdr:twoCellAnchor>
-        </mc:Choice>
-        <mc:Fallback/>
-    </mc:AlternateContent>`;
+        formRel +=
+          '<Relationship Id="rId' +
+          (7 + i) +
+          '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/ctrlProp" ' +
+          'Target="../ctrlProps/ctrlProp' +
+          checkboxForm.length +
+          '.xml" />';
+        checkboxDrawingContent +=
+          '<mc:AlternateContent xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"><mc:Choice xmlns:a14="http://schemas.microsoft.com/office/drawing/2010/main" Requires="a14"><xdr:twoCellAnchor editAs="oneCell"><xdr:from><xdr:col>' +
+          resultVal.start.col +
+          "</xdr:col><xdr:colOff>19050</xdr:colOff><xdr:row>" +
+          resultVal.start.row +
+          "</xdr:row><xdr:rowOff>19050</xdr:rowOff></xdr:from><xdr:to><xdr:col>" +
+          resultVal.end.col +
+          "</xdr:col><xdr:colOff>819150</xdr:colOff><xdr:row>" +
+          resultVal.end.row +
+          '</xdr:row><xdr:rowOff>0</xdr:rowOff></xdr:to><xdr:sp macro="" textlink=""><xdr:nvSpPr><xdr:cNvPr id="' +
+          shapeId +
+          '" name="' +
+          v.text +
+          '" hidden="1"><a:extLst><a:ext uri=""><a14:compatExt spid="' +
+          sId +
+          '"/></a:ext><a:ext uri=""><a16:creationId xmlns:a16="http://schemas.microsoft.com/office/drawing/2014/main" id=""/></a:ext>' +
+          '</a:extLst></xdr:cNvPr><xdr:cNvSpPr/></xdr:nvSpPr><xdr:spPr bwMode="auto"><a:xfrm><a:off x="0" y="0"/><a:ext cx="0" cy="0"/></a:xfrm>' +
+          '<a:prstGeom prst="rect"><a:avLst/></a:prstGeom><a:noFill/><a:ln><a:noFill/></a:ln></xdr:spPr><xdr:txBody>' +
+          '<a:bodyPr vertOverflow="clip" wrap="square" lIns="27432" tIns="18288" rIns="0" bIns="18288" anchor="ctr" upright="1"/>' +
+          '<a:lstStyle/><a:p><a:pPr algn="l" rtl="0"><a:defRPr sz="1000"/></a:pPr><a:r><a:rPr lang="en-US" sz="800" b="0" i="0" u="none" strike="noStrike" baseline="0"><a:solidFill>' +
+          '<a:srgbClr val="000000"/></a:solidFill><a:latin typeface="Segoe UI"/><a:cs typeface="Segoe UI"/></a:rPr><a:t>' +
+          v.text +
+          "</a:t></a:r></a:p></xdr:txBody></xdr:sp><xdr:clientData/></xdr:twoCellAnchor></mc:Choice><mc:Fallback/></mc:AlternateContent>";
       });
     }
     let backgroundImagePromise;
@@ -1004,7 +950,7 @@ export async function generateExcel(data: ExcelTable, styleKey: string = "") {
         }
         const ref = imageCounter++;
         const name = "image" + ref + "." + type;
-        const image = await toDataURL2(urlImg, name, isBackend,data.fetch);
+        const image = await toDataURL2(urlImg, name, isBackend, data.fetch);
         if (!image) {
           reject("image not load");
         }
@@ -2498,35 +2444,34 @@ export async function generateExcel(data: ExcelTable, styleKey: string = "") {
       sheetDrawers.push(drawerName);
       xl_drawingsFolder?.file(
         drawerName,
-        `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<xdr:wsDr xmlns:xdr="http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing"
-    xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"
-    xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"
-    xmlns:c="http://schemas.openxmlformats.org/drawingml/2006/chart"
-    xmlns:cx="http://schemas.microsoft.com/office/drawing/2014/chartex"
-    xmlns:cx1="http://schemas.microsoft.com/office/drawing/2015/9/8/chartex"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:dgm="http://schemas.openxmlformats.org/drawingml/2006/diagram"
-    xmlns:x3Unk="http://schemas.microsoft.com/office/drawing/2010/slicer"
-    xmlns:sle15="http://schemas.microsoft.com/office/drawing/2012/slicer"
->
-${sh.checkboxDrawingContent}
-</xdr:wsDr>`
+        '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
+          '<xdr:wsDr xmlns:xdr="http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing"' +
+          ' xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"' +
+          ' xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"' +
+          ' xmlns:c="http://schemas.openxmlformats.org/drawingml/2006/chart"' +
+          ' xmlns:cx="http://schemas.microsoft.com/office/drawing/2014/chartex"' +
+          ' xmlns:cx1="http://schemas.microsoft.com/office/drawing/2015/9/8/chartex"' +
+          ' xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"' +
+          ' xmlns:dgm="http://schemas.openxmlformats.org/drawingml/2006/diagram"' +
+          ' xmlns:x3Unk="http://schemas.microsoft.com/office/drawing/2010/slicer"' +
+          ' xmlns:sle15="http://schemas.microsoft.com/office/drawing/2012/slicer" >' +
+          sh.checkboxDrawingContent +
+          "</xdr:wsDr>"
       );
-      sheetRelContentStr += `<Relationship Id="rId3"
-        Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing"
-        Target="../drawings/vmlDrawing${iCo + 1}.vml" />
-        <Relationship Id="rId2"
-        Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing"
-        Target="../drawings/${drawerName}" />`;
+      sheetRelContentStr +=
+        '<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing" Target="../drawings/vmlDrawing' +
+        (iCo + 1) +
+        '.vml" /><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing" Target="../drawings/' +
+        drawerName +
+        '" />';
       sheetRelContentStr += sh.formRel;
       xl_drawingsFolder?.file(
         "vmlDrawing" + (iCo + 1) + ".vml",
-        `<xml xmlns:p="http://schemas.openxmlformats.org/presentationml/2006/main" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:oa="urn:schemas-microsoft-com:office:activation" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:pvml="urn:schemas-microsoft-com:office:powerpoint">
- <o:shapelayout v:ext="edit">
-  <o:idmap v:ext="edit" data="1"/>
- </o:shapelayout>${shapeTypeMap["checkbox"]}${sh.checkboxShape}
- </xml>`
+        '<xml xmlns:p="http://schemas.openxmlformats.org/presentationml/2006/main" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:oa="urn:schemas-microsoft-com:office:activation" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:pvml="urn:schemas-microsoft-com:office:powerpoint"><o:shapelayout v:ext="edit"><o:idmap v:ext="edit" data="1"/>' +
+          "</o:shapelayout>" +
+          shapeTypeMap["checkbox"] +
+          sh.checkboxShape +
+          "</xml>"
       );
     }
 
@@ -2684,13 +2629,9 @@ ${sh.checkboxDrawingContent}
           ? '<legacyDrawing r:id="rId3" />'
           : "") +
         (sh.hasCheckbox
-          ? `<mc:AlternateContent xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006">
-        <mc:Choice Requires="x14">
-            <controls>
-                ${sh.checkboxSheetContent}
-</controls>
- </mc:Choice>
-</mc:AlternateContent>`
+          ? '<mc:AlternateContent xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"><mc:Choice Requires="x14"><controls>' +
+            sh.checkboxSheetContent +
+            "</controls></mc:Choice></mc:AlternateContent>"
           : "") +
         sh.sheetMargin +
         (sh.isPortrait || (<string>sh.sheetBreakLine).length > 0

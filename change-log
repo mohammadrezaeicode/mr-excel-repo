@@ -1,5 +1,5 @@
-## Version 5.1.1 (2024-01-31)
+## Version 5.2.0 (2024-02-08)
 
-### Bug Fixes
+### New Features
 
-- Fixed README.md
+- `generateCSV` & `generateText` functions create files in different formats, namely .csv and .txt

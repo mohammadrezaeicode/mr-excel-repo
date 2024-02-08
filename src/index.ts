@@ -1,5 +1,10 @@
-import {themeGenerator } from "./themes/theme";
-import type { Data, ExcelTable, SideBySide,ThemeOption } from "./data-model/excel-table";
+import { themeGenerator } from "./themes/theme";
+import type {
+  Data,
+  ExcelTable,
+  SideBySide,
+  ThemeOption,
+} from "./data-model/excel-table";
 import {
   ColWidthScaleFunction,
   RowHeightScaleFunction,
@@ -14,6 +19,7 @@ import {
   addGlobalOptions as addGlobalOptionsFunc,
   addGlobalOptionFromExcelTable as addGlobalOptionFromExcelTableFunc,
 } from "./utils/store";
+import { generateCSV as gCSV } from "./utils/generateCSV";
 export const generateExcel = generateEx;
 
 export const addGlobalOptions = addGlobalOptionsFunc;
@@ -53,5 +59,11 @@ export async function themeBaseGenerate(
 }
 
 export const extractExcelData = extractExcelDataUtil;
+export function generateCSV(excelTable: ExcelTable, asZip: boolean = false) {
+  return gCSV(excelTable, asZip, false);
+}
+export function generateText(excelTable: ExcelTable, asZip: boolean = false) {
+  return gCSV(excelTable, asZip, true);
+}
 export type { DataModel };
 export { Validator };

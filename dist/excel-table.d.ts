@@ -212,9 +212,13 @@ declare interface FormulaSetting {
 
 declare type FormulaType = "AVERAGE" | "SUM" | "COUNT" | "MAX" | "MIN";
 
+export declare function generateCSV(excelTable: ExcelTable, asZip?: boolean): string[] | "done" | undefined;
+
 export declare const generateExcel: typeof generateExcel_2;
 
 declare function generateExcel_2(data: ExcelTable, styleKey?: string): Promise<string | number[] | Blob | Buffer | undefined>;
+
+export declare function generateText(excelTable: ExcelTable, asZip?: boolean): string[] | "done" | undefined;
 
 declare interface Header {
     label: string;

@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 5.2.0 (2024-02-08)
+
+### New Features
+
+- `generateCSV` & `generateText` functions create files in different formats, namely .csv and .txt
+
 ## Version 5.1.1 (2024-01-31)
 
 ### Bug Fixes
