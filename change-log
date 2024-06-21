@@ -1,5 +1,7 @@
-## Version 5.2.0 (2024-02-08)
+# Changelog
 
-### New Features
+## Version 5.3.0 (2024-06-21)
 
-- `generateCSV` & `generateText` functions create files in different formats, namely .csv and .txt
+### New Feature
+
+- feat: add new dollar format (by [Sergio Fernández](https://github.com/xergiodf))

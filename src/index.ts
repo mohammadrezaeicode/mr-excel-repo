@@ -1,4 +1,4 @@
-import { themeGenerator } from "./themes/theme";
+import { themeGenerator } from "./Themes/theme";
 import type {
   Data,
   ExcelTable,

@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 5.3.0 (2024-06-21)
+
+### New Feature
+
+- feat: add new dollar format (by [Sergio Fernández](https://github.com/xergiodf))
+
 ## Version 5.2.0 (2024-02-08)
 
 ### New Features

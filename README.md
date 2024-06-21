@@ -8468,6 +8468,12 @@ To migrate from Version 2 to Version 3, you need to follow the steps below:
 
 ## Release Notes [⬆️](#table-of-contents)
 
+## Version 5.3.0 (2024-06-21)
+
+### New Feature
+
+- feat: add new dollar format (by [Sergio Fernández](https://github.com/xergiodf))
+
 ## Version 5.2.0 (2024-02-08)
 
 ### New Features

@@ -564,6 +564,10 @@ const Pt = {
     key: 182,
     value: '<numFmt numFmtId="182" formatCode="0.0000" />'
   },
+  dollar_rounded: {
+    key: 183,
+    value: '<numFmt numFmtId="183" formatCode="&quot;$&quot;#,##0" />'
+  },
   dollar_2: {
     key: 183,
     value: '<numFmt numFmtId="183" formatCode="&quot;$&quot;#,##0.00" />'
