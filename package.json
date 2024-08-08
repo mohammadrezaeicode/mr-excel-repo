@@ -1,8 +1,21 @@
 {
   "name": "mr-excel",
-  "version": "5.3.0",
-  "main": "dist/excel-table.mjs",
+  "version": "6.0.0",
+  "type": "module",
+  "main": "dist/excel-table.cjs",
+  "module": "dist/excel-table.js",
   "types": "dist/excel-table.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/excel-table.js",
+      "require": "./dist/excel-table.cjs",
+      "default": "./dist/excel-table.umd.cjs",
+      "browser": "./dist/excel-table.iife.js",
+      "node": "./dist/excel-table.cjs",
+      "amd": "./dist/excel-table.amd.js",
+      "system": "./dist/excel-table.system.js"
+    }
+  },
   "scripts": {
     "build1": "tsc --noEmit && vite build",
     "start": "tsc",
@@ -64,9 +77,9 @@
     "jest-environment-jsdom": "^29.7.0",
     "ts-jest": "^29.1.1",
     "ts-loader": "^9.5.1",
-    "typescript": "^5.1.6",
-    "vite": "^4.5.1",
-    "vite-plugin-dts": "^3.7.0"
+    "typescript": "^5.5.4",
+    "vite": "^5.3.4",
+    "vite-plugin-dts": "^3.9.1"
   },
   "repository": "https://github.com/mohammadrezaeicode/mr-excel-repo.git",
   "bugs": {
@@ -79,6 +92,7 @@
   "homepage": "https://github.com/mohammadrezaeicode/mr-excel-repo#readme",
   "dependencies": {
     "file-saver": "2.0.5",
-    "jszip": "3.10.1"
+    "jszip": "3.10.1",
+    "mr-excel": "file:"
   }
 }

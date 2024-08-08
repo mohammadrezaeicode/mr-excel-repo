@@ -1,8 +1,5 @@
 import { describe, expect, test, jest } from "@jest/globals";
-import {
-  cols,
-  formatMap,
-} from "../../../../src/utils/content-generator/const-data";
+import { cols, formatMap } from "../../../../src/data-model/const-data";
 
 const def: string[] = [
   "A",
@@ -42,9 +39,11 @@ describe("formatMap object tests", () => {
     Object.keys(formatMap).forEach((element: string) => {
       let record = formatMap[element];
       expect(record.key).toBeTruthy();
-      expect(typeof record.value=="undefined" ||typeof record.value== "string").toBeTruthy();
+      expect(
+        typeof record.value == "undefined" || typeof record.value == "string"
+      ).toBeTruthy();
       if (record.value) {
-        expect(record.value.indexOf("/>")).toBe(record.value.length-2);
+        expect(record.value.indexOf("/>")).toBe(record.value.length - 2);
 
         expect(
           record.value.indexOf("/>") === record.value.lastIndexOf("/>")

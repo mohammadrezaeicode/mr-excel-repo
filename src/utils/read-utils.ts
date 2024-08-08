@@ -1,3 +1,11 @@
+import { cols } from "../data-model/const-data";
+import type {
+  ExtractedData,
+  ExtractResult,
+  ReadResult,
+} from "../data-model/excel-table";
+import { getColRowBaseOnRefString } from "./excel-util";
+
 function hasTBeforeV(element: string) {
   // Use regular expression to find 't="s"' before <v>
   const regex = /t="s".*?<v/;
@@ -30,19 +38,11 @@ function getRValue(element: string) {
   }
   return null; // Return null if 'r' attribute is not found
 }
-
-// import JSZip from "jszip";
-import { cols } from "./content-generator/const-data";
-import { getColRowBaseOnRefString } from "./excel-util";
-type ExtractedData = (string | null)[][];
-interface ExtractResult {
-  [sheetName: string]: ExtractedData;
-}
 export async function extractExcelData(
   uri: string,
   isBackend: boolean = false,
   fetchFunc?: Function
-) {
+): Promise<ReadResult> {
   let apiCaller: Function;
   let convertCall = false;
   if (typeof fetchFunc == "function") {
@@ -56,10 +56,13 @@ export async function extractExcelData(
     fileData: any;
   }[] = [];
   let nameMap = new Map<string, string>();
+  let nameObject: Record<string, string> = {};
   let sharedStrings: string[] = [];
   let sheetResultData: ExtractResult = {};
+  let maxLengthOfColumn: Record<string, number> = {};
   let seenShardString = false;
   function generateDataArray(filename: string, fileData: any) {
+    let maxCol = 0;
     let resultData: ExtractedData = [];
     let rows = fileData.match(/<c[\s\S\n]*?<\/c>/g);
     if (Array.isArray(rows)) {
@@ -74,6 +77,7 @@ export async function extractExcelData(
           resultData[rC.row] = [];
         }
         resultData[rC.row][rC.col] = value;
+        maxCol = Math.max(rC.col, maxCol);
       });
     }
     if (filename.indexOf("xl/worksheets/sheet") == 0) {
@@ -82,6 +86,7 @@ export async function extractExcelData(
         key = nameMap.get(key)!;
       }
       sheetResultData[key] = resultData;
+      maxLengthOfColumn[key] = maxCol;
     }
   }
   return await apiCaller(uri)
@@ -101,7 +106,7 @@ export async function extractExcelData(
       const module = await import("jszip");
       const JSZip = module.default;
       let fileCounter = 0;
-      return await new Promise((resolve, reject) => {
+      return await new Promise<ReadResult>((resolve, reject) => {
         JSZip.loadAsync(res).then(function (zip) {
           const keys = Object.keys(zip.files);
           fileCounter = keys.length;
@@ -124,7 +129,9 @@ export async function extractExcelData(
                   if (obj.counter === fileCounter) {
                     resolve({
                       data: sheetResultData,
+                      sheetNameObject: nameObject,
                       sheetName: nameMap.entries(),
+                      maxLengthOfColumn,
                     });
                   }
                 }
@@ -180,14 +187,14 @@ export async function extractExcelData(
                 );
                 const sheets = sheetsTag.split("<sheet ").slice(1);
                 sheets.forEach((v, i) => {
-                  let name = "Sheet 1";
-                  if (v.indexOf("name=") > 0) {
+                  let id = i + 1;
+                  let name = "Sheet " + id;
+                  if (v.indexOf("name=") >= 0) {
                     name = v.replace(
                       /(.*[\n\s\S]*?)name="([^"]*)"(.*[\n\s\S]*)/,
                       "$2"
                     );
                   }
-                  let id = i + 1;
                   if (v.indexOf("sheetId=") > 0) {
                     id = Number(
                       v.replace(
@@ -200,6 +207,7 @@ export async function extractExcelData(
                     }
                   }
                   nameMap.set("sheet" + id, name);
+                  nameObject["sheet" + id] = name;
                 });
                 proxy.isNameSet = true;
               }

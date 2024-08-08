@@ -1,3 +1,10 @@
+import JSZip from "jszip";
+import { cols } from "../../src/data-model/const-data";
+import { getColRowBaseOnRefString } from "../../src/utils/excel-util";
+type ExtractedData = (string | null)[][];
+interface ExtractResult {
+  [sheetName: string]: ExtractedData;
+}
 function hasTBeforeV(element: string) {
   // Use regular expression to find 't="s"' before <v>
   const regex = /t="s".*?<v/;
@@ -30,14 +37,6 @@ function getRValue(element: string) {
   }
   return null; // Return null if 'r' attribute is not found
 }
-
-import JSZip from "jszip";
-import { cols } from "../../src/utils/content-generator/const-data";
-import { getColRowBaseOnRefString } from "../../src/utils/excel-util";
-type ExtractedData = (string | null)[][];
-interface ExtractResult {
-  [sheetName: string]: ExtractedData;
-}
 export async function readGeneratedFile(
   data: unknown,
   isBackend: boolean = false
@@ -48,7 +47,7 @@ export async function readGeneratedFile(
   }[] = [];
   let nameMap = new Map<string, string>();
   let sharedStrings: string[] = [];
-  let fileList:string[]=[]
+  let fileList: string[] = [];
   let sheetResultData: ExtractResult = {};
   let seenShardString = false;
   function generateDataArray(filename: string, fileData: any) {
@@ -92,9 +91,8 @@ export async function readGeneratedFile(
       let fileCounter = 0;
       return await new Promise((resolve, reject) => {
         JSZip.loadAsync(res).then(function (zip) {
-        
           const keys = Object.keys(zip.files);
-          fileList=[...keys]
+          fileList = [...keys];
           fileCounter = keys.length;
           let proxy = new Proxy(
             {
@@ -204,4 +202,10 @@ export async function readGeneratedFile(
     .catch((e) => {
       throw e;
     });
+}
+export async function readSheet1(data: any) {
+  return await JSZip.loadAsync(data as any).then(async (zip: JSZip) => {
+    const keys = Object.keys(zip.files);
+    return await zip.files["xl/worksheets/sheet1.xml"].async("string");
+  });
 }

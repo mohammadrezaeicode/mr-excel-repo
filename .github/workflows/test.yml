@@ -7,7 +7,7 @@ jobs:
     continue-on-error: true
     strategy:
       matrix:
-        os: [macos-latest, windows-latest, ubuntu-latest,macos-13]
+        os: [windows-latest, ubuntu-latest,macos-13]
         version: ['14.x', '15.x', '16.x','17.x', '18.x','19.x','20.x']
     runs-on: ${{ matrix.os }}
     steps:

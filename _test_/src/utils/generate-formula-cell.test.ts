@@ -1,5 +1,4 @@
 import { describe, expect, test } from "@jest/globals";
-
 import { generateCellRowCol } from "../../../src/utils/generate-formula-cell";
 import {
   CustomFormulaSetting,

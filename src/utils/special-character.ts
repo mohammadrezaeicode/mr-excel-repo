@@ -1,4 +1,4 @@
-export const specialCharacterConverter= function (str: string) {
+export const specialCharacterConverter = function (str: string) {
   return str
     .replace(/\&/g, "&amp;")
     .replace(/\</g, "&lt;")

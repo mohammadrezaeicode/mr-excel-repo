@@ -1,9 +1,9 @@
 import {
- type CustomFormulaSetting,
- type FormulaSetting,
- type NoArgFormulaSetting,
- type SingleRefFormulaSetting,
- type Styles,
+  type CustomFormulaSetting,
+  type FormulaSetting,
+  type NoArgFormulaSetting,
+  type SingleRefFormulaSetting,
+  type Styles,
 } from "../data-model/excel-table";
 
 export function generateCellRowCol(
@@ -16,7 +16,7 @@ export function generateCellRowCol(
   sheetIndex: number,
   styles?: Styles
 ) {
-  string=string.toUpperCase();
+  string = string.toUpperCase();
   let cell = "";
   if ((<CustomFormulaSetting>formula).formula) {
     let form = <CustomFormulaSetting>formula;

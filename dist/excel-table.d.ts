@@ -1,5 +1,3 @@
-/// <reference types="node" />
-
 export declare const addGlobalOptionFromExcelTable: typeof addGlobalOptionFromExcelTable_2;
 
 declare function addGlobalOptionFromExcelTable_2(key: string, data: ExcelTable): void;
@@ -56,6 +54,10 @@ declare interface Checkbox {
     endStr?: string;
 }
 
+declare function checkSheetValidWithOneRef(ref: string): boolean;
+
+declare function checkSheetValidWithTwoRef(ref: string): boolean;
+
 declare type ColWidthScaleFunction = (data: number, colIndex: number) => number;
 
 declare interface Comment_2 {
@@ -71,9 +73,13 @@ declare interface ConditionalFormatting extends ConditionalFormattingOption {
     end: string;
 }
 
+declare type ConditionalFormattingCellsOperation = "lt" | "gt" | "between" | "eq" | "ct";
+
+declare type ConditionalFormattingIconSetOperation = "3Arrows" | "4Arrows" | "5Arrows" | "5ArrowsGray" | "4ArrowsGray" | "3ArrowsGray";
+
 declare interface ConditionalFormattingOption {
     type: "cells" | "dataBar" | "iconSet" | "colorScale" | "top";
-    operator?: string;
+    operator?: string | ConditionalFormattingCellsOperation | ConditionalFormattingIconSetOperation | ConditionalFormattingTopOperation;
     value?: number | string;
     priority?: number;
     colors?: string[];
@@ -82,7 +88,13 @@ declare interface ConditionalFormattingOption {
     percent?: number;
 }
 
-export declare function convertTableToExcel(queryForTable?: string, table?: HTMLTableElement, keepStyle?: boolean, rowHeightScaleFunction?: RowHeightScaleFunction, colWidthScaleFunction?: ColWidthScaleFunction): Promise<string | number[] | Blob | Buffer | undefined>;
+declare type ConditionalFormattingTopOperation = "belowAverage" | "aboveAverage";
+
+export declare function convertTableToExcel(queryForTable?: string, table?: HTMLTableElement, config?: {
+    keepStyle?: boolean;
+    rowHeightScaleFunction?: RowHeightScaleFunction;
+    colWidthScaleFunction?: ColWidthScaleFunction;
+}): Promise<string | number[] | Blob | Buffer | undefined>;
 
 declare interface CustomFormulaSetting {
     isArray?: boolean;
@@ -119,6 +131,9 @@ declare namespace DataModel {
         RowMap,
         ProtectionOption,
         ProtectionOptionKey,
+        ConditionalFormattingCellsOperation,
+        ConditionalFormattingIconSetOperation,
+        ConditionalFormattingTopOperation,
         ConditionalFormattingOption,
         ConditionalFormatting,
         ImageTypes,
@@ -153,7 +168,10 @@ declare namespace DataModel {
         NoArgFormulaSetting,
         StyleMapper,
         MapComment,
-        ThemeOption
+        ThemeOption,
+        ExtractedData,
+        ExtractResult,
+        ReadResult
     }
 }
 export { DataModel }
@@ -186,11 +204,38 @@ declare interface ExcelTableOption {
     numberOfColumn?: number;
     createType?: string;
     styles?: Styles;
+    formatMap?: FormatMap;
 }
 
-export declare const extractExcelData: typeof extractExcelData_2;
+export declare function excelToJson(uri: string, fetchFunc?: Function, withHeader?: boolean, defaultPropertyPrefix?: string): Promise<Record<string, object>>;
 
-declare function extractExcelData_2(uri: string, isBackend?: boolean, fetchFunc?: Function): Promise<any>;
+export declare function excelToNode(uri: string, queryForTable?: string | null, containerElement?: HTMLDivElement | null, config?: {
+    fetchFunc?: Function;
+    firstHeader?: boolean;
+    returnTableNodes?: boolean;
+    emptyNodeDefaultString?: string;
+    removeContainerChildNode?: boolean;
+    containerNodeStyle?: object;
+    tableStyle?: object;
+    cellStyle?: object;
+    buttonContainerStyle?: object;
+    buttonStyle?: object;
+    activeButtonStyle?: object;
+}): Promise<HTMLTableElement[] | "Done">;
+
+declare const exportedForTesting: {
+    checkSheetValidWithOneRef: typeof checkSheetValidWithOneRef;
+    checkSheetValidWithTwoRef: typeof checkSheetValidWithTwoRef;
+    generalValidationCheck: typeof generalValidationCheck;
+};
+
+declare type ExtractedData = (string | null | undefined)[][];
+
+export declare function extractExcelData(uri: string, isBackend?: boolean, fetchFunc?: Function): Promise<DataModel.ReadResult>;
+
+declare interface ExtractResult {
+    [sheetName: string]: ExtractedData;
+}
 
 declare interface FormatMap {
     [format: string]: {
@@ -212,13 +257,13 @@ declare interface FormulaSetting {
 
 declare type FormulaType = "AVERAGE" | "SUM" | "COUNT" | "MAX" | "MIN";
 
-export declare function generateCSV(excelTable: ExcelTable, asZip?: boolean): string[] | "done" | undefined;
+declare function generalValidationCheck(value: never, validateProperty: ValidationObject, property: string, strict: boolean, warn: boolean): boolean;
 
-export declare const generateExcel: typeof generateExcel_2;
+export declare function generateCSV(excelTable: ExcelTable, asZip?: boolean): Promise<string[] | "done" | undefined>;
 
-declare function generateExcel_2(data: ExcelTable, styleKey?: string): Promise<string | number[] | Blob | Buffer | undefined>;
+export declare function generateExcel(data: ExcelTable, styleKey?: string): Promise<string | number[] | Blob | Buffer | undefined>;
 
-export declare function generateText(excelTable: ExcelTable, asZip?: boolean): string[] | "done" | undefined;
+export declare function generateText(excelTable: ExcelTable, asZip?: boolean): Promise<string[] | "done" | undefined>;
 
 declare interface Header {
     label: string;
@@ -332,6 +377,13 @@ declare type ProtectionOption = {
 };
 
 declare type ProtectionOptionKey = "sheet" | "formatCells" | "formatColumns" | "formatRows" | "insertColumns" | "insertRows" | "insertHyperlinks" | "deleteColumns" | "deleteRows" | "sort" | "autoFilter" | "pivotTables";
+
+declare interface ReadResult {
+    data: ExtractResult;
+    sheetNameObject: Record<string, string>;
+    sheetName: IterableIterator<[string, string]>;
+    maxLengthOfColumn: Record<string, number>;
+}
 
 declare type RowHeightScaleFunction = (data: number, rowIndex: number, fromHeader: boolean) => number;
 
@@ -470,17 +522,16 @@ declare interface Styles {
 
 declare type StyleType = "conditionalFormatting" | "CF" | "headerFooter" | "HF";
 
-export declare function themeBaseGenerate(data: ExcelTable | Data[] | Data[][], index: number, option?: ThemeOption): Promise<string | number[] | Blob | Buffer | undefined>;
+export declare function themeBaseGenerate(data: ExcelTable | Data[] | Data[][], option?: ThemeOption): Promise<string | number[] | Blob | Buffer | undefined>;
 
 declare interface ThemeOption {
-    headerIndex?: number;
-    rowIndex?: number;
     negativeColor?: boolean;
     headerColor?: string;
     rowColor?: string;
     headerBackgroundColor?: string;
     rowBackgroundColor?: string;
     fileName?: string;
+    filterKeys?: string[];
 }
 
 declare interface Title {
@@ -501,11 +552,25 @@ declare function validateSheetArrayFunction(sheets: Sheet[] | Sheet, strict?: bo
 
 declare function validateStyleObjectFunction(styles: Styles, strict?: boolean, warn?: boolean): void;
 
+declare interface ValidationObject {
+    mode: ValidationType;
+    type: string;
+    isEnum?: boolean;
+    enum?: string[];
+    isArray?: boolean;
+    notEmpty?: boolean;
+    min?: number;
+    validateFunction?: (key: string, value: any, strict: boolean, warn: boolean) => boolean;
+}
+
+declare type ValidationType = "TYPE_CHECK";
+
 declare namespace Validator {
     export {
         validateStyleObjectFunction,
         validateSheetArrayFunction,
-        validateExcelTableObjectFunction
+        validateExcelTableObjectFunction,
+        exportedForTesting
     }
 }
 export { Validator }
