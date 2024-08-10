@@ -79,7 +79,7 @@
     "ts-loader": "^9.5.1",
     "typescript": "^5.5.4",
     "vite": "^5.3.4",
-    "vite-plugin-dts": "^3.9.1"
+    "vite-plugin-dts": "^4.0.2"
   },
   "repository": "https://github.com/mohammadrezaeicode/mr-excel-repo.git",
   "bugs": {
@@ -92,7 +92,6 @@
   "homepage": "https://github.com/mohammadrezaeicode/mr-excel-repo#readme",
   "dependencies": {
     "file-saver": "2.0.5",
-    "jszip": "3.10.1",
-    "mr-excel": "file:"
+    "jszip": "3.10.1"
   }
 }
