@@ -9,12 +9,12 @@ export function getColRowBaseOnRefString(
 } {
   refString = refString.toUpperCase();
   let column = refString.replace(/[0-9]/g, "");
-  if(column.length==0){
-    throw "Invalid Column"
+  if (column.length == 0) {
+    throw "Invalid Column";
   }
   let row = parseInt(refString.substring(column.length));
   if (isNaN(row)) {
-    throw "Invalid Row"
+    throw "Invalid Row";
   }
   row = Math.max(0, row - 1);
   let colIndex = cols.indexOf(column);

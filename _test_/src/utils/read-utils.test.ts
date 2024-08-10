@@ -62,8 +62,8 @@ describe("toDataURL2 data tests", () => {
       expect(typeof resp.sheetName).toBe("object");
       expect(Object.keys(resp.data).length).toBe(1);
       let firstSheet;
-      if (resp.data["Sheet 1"]) {
-        firstSheet = resp.data["Sheet 1"];
+      if (resp.data["Sheet1"]) {
+        firstSheet = resp.data["Sheet1"];
       } else {
         firstSheet = resp.data["sheet1"];
       }

@@ -1,5 +1,5 @@
 
-# Theme result Images
+# Some Example result Images
 
 ![ex](https://github.com/mohammadrezaeicode/mr-excel-page-repo/blob/main/public/img/ex.PNG?raw=true)
 

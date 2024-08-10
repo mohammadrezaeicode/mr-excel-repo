@@ -1,42 +1,37 @@
-function hasTBeforeV(element: string) {
-  // Use regular expression to find 't="s"' before <v>
-  const regex = /t="s".*?<v/;
-  return regex.test(element);
-}
-function getValueWithinT(element: string) {
-  // Use regular expression to extract the content between <v> and </v>
-  const regex = /<t.*?>(.*?)<\/t>/;
-  const match = element.match(regex);
-  if (match) {
-    return match[1]; // Extracted value
-  }
-  return null; // Return null if <v> tag is not found
-}
-function getValueWithinV(element: string) {
-  // Use regular expression to extract the content between <v> and </v>
-  const regex = /<v.*?>(.*?)<\/v>/;
-  const match = element.match(regex);
-  if (match) {
-    return match[1]; // Extracted value
-  }
-  return null; // Return null if <v> tag is not found
-}
-function getRValue(element: string) {
-  // Use regular expression to extract the 'r' attribute value
-  const regex = /r="(.*?)"/;
-  const match = element.match(regex);
-  if (match) {
-    return match[1]; // Extracted 'r' value
-  }
-  return null; // Return null if 'r' attribute is not found
-}
-
 import JSZip from "jszip";
-import { cols } from "../../src/utils/content-generator/const-data";
+import { cols } from "../../src/data-model/const-data";
 import { getColRowBaseOnRefString } from "../../src/utils/excel-util";
 type ExtractedData = (string | null)[][];
 interface ExtractResult {
   [sheetName: string]: ExtractedData;
+}
+function hasTBeforeV(element: string) {
+  const regex = /t="s".*?<v/;
+  return regex.test(element);
+}
+function getValueWithinT(element: string) {
+  const regex = /<t.*?>(.*?)<\/t>/;
+  const match = element.match(regex);
+  if (match) {
+    return match[1];
+  }
+  return null;
+}
+function getValueWithinV(element: string) {
+  const regex = /<v.*?>(.*?)<\/v>/;
+  const match = element.match(regex);
+  if (match) {
+    return match[1];
+  }
+  return null;
+}
+function getRValue(element: string) {
+  const regex = /r="(.*?)"/;
+  const match = element.match(regex);
+  if (match) {
+    return match[1];
+  }
+  return null;
 }
 export async function readGeneratedFile(
   data: unknown,
@@ -48,7 +43,7 @@ export async function readGeneratedFile(
   }[] = [];
   let nameMap = new Map<string, string>();
   let sharedStrings: string[] = [];
-  let fileList:string[]=[]
+  let fileList: string[] = [];
   let sheetResultData: ExtractResult = {};
   let seenShardString = false;
   function generateDataArray(filename: string, fileData: any) {
@@ -92,9 +87,8 @@ export async function readGeneratedFile(
       let fileCounter = 0;
       return await new Promise((resolve, reject) => {
         JSZip.loadAsync(res).then(function (zip) {
-        
           const keys = Object.keys(zip.files);
-          fileList=[...keys]
+          fileList = [...keys];
           fileCounter = keys.length;
           let proxy = new Proxy(
             {
@@ -126,8 +120,7 @@ export async function readGeneratedFile(
                 if (prop === "isNameSet") {
                   return target.isNameSet;
                 }
-                // By default, it looks like Reflect.get(target, prop, receiver)
-                // which has a different value of `this`
+
                 return target.counter;
               },
             }
@@ -204,4 +197,10 @@ export async function readGeneratedFile(
     .catch((e) => {
       throw e;
     });
+}
+export async function readSheet1(data: any) {
+  return await JSZip.loadAsync(data as any).then(async (zip: JSZip) => {
+    const keys = Object.keys(zip.files);
+    return await zip.files["xl/worksheets/sheet1.xml"].async("string");
+  });
 }
