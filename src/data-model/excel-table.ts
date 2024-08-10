@@ -15,6 +15,7 @@ export interface ExcelTableOption {
   numberOfColumn?: number;
   createType?: string;
   styles?: Styles;
+  formatMap?: FormatMap;
 }
 
 export interface Sheet extends SheetOption {
@@ -203,9 +204,28 @@ export type ProtectionOptionKey =
   | "sort"
   | "autoFilter"
   | "pivotTables";
+export type ConditionalFormattingCellsOperation =
+  | "lt"
+  | "gt"
+  | "between"
+  | "eq"
+  | "ct";
+export type ConditionalFormattingIconSetOperation =
+  | "3Arrows"
+  | "4Arrows"
+  | "5Arrows"
+  | "5ArrowsGray"
+  | "4ArrowsGray"
+  | "3ArrowsGray";
+export type ConditionalFormattingTopOperation = "belowAverage" | "aboveAverage";
 export interface ConditionalFormattingOption {
   type: "cells" | "dataBar" | "iconSet" | "colorScale" | "top";
-  operator?: string;
+  operator?:
+    | string
+    | ConditionalFormattingCellsOperation
+    | ConditionalFormattingIconSetOperation
+    | ConditionalFormattingTopOperation;
+
   value?: number | string;
   priority?: number;
   colors?: string[];
@@ -472,12 +492,53 @@ export interface MapComment {
   [key: string]: Comment | string;
 }
 export interface ThemeOption {
-  headerIndex?: number;
-  rowIndex?: number;
   negativeColor?: boolean;
   headerColor?: string;
   rowColor?: string;
   headerBackgroundColor?: string;
   rowBackgroundColor?: string;
   fileName?: string;
+  filterKeys?: string[];
+}
+export type ExtractedData = (string | null | undefined)[][];
+export interface ExtractResult {
+  [sheetName: string]: ExtractedData;
+}
+export interface ReadResult {
+  data: ExtractResult;
+  sheetNameObject: Record<string, string>;
+  sheetName: IterableIterator<[string, string]>;
+  maxLengthOfColumn: Record<string, number>;
+}
+export declare class Buffer extends Uint8Array {
+  constructor(str: string, encoding?: string);
+  constructor(size: number);
+  constructor(array: Uint8Array);
+  constructor(arrayBuffer: ArrayBuffer, byteOffset?: number, length?: number);
+
+  static alloc(
+    size: number,
+    fill?: string | Buffer | number,
+    encoding?: string
+  ): Buffer;
+  static from(
+    arrayBuffer: ArrayBuffer,
+    byteOffset?: number,
+    length?: number
+  ): Buffer;
+  static from(data: number[]): Buffer;
+  static from(str: string, encoding?: string): Buffer;
+
+  write(
+    string: string,
+    offset?: number,
+    length?: number,
+    encoding?: string
+  ): number;
+  toString(encoding?: string, start?: number, end?: number): string;
+  slice(start?: number, end?: number): Buffer;
+  static concat(list: Buffer[], totalLength?: number): Buffer;
+
+  length: number;
+  byteOffset: number;
 }

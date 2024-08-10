@@ -2,7 +2,45 @@
 
 ![Test](https://github.com/mohammadrezaeicode/github-action/actions/workflows/test.yml/badge.svg) [![Release & Publish](https://github.com/mohammadrezaeicode/mr-excel-repo/actions/workflows/release.yml/badge.svg)](https://github.com/mohammadrezaeicode/mr-excel-repo/actions/workflows/release.yml)
 
-MR-Excel is a JavaScript library designed for reading and writing Excel files. This library allows you to extract data from Excel files, and when it comes to writing, it offers a range of features such as commenting, styling, Formulas, merging cells,Grouping rows, conditional formatting (Excel), multi-style values, and functions that can be used for cell merging, adding styles and commenting functionalities. `Since version 5.0.0, we exclusively build via Vite. The path of the TypeScript interface has been updated (link). For further details, refer to the TypeScript example.` **Example: [Express](https://github.com/mohammadrezaeicode/mr-excel-repo/tree/main/example/express) | [CDN](https://github.com/mohammadrezaeicode/mr-excel-repo/tree/main/example/CDN) | [Typescript](https://github.com/mohammadrezaeicode/mr-excel-repo/tree/main/example/typescript) | [Angular](https://github.com/mohammadrezaeicode/mr-excel-repo/tree/main/example/angular)**
+`MR-Excel` is a powerful JavaScript library designed for reading and writing Excel files. It enables users to extract data seamlessly from Excel documents while providing an array of advanced writing features. These include commenting, styling, applying formulas, merging cells, inserting images into cells, adding background images, grouping rows, and implementing conditional formatting. Additionally, the library supports multi-style values and offers functions for cell merging and styling, as well as commenting features.
+
+For front-end-specific tasks, the library includes functions such as `excelToNode` and `convertTableToExcel`, which facilitate reading and inserting nodes into the DOM.This library also supports the generation of CSV and text file formats, enhancing its versatility for various data handling needs.
+
+important functions of library that are defined with specific use cases as follows:
+
+<a id="generate-excel"></a>
+
+- **`generateExcel`**: This is the primary function and serves as the main entry point for most other functions. Its responsibility is to generate an Excel file based on the received input data. We will provide examples of the various options that can be utilized.
+
+<a id="convert-table-to-excel"></a>
+
+- **`convertTableToExcel`**: This function is designed exclusively for **client-side** use. It requires passing a DOM element (a table element) as a parameter. The output of this function is an Excel file generated from the provided table.
+
+<a id="side-by-side-line-by-line"></a>
+
+- **`sideBySideLineByLine`**: This function offers the capability to generate a single-sheet Excel file containing multiple tables side by side and line by line.
+
+<a id="theme-base-generate"></a>
+
+- **`themeBaseGenerate`**: After version `6.0.0`, the themeBaseGenerate function requires a theme color instead of index-based themes. Previous themes and the corresponding code for necessary changes can be found at [this link](https://mohammadrezaeicode.github.io/mr-excel-theme-page/)
+
+<a id="extract-excel-data"></a>
+
+- **`extractExcelData`**:  This function accepts the URL of an Excel file, retrieves its data, and returns an object containing the sheets. Additionally, it includes a `fetchFunc` parameter that allows users to override the default request call (fetch) for backend use.
+
+<a id="generate-csv-txt"></a>
+
+- **`generateCSV && generateText`**: The `generateCSV` function produces a .csv file based on the excelTable input, while the `generateText` function generates a .txt file. This function includes a boolean property; if set to true, the generated files will be compressed into a zip file. It is important to note that .csv and .txt files do not support styles, formulas, and other similar features.
+
+<a id="excel-to-node"></a>
+
+- **`🆕 excelToNode`**: This function reads an uploaded Excel file and generates a representation of the tables from its sheets. It can either return the table directly or insert it into a specified container node provided as input.
+
+<a id="excel-to-json"></a>
+
+- **`🆕 excelToJson`**: This function reads an Excel file and returns a JSON object that represents the data contained in the file.
+
+The example has been moved to a separate repository for easier updates. You can find it in the ["**_`mr-excel-example-gallery`_**"](https://github.com/mohammadrezaeicode/mr-excel-example-gallery)([**_link_**](https://github.com/mohammadrezaeicode/mr-excel-example-gallery))
 
 ## Table of Contents
 
@@ -12,12 +50,13 @@ MR-Excel is a JavaScript library designed for reading and writing Excel files. T
 > You can return to the table of contents by clicking on ⬆️
 
 - [**`Installation`**](#installation)
+- [**`Install via Github `**](#install-github)
 - [**`Import`**](#import-package)
 - [**`Getting Started`**](#getting-started)
 - [**`generateExcel`**](#generate-excel)
   - [**`How to use generateExcel`**](#generate-excel-usage)
   - [**`General`**](#general-option)
-  - [**`🆕 fetch`**](#fetch)
+  - [**`fetch`**](#fetch)
   - [**`Header`**](#header)
   - [**`Formula`**](#formula)
     - [**`Time, Math, Custom Formula & etc`**](#new-formula)
@@ -33,12 +72,12 @@ MR-Excel is a JavaScript library designed for reading and writing Excel files. T
   - [**`Shift & Title`**](#shift-title)
   - [**`Image Option`**](#image-option)
   - [**`Checkbox`**](#checkbox)
-  - [**`🆕 Global Setting`**](#global-setting)
-  - [**`🆕 Page Option`**](#page-option)
-  - [**`🆕 RTL Option`**](#rtl-option)
-  - [**`🆕 View Option`**](#view-option)
-  - [**`🆕 Page Break`**](#page-break-option)
-  - [**`🆕 As Table`**](#as-table-option)
+  - [**`Global Setting`**](#global-setting)
+  - [**`Page Option`**](#page-option)
+  - [**`RTL Option`**](#rtl-option)
+  - [**`View Option`**](#view-option)
+  - [**`Page Break`**](#page-break-option)
+  - [**`As Table`**](#as-table-option)
 - [**`convertTableToExcel`**](#convert-table-to-excel)
   - [**`How to use convertTableToExcel`**](#convert-table-to-excel-usage)
 - [**`sideBySideLineByLine`**](#side-by-side-line-by-line)
@@ -47,45 +86,19 @@ MR-Excel is a JavaScript library designed for reading and writing Excel files. T
   - [**`How to use themeBaseGenerate`**](#theme-base-generate-usage)
 - [**`extractExcelData`**](#extract-excel-data)
   - [**`How to use extractExcelData`**](#extract-excel-data-usage)
-- [**`🆕 generateCSV && generateText`**](#generate-csv-txt)
-  - [**`🆕 How to use generateCSV && generateText`**](#generate-csv-txt-usage)
+- [**`generateCSV && generateText`**](#generate-csv-txt)
+  - [**`How to use generateCSV && generateText`**](#generate-csv-txt-usage)
+- [**`🆕 excelToNode`**](#excel-to-node)
+  - [**`🆕 How to use excelToNode`**](#excel-to-node-usage)
+- [**`🆕 excelToJson`**](#excel-to-json)
+  - [**`🆕 How to use excelToJson`**](#excel-to-json-usage)
 - [**`interface`**](#interface)
 - [**`Migrate Version`**](#migrate)
+  - [**`Migrating from 5 to 6`**](#migrating-5)
   - [**`Migrating from 4 to 5`**](#migrating-4)
   - [**`Migrating from 3 to 4`**](#migrating-3)
   - [**`Migrating from 2 to 3`**](#migrating-2)
 
-## Introduction [⬆️](#table-of-contents)
-
-Our library offers comprehensive support for a wide range of features, including data formatting, formulas, styles, merged cells, and grouped rows. [Express/backend example](https://github.com/mohammadrezaeicode/mr-excel-repo/tree/main/example/express), [TypeScript example](https://github.com/mohammadrezaeicode/mr-excel-repo/tree/main/example/typescript)
-
-In version 2.1.0, we introduced a new feature called "convertTableToExcel," which enables the generation of an Excel file from a specified table or DOM element (table). The provided query is expected to be a valid input for the querySelector method. This enhancement allows for greater flexibility and convenience when creating Excel files directly from HTML tables.
-
-We have four functions that are defined with specific use cases as follows:
-
-<a id="generate-excel"></a>
-
-- **`generateExcel`**: This is the primary and most important function that serves as the entry point for all other functions. Its responsibility is to generate an Excel file based on the received input data. We will provide examples of the various options that can be utilized.
-
-<a id="convert-table-to-excel"></a>
-
-- **`convertTableToExcel`**: This function is designed exclusively for **client-side** use. It requires passing a DOM element (a table element) as a parameter. The output of this function is an Excel file generated from the provided table.
-
-<a id="side-by-side-line-by-line"></a>
-
-- **`sideBySideLineByLine`**: This function offers the capability to generate a single-sheet Excel file containing multiple tables side by side and line by line.
-
-<a id="theme-base-generate"></a>
-
-- **`themeBaseGenerate`**: Within this function, we utilize color palettes from **https://colorhunt.co/**. It accepts data and a theme index as inputs, then generates an Excel file with the selected theme applied.[Themes](https://mohammadrezaeicode.github.io/mr-excel-theme-page/)
-
-<a id="extract-excel-data"></a>
-
-- **`extractExcelData`**: We provide 'extract-excel-data-usage,' which takes the URL of an Excel file that needs to be read, retrieves and reads the data, and returns an object containing the sheets as the result.
-
-<a id="generate-csv-txt"></a>
-
-- **`🆕 generateCSV && generateText`**:The generateCSV function produces a .csv file based on the excelTable output, while the generateText function generates a .txt file. This function includes a boolean property; if set to true, the generated files will be compressed into a zip file. It is important to note that .csv and .txt files do not support styles, formulas, and other similar features.
 
 <a id="installation"></a>
 
@@ -96,7 +109,7 @@ We have four functions that are defined with specific use cases as follows:
 You can utilize our library, which comes bundled with **Vite**, by including the following link:
 
 ```html
-<script src="https://unpkg.com/mr-excel@latest/dist/excel-table.umd.js"></script>
+<script src="https://unpkg.com/mr-excel@latest/dist/excel-table.umd.cjs"></script>
 ```
 
 **Using a Package Manager**
@@ -122,6 +135,16 @@ pnpm install mr-excel
 
 Choose the package manager that suits your workflow, and effortlessly bring the power of our library into your project, enabling smooth generation of Excel tables with ease and efficiency.
 
+<a id="install-github"></a>
+
+## Install via Github  [⬆️](#table-of-contents)
+
+You can install the library from a repository by following the example below. This approach allows you to fork, customize, and set up your own repository. In this instance, we will install from the `mr-excel` repository using the `main` branch.
+
+```terminal/bash
+npm install https://github.com/mohammadrezaeicode/mr-excel-repo.git#main
+```
+
 <a id="import-package"></a>
 
 ## Import [⬆️](#table-of-contents)
@@ -133,6 +156,7 @@ Depending on the installation method, use the appropriate approach:
 If you opt for a `CDN`, after adding the script, you only need the `ExcelTable` keyword for access to functions.
 
 ### Javascript(type: module) OR TypeScript:
+
 For JavaScript or TypeScript files that use the module type (indicated by adding `type: module` to the `package.json` file), employ the following code:
 
 ```javascript
@@ -142,27 +166,43 @@ import * as ExcelTable from "mr-excel";
 ExcelTable.generateExcel();
 ```
 
-### Lazy Import:
+### Dynamic Import/Lazy Loading:
 
 We recommend using this approach on the client side for import:
 
 ```javascript
-import("mr-excel").then(m => {
-  m.generateExcel();
-});
+import("mr-excel").then((m) =>m.generateExcel());
 ```
 
-Ensure you choose the appropriate method based on your installation preferences and project requirements.
+Ensure you choose the appropriate method based on your installation preferences and project requirements.["**_`mr-excel-example-gallery`_**"](https://github.com/mohammadrezaeicode/mr-excel-example-gallery)([**_link_**](https://github.com/mohammadrezaeicode/mr-excel-example-gallery))
 
 <a id="getting-started"></a>
 
 ## Getting Started [⬆️](#table-of-contents)
 
-After adding the library to your project, generating XLSX files becomes straightforward. You can achieve this by creating a data object similar to the code snippet below:
+After integrating the library into your project, generating XLSX files is a straightforward process. Simply create a data object, as demonstrated in the code snippet below:
 
 <a id="theme-base-generate-usage"></a>
 
 ### How to use themeBaseGenerate
+
+After version 6.0.0, the `themeBaseGenerate` function no longer supports index-based themes, so you'll need to provide a theme color instead. You can find the previous themes at [this link](https://mohammadrezaeicode.github.io/mr-excel-theme-page/), which also generates the necessary code to represent the changes that need to be applied.
+
+The second input parameter of `themeBaseGenerate` is a configuration object that includes the following options:
+
+```
+config => {
+  negativeColor?: boolean;
+  headerColor?: string;
+  rowColor?: string;
+  headerBackgroundColor?: string;
+  rowBackgroundColor?: string;
+  fileName?: string;
+  filterKeys?: string[];
+}
+```
+
+By using these options, you can customize the generated Excel file to suit your needs.
 
 <details>
 <summary>Display Code</summary>
@@ -310,7 +350,7 @@ let data = {
     },
   ],
 };
-ExcelTable.themeBaseGenerate(data, 0);
+ExcelTable.themeBaseGenerate(data);
 ```
 
 Or:
@@ -418,7 +458,7 @@ let data = [
     Occupation: "Engineer",
   },
 ];
-ExcelTable.themeBaseGenerate(data, 12);
+ExcelTable.themeBaseGenerate(data, { negativeColor: true });
 ```
 
 </details>
@@ -433,7 +473,7 @@ ExcelTable.themeBaseGenerate(data, 12);
 ExcelTable.convertTableToExcel("#table");
 -------------------------------------------------------------------
 let element = document.querySelector("#table");
-ExcelTable.convertTableToExcel(null, element, true);
+ExcelTable.convertTableToExcel(null, element, {keepStyle:true});
 -------------------------------------------------------------------
 const rowF = (value, index, from) => {
     return 50
@@ -441,7 +481,11 @@ const rowF = (value, index, from) => {
 const colF = (value, index) => {
     return value * 0.19
 }
-ExcelTable.convertTableToExcel("#table", null, true, rowF, colF)
+ExcelTable.convertTableToExcel("#table", null, {
+    keepStyle: true,
+    rowHeightScaleFunction: rowF,
+    colWidthScaleFunction: colF
+})
 ```
 
 <details>
@@ -462,7 +506,7 @@ ExcelTable.extractExcelData(your excel url);
 
 <a id="generate-csv-txt-usage"></a>
 
-### 🆕 How to use generateCSV && generateText
+### How to use generateCSV && generateText
 
 <details>
 
@@ -471,130 +515,162 @@ ExcelTable.extractExcelData(your excel url);
 ```javascript
 const data = {
   sheet: [
-      {
-          headers: [
-              {
-                  label: "test",
-                  text: "Test",
-              },
-              {
-                  label: "_id",
-                  text: "ID",
-                  formula: {
-                      type: "MAX",
-                      styleId: "formulaStyle",
-                  },
-              },
-          ],
-          data: [
-              {
-                  _id: 0.3,
-                  test: "test1",
-              },
-              {
-                  _id: 2,
-                  test: "test2",
-              },
-              {
-                  _id: 3,
-                  test: "test3",
-              },
-              {
-                  _id: 4,
-                  test: "test4",
-              },
-              {
-                  _id: 5,
-                  test: "test5",
-              },
-              {
-                  _id: 6,
-                  test: "test6",
-              },
-              {
-                  _id: 7,
-                  test: "test7",
-              },
-              {
-                  _id: 8,
-                  test: "test8",
-              },
-              {
-                  _id: 9,
-                  test: "test9",
-              },
-              {
-                  _id: 10,
-                  test: "test10",
-              },
-              {
-                  _id: 11,
-                  test: "test11",
-              },
-          ],
-      },
-      {
-          headers: [
-              {
-                  label: "test",
-                  text: "Test",
-              },
-              {
-                  label: "_id",
-                  text: "ID",
-              },
-          ],
-          data: [
-              {
-                  _id: 1,
-                  test: "test1",
-              },
-              {
-                  _id: 2,
-                  test: "test2",
-              },
-              {
-                  _id: 3,
-                  test: "test3",
-              },
-              {
-                  _id: 4,
-                  test: "test4",
-              },
-              {
-                  _id: 5,
-                  test: "test5",
-              },
-              {
-                  _id: 6,
-                  test: "test6",
-              },
-              {
-                  _id: 7,
-                  test: "test7",
-              },
-              {
-                  _id: 8,
-                  test: "test8",
-              },
-              {
-                  _id: 9,
-                  test: "test9",
-              },
-              {
-                  _id: 10,
-                  test: "test10",
-              },
-              {
-                  _id: 11,
-                  test: "test11",
-              },
-          ],
-      },
+    {
+      headers: [
+        {
+          label: "test",
+          text: "Test",
+        },
+        {
+          label: "_id",
+          text: "ID",
+          formula: {
+            type: "MAX",
+            styleId: "formulaStyle",
+          },
+        },
+      ],
+      data: [
+        {
+          _id: 0.3,
+          test: "test1",
+        },
+        {
+          _id: 2,
+          test: "test2",
+        },
+        {
+          _id: 3,
+          test: "test3",
+        },
+        {
+          _id: 4,
+          test: "test4",
+        },
+        {
+          _id: 5,
+          test: "test5",
+        },
+        {
+          _id: 6,
+          test: "test6",
+        },
+        {
+          _id: 7,
+          test: "test7",
+        },
+        {
+          _id: 8,
+          test: "test8",
+        },
+        {
+          _id: 9,
+          test: "test9",
+        },
+        {
+          _id: 10,
+          test: "test10",
+        },
+        {
+          _id: 11,
+          test: "test11",
+        },
+      ],
+    },
+    {
+      headers: [
+        {
+          label: "test",
+          text: "Test",
+        },
+        {
+          label: "_id",
+          text: "ID",
+        },
+      ],
+      data: [
+        {
+          _id: 1,
+          test: "test1",
+        },
+        {
+          _id: 2,
+          test: "test2",
+        },
+        {
+          _id: 3,
+          test: "test3",
+        },
+        {
+          _id: 4,
+          test: "test4",
+        },
+        {
+          _id: 5,
+          test: "test5",
+        },
+        {
+          _id: 6,
+          test: "test6",
+        },
+        {
+          _id: 7,
+          test: "test7",
+        },
+        {
+          _id: 8,
+          test: "test8",
+        },
+        {
+          _id: 9,
+          test: "test9",
+        },
+        {
+          _id: 10,
+          test: "test10",
+        },
+        {
+          _id: 11,
+          test: "test11",
+        },
+      ],
+    },
   ],
 };
 ExcelTable.generateCSV(data, true);
-ExcelTable.generateText(data, true);   
+ExcelTable.generateText(data, true);
+```
+
+</details>
+
+<a id="excel-to-node-usage"></a>
+
+### 🆕 How to use excelToNode
+
+<details>
+
+<summary>Display Code</summary>
+
+```javascript
+ExcelTable.excelToNode(link, "your query")
+-----
+ExcelTable.excelToNode(uri, queryForTable, containerElement, config)
+```
+
+</details>
+
+<a id="excel-to-json-usage"></a>
+
+### 🆕 How to use excelToJson
+
+<details>
+
+<summary>Display Code</summary>
+
+```javascript
+ExcelTable.excelToJson(link)
+-----
+ExcelTable.excelToJson(uri,fetchFunction,withHeader,defaultPropertyPrefix)
 ```
 
 </details>
@@ -602,8 +678,6 @@ ExcelTable.generateText(data, true);
 <a id="side-by-side-line-by-line-usage"></a>
 
 ### How to use sideBySideLineByLine
-
-`sideBySideLineByLine` is a new feature that enables the generation of multiple tables within a single Excel sheet.
 
 <details>
 
@@ -750,7 +824,7 @@ ExcelTable.sideBySideLineByLine(sideData);
 
 <a id="generate-excel-usage"></a>
 
-### generateExcel
+### How to use generateExcel
 
 <details>
 
@@ -758,12 +832,6 @@ ExcelTable.sideBySideLineByLine(sideData);
 
 ```javascript
 //<https://colorhunt.co/palette/f9ed69f08a5db83b5e6a2c70>
-const colorPalette = {
-  c1: "F9ED69",
-  c2: "#F08A5D",
-  c3: "B83B5E",
-  c4: "6A2C70",
-};
 const data = {
   creator: "mr",
   created: "2023-08-06T07:22:40Z",
@@ -923,7 +991,7 @@ ExcelTable.generateExcel(data);
 
 ## General option [⬆️](#table-of-contents)
 
-Each sheet has options for customization. You can change the sheet name using name, adjust the tab name color with tabColor, control visibility with state, add protection to a sheet via protectionOption, and implement sorting and filtering using sortAndFilter. In the example below, we will demonstrate how to utilize these properties. Additionally, for Excel file information, we offer options such as creator, created, notSave, and modified.
+Each sheet offers several customization options. You can rename the sheet using the `name` property, adjust the tab color with tabColor, control its visibility with the `state` property, add protection via `protectionOption`, and implement sorting and filtering using `sortAndFilter`. In the example below, we will demonstrate how to utilize these features effectively. Additionally, for Excel file information, we provide options such as `creator`, `created`, `notSave`, and `modified`.
 
 <details>
 
@@ -991,78 +1059,7 @@ const data = {
           work: "Computer repair technician",
           birthDate: "1853-04-10T01:23:16.181Z",
         },
-        {
-          id: 4132538644996,
-          name: "Grace",
-          surname: "MacTavish",
-          parentId: 6840142476821,
-          work: "Retired",
-          birthDate: "1854-04-03T08:51:19.825Z",
-        },
-        {
-          id: 778493423064,
-          name: "Bailey",
-          surname: "Byram",
-          parentId: 7137102781494,
-          work: "Occupational Therapist- Neonatal/ Pediatric",
-          birthDate: "1852-08-13T18:07:57.408Z",
-        },
-        {
-          id: 510141747289,
-          name: "Sherman",
-          surname: "Joseph",
-          parentId: 602149579197,
-          work: "work from home",
-          birthDate: "1854-12-12T05:48:31.806Z",
-        },
-        {
-          id: 5513277402976,
-          name: "Ryder",
-          surname: "Watrous",
-          parentId: 7435302183884,
-          work: "Welder",
-          birthDate: "1854-08-18T04:11:04.736Z",
-        },
-        {
-          id: 1032906540606,
-          name: "Phoenix",
-          surname: "Netter",
-          parentId: 3204642808212,
-          work: "Unemployed",
-          birthDate: "1854-07-19T07:53:58.843Z",
-        },
-        {
-          id: 343574032284,
-          name: "Tonya",
-          surname: "Carpenter",
-          parentId: 3709985684199,
-          work: "Pulmonologist",
-          birthDate: "1852-04-20T12:44:08.362Z",
-        },
-        {
-          id: 9497014533965,
-          name: "Coral",
-          surname: "Hoskins",
-          parentId: 3497153671269,
-          work: "Unemployed",
-          birthDate: "1854-12-01T22:08:59.891Z",
-        },
-        {
-          id: 4998374693826,
-          name: "Billie",
-          surname: "Guthrie",
-          parentId: 1555796128163,
-          work: "Skomorokh",
-          birthDate: "1853-11-10T14:06:54.037Z",
-        },
-        {
-          id: 95132218987,
-          name: "Gertrude",
-          surname: "Clark",
-          parentId: 2324519652998,
-          work: "Unemployed",
-          birthDate: "1852-12-22T20:12:13.237Z",
-        },
+        ...
       ],
     },
     {
@@ -1102,798 +1099,7 @@ const data = {
           work: "Computer repair technician",
           birthDate: "1853-04-10T01:23:16.181Z",
         },
-        {
-          id: 4132538644996,
-          name: "Grace",
-          surname: "MacTavish",
-          parentId: 6840142476821,
-          work: "Retired",
-          birthDate: "1854-04-03T08:51:19.825Z",
-        },
-        {
-          id: 778493423064,
-          name: "Bailey",
-          surname: "Byram",
-          parentId: 7137102781494,
-          work: "Occupational Therapist- Neonatal/ Pediatric",
-          birthDate: "1852-08-13T18:07:57.408Z",
-        },
-        {
-          id: 510141747289,
-          name: "Sherman",
-          surname: "Joseph",
-          parentId: 602149579197,
-          work: "work from home",
-          birthDate: "1854-12-12T05:48:31.806Z",
-        },
-        {
-          id: 5513277402976,
-          name: "Ryder",
-          surname: "Watrous",
-          parentId: 7435302183884,
-          work: "Welder",
-          birthDate: "1854-08-18T04:11:04.736Z",
-        },
-        {
-          id: 1032906540606,
-          name: "Phoenix",
-          surname: "Netter",
-          parentId: 3204642808212,
-          work: "Unemployed",
-          birthDate: "1854-07-19T07:53:58.843Z",
-        },
-        {
-          id: 343574032284,
-          name: "Tonya",
-          surname: "Carpenter",
-          parentId: 3709985684199,
-          work: "Pulmonologist",
-          birthDate: "1852-04-20T12:44:08.362Z",
-        },
-        {
-          id: 9497014533965,
-          name: "Coral",
-          surname: "Hoskins",
-          parentId: 3497153671269,
-          work: "Unemployed",
-          birthDate: "1854-12-01T22:08:59.891Z",
-        },
-        {
-          id: 4998374693826,
-          name: "Billie",
-          surname: "Guthrie",
-          parentId: 1555796128163,
-          work: "Skomorokh",
-          birthDate: "1853-11-10T14:06:54.037Z",
-        },
-        {
-          id: 95132218987,
-          name: "Gertrude",
-          surname: "Clark",
-          parentId: 2324519652998,
-          work: "Unemployed",
-          birthDate: "1852-12-22T20:12:13.237Z",
-        },
-        {
-          id: 4353606351491,
-          name: "Corinna",
-          surname: "Powell",
-          parentId: 6303270085856,
-          work: "Business analyst",
-          birthDate: "1853-05-13T14:00:27.525Z",
-        },
-        {
-          id: 9821977853501,
-          name: "Alexander",
-          surname: "Rowlands",
-          parentId: 5281151854805,
-          work: "work from home",
-          birthDate: "1852-07-29T02:34:26.818Z",
-        },
-        {
-          id: 1789259068865,
-          name: "Khloe",
-          surname: "Allsebrook",
-          parentId: 9085712911231,
-          work: "Internet celebrity",
-          birthDate: "1853-10-10T01:28:17.141Z",
-        },
-        {
-          id: 1547071460137,
-          name: "Sky",
-          surname: "Hyde",
-          parentId: 3932330547777,
-          work: "Retired",
-          birthDate: "1854-11-03T05:06:37.477Z",
-        },
-        {
-          id: 8054019194308,
-          name: "Niles",
-          surname: "Dudley",
-          parentId: 9487606369042,
-          work: "Porter",
-          birthDate: "1852-09-01T05:46:03.040Z",
-        },
-        {
-          id: 6759490924297,
-          name: "Valda",
-          surname: "Bye",
-          parentId: 5146431233541,
-          work: "Management",
-          birthDate: "1853-09-29T00:33:43.968Z",
-        },
-        {
-          id: 6625148457816,
-          name: "Keaton",
-          surname: "Boothe",
-          parentId: 4935663844945,
-          work: "Mental Health Counselor",
-          birthDate: "1854-10-25T16:56:16.488Z",
-        },
-        {
-          id: 5968154253225,
-          name: "Gill",
-          surname: "Voyles",
-          parentId: 1358001926693,
-          work: "Ophthalmologist",
-          birthDate: "1853-09-13T06:48:43.632Z",
-        },
-        {
-          id: 7963337332727,
-          name: "Josiah",
-          surname: "Engleman",
-          parentId: 4661422144081,
-          work: "Unemployed",
-          birthDate: "1854-05-31T14:12:01.180Z",
-        },
-        {
-          id: 7276643575609,
-          name: "Luca",
-          surname: "Alderman",
-          parentId: 1257836499862,
-          work: "Unemployed",
-          birthDate: "1852-07-04T12:18:59.130Z",
-        },
-        {
-          id: 4670743239553,
-          name: "Kathleen",
-          surname: "Walle",
-          parentId: 4441682230999,
-          work: "Computer scientist",
-          birthDate: "1854-08-22T11:02:53.945Z",
-        },
-        {
-          id: 7400518637533,
-          name: "Deacon",
-          surname: "Humpherys",
-          parentId: 1446747090804,
-          work: "Conservation officer",
-          birthDate: "1854-06-07T15:31:11.006Z",
-        },
-        {
-          id: 6500156651299,
-          name: "Carina",
-          parentId: 5968154253225,
-          surname: "Voyles",
-          work: "Chiropodist",
-          birthDate: "1867-02-15T16:59:13.152Z",
-        },
-        {
-          id: 1706294044283,
-          name: "Tucker",
-          parentId: 7963337332727,
-          surname: "Engleman",
-          work: "Podiatrist",
-          birthDate: "1866-12-09T07:32:17.900Z",
-        },
-        {
-          id: 3173442171339,
-          name: "Clarissa",
-          surname: "Harvie",
-          parentId: 8355293899833,
-          work: "Botanist",
-          birthDate: "1853-03-29T17:49:36.408Z",
-        },
-        {
-          id: 5788750055334,
-          name: "Melina",
-          parentId: 6500156651299,
-          surname: "Voyles",
-          work: "Welder",
-          birthDate: "1882-08-16T00:50:47.934Z",
-        },
-        {
-          id: 8843316769405,
-          name: "Keith",
-          surname: "Ludington",
-          parentId: 6356556019596,
-          work: "Usher",
-          birthDate: "1852-06-15T06:27:32.233Z",
-        },
-        {
-          id: 4207038883417,
-          name: "Aaliyah",
-          surname: "Woodville",
-          parentId: 5819329552655,
-          work: "Scop",
-          birthDate: "1854-10-08T02:36:29.656Z",
-        },
-        {
-          id: 8313555968957,
-          name: "Harper",
-          surname: "Allcock",
-          parentId: 7731940327551,
-          work: "Songwriter",
-          birthDate: "1853-05-09T23:05:40.195Z",
-        },
-        {
-          id: 8321384691545,
-          name: "Johnny",
-          parentId: 778493423064,
-          surname: "Byram",
-          work: "Copy editor",
-          birthDate: "1873-12-17T06:16:58.798Z",
-        },
-        {
-          id: 8774024011461,
-          name: "Jody",
-          parentId: 4132538644996,
-          surname: "MacTavish",
-          work: "Graphic designer",
-          birthDate: "1872-08-31T01:04:39.456Z",
-        },
-        {
-          id: 3306066401344,
-          name: "Mercedes",
-          surname: "Roberts",
-          parentId: 6748854838600,
-          work: "Feller",
-          birthDate: "1852-05-10T11:58:05.415Z",
-        },
-        {
-          id: 6496588012690,
-          name: "Renee",
-          parentId: 8054019194308,
-          surname: "Dudley",
-          work: "Plumber",
-          birthDate: "1873-12-17T21:54:18.411Z",
-        },
-        {
-          id: 2454674611066,
-          name: "Jill",
-          parentId: 6759490924297,
-          surname: "Bye",
-          work: "Dermatology Physician Assistant",
-          birthDate: "1865-03-20T17:31:14.827Z",
-        },
-        {
-          id: 8810365866300,
-          name: "Townsend",
-          parentId: 6496588012690,
-          surname: "Dudley",
-          work: "Psychiatric Nurse Practitioner",
-          birthDate: "1885-09-06T14:23:00.439Z",
-        },
-        {
-          id: 1971028749432,
-          name: "George",
-          surname: "Georgeson",
-          parentId: 3375820364841,
-          work: "Director",
-          birthDate: "1854-10-26T04:21:32.595Z",
-        },
-        {
-          id: 1113599419684,
-          name: "Jess",
-          surname: "Summers",
-          parentId: 8197445224794,
-          work: "Showrunner",
-          birthDate: "1853-06-20T11:49:42.822Z",
-        },
-        {
-          id: 260692577513,
-          name: "Salma",
-          surname: "Bagshaw",
-          parentId: 8646582409037,
-          work: "Technical director",
-          birthDate: "1854-08-02T11:08:13.512Z",
-        },
-        {
-          id: 4717646566698,
-          name: "Jakob",
-          parentId: 7400518637533,
-          surname: "Humpherys",
-          work: "Draper",
-          birthDate: "1875-09-29T02:59:25.272Z",
-        },
-        {
-          id: 2812851588162,
-          name: "Ezekiel",
-          surname: "Glanton",
-          parentId: 8694260373371,
-          work: "Retired",
-          birthDate: "1853-07-25T22:30:11.069Z",
-        },
-        {
-          id: 546554428930,
-          name: "Darrin",
-          parentId: 7963337332727,
-          surname: "Engleman",
-          work: "Healthcare science",
-          birthDate: "1867-11-05T12:21:08.349Z",
-        },
-        {
-          id: 5568159710759,
-          name: "Kirsten",
-          parentId: 6496588012690,
-          surname: "Dudley",
-          work: "work from home",
-          birthDate: "1890-06-13T12:43:09.597Z",
-        },
-        {
-          id: 3385269771452,
-          name: "Emerald",
-          parentId: 6496588012690,
-          surname: "Dudley",
-          work: "Retired",
-          birthDate: "1892-05-01T07:40:24.011Z",
-        },
-        {
-          id: 8533172021814,
-          name: "Andre",
-          parentId: 8321384691545,
-          surname: "Byram",
-          work: "Retired",
-          birthDate: "1892-02-25T01:12:38.146Z",
-        },
-        {
-          id: 4710524419131,
-          name: "Patty",
-          surname: "Dick",
-          parentId: 1760988033690,
-          work: "Technical writer",
-          birthDate: "1853-01-11T14:35:24.298Z",
-        },
-        {
-          id: 1805461552938,
-          name: "Elisha",
-          surname: "Bradford",
-          parentId: 8622160581630,
-          work: "Theatre practitioner",
-          birthDate: "1853-06-30T19:11:12.105Z",
-        },
-        {
-          id: 6542853113042,
-          name: "Zoe",
-          parentId: 3173442171339,
-          surname: "Harvie",
-          work: "Showgirl",
-          birthDate: "1870-12-08T18:18:09.844Z",
-        },
-        {
-          id: 1718991242108,
-          name: "Drew",
-          surname: "Ashby",
-          parentId: 3010550761310,
-          work: "Retired",
-          birthDate: "1854-10-23T05:29:23.476Z",
-        },
-        {
-          id: 1334633156399,
-          name: "Marie",
-          surname: "Tibbets",
-          parentId: 2575362966990,
-          work: "Geotechnical Engineer",
-          birthDate: "1854-09-01T14:29:47.329Z",
-        },
-        {
-          id: 5668998711075,
-          name: "Dulcie",
-          surname: "Derwin",
-          parentId: 7518120488089,
-          work: "Emcee",
-          birthDate: "1854-03-09T04:56:18.697Z",
-        },
-        {
-          id: 248786146102,
-          name: "Shania",
-          surname: "Fleetwood",
-          parentId: 7804160535710,
-          work: "Station",
-          birthDate: "1854-10-06T02:01:08.206Z",
-        },
-        {
-          id: 9525762609317,
-          name: "Ana",
-          parentId: 7209449538085,
-          surname: "Terry",
-          work: "Manager (Guard)",
-          birthDate: "1867-07-30T11:59:23.739Z",
-        },
-        {
-          id: 934688923249,
-          name: "Alicia",
-          parentId: 6542853113042,
-          surname: "Harvie",
-          work: "Blogger",
-          birthDate: "1890-10-06T17:26:42.673Z",
-        },
-        {
-          id: 7306715236916,
-          name: "Petula",
-          surname: "Newey",
-          parentId: 1042642003017,
-          work: "Geoff",
-          birthDate: "1852-10-04T08:37:28.785Z",
-        },
-        {
-          id: 8234536999381,
-          name: "Mary",
-          surname: "Rose",
-          parentId: 5386302345101,
-          work: "Signal maintainer",
-          birthDate: "1854-02-15T23:14:32.174Z",
-        },
-        {
-          id: 7494359933717,
-          name: "Brittany",
-          parentId: 1805461552938,
-          surname: "Bradford",
-          work: "Unemployed",
-          birthDate: "1875-01-06T09:30:49.999Z",
-        },
-        {
-          id: 7049262735491,
-          name: "Juniper",
-          surname: "Marks",
-          parentId: 9127368958939,
-          work: "work from home",
-          birthDate: "1854-11-26T11:05:44.683Z",
-        },
-        {
-          id: 7781822521224,
-          name: "Edris",
-          surname: "Godwin",
-          parentId: 6016143008277,
-          work: "work from home",
-          birthDate: "1854-09-13T08:22:46.191Z",
-        },
-        {
-          id: 9078112227633,
-          name: "Kaitlin",
-          surname: "Minogue",
-          parentId: 95176825076,
-          work: "Clinical pharmaceutical scientist",
-          birthDate: "1852-05-08T21:59:27.773Z",
-        },
-        {
-          id: 3055221397713,
-          name: "Lauretta",
-          parentId: 6759490924297,
-          surname: "Bye",
-          work: "Track inspector",
-          birthDate: "1867-05-21T06:07:21.273Z",
-        },
-        {
-          id: 3794107972026,
-          name: "Dorothy",
-          surname: "Bostick",
-          parentId: 6850128149597,
-          work: "Go-go dancer",
-          birthDate: "1853-03-06T19:01:31.143Z",
-        },
-        {
-          id: 1698494645377,
-          name: "Cameron",
-          surname: "Torney",
-          parentId: 770004791023,
-          work: "Advertising designer",
-          birthDate: "1854-07-17T07:16:12.429Z",
-        },
-        {
-          id: 841895938898,
-          name: "Shepherd",
-          parentId: 4717646566698,
-          surname: "Humpherys",
-          work: "Quilter",
-          birthDate: "1897-02-23T22:01:59.520Z",
-        },
-        {
-          id: 7914083691988,
-          name: "Alisha",
-          surname: "Wind",
-          parentId: 1656884957449,
-          work: "Veterinarian",
-          birthDate: "1853-04-04T07:49:55.453Z",
-        },
-        {
-          id: 5015337941343,
-          name: "Agnes",
-          parentId: 9821977853501,
-          surname: "Rowlands",
-          work: "Rhapsode",
-          birthDate: "1865-09-14T16:07:21.238Z",
-        },
-        {
-          id: 6498601438355,
-          name: "Harvard",
-          parentId: 1971028749432,
-          surname: "Georgeson",
-          work: "Retired",
-          birthDate: "1874-02-03T05:44:32.483Z",
-        },
-        {
-          id: 6162073883494,
-          name: "Lizzie",
-          surname: "Allitt",
-          parentId: 7443156411879,
-          work: "work from home",
-          birthDate: "1854-02-09T14:41:55.210Z",
-        },
-        {
-          id: 4027876312592,
-          name: "Samuel",
-          parentId: 8843316769405,
-          surname: "Ludington",
-          work: "Neuroradiographer",
-          birthDate: "1864-11-13T01:39:02.494Z",
-        },
-        {
-          id: 6910084039563,
-          name: "Layla",
-          parentId: 95132218987,
-          surname: "Clark",
-          work: "CT Radiographer",
-          birthDate: "1868-09-02T07:10:46.829Z",
-        },
-        {
-          id: 2583927007530,
-          name: "Darby",
-          surname: "Yeakel",
-          parentId: 1323435182904,
-          work: "Data designer",
-          birthDate: "1853-05-12T16:14:07.161Z",
-        },
-        {
-          id: 7448530790803,
-          name: "Winnifred",
-          surname: "Rykener",
-          parentId: 9181202451521,
-          work: "Unemployed",
-          birthDate: "1852-03-20T06:48:07.162Z",
-        },
-        {
-          id: 4842667119782,
-          name: "Lacey",
-          parentId: 7400518637533,
-          surname: "Humpherys",
-          work: "Unemployed",
-          birthDate: "1875-03-04T17:56:15.949Z",
-        },
-        {
-          id: 3926090190617,
-          name: "Beverley",
-          surname: "McHatton",
-          parentId: 8769830982857,
-          work: "Field warden",
-          birthDate: "1853-06-02T04:00:57.288Z",
-        },
-        {
-          id: 5107646185720,
-          name: "Cassidy",
-          parentId: 7276643575609,
-          surname: "Alderman",
-          work: "Retired",
-          birthDate: "1863-12-22T05:38:41.764Z",
-        },
-        {
-          id: 6617379016460,
-          name: "Jeannie",
-          surname: "Artley",
-          parentId: 5730519222203,
-          work: "Psychologist",
-          birthDate: "1854-11-06T11:20:41.234Z",
-        },
-        {
-          id: 5415904134291,
-          name: "Shannon",
-          parentId: 5513277402976,
-          surname: "Watrous",
-          work: "Artistic director",
-          birthDate: "1872-02-22T13:25:42.485Z",
-        },
-        {
-          id: 8625554360699,
-          name: "Margot",
-          surname: "Glidewell",
-          parentId: 5710615384493,
-          work: "Rhapsode",
-          birthDate: "1854-10-31T13:03:27.754Z",
-        },
-        {
-          id: 2167634099186,
-          name: "Annie",
-          parentId: 9497014533965,
-          surname: "Hoskins",
-          work: "Spotlight Operator",
-          birthDate: "1866-11-19T12:52:54.706Z",
-        },
-        {
-          id: 2969518168386,
-          name: "Velma",
-          parentId: 7209449538085,
-          surname: "Terry",
-          work: "Web developer",
-          birthDate: "1871-10-28T11:08:07.215Z",
-        },
-        {
-          id: 9376340620106,
-          name: "Cheryl",
-          parentId: 1706294044283,
-          surname: "Engleman",
-          work: "Stunt performer",
-          birthDate: "1877-10-11T10:56:39.191Z",
-        },
-        {
-          id: 4611179134961,
-          name: "Mayola",
-          surname: "Whyte",
-          parentId: 2106785096820,
-          work: "Painters",
-          birthDate: "1854-12-18T21:34:21.340Z",
-        },
-        {
-          id: 3330893717600,
-          name: "Imogen",
-          surname: "Brinkley",
-          parentId: 4855829489899,
-          work: "Nephrology Physician Assistant",
-          birthDate: "1853-02-02T11:36:44.244Z",
-        },
-        {
-          id: 2322780495725,
-          name: "Gillian",
-          parentId: 8313555968957,
-          surname: "Allcock",
-          work: "Rhapsode",
-          birthDate: "1871-08-02T14:41:44.723Z",
-        },
-        {
-          id: 9096773496327,
-          name: "Crossley",
-          surname: "Oatway",
-          parentId: 4983996020215,
-          work: "Flagman",
-          birthDate: "1854-09-04T11:14:16.967Z",
-        },
-        {
-          id: 7912768369102,
-          name: "Jack",
-          surname: "Cortright",
-          parentId: 1954893391139,
-          work: "Racing driver",
-          birthDate: "1852-08-02T03:15:25.294Z",
-        },
-        {
-          id: 4936706920188,
-          name: "Marilyn",
-          parentId: 1805461552938,
-          surname: "Bradford",
-          work: "Park ranger",
-          birthDate: "1868-03-15T10:44:36.661Z",
-        },
-        {
-          id: 4507151706136,
-          name: "Malcolm",
-          surname: "Fish",
-          parentId: 10892055752,
-          work: "Otorhinolaryngology Physician assistant",
-          birthDate: "1852-09-21T09:57:38.875Z",
-        },
-        {
-          id: 1002471008138,
-          name: "Sapphire",
-          surname: "Plumb",
-          parentId: 7581067886471,
-          work: "Physical Therapist",
-          birthDate: "1853-10-01T07:37:10.197Z",
-        },
-        {
-          id: 935177490762,
-          name: "Cracroft",
-          parentId: 4710524419131,
-          surname: "Dick",
-          work: "Emergency medical technician",
-          birthDate: "1874-06-28T07:03:04.205Z",
-        },
-        {
-          id: 3214614421553,
-          name: "Sparrow",
-          surname: "Ashbridge",
-          parentId: 957660638347,
-          work: "Deputy Station Master",
-          birthDate: "1852-04-10T04:05:16.806Z",
-        },
-        {
-          id: 7486640594543,
-          name: "Krista",
-          surname: "Pancake",
-          parentId: 7378652821449,
-          work: "Plumber",
-          birthDate: "1854-08-23T21:50:03.378Z",
-        },
-        {
-          id: 4208092032684,
-          name: "Jolie",
-          surname: "Williamson",
-          parentId: 542240779474,
-          work: "Stage crew",
-          birthDate: "1853-10-29T00:38:32.373Z",
-        },
-        {
-          id: 265753551687,
-          name: "Holbrook",
-          parentId: 4936706920188,
-          surname: "Bradford",
-          work: "Hack writer",
-          birthDate: "1884-05-07T02:08:54.196Z",
-        },
-        {
-          id: 8299001953232,
-          name: "Robert",
-          parentId: 3173442171339,
-          surname: "Harvie",
-          work: "Ticketing agent",
-          birthDate: "1873-06-05T02:00:54.119Z",
-        },
-        {
-          id: 4569395503128,
-          name: "Heather",
-          surname: "Exton",
-          parentId: 9258857749445,
-          work: "Millwright",
-          birthDate: "1854-07-30T13:43:50.734Z",
-        },
-        {
-          id: 3805806644419,
-          name: "Avis",
-          surname: "Waddington",
-          parentId: 7607565215691,
-          work: "Soloist",
-          birthDate: "1853-05-16T10:13:10.174Z",
-        },
-        {
-          id: 215914970248,
-          name: "Lanna",
-          parentId: 3926090190617,
-          surname: "McHatton",
-          work: "Poet",
-          birthDate: "1871-10-23T19:08:06.184Z",
-        },
-        {
-          id: 405274833240,
-          name: "Demetria",
-          parentId: 4670743239553,
-          surname: "Walle",
-          work: "Signalman",
-          birthDate: "1874-07-17T12:36:59.100Z",
-        },
-        {
-          id: 2703780723460,
-          name: "Grayson",
-          parentId: 7914083691988,
-          surname: "Wind",
-          work: "Bylaw enforcement officer",
-          birthDate: "1866-08-17T16:34:36.854Z",
-        },
-        {
-          id: 2649091306594,
-          name: "Kathryn",
-          parentId: 8313555968957,
-          surname: "Allcock",
-          work: "Station",
-          birthDate: "1874-09-20T04:49:58.207Z",
-        },
+        ...
       ],
     },
   ],
@@ -1916,9 +1122,9 @@ ExcelTable.generateExcel(data).then((res) => {
 
 <a id="fetch"></a>
 
-## 🆕 fetch Option [⬆️](#table-of-contents)
+## fetch Option [⬆️](#table-of-contents)
 
-mr-Excel uses fetch (if the images option is used). If it is used with Node lower than 18.0.0, you may encounter problems. To fix this problem, you can add the fetch option. Here’s an example of how the function should look like:
+mr-Excel utilizes the `fetch` API when the images option is enabled. However, if you are using Node.js version lower than `18.0.0`, you may encounter issues. To resolve this, you can add the fetch option. Here’s an example of how the function should be structured:
 
 ```javascript
 import fetch from "cross-fetch";
@@ -1949,9 +1155,9 @@ const data = {
 
 ## Header Option [⬆️](#table-of-contents)
 
-We offer specific header options for Excel headers. The header is a mandatory component, so the withoutHeader option cannot be used to omit it. The headerHeight option is employed to determine the height of the header row. Additionally, we provide the headerStyleKey property, which specifies the most commonly used style for each cell (its value corresponds to the style ID; detailed functionality is explained in the Styles section).
+We provide specific options for customizing Excel headers. Since the header is a mandatory component, the `withoutHeader` option cannot be used to omit it. The `headerHeight` option allows you to set the height of the header row. Additionally, the `headerStyleKey` property specifies the default style for each cell, with its value corresponding to the style ID; detailed functionality is outlined in the Styles section.
 
-Each header cell is endowed with properties beyond the label and text. The size property defines the width of the column, while the formula property applies a formula to all rows (excluding the header) within the column, ultimately affecting the final cell in that column.
+Each header cell comes with additional properties beyond just the label and text. The `size` property defines the width of the column, while the `formula` property applies a formula to all rows (excluding the header) within that column, ultimately affecting the last cell in the column.
 
 <details>
 <summary>Display Code</summary>
@@ -2194,7 +1400,7 @@ ExcelTable.generateExcel(data);
 
 ## Formula Option [⬆️](#table-of-contents)
 
-We provide two distinct methods for defining formulas: customization and column type. In the customization approach, if you employ a cell containing data that is used within the formula, the formula will display an instance of the formula. When using the customization type, it's important to specify the formula type, which can be any of the following: AVERAGE, SUM, COUNT, MAX, or MIN.
+We offer two distinct methods for defining formulas: customization and column type. With the customization approach, if you use a cell containing data referenced in the formula, the formula will display the corresponding result. When utilizing this method, it's essential to specify the formula type, which can be one of the following: AVERAGE, SUM, COUNT, MAX, or MIN.
 
 <details>
 <summary>Display Code</summary>
@@ -2391,7 +1597,7 @@ ExcelTable.generateExcel(data);
 
 ### Time, Math, Custom Formula & etc [⬆️](#table-of-contents)
 
-We offer new formulas for mathematics, time, and more. Additionally, you can create complex formulas using the Custom Formula feature. One notable aspect of the Custom Formula feature is the ability to generate an array result formula. To achieve this, you must specify a range cell where the results are to be inserted and define the formula in the formula property. Moreover, you can use this feature to define a single result formula.
+We offer a variety of new formulas for mathematics, time, and more. Additionally, you can create complex formulas using the Custom Formula feature. A key aspect of this feature is the ability to generate array result formulas. To do this, you need to specify a range of cells where the results will be inserted and define the formula in the formula property. Furthermore, this feature also allows you to define a single result formula.
 
 <details>
 <summary>Display Code</summary>
@@ -3617,8 +2823,6 @@ ExcelTable.generateExcel(data);
 
 ## Comment Option [⬆️](#table-of-contents)
 
-After version 2.4.0 you can add comment on cells.
-
 <details>
 <summary>Display Code</summary>
 
@@ -3765,8 +2969,6 @@ ExcelTable.generateExcel(data);
 <a id="multi-style-value"></a>
 
 ## Multi Style value Option [⬆️](#table-of-contents)
-
-After version 2.4.0, We added Ability to change the style of each character of cells. (only text value)
 
 <details>
 <summary>Display Code</summary>
@@ -4709,125 +3911,123 @@ ExcelTable.generateExcel(data);
 
 ## Image Option [⬆️](#table-of-contents)
 
-After version 2.8.0, we introduced the ability to add images.
-
 <details>
 
 <summary>Display Code</summary>
 
 ```javascript
 const data = {
-    creator: 'mr',
-    sheet: [
+  creator: "mr",
+  sheet: [
+    {
+      images: [
         {
-            images: [
-                {
-                    url: 'https://mohammadrezaeicode.github.io/mr-excel-page/img/ezgif.com-gif-maker.gif',
-                    from: 'H1',
-                    type: 'one'
-                },
-                {
-                    url: 'https://mohammadrezaeicode.github.io/mr-excel-page/img/uniqe.jpg',
-                    from: 'H2',
-                    type: 'one'
-                },
+          url: "https://mohammadrezaeicode.github.io/mr-excel-page/img/ezgif.com-gif-maker.gif",
+          from: "H1",
+          type: "one",
+        },
+        {
+          url: "https://mohammadrezaeicode.github.io/mr-excel-page/img/uniqe.jpg",
+          from: "H2",
+          type: "one",
+        },
 
-                {
-                    url: 'https://mohammadrezaeicode.github.io/mr-excel-page/img/ex.PNG',
-                    from: 'H3',
-                    type: 'onde'
-                },
-                {
-                    url: 'https://mohammadrezaeicode.github.io/mr-excel-page/img/ex.PNG',
-                    from: 'H4',
-                    type: 'two'
-                },
-                {
-                    url: 'https://mohammadrezaeicode.github.io/mr-excel-page/img/ezgif.com-gif-maker.gif',
-                    from: 'E1',
-                    to: 'F10',
-                    type: 'two'
-                },
-                {
-                    url: 'https://mohammadrezaeicode.github.io/mr-excel-page/img/uniqe.jpg',
-                    from: 'H6',
-                    type: 'two'
-                }
-            ],
+        {
+          url: "https://mohammadrezaeicode.github.io/mr-excel-page/img/ex.PNG",
+          from: "H3",
+          type: "onde",
+        },
+        {
+          url: "https://mohammadrezaeicode.github.io/mr-excel-page/img/ex.PNG",
+          from: "H4",
+          type: "two",
+        },
+        {
+          url: "https://mohammadrezaeicode.github.io/mr-excel-page/img/ezgif.com-gif-maker.gif",
+          from: "E1",
+          to: "F10",
+          type: "two",
+        },
+        {
+          url: "https://mohammadrezaeicode.github.io/mr-excel-page/img/uniqe.jpg",
+          from: "H6",
+          type: "two",
+        },
+      ],
 
-            headers: [
-                {
-                    label: 'Name',
-                    text: 'Name'
-                },
-                { label: 'Color', text: 'Color' },
-                { label: 'Size', text: 'Size' },
-                { label: 'Price', text: 'Price' }
-            ],
-            data: [
-                {
-                    Name: 'Rose',
-                    Color: 'Red',
-                    Size: 'Medium',
-                    Price: 5.99
-                },
-                {
-                    Name: 'Tulip',
-                    Color: 'Yellow',
-                    Size: 'Small',
-                    Price: 2.49
-                },
-                {
-                    Name: 'Daisy',
-                    Color: 'White',
-                    Size: 'Small',
-                    Price: 1.99
-                },
-                {
-                    Name: 'Sunflower',
-                    Color: 'Yellow',
-                    Size: 'Large',
-                    Price: 4.99
-                },
-                {
-                    Name: 'Lily',
-                    Color: 'Pink',
-                    Size: 'Medium',
-                    Price: 3.99
-                },
-                {
-                    Name: 'Daffodil',
-                    Color: 'Yellow',
-                    Size: 'Small',
-                    Price: 2.49
-                },
-                {
-                    Name: 'Orchid',
-                    Color: 'Purple',
-                    Size: 'Medium',
-                    Price: 6.99
-                },
-                {
-                    Name: 'Carnation',
-                    Color: 'Red',
-                    Size: 'Small',
-                    Price: 1.99
-                },
-                {
-                    Name: 'Hyacinth',
-                    Color: 'Blue',
-                    Size: 'Medium',
-                    Price: 4.49
-                },
-                {
-                    Name: 'Pansy',
-                    Color: 'Purple',
-                    Size: 'Small',
-                    Price: 2.99
-                }
-            ]
-        }
-    ]
+      headers: [
+        {
+          label: "Name",
+          text: "Name",
+        },
+        { label: "Color", text: "Color" },
+        { label: "Size", text: "Size" },
+        { label: "Price", text: "Price" },
+      ],
+      data: [
+        {
+          Name: "Rose",
+          Color: "Red",
+          Size: "Medium",
+          Price: 5.99,
+        },
+        {
+          Name: "Tulip",
+          Color: "Yellow",
+          Size: "Small",
+          Price: 2.49,
+        },
+        {
+          Name: "Daisy",
+          Color: "White",
+          Size: "Small",
+          Price: 1.99,
+        },
+        {
+          Name: "Sunflower",
+          Color: "Yellow",
+          Size: "Large",
+          Price: 4.99,
+        },
+        {
+          Name: "Lily",
+          Color: "Pink",
+          Size: "Medium",
+          Price: 3.99,
+        },
+        {
+          Name: "Daffodil",
+          Color: "Yellow",
+          Size: "Small",
+          Price: 2.49,
+        },
+        {
+          Name: "Orchid",
+          Color: "Purple",
+          Size: "Medium",
+          Price: 6.99,
+        },
+        {
+          Name: "Carnation",
+          Color: "Red",
+          Size: "Small",
+          Price: 1.99,
+        },
+        {
+          Name: "Hyacinth",
+          Color: "Blue",
+          Size: "Medium",
+          Price: 4.49,
+        },
+        {
+          Name: "Pansy",
+          Color: "Purple",
+          Size: "Small",
+          Price: 2.99,
+        },
+      ],
+    },
+  ],
 };
 ExcelTable.generateExcel(data);
 ```
@@ -4843,8 +4043,6 @@ ExcelTable.generateExcel(data);
 <a id="checkbox"></a>
 
 ## Checkbox [⬆️](#table-of-contents)
-
-After version 3.1.0, `checkbox` has been added to sheets, allowing you to define checkboxes. However, please note that this feature does not work with `images` and `comments` when used together.
 
 <details>
 
@@ -4932,10 +4130,9 @@ ExcelTable.generateExcel(data);
 
 <a id="global-setting"></a>
 
-## 🆕 Global Setting [⬆️](#table-of-contents)
+## Global Setting [⬆️](#table-of-contents)
 
 With the global property, you can define Excel table options globally. When you pass a key to generateExcel data, it will merge with the Excel table option if the key exists in the global Excel table settings.
-
 
 <details>
 
@@ -4943,184 +4140,214 @@ With the global property, you can define Excel table options globally. When you 
 
 ```javascript
 const colorPalette = {
-    c1: '2C3639',
-    c2: '3F4E4F',
-    c3: 'A27B5C',
-    c4: 'DCD7C9'
-}
-const rowStyle = {
-    backgroundColor: colorPalette.c2,
-    fontFamily: 'Times New Roman',
-    color: colorPalette.c4
-}
-const headerStyle = {
-    backgroundColor: colorPalette.c4,
-    fontFamily: 'Times New Roman',
-    color: colorPalette.c2
-}
-const headers = [
-    { label: 'Date', text: 'Date' },
-    { label: 'Time', text: 'Time' },
-    { label: 'Percentage', text: 'Percentage' },
-    { label: 'Float', text: 'Float' },
-    { label: 'Fraction', text: 'Fraction' },
-    { label: 'Long Number Column 1', text: 'Long Number Column 1', size: 50 },
-    { label: 'Long Number Column 2', text: 'Long Number Column 2', size: 50 }
-]
-const items = [
-    {
-        Date: '2023-08-01',
-        Time: '09:00 AM',
-        Percentage: 0.7525,
-        Float: 0.7525,
-        Fraction: '1/4',
-        'Long Number Column 1': 123456789012345,
-        'Long Number Column 2': 987654321098765
-    },
-    {
-        Date: '2023-08-02',
-        Time: '02:30 PM',
-        Percentage: 0.4275,
-        Float: 0.4275,
-        Fraction: '3/8',
-        'Long Number Column 1': 456789012345678,
-        'Long Number Column 2': 876543210987654
-    },
-    {
-        Date: '2023-08-03',
-        Time: '10:45 AM',
-        Percentage: 0.955,
-        Float: 0.955,
-        Fraction: '5/6',
-        'Long Number Column 1': 789012345678901,
-        'Long Number Column 2': 765432109876543
-    },
-    {
-        Date: '2023-08-04',
-        Time: '04:15 PM',
-        Percentage: 0.2875,
-        Float: 0.2875,
-        Fraction: '2/7',
-        'Long Number Column 1': 123450987654321,
-        'Long Number Column 2': 654321098765432
-    },
-    {
-        Date: '2023-08-05',
-        Time: '08:20 AM',
-        Percentage: 0.6,
-        Float: 0.6,
-        Fraction: '4/5',
-        'Long Number Column 1': 543210987654321,
-        'Long Number Column 2': 543210987654321
-    }
-]
-const data = {
-    creator: 'mr',
-    styles: {
-        Date: {
-            ...rowStyle,
-            format: 'short_date'
-        },
-        Time: {
-            ...rowStyle,
-            format: 'time'
-        },
-        Percentage: {
-            ...rowStyle,
-            format: 'percentage'
-        },
-        Float: {
-            ...rowStyle,
-            format: 'float_2',
-            alignment: {
-                horizontal: 'left'
-            }
-        },
-        Fraction: {
-            ...rowStyle,
-            format: 'fraction'
-        },
-        'Long Number Column 1': {
-            ...rowStyle,
-            format: 'dollar_2',
-            alignment: {
-                indent: 3,
-                rtl: true,
-                horizontal: 'left'
-            }
-        },
-        'Long Number Column 2': {
-            ...rowStyle,
-            format: 'num_sep',
-            alignment: {
-                ltr: true,
-                horizontal: 'left'
-            }
-        },
-        headerStyle: {
-            ...headerStyle
-        }
-    },
-    sheet: [
-        {
-            styleCellCondition(data, fullData, rowIndex, colIndex, fromHeader) {
-                if (fromHeader) {
-                    return 'headerStyle'
-                } else {
-                    if (colIndex == 0) {
-                        return 'Date'
-                    } else if (colIndex == 1) {
-                        return 'Time'
-                    } else if (colIndex == 2) {
-                        return 'Percentage'
-                    } else if (colIndex == 3) {
-                        return 'Float'
-                    } else if (colIndex == 4) {
-                        return 'Fraction'
-                    } else if (colIndex == 5) {
-                        return 'Long Number Column 1'
-                    } else {
-                        return 'Long Number Column 2'
-                    }
-                }
-            },
-            headers: [],
-            data: []
-        }
-    ]
+  c1: "2C3639",
+  c2: "3F4E4F",
+  c3: "A27B5C",
+  c4: "DCD7C9",
 };
-ExcelTable.addGlobalOptionFromExcelTable("global-1", data)
+const rowStyle = {
+  backgroundColor: colorPalette.c2,
+  fontFamily: "Times New Roman",
+  color: colorPalette.c4,
+};
+const headerStyle = {
+  backgroundColor: colorPalette.c4,
+  fontFamily: "Times New Roman",
+  color: colorPalette.c2,
+};
+const headers = [
+  { label: "Date", text: "Date" },
+  { label: "Time", text: "Time" },
+  { label: "Percentage", text: "Percentage" },
+  { label: "Float", text: "Float" },
+  { label: "Fraction", text: "Fraction" },
+  { label: "Long Number Column 1", text: "Long Number Column 1", size: 50 },
+  { label: "Long Number Column 2", text: "Long Number Column 2", size: 50 },
+];
+const items = [
+  {
+    Date: "2023-08-01",
+    Time: "09:00 AM",
+    Percentage: 0.7525,
+    Float: 0.7525,
+    Fraction: "1/4",
+    "Long Number Column 1": 123456789012345,
+    "Long Number Column 2": 987654321098765,
+  },
+  {
+    Date: "2023-08-02",
+    Time: "02:30 PM",
+    Percentage: 0.4275,
+    Float: 0.4275,
+    Fraction: "3/8",
+    "Long Number Column 1": 456789012345678,
+    "Long Number Column 2": 876543210987654,
+  },
+  {
+    Date: "2023-08-03",
+    Time: "10:45 AM",
+    Percentage: 0.955,
+    Float: 0.955,
+    Fraction: "5/6",
+    "Long Number Column 1": 789012345678901,
+    "Long Number Column 2": 765432109876543,
+  },
+  {
+    Date: "2023-08-04",
+    Time: "04:15 PM",
+    Percentage: 0.2875,
+    Float: 0.2875,
+    Fraction: "2/7",
+    "Long Number Column 1": 123450987654321,
+    "Long Number Column 2": 654321098765432,
+  },
+  {
+    Date: "2023-08-05",
+    Time: "08:20 AM",
+    Percentage: 0.6,
+    Float: 0.6,
+    Fraction: "4/5",
+    "Long Number Column 1": 543210987654321,
+    "Long Number Column 2": 543210987654321,
+  },
+];
+const data = {
+  creator: "mr",
+  styles: {
+    Date: {
+      ...rowStyle,
+      format: "short_date",
+    },
+    Time: {
+      ...rowStyle,
+      format: "time",
+    },
+    Percentage: {
+      ...rowStyle,
+      format: "percentage",
+    },
+    Float: {
+      ...rowStyle,
+      format: "float_2",
+      alignment: {
+        horizontal: "left",
+      },
+    },
+    Fraction: {
+      ...rowStyle,
+      format: "fraction",
+    },
+    "Long Number Column 1": {
+      ...rowStyle,
+      format: "dollar_2",
+      alignment: {
+        indent: 3,
+        rtl: true,
+        horizontal: "left",
+      },
+    },
+    "Long Number Column 2": {
+      ...rowStyle,
+      format: "num_sep",
+      alignment: {
+        ltr: true,
+        horizontal: "left",
+      },
+    },
+    headerStyle: {
+      ...headerStyle,
+    },
+  },
+  sheet: [
+    {
+      styleCellCondition(data, fullData, rowIndex, colIndex, fromHeader) {
+        if (fromHeader) {
+          return "headerStyle";
+        } else {
+          if (colIndex == 0) {
+            return "Date";
+          } else if (colIndex == 1) {
+            return "Time";
+          } else if (colIndex == 2) {
+            return "Percentage";
+          } else if (colIndex == 3) {
+            return "Float";
+          } else if (colIndex == 4) {
+            return "Fraction";
+          } else if (colIndex == 5) {
+            return "Long Number Column 1";
+          } else {
+            return "Long Number Column 2";
+          }
+        }
+      },
+      headers: [],
+      data: [],
+    },
+  ],
+};
+ExcelTable.addGlobalOptionFromExcelTable("global-1", data);
 
-ExcelTable.generateExcel({
-    sheet: [{
+ExcelTable.generateExcel(
+  {
+    sheet: [
+      {
         headers,
-        data: items
-    }]
-}, "global-1");
-ExcelTable.addGlobalOptions("global-1", "styles.headerStyle.backgroundColor", colorPalette.c2)
-ExcelTable.addGlobalOptions("global-1", "styles.headerStyle.color", colorPalette.c4)
-ExcelTable.generateExcel({
-    sheet: [{
+        data: items,
+      },
+    ],
+  },
+  "global-1"
+);
+ExcelTable.addGlobalOptions(
+  "global-1",
+  "styles.headerStyle.backgroundColor",
+  colorPalette.c2
+);
+ExcelTable.addGlobalOptions(
+  "global-1",
+  "styles.headerStyle.color",
+  colorPalette.c4
+);
+ExcelTable.generateExcel(
+  {
+    sheet: [
+      {
         headers,
-        data: items
-    }]
-}, "global-1");
-ExcelTable.addGlobalOptions("global-1", "styles.headerStyle.backgroundColor", colorPalette.c4)
-ExcelTable.addGlobalOptions("global-1", "styles.headerStyle.color", colorPalette.c2)
-ExcelTable.generateExcel({
-    sheet: [{
+        data: items,
+      },
+    ],
+  },
+  "global-1"
+);
+ExcelTable.addGlobalOptions(
+  "global-1",
+  "styles.headerStyle.backgroundColor",
+  colorPalette.c4
+);
+ExcelTable.addGlobalOptions(
+  "global-1",
+  "styles.headerStyle.color",
+  colorPalette.c2
+);
+ExcelTable.generateExcel(
+  {
+    sheet: [
+      {
         headers,
-        data: items
-    }]
-}, "global-1");
- 
+        data: items,
+      },
+    ],
+  },
+  "global-1"
+);
 ```
 
 </details>
 
 <a id="page-option"></a>
 
-## 🆕 Page Option [⬆️](#table-of-contents)
+## Page Option [⬆️](#table-of-contents)
 
 With PageOption, you can utilize Excel headers and footers, specify first, odd, and even pages separately, apply styles to them, and more.
 
@@ -5130,240 +4357,241 @@ With PageOption, you can utilize Excel headers and footers, specify first, odd, 
 
 ```javascript
 const colorPalette = {
-    c1: '561C24',
-    c2: '6D2932',
-    c3: 'C7B7A3',
-    c4: 'E8D8C4'
-}
+  c1: "561C24",
+  c2: "6D2932",
+  c3: "C7B7A3",
+  c4: "E8D8C4",
+};
 const first = {
-    type: "HF",
-    backgroundColor: colorPalette.c2,
-    fontFamily: 'Times New Roman',
-    color: colorPalette.c1
-}
+  type: "HF",
+  backgroundColor: colorPalette.c2,
+  fontFamily: "Times New Roman",
+  color: colorPalette.c1,
+};
 const second = {
-    type: "HF",
-    backgroundColor: colorPalette.c1,
-    fontFamily: 'Times New Roman',
-    color: colorPalette.c2
-}
+  type: "HF",
+  backgroundColor: colorPalette.c1,
+  fontFamily: "Times New Roman",
+  color: colorPalette.c2,
+};
 const data = {
-    creator: 'mr',
-    styles: {
-        first,
-        second
-    },
-    sheet: [
-        {
-            pageOption: {
-                margin:{
-                    top:.85,
-                    right:.85,
-                    left:.85,
-                    bottom:.85,
-                },
-                header: {
-                    first: {
-                        c: {
-                            text: "First Header center",
-                            styleId: "first"
-                        },
-                        l: {
-                            text: "First Header Left"
-                        }
-                    },
-                    odd: {
-                        r: {
-                            text: "Odd Headers right"
-                        }
-                    }
-                },
-                footer: {
-                    even: {
-                        c: {
-                            text: "Even Footers center",
-                            styleId: "second"
-                        }
-                    }
-                }
+  creator: "mr",
+  styles: {
+    first,
+    second,
+  },
+  sheet: [
+    {
+      pageOption: {
+        margin: {
+          top: 0.85,
+          right: 0.85,
+          left: 0.85,
+          bottom: 0.85,
+        },
+        header: {
+          first: {
+            c: {
+              text: "First Header center",
+              styleId: "first",
             },
-            headers: [
-                { label: "id", text: "ID" },
-                { label: "name", text: "Name" },
-                { label: "surname", text: "Surname" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "id", text: "ID" },
-                { label: "name", text: "Name" },
-                { label: "surname", text: "Surname" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "id", text: "ID" },
-                { label: "name", text: "Name" },
-                { label: "surname", text: "Surname" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "birthDate", text: "Birth Date", size: 40 }
-            ],
-            data: [
-                {
-                    "id": 1525528872576,
-                    "name": "Declan",
-                    "surname": "Bright",
-                    "parentId": 9193814686664,
-                    "work": "National Park Service ranger",
-                    "birthDate": "1854-02-28T22:39:49.028Z"
-                },
-                {
-                    "id": 1933819177102,
-                    "name": "Phoebe",
-                    "surname": "Austin",
-                    "parentId": 7377315170005,
-                    "work": "Director of audience services",
-                    "birthDate": "1852-04-18T10:17:54.557Z"
-                },
-                {
-                    "id": 9541178576629,
-                    "name": "Waite",
-                    "surname": "Aveyard",
-                    "parentId": 8770728211947,
-                    "work": "Retired",
-                    "birthDate": "1854-12-11T17:36:40.765Z"
-                },
-                {
-                    "id": 2473638123843,
-                    "name": "Kaitlin",
-                    "surname": "Courtney",
-                    "parentId": 3076331620534,
-                    "work": "Maintenance engineering",
-                    "birthDate": "1854-03-04T01:50:50.209Z"
-                },
-                {
-                    "id": 7140741364134,
-                    "name": "Tristan",
-                    "surname": "King",
-                    "parentId": 4674378612151,
-                    "work": "Japanese idol",
-                    "birthDate": "1853-12-08T21:09:19.672Z"
-                },
-                {
-                    "id": 8756865627934,
-                    "name": "Egerton",
-                    "surname": "Mendenhall",
-                    "parentId": 4218847452166,
-                    "work": "Japanese idol",
-                    "birthDate": "1854-10-24T12:41:51.902Z"
-                },
-                {
-                    "id": 5098636603452,
-                    "name": "Adele",
-                    "surname": "Monroe",
-                    "parentId": 9762225632557,
-                    "work": "Unemployed",
-                    "birthDate": "1852-10-11T09:48:24.128Z"
-                },
-                {
-                    "id": 6700176094055,
-                    "name": "Katey",
-                    "surname": "Lewis",
-                    "parentId": 7938892587472,
-                    "work": "work from home",
-                    "birthDate": "1852-05-19T09:36:47.969Z"
-                },
-                {
-                    "id": 6869885121153,
-                    "name": "Rodney",
-                    "surname": "Saxby",
-                    "parentId": 576630955195,
-                    "work": "Cardiovascular Technologist",
-                    "birthDate": "1852-11-07T03:33:46.973Z"
-                },
-                {
-                    "id": 1389127579072,
-                    "name": "Dare",
-                    "surname": "Kenny",
-                    "parentId": 4017546822023,
-                    "work": "Engineering technologist",
-                    "birthDate": "1852-10-25T23:36:29.109Z"
-                },
-                {
-                    "id": 6801196917678,
-                    "name": "Potter",
-                    "surname": "Bradbury",
-                    "parentId": 3750611241942,
-                    "work": "Petroleum geologist",
-                    "birthDate": "1852-10-12T06:59:33.426Z"
-                },
-                {
-                    "id": 1981219057492,
-                    "name": "Charlene",
-                    "surname": "Stuttaford",
-                    "parentId": 5645329253708,
-                    "work": "Harlequin",
-                    "birthDate": "1853-11-22T01:25:50.328Z"
-                },
-                {
-                    "id": 8447379393015,
-                    "name": "Molly",
-                    "surname": "Lawrenson",
-                    "parentId": 7440555772320,
-                    "work": "Healthcare science",
-                    "birthDate": "1853-01-20T19:18:17.595Z"
-                },
-                {
-                    "id": 1421335493979,
-                    "name": "Tyson",
-                    "surname": "Grennan",
-                    "parentId": 1518948755485,
-                    "work": "Pilot",
-                    "birthDate": "1852-09-04T12:05:31.252Z"
-                },
-                {
-                    "id": 5260799325935,
-                    "name": "Sophia",
-                    "surname": "Buckley",
-                    "parentId": 8474979566542,
-                    "work": "Stunt performer",
-                    "birthDate": "1853-01-05T04:12:27.037Z"
-                },
-                {
-                    "id": 2231363435720,
-                    "name": "Melody",
-                    "surname": "Humpherys",
-                    "parentId": 2317759882951,
-                    "work": "work from home",
-                    "birthDate": "1853-01-12T00:39:05.356Z"
-                },
-                {
-                    "id": 9555420460973,
-                    "name": "Kristi",
-                    "surname": "Adkins",
-                    "parentId": 9735997282913,
-                    "work": "Upholsterer",
-                    "birthDate": "1853-10-19T15:26:25.022Z"
-                },
-                {
-                    "id": 1613978413981,
-                    "name": "Paul",
-                    "surname": "Cook",
-                    "parentId": 202934661757,
-                    "work": "Pipefitter",
-                    "birthDate": "1853-02-21T08:46:25.185Z"
-                },
-                {
-                    "id": 6752497709181,
-                    "name": "Kayden",
-                    "surname": "Woodcock",
-                    "parentId": 2850592397073,
-                    "work": "Arborist",
-                    "birthDate": "1854-03-05T02:17:31.620Z"
-                },
-            ]
-        }
-    ]
+            l: {
+              text: "First Header Left",
+            },
+          },
+          odd: {
+            r: {
+              text: "Odd Headers right",
+            },
+          },
+        },
+        footer: {
+          even: {
+            c: {
+              text: "Even Footers center",
+              styleId: "second",
+            },
+          },
+        },
+      },
+      headers: [
+        { label: "id", text: "ID" },
+        { label: "name", text: "Name" },
+        { label: "surname", text: "Surname" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "id", text: "ID" },
+        { label: "name", text: "Name" },
+        { label: "surname", text: "Surname" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "id", text: "ID" },
+        { label: "name", text: "Name" },
+        { label: "surname", text: "Surname" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "birthDate", text: "Birth Date", size: 40 },
+      ],
+      data: [
+        {
+          id: 1525528872576,
+          name: "Declan",
+          surname: "Bright",
+          parentId: 9193814686664,
+          work: "National Park Service ranger",
+          birthDate: "1854-02-28T22:39:49.028Z",
+        },
+        {
+          id: 1933819177102,
+          name: "Phoebe",
+          surname: "Austin",
+          parentId: 7377315170005,
+          work: "Director of audience services",
+          birthDate: "1852-04-18T10:17:54.557Z",
+        },
+        {
+          id: 9541178576629,
+          name: "Waite",
+          surname: "Aveyard",
+          parentId: 8770728211947,
+          work: "Retired",
+          birthDate: "1854-12-11T17:36:40.765Z",
+        },
+        {
+          id: 2473638123843,
+          name: "Kaitlin",
+          surname: "Courtney",
+          parentId: 3076331620534,
+          work: "Maintenance engineering",
+          birthDate: "1854-03-04T01:50:50.209Z",
+        },
+        {
+          id: 7140741364134,
+          name: "Tristan",
+          surname: "King",
+          parentId: 4674378612151,
+          work: "Japanese idol",
+          birthDate: "1853-12-08T21:09:19.672Z",
+        },
+        {
+          id: 8756865627934,
+          name: "Egerton",
+          surname: "Mendenhall",
+          parentId: 4218847452166,
+          work: "Japanese idol",
+          birthDate: "1854-10-24T12:41:51.902Z",
+        },
+        {
+          id: 5098636603452,
+          name: "Adele",
+          surname: "Monroe",
+          parentId: 9762225632557,
+          work: "Unemployed",
+          birthDate: "1852-10-11T09:48:24.128Z",
+        },
+        {
+          id: 6700176094055,
+          name: "Katey",
+          surname: "Lewis",
+          parentId: 7938892587472,
+          work: "work from home",
+          birthDate: "1852-05-19T09:36:47.969Z",
+        },
+        {
+          id: 6869885121153,
+          name: "Rodney",
+          surname: "Saxby",
+          parentId: 576630955195,
+          work: "Cardiovascular Technologist",
+          birthDate: "1852-11-07T03:33:46.973Z",
+        },
+        {
+          id: 1389127579072,
+          name: "Dare",
+          surname: "Kenny",
+          parentId: 4017546822023,
+          work: "Engineering technologist",
+          birthDate: "1852-10-25T23:36:29.109Z",
+        },
+        {
+          id: 6801196917678,
+          name: "Potter",
+          surname: "Bradbury",
+          parentId: 3750611241942,
+          work: "Petroleum geologist",
+          birthDate: "1852-10-12T06:59:33.426Z",
+        },
+        {
+          id: 1981219057492,
+          name: "Charlene",
+          surname: "Stuttaford",
+          parentId: 5645329253708,
+          work: "Harlequin",
+          birthDate: "1853-11-22T01:25:50.328Z",
+        },
+        {
+          id: 8447379393015,
+          name: "Molly",
+          surname: "Lawrenson",
+          parentId: 7440555772320,
+          work: "Healthcare science",
+          birthDate: "1853-01-20T19:18:17.595Z",
+        },
+        {
+          id: 1421335493979,
+          name: "Tyson",
+          surname: "Grennan",
+          parentId: 1518948755485,
+          work: "Pilot",
+          birthDate: "1852-09-04T12:05:31.252Z",
+        },
+        {
+          id: 5260799325935,
+          name: "Sophia",
+          surname: "Buckley",
+          parentId: 8474979566542,
+          work: "Stunt performer",
+          birthDate: "1853-01-05T04:12:27.037Z",
+        },
+        {
+          id: 2231363435720,
+          name: "Melody",
+          surname: "Humpherys",
+          parentId: 2317759882951,
+          work: "work from home",
+          birthDate: "1853-01-12T00:39:05.356Z",
+        },
+        {
+          id: 9555420460973,
+          name: "Kristi",
+          surname: "Adkins",
+          parentId: 9735997282913,
+          work: "Upholsterer",
+          birthDate: "1853-10-19T15:26:25.022Z",
+        },
+        {
+          id: 1613978413981,
+          name: "Paul",
+          surname: "Cook",
+          parentId: 202934661757,
+          work: "Pipefitter",
+          birthDate: "1853-02-21T08:46:25.185Z",
+        },
+        {
+          id: 6752497709181,
+          name: "Kayden",
+          surname: "Woodcock",
+          parentId: 2850592397073,
+          work: "Arborist",
+          birthDate: "1854-03-05T02:17:31.620Z",
+        },
+      ],
+    },
+  ],
 };
 ExcelTable.generateExcel(data);
 ```
+
 </details>
 
 <details>
@@ -5376,7 +4604,7 @@ ExcelTable.generateExcel(data);
 
 <a id="rtl-option"></a>
 
-## 🆕 RTL Option [⬆️](#table-of-contents)
+## RTL Option [⬆️](#table-of-contents)
 
 The sheet direction can be changed using the rtl property. If set to true, the direction changes from left to right to right to left.
 
@@ -5386,219 +4614,219 @@ The sheet direction can be changed using the rtl property. If set to true, the d
 
 ```javascript
 const colorPalette = {
-    c1: '561C24',
-    c2: '6D2932',
-    c3: 'C7B7A3',
-    c4: 'E8D8C4'
-}
+  c1: "561C24",
+  c2: "6D2932",
+  c3: "C7B7A3",
+  c4: "E8D8C4",
+};
 const first = {
-    type: "HF",
-    backgroundColor: colorPalette.c2,
-    fontFamily: 'Times New Roman',
-    color: colorPalette.c4
-}
+  type: "HF",
+  backgroundColor: colorPalette.c2,
+  fontFamily: "Times New Roman",
+  color: colorPalette.c4,
+};
 const second = {
-    type: "HF",
-    backgroundColor: colorPalette.c4,
-    fontFamily: 'Times New Roman',
-    color: colorPalette.c2
-}
+  type: "HF",
+  backgroundColor: colorPalette.c4,
+  fontFamily: "Times New Roman",
+  color: colorPalette.c2,
+};
 const data = {
-    creator: 'mr',
-    styles: {
-        first,
-        second
-    },
-    sheet: [
+  creator: "mr",
+  styles: {
+    first,
+    second,
+  },
+  sheet: [
+    {
+      rtl: true,
+      headers: [
+        { label: "id", text: "ID" },
+        { label: "name", text: "Name" },
+        { label: "surname", text: "Surname" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "id", text: "ID" },
+        { label: "name", text: "Name" },
+        { label: "surname", text: "Surname" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "id", text: "ID" },
+        { label: "name", text: "Name" },
+        { label: "surname", text: "Surname" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "id", text: "ID" },
+        { label: "name", text: "Name" },
+        { label: "surname", text: "Surname" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "birthDate", text: "Birth Date", size: 40 },
+        { label: "id", text: "ID" },
+        { label: "name", text: "Name" },
+        { label: "surname", text: "Surname" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "birthDate", text: "Birth Date", size: 40 },
+      ],
+      data: [
         {
-            rtl: true,
-            headers: [
-                { label: "id", text: "ID" },
-                { label: "name", text: "Name" },
-                { label: "surname", text: "Surname" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "id", text: "ID" },
-                { label: "name", text: "Name" },
-                { label: "surname", text: "Surname" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "id", text: "ID" },
-                { label: "name", text: "Name" },
-                { label: "surname", text: "Surname" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "id", text: "ID" },
-                { label: "name", text: "Name" },
-                { label: "surname", text: "Surname" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "birthDate", text: "Birth Date", size: 40 },
-                { label: "id", text: "ID" },
-                { label: "name", text: "Name" },
-                { label: "surname", text: "Surname" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "birthDate", text: "Birth Date", size: 40 }
-            ],
-            data: [
-                {
-                    "id": 1525528872576,
-                    "name": "Declan",
-                    "surname": "Bright",
-                    "parentId": 9193814686664,
-                    "work": "National Park Service ranger",
-                    "birthDate": "1854-02-28T22:39:49.028Z"
-                },
-                {
-                    "id": 1933819177102,
-                    "name": "Phoebe",
-                    "surname": "Austin",
-                    "parentId": 7377315170005,
-                    "work": "Director of audience services",
-                    "birthDate": "1852-04-18T10:17:54.557Z"
-                },
-                {
-                    "id": 9541178576629,
-                    "name": "Waite",
-                    "surname": "Aveyard",
-                    "parentId": 8770728211947,
-                    "work": "Retired",
-                    "birthDate": "1854-12-11T17:36:40.765Z"
-                },
-                {
-                    "id": 2473638123843,
-                    "name": "Kaitlin",
-                    "surname": "Courtney",
-                    "parentId": 3076331620534,
-                    "work": "Maintenance engineering",
-                    "birthDate": "1854-03-04T01:50:50.209Z"
-                },
-                {
-                    "id": 7140741364134,
-                    "name": "Tristan",
-                    "surname": "King",
-                    "parentId": 4674378612151,
-                    "work": "Japanese idol",
-                    "birthDate": "1853-12-08T21:09:19.672Z"
-                },
-                {
-                    "id": 8756865627934,
-                    "name": "Egerton",
-                    "surname": "Mendenhall",
-                    "parentId": 4218847452166,
-                    "work": "Japanese idol",
-                    "birthDate": "1854-10-24T12:41:51.902Z"
-                },
-                {
-                    "id": 5098636603452,
-                    "name": "Adele",
-                    "surname": "Monroe",
-                    "parentId": 9762225632557,
-                    "work": "Unemployed",
-                    "birthDate": "1852-10-11T09:48:24.128Z"
-                },
-                {
-                    "id": 6700176094055,
-                    "name": "Katey",
-                    "surname": "Lewis",
-                    "parentId": 7938892587472,
-                    "work": "work from home",
-                    "birthDate": "1852-05-19T09:36:47.969Z"
-                },
-                {
-                    "id": 6869885121153,
-                    "name": "Rodney",
-                    "surname": "Saxby",
-                    "parentId": 576630955195,
-                    "work": "Cardiovascular Technologist",
-                    "birthDate": "1852-11-07T03:33:46.973Z"
-                },
-                {
-                    "id": 1389127579072,
-                    "name": "Dare",
-                    "surname": "Kenny",
-                    "parentId": 4017546822023,
-                    "work": "Engineering technologist",
-                    "birthDate": "1852-10-25T23:36:29.109Z"
-                },
-                {
-                    "id": 6801196917678,
-                    "name": "Potter",
-                    "surname": "Bradbury",
-                    "parentId": 3750611241942,
-                    "work": "Petroleum geologist",
-                    "birthDate": "1852-10-12T06:59:33.426Z"
-                },
-                {
-                    "id": 1981219057492,
-                    "name": "Charlene",
-                    "surname": "Stuttaford",
-                    "parentId": 5645329253708,
-                    "work": "Harlequin",
-                    "birthDate": "1853-11-22T01:25:50.328Z"
-                },
-                {
-                    "id": 8447379393015,
-                    "name": "Molly",
-                    "surname": "Lawrenson",
-                    "parentId": 7440555772320,
-                    "work": "Healthcare science",
-                    "birthDate": "1853-01-20T19:18:17.595Z"
-                },
-                {
-                    "id": 1421335493979,
-                    "name": "Tyson",
-                    "surname": "Grennan",
-                    "parentId": 1518948755485,
-                    "work": "Pilot",
-                    "birthDate": "1852-09-04T12:05:31.252Z"
-                },
-                {
-                    "id": 5260799325935,
-                    "name": "Sophia",
-                    "surname": "Buckley",
-                    "parentId": 8474979566542,
-                    "work": "Stunt performer",
-                    "birthDate": "1853-01-05T04:12:27.037Z"
-                },
-                {
-                    "id": 2231363435720,
-                    "name": "Melody",
-                    "surname": "Humpherys",
-                    "parentId": 2317759882951,
-                    "work": "work from home",
-                    "birthDate": "1853-01-12T00:39:05.356Z"
-                },
-                {
-                    "id": 9555420460973,
-                    "name": "Kristi",
-                    "surname": "Adkins",
-                    "parentId": 9735997282913,
-                    "work": "Upholsterer",
-                    "birthDate": "1853-10-19T15:26:25.022Z"
-                },
-                {
-                    "id": 1613978413981,
-                    "name": "Paul",
-                    "surname": "Cook",
-                    "parentId": 202934661757,
-                    "work": "Pipefitter",
-                    "birthDate": "1853-02-21T08:46:25.185Z"
-                },
-                {
-                    "id": 6752497709181,
-                    "name": "Kayden",
-                    "surname": "Woodcock",
-                    "parentId": 2850592397073,
-                    "work": "Arborist",
-                    "birthDate": "1854-03-05T02:17:31.620Z"
-                },
-            ]
-        }
-    ]
+          id: 1525528872576,
+          name: "Declan",
+          surname: "Bright",
+          parentId: 9193814686664,
+          work: "National Park Service ranger",
+          birthDate: "1854-02-28T22:39:49.028Z",
+        },
+        {
+          id: 1933819177102,
+          name: "Phoebe",
+          surname: "Austin",
+          parentId: 7377315170005,
+          work: "Director of audience services",
+          birthDate: "1852-04-18T10:17:54.557Z",
+        },
+        {
+          id: 9541178576629,
+          name: "Waite",
+          surname: "Aveyard",
+          parentId: 8770728211947,
+          work: "Retired",
+          birthDate: "1854-12-11T17:36:40.765Z",
+        },
+        {
+          id: 2473638123843,
+          name: "Kaitlin",
+          surname: "Courtney",
+          parentId: 3076331620534,
+          work: "Maintenance engineering",
+          birthDate: "1854-03-04T01:50:50.209Z",
+        },
+        {
+          id: 7140741364134,
+          name: "Tristan",
+          surname: "King",
+          parentId: 4674378612151,
+          work: "Japanese idol",
+          birthDate: "1853-12-08T21:09:19.672Z",
+        },
+        {
+          id: 8756865627934,
+          name: "Egerton",
+          surname: "Mendenhall",
+          parentId: 4218847452166,
+          work: "Japanese idol",
+          birthDate: "1854-10-24T12:41:51.902Z",
+        },
+        {
+          id: 5098636603452,
+          name: "Adele",
+          surname: "Monroe",
+          parentId: 9762225632557,
+          work: "Unemployed",
+          birthDate: "1852-10-11T09:48:24.128Z",
+        },
+        {
+          id: 6700176094055,
+          name: "Katey",
+          surname: "Lewis",
+          parentId: 7938892587472,
+          work: "work from home",
+          birthDate: "1852-05-19T09:36:47.969Z",
+        },
+        {
+          id: 6869885121153,
+          name: "Rodney",
+          surname: "Saxby",
+          parentId: 576630955195,
+          work: "Cardiovascular Technologist",
+          birthDate: "1852-11-07T03:33:46.973Z",
+        },
+        {
+          id: 1389127579072,
+          name: "Dare",
+          surname: "Kenny",
+          parentId: 4017546822023,
+          work: "Engineering technologist",
+          birthDate: "1852-10-25T23:36:29.109Z",
+        },
+        {
+          id: 6801196917678,
+          name: "Potter",
+          surname: "Bradbury",
+          parentId: 3750611241942,
+          work: "Petroleum geologist",
+          birthDate: "1852-10-12T06:59:33.426Z",
+        },
+        {
+          id: 1981219057492,
+          name: "Charlene",
+          surname: "Stuttaford",
+          parentId: 5645329253708,
+          work: "Harlequin",
+          birthDate: "1853-11-22T01:25:50.328Z",
+        },
+        {
+          id: 8447379393015,
+          name: "Molly",
+          surname: "Lawrenson",
+          parentId: 7440555772320,
+          work: "Healthcare science",
+          birthDate: "1853-01-20T19:18:17.595Z",
+        },
+        {
+          id: 1421335493979,
+          name: "Tyson",
+          surname: "Grennan",
+          parentId: 1518948755485,
+          work: "Pilot",
+          birthDate: "1852-09-04T12:05:31.252Z",
+        },
+        {
+          id: 5260799325935,
+          name: "Sophia",
+          surname: "Buckley",
+          parentId: 8474979566542,
+          work: "Stunt performer",
+          birthDate: "1853-01-05T04:12:27.037Z",
+        },
+        {
+          id: 2231363435720,
+          name: "Melody",
+          surname: "Humpherys",
+          parentId: 2317759882951,
+          work: "work from home",
+          birthDate: "1853-01-12T00:39:05.356Z",
+        },
+        {
+          id: 9555420460973,
+          name: "Kristi",
+          surname: "Adkins",
+          parentId: 9735997282913,
+          work: "Upholsterer",
+          birthDate: "1853-10-19T15:26:25.022Z",
+        },
+        {
+          id: 1613978413981,
+          name: "Paul",
+          surname: "Cook",
+          parentId: 202934661757,
+          work: "Pipefitter",
+          birthDate: "1853-02-21T08:46:25.185Z",
+        },
+        {
+          id: 6752497709181,
+          name: "Kayden",
+          surname: "Woodcock",
+          parentId: 2850592397073,
+          work: "Arborist",
+          birthDate: "1854-03-05T02:17:31.620Z",
+        },
+      ],
+    },
+  ],
 };
 ExcelTable.generateExcel(data);
 ```
@@ -5615,7 +4843,7 @@ ExcelTable.generateExcel(data);
 
 <a id="view-option"></a>
 
-## 🆕 View Option [⬆️](#table-of-contents)
+## View Option [⬆️](#table-of-contents)
 
 PageView is used to define the type of view, including options to hide the grid, ruler, and headlines, as well as enabling frozen and split views.
 
@@ -5628,210 +4856,210 @@ PageView is used to define the type of view, including options to hide the grid,
 
 ```javascript
 const colorPalette = {
-    c1: '561C24',
-    c2: '6D2932',
-    c3: 'C7B7A3',
-    c4: 'E8D8C4'
-}
+  c1: "561C24",
+  c2: "6D2932",
+  c3: "C7B7A3",
+  c4: "E8D8C4",
+};
 const first = {
-    type: "HF",
-    backgroundColor: colorPalette.c2,
-    fontFamily: 'Times New Roman',
-    color: colorPalette.c4
-}
+  type: "HF",
+  backgroundColor: colorPalette.c2,
+  fontFamily: "Times New Roman",
+  color: colorPalette.c4,
+};
 const second = {
-    type: "HF",
-    backgroundColor: colorPalette.c4,
-    fontFamily: 'Times New Roman',
-    color: colorPalette.c2
-}
+  type: "HF",
+  backgroundColor: colorPalette.c4,
+  fontFamily: "Times New Roman",
+  color: colorPalette.c2,
+};
 const data = {
-    creator: 'mr',
-    styles: {
-        first,
-        second
-    },
-    sheet: [
+  creator: "mr",
+  styles: {
+    first,
+    second,
+  },
+  sheet: [
+    {
+      viewOption: {
+        type: "pageBreakPreview",
+        hideHeadlines: true,
+        hideGrid: true,
+      },
+      headers: [
+        { label: "id", text: "ID" },
+        { label: "name", text: "Name" },
+        { label: "surname", text: "Surname" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "id", text: "ID" },
+        { label: "name", text: "Name" },
+        { label: "surname", text: "Surname" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "id", text: "ID" },
+        { label: "name", text: "Name" },
+        { label: "surname", text: "Surname" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "birthDate", text: "Birth Date", size: 40 },
+      ],
+      data: [
         {
-            viewOption: {
-                type: "pageBreakPreview",
-                hideHeadlines: true,
-                hideGrid: true,
-            },
-            headers: [
-                { label: "id", text: "ID" },
-                { label: "name", text: "Name" },
-                { label: "surname", text: "Surname" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "id", text: "ID" },
-                { label: "name", text: "Name" },
-                { label: "surname", text: "Surname" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "id", text: "ID" },
-                { label: "name", text: "Name" },
-                { label: "surname", text: "Surname" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "birthDate", text: "Birth Date", size: 40 }
-            ],
-            data: [
-                {
-                    "id": 1525528872576,
-                    "name": "Declan",
-                    "surname": "Bright",
-                    "parentId": 9193814686664,
-                    "work": "National Park Service ranger",
-                    "birthDate": "1854-02-28T22:39:49.028Z"
-                },
-                {
-                    "id": 1933819177102,
-                    "name": "Phoebe",
-                    "surname": "Austin",
-                    "parentId": 7377315170005,
-                    "work": "Director of audience services",
-                    "birthDate": "1852-04-18T10:17:54.557Z"
-                },
-                {
-                    "id": 9541178576629,
-                    "name": "Waite",
-                    "surname": "Aveyard",
-                    "parentId": 8770728211947,
-                    "work": "Retired",
-                    "birthDate": "1854-12-11T17:36:40.765Z"
-                },
-                {
-                    "id": 2473638123843,
-                    "name": "Kaitlin",
-                    "surname": "Courtney",
-                    "parentId": 3076331620534,
-                    "work": "Maintenance engineering",
-                    "birthDate": "1854-03-04T01:50:50.209Z"
-                },
-                {
-                    "id": 7140741364134,
-                    "name": "Tristan",
-                    "surname": "King",
-                    "parentId": 4674378612151,
-                    "work": "Japanese idol",
-                    "birthDate": "1853-12-08T21:09:19.672Z"
-                },
-                {
-                    "id": 8756865627934,
-                    "name": "Egerton",
-                    "surname": "Mendenhall",
-                    "parentId": 4218847452166,
-                    "work": "Japanese idol",
-                    "birthDate": "1854-10-24T12:41:51.902Z"
-                },
-                {
-                    "id": 5098636603452,
-                    "name": "Adele",
-                    "surname": "Monroe",
-                    "parentId": 9762225632557,
-                    "work": "Unemployed",
-                    "birthDate": "1852-10-11T09:48:24.128Z"
-                },
-                {
-                    "id": 6700176094055,
-                    "name": "Katey",
-                    "surname": "Lewis",
-                    "parentId": 7938892587472,
-                    "work": "work from home",
-                    "birthDate": "1852-05-19T09:36:47.969Z"
-                },
-                {
-                    "id": 6869885121153,
-                    "name": "Rodney",
-                    "surname": "Saxby",
-                    "parentId": 576630955195,
-                    "work": "Cardiovascular Technologist",
-                    "birthDate": "1852-11-07T03:33:46.973Z"
-                },
-                {
-                    "id": 1389127579072,
-                    "name": "Dare",
-                    "surname": "Kenny",
-                    "parentId": 4017546822023,
-                    "work": "Engineering technologist",
-                    "birthDate": "1852-10-25T23:36:29.109Z"
-                },
-                {
-                    "id": 6801196917678,
-                    "name": "Potter",
-                    "surname": "Bradbury",
-                    "parentId": 3750611241942,
-                    "work": "Petroleum geologist",
-                    "birthDate": "1852-10-12T06:59:33.426Z"
-                },
-                {
-                    "id": 1981219057492,
-                    "name": "Charlene",
-                    "surname": "Stuttaford",
-                    "parentId": 5645329253708,
-                    "work": "Harlequin",
-                    "birthDate": "1853-11-22T01:25:50.328Z"
-                },
-                {
-                    "id": 8447379393015,
-                    "name": "Molly",
-                    "surname": "Lawrenson",
-                    "parentId": 7440555772320,
-                    "work": "Healthcare science",
-                    "birthDate": "1853-01-20T19:18:17.595Z"
-                },
-                {
-                    "id": 1421335493979,
-                    "name": "Tyson",
-                    "surname": "Grennan",
-                    "parentId": 1518948755485,
-                    "work": "Pilot",
-                    "birthDate": "1852-09-04T12:05:31.252Z"
-                },
-                {
-                    "id": 5260799325935,
-                    "name": "Sophia",
-                    "surname": "Buckley",
-                    "parentId": 8474979566542,
-                    "work": "Stunt performer",
-                    "birthDate": "1853-01-05T04:12:27.037Z"
-                },
-                {
-                    "id": 2231363435720,
-                    "name": "Melody",
-                    "surname": "Humpherys",
-                    "parentId": 2317759882951,
-                    "work": "work from home",
-                    "birthDate": "1853-01-12T00:39:05.356Z"
-                },
-                {
-                    "id": 9555420460973,
-                    "name": "Kristi",
-                    "surname": "Adkins",
-                    "parentId": 9735997282913,
-                    "work": "Upholsterer",
-                    "birthDate": "1853-10-19T15:26:25.022Z"
-                },
-                {
-                    "id": 1613978413981,
-                    "name": "Paul",
-                    "surname": "Cook",
-                    "parentId": 202934661757,
-                    "work": "Pipefitter",
-                    "birthDate": "1853-02-21T08:46:25.185Z"
-                },
-                {
-                    "id": 6752497709181,
-                    "name": "Kayden",
-                    "surname": "Woodcock",
-                    "parentId": 2850592397073,
-                    "work": "Arborist",
-                    "birthDate": "1854-03-05T02:17:31.620Z"
-                },
-            ]
-        }
-    ]
+          id: 1525528872576,
+          name: "Declan",
+          surname: "Bright",
+          parentId: 9193814686664,
+          work: "National Park Service ranger",
+          birthDate: "1854-02-28T22:39:49.028Z",
+        },
+        {
+          id: 1933819177102,
+          name: "Phoebe",
+          surname: "Austin",
+          parentId: 7377315170005,
+          work: "Director of audience services",
+          birthDate: "1852-04-18T10:17:54.557Z",
+        },
+        {
+          id: 9541178576629,
+          name: "Waite",
+          surname: "Aveyard",
+          parentId: 8770728211947,
+          work: "Retired",
+          birthDate: "1854-12-11T17:36:40.765Z",
+        },
+        {
+          id: 2473638123843,
+          name: "Kaitlin",
+          surname: "Courtney",
+          parentId: 3076331620534,
+          work: "Maintenance engineering",
+          birthDate: "1854-03-04T01:50:50.209Z",
+        },
+        {
+          id: 7140741364134,
+          name: "Tristan",
+          surname: "King",
+          parentId: 4674378612151,
+          work: "Japanese idol",
+          birthDate: "1853-12-08T21:09:19.672Z",
+        },
+        {
+          id: 8756865627934,
+          name: "Egerton",
+          surname: "Mendenhall",
+          parentId: 4218847452166,
+          work: "Japanese idol",
+          birthDate: "1854-10-24T12:41:51.902Z",
+        },
+        {
+          id: 5098636603452,
+          name: "Adele",
+          surname: "Monroe",
+          parentId: 9762225632557,
+          work: "Unemployed",
+          birthDate: "1852-10-11T09:48:24.128Z",
+        },
+        {
+          id: 6700176094055,
+          name: "Katey",
+          surname: "Lewis",
+          parentId: 7938892587472,
+          work: "work from home",
+          birthDate: "1852-05-19T09:36:47.969Z",
+        },
+        {
+          id: 6869885121153,
+          name: "Rodney",
+          surname: "Saxby",
+          parentId: 576630955195,
+          work: "Cardiovascular Technologist",
+          birthDate: "1852-11-07T03:33:46.973Z",
+        },
+        {
+          id: 1389127579072,
+          name: "Dare",
+          surname: "Kenny",
+          parentId: 4017546822023,
+          work: "Engineering technologist",
+          birthDate: "1852-10-25T23:36:29.109Z",
+        },
+        {
+          id: 6801196917678,
+          name: "Potter",
+          surname: "Bradbury",
+          parentId: 3750611241942,
+          work: "Petroleum geologist",
+          birthDate: "1852-10-12T06:59:33.426Z",
+        },
+        {
+          id: 1981219057492,
+          name: "Charlene",
+          surname: "Stuttaford",
+          parentId: 5645329253708,
+          work: "Harlequin",
+          birthDate: "1853-11-22T01:25:50.328Z",
+        },
+        {
+          id: 8447379393015,
+          name: "Molly",
+          surname: "Lawrenson",
+          parentId: 7440555772320,
+          work: "Healthcare science",
+          birthDate: "1853-01-20T19:18:17.595Z",
+        },
+        {
+          id: 1421335493979,
+          name: "Tyson",
+          surname: "Grennan",
+          parentId: 1518948755485,
+          work: "Pilot",
+          birthDate: "1852-09-04T12:05:31.252Z",
+        },
+        {
+          id: 5260799325935,
+          name: "Sophia",
+          surname: "Buckley",
+          parentId: 8474979566542,
+          work: "Stunt performer",
+          birthDate: "1853-01-05T04:12:27.037Z",
+        },
+        {
+          id: 2231363435720,
+          name: "Melody",
+          surname: "Humpherys",
+          parentId: 2317759882951,
+          work: "work from home",
+          birthDate: "1853-01-12T00:39:05.356Z",
+        },
+        {
+          id: 9555420460973,
+          name: "Kristi",
+          surname: "Adkins",
+          parentId: 9735997282913,
+          work: "Upholsterer",
+          birthDate: "1853-10-19T15:26:25.022Z",
+        },
+        {
+          id: 1613978413981,
+          name: "Paul",
+          surname: "Cook",
+          parentId: 202934661757,
+          work: "Pipefitter",
+          birthDate: "1853-02-21T08:46:25.185Z",
+        },
+        {
+          id: 6752497709181,
+          name: "Kayden",
+          surname: "Woodcock",
+          parentId: 2850592397073,
+          work: "Arborist",
+          birthDate: "1854-03-05T02:17:31.620Z",
+        },
+      ],
+    },
+  ],
 };
 ExcelTable.generateExcel(data);
 ```
@@ -5852,211 +5080,211 @@ ExcelTable.generateExcel(data);
 
 ```javascript
 const colorPalette = {
-    c1: '561C24',
-    c2: '6D2932',
-    c3: 'C7B7A3',
-    c4: 'E8D8C4'
-}
-const first = {
-    type: "HF",
-    backgroundColor: colorPalette.c2,
-    fontFamily: 'Times New Roman',
-    color: colorPalette.c4
-}
-const second = {
-    type: "HF",
-    backgroundColor: colorPalette.c4,
-    fontFamily: 'Times New Roman',
-    color: colorPalette.c2
-}
-const data = {
-    creator: 'mr',
-    styles: {
-        first,
-        second
-    },
-    sheet: [
-        {
-            viewOption: {
-                type: "pageLayout",
-                hideRuler: true
-            },
-            headers: [
-                { label: "id", text: "ID" },
-                { label: "name", text: "Name" },
-                { label: "surname", text: "Surname" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "id", text: "ID" },
-                { label: "name", text: "Name" },
-                { label: "surname", text: "Surname" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "id", text: "ID" },
-                { label: "name", text: "Name" },
-                { label: "surname", text: "Surname" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "birthDate", text: "Birth Date", size: 40 }
-            ],
-            data: [
-                {
-                    "id": 1525528872576,
-                    "name": "Declan",
-                    "surname": "Bright",
-                    "parentId": 9193814686664,
-                    "work": "National Park Service ranger",
-                    "birthDate": "1854-02-28T22:39:49.028Z"
-                },
-                {
-                    "id": 1933819177102,
-                    "name": "Phoebe",
-                    "surname": "Austin",
-                    "parentId": 7377315170005,
-                    "work": "Director of audience services",
-                    "birthDate": "1852-04-18T10:17:54.557Z"
-                },
-                {
-                    "id": 9541178576629,
-                    "name": "Waite",
-                    "surname": "Aveyard",
-                    "parentId": 8770728211947,
-                    "work": "Retired",
-                    "birthDate": "1854-12-11T17:36:40.765Z"
-                },
-                {
-                    "id": 2473638123843,
-                    "name": "Kaitlin",
-                    "surname": "Courtney",
-                    "parentId": 3076331620534,
-                    "work": "Maintenance engineering",
-                    "birthDate": "1854-03-04T01:50:50.209Z"
-                },
-                {
-                    "id": 7140741364134,
-                    "name": "Tristan",
-                    "surname": "King",
-                    "parentId": 4674378612151,
-                    "work": "Japanese idol",
-                    "birthDate": "1853-12-08T21:09:19.672Z"
-                },
-                {
-                    "id": 8756865627934,
-                    "name": "Egerton",
-                    "surname": "Mendenhall",
-                    "parentId": 4218847452166,
-                    "work": "Japanese idol",
-                    "birthDate": "1854-10-24T12:41:51.902Z"
-                },
-                {
-                    "id": 5098636603452,
-                    "name": "Adele",
-                    "surname": "Monroe",
-                    "parentId": 9762225632557,
-                    "work": "Unemployed",
-                    "birthDate": "1852-10-11T09:48:24.128Z"
-                },
-                {
-                    "id": 6700176094055,
-                    "name": "Katey",
-                    "surname": "Lewis",
-                    "parentId": 7938892587472,
-                    "work": "work from home",
-                    "birthDate": "1852-05-19T09:36:47.969Z"
-                },
-                {
-                    "id": 6869885121153,
-                    "name": "Rodney",
-                    "surname": "Saxby",
-                    "parentId": 576630955195,
-                    "work": "Cardiovascular Technologist",
-                    "birthDate": "1852-11-07T03:33:46.973Z"
-                },
-                {
-                    "id": 1389127579072,
-                    "name": "Dare",
-                    "surname": "Kenny",
-                    "parentId": 4017546822023,
-                    "work": "Engineering technologist",
-                    "birthDate": "1852-10-25T23:36:29.109Z"
-                },
-                {
-                    "id": 6801196917678,
-                    "name": "Potter",
-                    "surname": "Bradbury",
-                    "parentId": 3750611241942,
-                    "work": "Petroleum geologist",
-                    "birthDate": "1852-10-12T06:59:33.426Z"
-                },
-                {
-                    "id": 1981219057492,
-                    "name": "Charlene",
-                    "surname": "Stuttaford",
-                    "parentId": 5645329253708,
-                    "work": "Harlequin",
-                    "birthDate": "1853-11-22T01:25:50.328Z"
-                },
-                {
-                    "id": 8447379393015,
-                    "name": "Molly",
-                    "surname": "Lawrenson",
-                    "parentId": 7440555772320,
-                    "work": "Healthcare science",
-                    "birthDate": "1853-01-20T19:18:17.595Z"
-                },
-                {
-                    "id": 1421335493979,
-                    "name": "Tyson",
-                    "surname": "Grennan",
-                    "parentId": 1518948755485,
-                    "work": "Pilot",
-                    "birthDate": "1852-09-04T12:05:31.252Z"
-                },
-                {
-                    "id": 5260799325935,
-                    "name": "Sophia",
-                    "surname": "Buckley",
-                    "parentId": 8474979566542,
-                    "work": "Stunt performer",
-                    "birthDate": "1853-01-05T04:12:27.037Z"
-                },
-                {
-                    "id": 2231363435720,
-                    "name": "Melody",
-                    "surname": "Humpherys",
-                    "parentId": 2317759882951,
-                    "work": "work from home",
-                    "birthDate": "1853-01-12T00:39:05.356Z"
-                },
-                {
-                    "id": 9555420460973,
-                    "name": "Kristi",
-                    "surname": "Adkins",
-                    "parentId": 9735997282913,
-                    "work": "Upholsterer",
-                    "birthDate": "1853-10-19T15:26:25.022Z"
-                },
-                {
-                    "id": 1613978413981,
-                    "name": "Paul",
-                    "surname": "Cook",
-                    "parentId": 202934661757,
-                    "work": "Pipefitter",
-                    "birthDate": "1853-02-21T08:46:25.185Z"
-                },
-                {
-                    "id": 6752497709181,
-                    "name": "Kayden",
-                    "surname": "Woodcock",
-                    "parentId": 2850592397073,
-                    "work": "Arborist",
-                    "birthDate": "1854-03-05T02:17:31.620Z"
-                },
-            ]
-        }
-    ]
+  c1: "561C24",
+  c2: "6D2932",
+  c3: "C7B7A3",
+  c4: "E8D8C4",
 };
-ExcelTable.generateExcel(data);   
+const first = {
+  type: "HF",
+  backgroundColor: colorPalette.c2,
+  fontFamily: "Times New Roman",
+  color: colorPalette.c4,
+};
+const second = {
+  type: "HF",
+  backgroundColor: colorPalette.c4,
+  fontFamily: "Times New Roman",
+  color: colorPalette.c2,
+};
+const data = {
+  creator: "mr",
+  styles: {
+    first,
+    second,
+  },
+  sheet: [
+    {
+      viewOption: {
+        type: "pageLayout",
+        hideRuler: true,
+      },
+      headers: [
+        { label: "id", text: "ID" },
+        { label: "name", text: "Name" },
+        { label: "surname", text: "Surname" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "id", text: "ID" },
+        { label: "name", text: "Name" },
+        { label: "surname", text: "Surname" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "id", text: "ID" },
+        { label: "name", text: "Name" },
+        { label: "surname", text: "Surname" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "birthDate", text: "Birth Date", size: 40 },
+      ],
+      data: [
+        {
+          id: 1525528872576,
+          name: "Declan",
+          surname: "Bright",
+          parentId: 9193814686664,
+          work: "National Park Service ranger",
+          birthDate: "1854-02-28T22:39:49.028Z",
+        },
+        {
+          id: 1933819177102,
+          name: "Phoebe",
+          surname: "Austin",
+          parentId: 7377315170005,
+          work: "Director of audience services",
+          birthDate: "1852-04-18T10:17:54.557Z",
+        },
+        {
+          id: 9541178576629,
+          name: "Waite",
+          surname: "Aveyard",
+          parentId: 8770728211947,
+          work: "Retired",
+          birthDate: "1854-12-11T17:36:40.765Z",
+        },
+        {
+          id: 2473638123843,
+          name: "Kaitlin",
+          surname: "Courtney",
+          parentId: 3076331620534,
+          work: "Maintenance engineering",
+          birthDate: "1854-03-04T01:50:50.209Z",
+        },
+        {
+          id: 7140741364134,
+          name: "Tristan",
+          surname: "King",
+          parentId: 4674378612151,
+          work: "Japanese idol",
+          birthDate: "1853-12-08T21:09:19.672Z",
+        },
+        {
+          id: 8756865627934,
+          name: "Egerton",
+          surname: "Mendenhall",
+          parentId: 4218847452166,
+          work: "Japanese idol",
+          birthDate: "1854-10-24T12:41:51.902Z",
+        },
+        {
+          id: 5098636603452,
+          name: "Adele",
+          surname: "Monroe",
+          parentId: 9762225632557,
+          work: "Unemployed",
+          birthDate: "1852-10-11T09:48:24.128Z",
+        },
+        {
+          id: 6700176094055,
+          name: "Katey",
+          surname: "Lewis",
+          parentId: 7938892587472,
+          work: "work from home",
+          birthDate: "1852-05-19T09:36:47.969Z",
+        },
+        {
+          id: 6869885121153,
+          name: "Rodney",
+          surname: "Saxby",
+          parentId: 576630955195,
+          work: "Cardiovascular Technologist",
+          birthDate: "1852-11-07T03:33:46.973Z",
+        },
+        {
+          id: 1389127579072,
+          name: "Dare",
+          surname: "Kenny",
+          parentId: 4017546822023,
+          work: "Engineering technologist",
+          birthDate: "1852-10-25T23:36:29.109Z",
+        },
+        {
+          id: 6801196917678,
+          name: "Potter",
+          surname: "Bradbury",
+          parentId: 3750611241942,
+          work: "Petroleum geologist",
+          birthDate: "1852-10-12T06:59:33.426Z",
+        },
+        {
+          id: 1981219057492,
+          name: "Charlene",
+          surname: "Stuttaford",
+          parentId: 5645329253708,
+          work: "Harlequin",
+          birthDate: "1853-11-22T01:25:50.328Z",
+        },
+        {
+          id: 8447379393015,
+          name: "Molly",
+          surname: "Lawrenson",
+          parentId: 7440555772320,
+          work: "Healthcare science",
+          birthDate: "1853-01-20T19:18:17.595Z",
+        },
+        {
+          id: 1421335493979,
+          name: "Tyson",
+          surname: "Grennan",
+          parentId: 1518948755485,
+          work: "Pilot",
+          birthDate: "1852-09-04T12:05:31.252Z",
+        },
+        {
+          id: 5260799325935,
+          name: "Sophia",
+          surname: "Buckley",
+          parentId: 8474979566542,
+          work: "Stunt performer",
+          birthDate: "1853-01-05T04:12:27.037Z",
+        },
+        {
+          id: 2231363435720,
+          name: "Melody",
+          surname: "Humpherys",
+          parentId: 2317759882951,
+          work: "work from home",
+          birthDate: "1853-01-12T00:39:05.356Z",
+        },
+        {
+          id: 9555420460973,
+          name: "Kristi",
+          surname: "Adkins",
+          parentId: 9735997282913,
+          work: "Upholsterer",
+          birthDate: "1853-10-19T15:26:25.022Z",
+        },
+        {
+          id: 1613978413981,
+          name: "Paul",
+          surname: "Cook",
+          parentId: 202934661757,
+          work: "Pipefitter",
+          birthDate: "1853-02-21T08:46:25.185Z",
+        },
+        {
+          id: 6752497709181,
+          name: "Kayden",
+          surname: "Woodcock",
+          parentId: 2850592397073,
+          work: "Arborist",
+          birthDate: "1854-03-05T02:17:31.620Z",
+        },
+      ],
+    },
+  ],
+};
+ExcelTable.generateExcel(data);
 ```
 
 </details>
@@ -6075,213 +5303,213 @@ ExcelTable.generateExcel(data);
 
 ```javascript
 const colorPalette = {
-    c1: '561C24',
-    c2: '6D2932',
-    c3: 'C7B7A3',
-    c4: 'E8D8C4'
-}
-const first = {
-    type: "HF",
-    backgroundColor: colorPalette.c2,
-    fontFamily: 'Times New Roman',
-    color: colorPalette.c4
-}
-const second = {
-    type: "HF",
-    backgroundColor: colorPalette.c4,
-    fontFamily: 'Times New Roman',
-    color: colorPalette.c2
-}
-const data = {
-    creator: 'mr',
-    styles: {
-        first,
-        second
-    },
-    sheet: [
-        {
-            viewOption: {
-                frozenOption: {
-                    type: "R",//or "ROW"
-                    index: 1
-                }
-            },
-            headers: [
-                { label: "id", text: "ID" },
-                { label: "name", text: "Name" },
-                { label: "surname", text: "Surname" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "id", text: "ID" },
-                { label: "name", text: "Name" },
-                { label: "surname", text: "Surname" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "id", text: "ID" },
-                { label: "name", text: "Name" },
-                { label: "surname", text: "Surname" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "birthDate", text: "Birth Date", size: 40 }
-            ],
-            data: [
-                {
-                    "id": 1525528872576,
-                    "name": "Declan",
-                    "surname": "Bright",
-                    "parentId": 9193814686664,
-                    "work": "National Park Service ranger",
-                    "birthDate": "1854-02-28T22:39:49.028Z"
-                },
-                {
-                    "id": 1933819177102,
-                    "name": "Phoebe",
-                    "surname": "Austin",
-                    "parentId": 7377315170005,
-                    "work": "Director of audience services",
-                    "birthDate": "1852-04-18T10:17:54.557Z"
-                },
-                {
-                    "id": 9541178576629,
-                    "name": "Waite",
-                    "surname": "Aveyard",
-                    "parentId": 8770728211947,
-                    "work": "Retired",
-                    "birthDate": "1854-12-11T17:36:40.765Z"
-                },
-                {
-                    "id": 2473638123843,
-                    "name": "Kaitlin",
-                    "surname": "Courtney",
-                    "parentId": 3076331620534,
-                    "work": "Maintenance engineering",
-                    "birthDate": "1854-03-04T01:50:50.209Z"
-                },
-                {
-                    "id": 7140741364134,
-                    "name": "Tristan",
-                    "surname": "King",
-                    "parentId": 4674378612151,
-                    "work": "Japanese idol",
-                    "birthDate": "1853-12-08T21:09:19.672Z"
-                },
-                {
-                    "id": 8756865627934,
-                    "name": "Egerton",
-                    "surname": "Mendenhall",
-                    "parentId": 4218847452166,
-                    "work": "Japanese idol",
-                    "birthDate": "1854-10-24T12:41:51.902Z"
-                },
-                {
-                    "id": 5098636603452,
-                    "name": "Adele",
-                    "surname": "Monroe",
-                    "parentId": 9762225632557,
-                    "work": "Unemployed",
-                    "birthDate": "1852-10-11T09:48:24.128Z"
-                },
-                {
-                    "id": 6700176094055,
-                    "name": "Katey",
-                    "surname": "Lewis",
-                    "parentId": 7938892587472,
-                    "work": "work from home",
-                    "birthDate": "1852-05-19T09:36:47.969Z"
-                },
-                {
-                    "id": 6869885121153,
-                    "name": "Rodney",
-                    "surname": "Saxby",
-                    "parentId": 576630955195,
-                    "work": "Cardiovascular Technologist",
-                    "birthDate": "1852-11-07T03:33:46.973Z"
-                },
-                {
-                    "id": 1389127579072,
-                    "name": "Dare",
-                    "surname": "Kenny",
-                    "parentId": 4017546822023,
-                    "work": "Engineering technologist",
-                    "birthDate": "1852-10-25T23:36:29.109Z"
-                },
-                {
-                    "id": 6801196917678,
-                    "name": "Potter",
-                    "surname": "Bradbury",
-                    "parentId": 3750611241942,
-                    "work": "Petroleum geologist",
-                    "birthDate": "1852-10-12T06:59:33.426Z"
-                },
-                {
-                    "id": 1981219057492,
-                    "name": "Charlene",
-                    "surname": "Stuttaford",
-                    "parentId": 5645329253708,
-                    "work": "Harlequin",
-                    "birthDate": "1853-11-22T01:25:50.328Z"
-                },
-                {
-                    "id": 8447379393015,
-                    "name": "Molly",
-                    "surname": "Lawrenson",
-                    "parentId": 7440555772320,
-                    "work": "Healthcare science",
-                    "birthDate": "1853-01-20T19:18:17.595Z"
-                },
-                {
-                    "id": 1421335493979,
-                    "name": "Tyson",
-                    "surname": "Grennan",
-                    "parentId": 1518948755485,
-                    "work": "Pilot",
-                    "birthDate": "1852-09-04T12:05:31.252Z"
-                },
-                {
-                    "id": 5260799325935,
-                    "name": "Sophia",
-                    "surname": "Buckley",
-                    "parentId": 8474979566542,
-                    "work": "Stunt performer",
-                    "birthDate": "1853-01-05T04:12:27.037Z"
-                },
-                {
-                    "id": 2231363435720,
-                    "name": "Melody",
-                    "surname": "Humpherys",
-                    "parentId": 2317759882951,
-                    "work": "work from home",
-                    "birthDate": "1853-01-12T00:39:05.356Z"
-                },
-                {
-                    "id": 9555420460973,
-                    "name": "Kristi",
-                    "surname": "Adkins",
-                    "parentId": 9735997282913,
-                    "work": "Upholsterer",
-                    "birthDate": "1853-10-19T15:26:25.022Z"
-                },
-                {
-                    "id": 1613978413981,
-                    "name": "Paul",
-                    "surname": "Cook",
-                    "parentId": 202934661757,
-                    "work": "Pipefitter",
-                    "birthDate": "1853-02-21T08:46:25.185Z"
-                },
-                {
-                    "id": 6752497709181,
-                    "name": "Kayden",
-                    "surname": "Woodcock",
-                    "parentId": 2850592397073,
-                    "work": "Arborist",
-                    "birthDate": "1854-03-05T02:17:31.620Z"
-                },
-            ]
-        }
-    ]
+  c1: "561C24",
+  c2: "6D2932",
+  c3: "C7B7A3",
+  c4: "E8D8C4",
 };
-ExcelTable.generateExcel(data);  
+const first = {
+  type: "HF",
+  backgroundColor: colorPalette.c2,
+  fontFamily: "Times New Roman",
+  color: colorPalette.c4,
+};
+const second = {
+  type: "HF",
+  backgroundColor: colorPalette.c4,
+  fontFamily: "Times New Roman",
+  color: colorPalette.c2,
+};
+const data = {
+  creator: "mr",
+  styles: {
+    first,
+    second,
+  },
+  sheet: [
+    {
+      viewOption: {
+        frozenOption: {
+          type: "R", //or "ROW"
+          index: 1,
+        },
+      },
+      headers: [
+        { label: "id", text: "ID" },
+        { label: "name", text: "Name" },
+        { label: "surname", text: "Surname" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "id", text: "ID" },
+        { label: "name", text: "Name" },
+        { label: "surname", text: "Surname" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "id", text: "ID" },
+        { label: "name", text: "Name" },
+        { label: "surname", text: "Surname" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "birthDate", text: "Birth Date", size: 40 },
+      ],
+      data: [
+        {
+          id: 1525528872576,
+          name: "Declan",
+          surname: "Bright",
+          parentId: 9193814686664,
+          work: "National Park Service ranger",
+          birthDate: "1854-02-28T22:39:49.028Z",
+        },
+        {
+          id: 1933819177102,
+          name: "Phoebe",
+          surname: "Austin",
+          parentId: 7377315170005,
+          work: "Director of audience services",
+          birthDate: "1852-04-18T10:17:54.557Z",
+        },
+        {
+          id: 9541178576629,
+          name: "Waite",
+          surname: "Aveyard",
+          parentId: 8770728211947,
+          work: "Retired",
+          birthDate: "1854-12-11T17:36:40.765Z",
+        },
+        {
+          id: 2473638123843,
+          name: "Kaitlin",
+          surname: "Courtney",
+          parentId: 3076331620534,
+          work: "Maintenance engineering",
+          birthDate: "1854-03-04T01:50:50.209Z",
+        },
+        {
+          id: 7140741364134,
+          name: "Tristan",
+          surname: "King",
+          parentId: 4674378612151,
+          work: "Japanese idol",
+          birthDate: "1853-12-08T21:09:19.672Z",
+        },
+        {
+          id: 8756865627934,
+          name: "Egerton",
+          surname: "Mendenhall",
+          parentId: 4218847452166,
+          work: "Japanese idol",
+          birthDate: "1854-10-24T12:41:51.902Z",
+        },
+        {
+          id: 5098636603452,
+          name: "Adele",
+          surname: "Monroe",
+          parentId: 9762225632557,
+          work: "Unemployed",
+          birthDate: "1852-10-11T09:48:24.128Z",
+        },
+        {
+          id: 6700176094055,
+          name: "Katey",
+          surname: "Lewis",
+          parentId: 7938892587472,
+          work: "work from home",
+          birthDate: "1852-05-19T09:36:47.969Z",
+        },
+        {
+          id: 6869885121153,
+          name: "Rodney",
+          surname: "Saxby",
+          parentId: 576630955195,
+          work: "Cardiovascular Technologist",
+          birthDate: "1852-11-07T03:33:46.973Z",
+        },
+        {
+          id: 1389127579072,
+          name: "Dare",
+          surname: "Kenny",
+          parentId: 4017546822023,
+          work: "Engineering technologist",
+          birthDate: "1852-10-25T23:36:29.109Z",
+        },
+        {
+          id: 6801196917678,
+          name: "Potter",
+          surname: "Bradbury",
+          parentId: 3750611241942,
+          work: "Petroleum geologist",
+          birthDate: "1852-10-12T06:59:33.426Z",
+        },
+        {
+          id: 1981219057492,
+          name: "Charlene",
+          surname: "Stuttaford",
+          parentId: 5645329253708,
+          work: "Harlequin",
+          birthDate: "1853-11-22T01:25:50.328Z",
+        },
+        {
+          id: 8447379393015,
+          name: "Molly",
+          surname: "Lawrenson",
+          parentId: 7440555772320,
+          work: "Healthcare science",
+          birthDate: "1853-01-20T19:18:17.595Z",
+        },
+        {
+          id: 1421335493979,
+          name: "Tyson",
+          surname: "Grennan",
+          parentId: 1518948755485,
+          work: "Pilot",
+          birthDate: "1852-09-04T12:05:31.252Z",
+        },
+        {
+          id: 5260799325935,
+          name: "Sophia",
+          surname: "Buckley",
+          parentId: 8474979566542,
+          work: "Stunt performer",
+          birthDate: "1853-01-05T04:12:27.037Z",
+        },
+        {
+          id: 2231363435720,
+          name: "Melody",
+          surname: "Humpherys",
+          parentId: 2317759882951,
+          work: "work from home",
+          birthDate: "1853-01-12T00:39:05.356Z",
+        },
+        {
+          id: 9555420460973,
+          name: "Kristi",
+          surname: "Adkins",
+          parentId: 9735997282913,
+          work: "Upholsterer",
+          birthDate: "1853-10-19T15:26:25.022Z",
+        },
+        {
+          id: 1613978413981,
+          name: "Paul",
+          surname: "Cook",
+          parentId: 202934661757,
+          work: "Pipefitter",
+          birthDate: "1853-02-21T08:46:25.185Z",
+        },
+        {
+          id: 6752497709181,
+          name: "Kayden",
+          surname: "Woodcock",
+          parentId: 2850592397073,
+          work: "Arborist",
+          birthDate: "1854-03-05T02:17:31.620Z",
+        },
+      ],
+    },
+  ],
+};
+ExcelTable.generateExcel(data);
 ```
 
 </details>
@@ -6300,211 +5528,211 @@ ExcelTable.generateExcel(data);
 
 ```javascript
 const colorPalette = {
-    c1: '561C24',
-    c2: '6D2932',
-    c3: 'C7B7A3',
-    c4: 'E8D8C4'
-}
+  c1: "561C24",
+  c2: "6D2932",
+  c3: "C7B7A3",
+  c4: "E8D8C4",
+};
 const first = {
-    type: "HF",
-    backgroundColor: colorPalette.c2,
-    fontFamily: 'Times New Roman',
-    color: colorPalette.c4
-}
+  type: "HF",
+  backgroundColor: colorPalette.c2,
+  fontFamily: "Times New Roman",
+  color: colorPalette.c4,
+};
 const second = {
-    type: "HF",
-    backgroundColor: colorPalette.c4,
-    fontFamily: 'Times New Roman',
-    color: colorPalette.c2
-}
+  type: "HF",
+  backgroundColor: colorPalette.c4,
+  fontFamily: "Times New Roman",
+  color: colorPalette.c2,
+};
 const data = {
-    creator: 'mr',
-    styles: {
-        first,
-        second
-    },
-    sheet: [
+  creator: "mr",
+  styles: {
+    first,
+    second,
+  },
+  sheet: [
+    {
+      viewOption: {
+        frozenOption: {
+          type: "C", //or "COLUMN"
+          index: 1,
+        },
+      },
+      headers: [
+        { label: "id", text: "ID" },
+        { label: "name", text: "Name" },
+        { label: "surname", text: "Surname" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "id", text: "ID" },
+        { label: "name", text: "Name" },
+        { label: "surname", text: "Surname" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "id", text: "ID" },
+        { label: "name", text: "Name" },
+        { label: "surname", text: "Surname" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "birthDate", text: "Birth Date", size: 40 },
+      ],
+      data: [
         {
-            viewOption: {
-                frozenOption: {
-                    type: "C",//or "COLUMN"
-                    index: 1
-                }
-            },
-            headers: [
-                { label: "id", text: "ID" },
-                { label: "name", text: "Name" },
-                { label: "surname", text: "Surname" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "id", text: "ID" },
-                { label: "name", text: "Name" },
-                { label: "surname", text: "Surname" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "id", text: "ID" },
-                { label: "name", text: "Name" },
-                { label: "surname", text: "Surname" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "birthDate", text: "Birth Date", size: 40 }
-            ],
-            data: [
-                {
-                    "id": 1525528872576,
-                    "name": "Declan",
-                    "surname": "Bright",
-                    "parentId": 9193814686664,
-                    "work": "National Park Service ranger",
-                    "birthDate": "1854-02-28T22:39:49.028Z"
-                },
-                {
-                    "id": 1933819177102,
-                    "name": "Phoebe",
-                    "surname": "Austin",
-                    "parentId": 7377315170005,
-                    "work": "Director of audience services",
-                    "birthDate": "1852-04-18T10:17:54.557Z"
-                },
-                {
-                    "id": 9541178576629,
-                    "name": "Waite",
-                    "surname": "Aveyard",
-                    "parentId": 8770728211947,
-                    "work": "Retired",
-                    "birthDate": "1854-12-11T17:36:40.765Z"
-                },
-                {
-                    "id": 2473638123843,
-                    "name": "Kaitlin",
-                    "surname": "Courtney",
-                    "parentId": 3076331620534,
-                    "work": "Maintenance engineering",
-                    "birthDate": "1854-03-04T01:50:50.209Z"
-                },
-                {
-                    "id": 7140741364134,
-                    "name": "Tristan",
-                    "surname": "King",
-                    "parentId": 4674378612151,
-                    "work": "Japanese idol",
-                    "birthDate": "1853-12-08T21:09:19.672Z"
-                },
-                {
-                    "id": 8756865627934,
-                    "name": "Egerton",
-                    "surname": "Mendenhall",
-                    "parentId": 4218847452166,
-                    "work": "Japanese idol",
-                    "birthDate": "1854-10-24T12:41:51.902Z"
-                },
-                {
-                    "id": 5098636603452,
-                    "name": "Adele",
-                    "surname": "Monroe",
-                    "parentId": 9762225632557,
-                    "work": "Unemployed",
-                    "birthDate": "1852-10-11T09:48:24.128Z"
-                },
-                {
-                    "id": 6700176094055,
-                    "name": "Katey",
-                    "surname": "Lewis",
-                    "parentId": 7938892587472,
-                    "work": "work from home",
-                    "birthDate": "1852-05-19T09:36:47.969Z"
-                },
-                {
-                    "id": 6869885121153,
-                    "name": "Rodney",
-                    "surname": "Saxby",
-                    "parentId": 576630955195,
-                    "work": "Cardiovascular Technologist",
-                    "birthDate": "1852-11-07T03:33:46.973Z"
-                },
-                {
-                    "id": 1389127579072,
-                    "name": "Dare",
-                    "surname": "Kenny",
-                    "parentId": 4017546822023,
-                    "work": "Engineering technologist",
-                    "birthDate": "1852-10-25T23:36:29.109Z"
-                },
-                {
-                    "id": 6801196917678,
-                    "name": "Potter",
-                    "surname": "Bradbury",
-                    "parentId": 3750611241942,
-                    "work": "Petroleum geologist",
-                    "birthDate": "1852-10-12T06:59:33.426Z"
-                },
-                {
-                    "id": 1981219057492,
-                    "name": "Charlene",
-                    "surname": "Stuttaford",
-                    "parentId": 5645329253708,
-                    "work": "Harlequin",
-                    "birthDate": "1853-11-22T01:25:50.328Z"
-                },
-                {
-                    "id": 8447379393015,
-                    "name": "Molly",
-                    "surname": "Lawrenson",
-                    "parentId": 7440555772320,
-                    "work": "Healthcare science",
-                    "birthDate": "1853-01-20T19:18:17.595Z"
-                },
-                {
-                    "id": 1421335493979,
-                    "name": "Tyson",
-                    "surname": "Grennan",
-                    "parentId": 1518948755485,
-                    "work": "Pilot",
-                    "birthDate": "1852-09-04T12:05:31.252Z"
-                },
-                {
-                    "id": 5260799325935,
-                    "name": "Sophia",
-                    "surname": "Buckley",
-                    "parentId": 8474979566542,
-                    "work": "Stunt performer",
-                    "birthDate": "1853-01-05T04:12:27.037Z"
-                },
-                {
-                    "id": 2231363435720,
-                    "name": "Melody",
-                    "surname": "Humpherys",
-                    "parentId": 2317759882951,
-                    "work": "work from home",
-                    "birthDate": "1853-01-12T00:39:05.356Z"
-                },
-                {
-                    "id": 9555420460973,
-                    "name": "Kristi",
-                    "surname": "Adkins",
-                    "parentId": 9735997282913,
-                    "work": "Upholsterer",
-                    "birthDate": "1853-10-19T15:26:25.022Z"
-                },
-                {
-                    "id": 1613978413981,
-                    "name": "Paul",
-                    "surname": "Cook",
-                    "parentId": 202934661757,
-                    "work": "Pipefitter",
-                    "birthDate": "1853-02-21T08:46:25.185Z"
-                },
-                {
-                    "id": 6752497709181,
-                    "name": "Kayden",
-                    "surname": "Woodcock",
-                    "parentId": 2850592397073,
-                    "work": "Arborist",
-                    "birthDate": "1854-03-05T02:17:31.620Z"
-                },
-            ]
-        }
-    ]
+          id: 1525528872576,
+          name: "Declan",
+          surname: "Bright",
+          parentId: 9193814686664,
+          work: "National Park Service ranger",
+          birthDate: "1854-02-28T22:39:49.028Z",
+        },
+        {
+          id: 1933819177102,
+          name: "Phoebe",
+          surname: "Austin",
+          parentId: 7377315170005,
+          work: "Director of audience services",
+          birthDate: "1852-04-18T10:17:54.557Z",
+        },
+        {
+          id: 9541178576629,
+          name: "Waite",
+          surname: "Aveyard",
+          parentId: 8770728211947,
+          work: "Retired",
+          birthDate: "1854-12-11T17:36:40.765Z",
+        },
+        {
+          id: 2473638123843,
+          name: "Kaitlin",
+          surname: "Courtney",
+          parentId: 3076331620534,
+          work: "Maintenance engineering",
+          birthDate: "1854-03-04T01:50:50.209Z",
+        },
+        {
+          id: 7140741364134,
+          name: "Tristan",
+          surname: "King",
+          parentId: 4674378612151,
+          work: "Japanese idol",
+          birthDate: "1853-12-08T21:09:19.672Z",
+        },
+        {
+          id: 8756865627934,
+          name: "Egerton",
+          surname: "Mendenhall",
+          parentId: 4218847452166,
+          work: "Japanese idol",
+          birthDate: "1854-10-24T12:41:51.902Z",
+        },
+        {
+          id: 5098636603452,
+          name: "Adele",
+          surname: "Monroe",
+          parentId: 9762225632557,
+          work: "Unemployed",
+          birthDate: "1852-10-11T09:48:24.128Z",
+        },
+        {
+          id: 6700176094055,
+          name: "Katey",
+          surname: "Lewis",
+          parentId: 7938892587472,
+          work: "work from home",
+          birthDate: "1852-05-19T09:36:47.969Z",
+        },
+        {
+          id: 6869885121153,
+          name: "Rodney",
+          surname: "Saxby",
+          parentId: 576630955195,
+          work: "Cardiovascular Technologist",
+          birthDate: "1852-11-07T03:33:46.973Z",
+        },
+        {
+          id: 1389127579072,
+          name: "Dare",
+          surname: "Kenny",
+          parentId: 4017546822023,
+          work: "Engineering technologist",
+          birthDate: "1852-10-25T23:36:29.109Z",
+        },
+        {
+          id: 6801196917678,
+          name: "Potter",
+          surname: "Bradbury",
+          parentId: 3750611241942,
+          work: "Petroleum geologist",
+          birthDate: "1852-10-12T06:59:33.426Z",
+        },
+        {
+          id: 1981219057492,
+          name: "Charlene",
+          surname: "Stuttaford",
+          parentId: 5645329253708,
+          work: "Harlequin",
+          birthDate: "1853-11-22T01:25:50.328Z",
+        },
+        {
+          id: 8447379393015,
+          name: "Molly",
+          surname: "Lawrenson",
+          parentId: 7440555772320,
+          work: "Healthcare science",
+          birthDate: "1853-01-20T19:18:17.595Z",
+        },
+        {
+          id: 1421335493979,
+          name: "Tyson",
+          surname: "Grennan",
+          parentId: 1518948755485,
+          work: "Pilot",
+          birthDate: "1852-09-04T12:05:31.252Z",
+        },
+        {
+          id: 5260799325935,
+          name: "Sophia",
+          surname: "Buckley",
+          parentId: 8474979566542,
+          work: "Stunt performer",
+          birthDate: "1853-01-05T04:12:27.037Z",
+        },
+        {
+          id: 2231363435720,
+          name: "Melody",
+          surname: "Humpherys",
+          parentId: 2317759882951,
+          work: "work from home",
+          birthDate: "1853-01-12T00:39:05.356Z",
+        },
+        {
+          id: 9555420460973,
+          name: "Kristi",
+          surname: "Adkins",
+          parentId: 9735997282913,
+          work: "Upholsterer",
+          birthDate: "1853-10-19T15:26:25.022Z",
+        },
+        {
+          id: 1613978413981,
+          name: "Paul",
+          surname: "Cook",
+          parentId: 202934661757,
+          work: "Pipefitter",
+          birthDate: "1853-02-21T08:46:25.185Z",
+        },
+        {
+          id: 6752497709181,
+          name: "Kayden",
+          surname: "Woodcock",
+          parentId: 2850592397073,
+          work: "Arborist",
+          birthDate: "1854-03-05T02:17:31.620Z",
+        },
+      ],
+    },
+  ],
 };
 ExcelTable.generateExcel(data);
 ```
@@ -6525,227 +5753,227 @@ ExcelTable.generateExcel(data);
 
 ```javascript
 const colorPalette = {
-    c1: '561C24',
-    c2: '6D2932',
-    c3: 'C7B7A3',
-    c4: 'E8D8C4'
-}
+  c1: "561C24",
+  c2: "6D2932",
+  c3: "C7B7A3",
+  c4: "E8D8C4",
+};
 const first = {
-    type: "HF",
-    backgroundColor: colorPalette.c2,
-    fontFamily: 'Times New Roman',
-    color: colorPalette.c4
-}
+  type: "HF",
+  backgroundColor: colorPalette.c2,
+  fontFamily: "Times New Roman",
+  color: colorPalette.c4,
+};
 const second = {
-    type: "HF",
-    backgroundColor: colorPalette.c4,
-    fontFamily: 'Times New Roman',
-    color: colorPalette.c2
-}
+  type: "HF",
+  backgroundColor: colorPalette.c4,
+  fontFamily: "Times New Roman",
+  color: colorPalette.c2,
+};
 const data = {
-    creator: 'mr',
-    styles: {
-        first,
-        second
-    },
-    sheet: [
+  creator: "mr",
+  styles: {
+    first,
+    second,
+  },
+  sheet: [
+    {
+      viewOption: {
+        frozenOption: {
+          type: "B", //or "BOTH"
+          index: {
+            r: 2,
+            c: 3,
+          },
+        },
+      },
+      headers: [
+        { label: "id", text: "ID" },
+        { label: "name", text: "Name" },
+        { label: "surname", text: "Surname" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "id", text: "ID" },
+        { label: "name", text: "Name" },
+        { label: "surname", text: "Surname" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "id", text: "ID" },
+        { label: "name", text: "Name" },
+        { label: "surname", text: "Surname" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "id", text: "ID" },
+        { label: "name", text: "Name" },
+        { label: "surname", text: "Surname" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "birthDate", text: "Birth Date", size: 40 },
+        { label: "id", text: "ID" },
+        { label: "name", text: "Name" },
+        { label: "surname", text: "Surname" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "birthDate", text: "Birth Date", size: 40 },
+      ],
+      data: [
         {
-            viewOption: {
-                frozenOption: {
-                    type: "B",//or "BOTH"
-                    index: {
-                        r: 2,
-                        c: 3
-                    }
-                }
-            },
-            headers: [
-                { label: "id", text: "ID" },
-                { label: "name", text: "Name" },
-                { label: "surname", text: "Surname" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "id", text: "ID" },
-                { label: "name", text: "Name" },
-                { label: "surname", text: "Surname" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "id", text: "ID" },
-                { label: "name", text: "Name" },
-                { label: "surname", text: "Surname" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "id", text: "ID" },
-                { label: "name", text: "Name" },
-                { label: "surname", text: "Surname" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "birthDate", text: "Birth Date", size: 40 },
-                { label: "id", text: "ID" },
-                { label: "name", text: "Name" },
-                { label: "surname", text: "Surname" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "birthDate", text: "Birth Date", size: 40 }
-            ],
-            data: [
-                {
-                    "id": 1525528872576,
-                    "name": "Declan",
-                    "surname": "Bright",
-                    "parentId": 9193814686664,
-                    "work": "National Park Service ranger",
-                    "birthDate": "1854-02-28T22:39:49.028Z"
-                },
-                {
-                    "id": 1933819177102,
-                    "name": "Phoebe",
-                    "surname": "Austin",
-                    "parentId": 7377315170005,
-                    "work": "Director of audience services",
-                    "birthDate": "1852-04-18T10:17:54.557Z"
-                },
-                {
-                    "id": 9541178576629,
-                    "name": "Waite",
-                    "surname": "Aveyard",
-                    "parentId": 8770728211947,
-                    "work": "Retired",
-                    "birthDate": "1854-12-11T17:36:40.765Z"
-                },
-                {
-                    "id": 2473638123843,
-                    "name": "Kaitlin",
-                    "surname": "Courtney",
-                    "parentId": 3076331620534,
-                    "work": "Maintenance engineering",
-                    "birthDate": "1854-03-04T01:50:50.209Z"
-                },
-                {
-                    "id": 7140741364134,
-                    "name": "Tristan",
-                    "surname": "King",
-                    "parentId": 4674378612151,
-                    "work": "Japanese idol",
-                    "birthDate": "1853-12-08T21:09:19.672Z"
-                },
-                {
-                    "id": 8756865627934,
-                    "name": "Egerton",
-                    "surname": "Mendenhall",
-                    "parentId": 4218847452166,
-                    "work": "Japanese idol",
-                    "birthDate": "1854-10-24T12:41:51.902Z"
-                },
-                {
-                    "id": 5098636603452,
-                    "name": "Adele",
-                    "surname": "Monroe",
-                    "parentId": 9762225632557,
-                    "work": "Unemployed",
-                    "birthDate": "1852-10-11T09:48:24.128Z"
-                },
-                {
-                    "id": 6700176094055,
-                    "name": "Katey",
-                    "surname": "Lewis",
-                    "parentId": 7938892587472,
-                    "work": "work from home",
-                    "birthDate": "1852-05-19T09:36:47.969Z"
-                },
-                {
-                    "id": 6869885121153,
-                    "name": "Rodney",
-                    "surname": "Saxby",
-                    "parentId": 576630955195,
-                    "work": "Cardiovascular Technologist",
-                    "birthDate": "1852-11-07T03:33:46.973Z"
-                },
-                {
-                    "id": 1389127579072,
-                    "name": "Dare",
-                    "surname": "Kenny",
-                    "parentId": 4017546822023,
-                    "work": "Engineering technologist",
-                    "birthDate": "1852-10-25T23:36:29.109Z"
-                },
-                {
-                    "id": 6801196917678,
-                    "name": "Potter",
-                    "surname": "Bradbury",
-                    "parentId": 3750611241942,
-                    "work": "Petroleum geologist",
-                    "birthDate": "1852-10-12T06:59:33.426Z"
-                },
-                {
-                    "id": 1981219057492,
-                    "name": "Charlene",
-                    "surname": "Stuttaford",
-                    "parentId": 5645329253708,
-                    "work": "Harlequin",
-                    "birthDate": "1853-11-22T01:25:50.328Z"
-                },
-                {
-                    "id": 8447379393015,
-                    "name": "Molly",
-                    "surname": "Lawrenson",
-                    "parentId": 7440555772320,
-                    "work": "Healthcare science",
-                    "birthDate": "1853-01-20T19:18:17.595Z"
-                },
-                {
-                    "id": 1421335493979,
-                    "name": "Tyson",
-                    "surname": "Grennan",
-                    "parentId": 1518948755485,
-                    "work": "Pilot",
-                    "birthDate": "1852-09-04T12:05:31.252Z"
-                },
-                {
-                    "id": 5260799325935,
-                    "name": "Sophia",
-                    "surname": "Buckley",
-                    "parentId": 8474979566542,
-                    "work": "Stunt performer",
-                    "birthDate": "1853-01-05T04:12:27.037Z"
-                },
-                {
-                    "id": 2231363435720,
-                    "name": "Melody",
-                    "surname": "Humpherys",
-                    "parentId": 2317759882951,
-                    "work": "work from home",
-                    "birthDate": "1853-01-12T00:39:05.356Z"
-                },
-                {
-                    "id": 9555420460973,
-                    "name": "Kristi",
-                    "surname": "Adkins",
-                    "parentId": 9735997282913,
-                    "work": "Upholsterer",
-                    "birthDate": "1853-10-19T15:26:25.022Z"
-                },
-                {
-                    "id": 1613978413981,
-                    "name": "Paul",
-                    "surname": "Cook",
-                    "parentId": 202934661757,
-                    "work": "Pipefitter",
-                    "birthDate": "1853-02-21T08:46:25.185Z"
-                },
-                {
-                    "id": 6752497709181,
-                    "name": "Kayden",
-                    "surname": "Woodcock",
-                    "parentId": 2850592397073,
-                    "work": "Arborist",
-                    "birthDate": "1854-03-05T02:17:31.620Z"
-                },
-            ]
-        }
-    ]
+          id: 1525528872576,
+          name: "Declan",
+          surname: "Bright",
+          parentId: 9193814686664,
+          work: "National Park Service ranger",
+          birthDate: "1854-02-28T22:39:49.028Z",
+        },
+        {
+          id: 1933819177102,
+          name: "Phoebe",
+          surname: "Austin",
+          parentId: 7377315170005,
+          work: "Director of audience services",
+          birthDate: "1852-04-18T10:17:54.557Z",
+        },
+        {
+          id: 9541178576629,
+          name: "Waite",
+          surname: "Aveyard",
+          parentId: 8770728211947,
+          work: "Retired",
+          birthDate: "1854-12-11T17:36:40.765Z",
+        },
+        {
+          id: 2473638123843,
+          name: "Kaitlin",
+          surname: "Courtney",
+          parentId: 3076331620534,
+          work: "Maintenance engineering",
+          birthDate: "1854-03-04T01:50:50.209Z",
+        },
+        {
+          id: 7140741364134,
+          name: "Tristan",
+          surname: "King",
+          parentId: 4674378612151,
+          work: "Japanese idol",
+          birthDate: "1853-12-08T21:09:19.672Z",
+        },
+        {
+          id: 8756865627934,
+          name: "Egerton",
+          surname: "Mendenhall",
+          parentId: 4218847452166,
+          work: "Japanese idol",
+          birthDate: "1854-10-24T12:41:51.902Z",
+        },
+        {
+          id: 5098636603452,
+          name: "Adele",
+          surname: "Monroe",
+          parentId: 9762225632557,
+          work: "Unemployed",
+          birthDate: "1852-10-11T09:48:24.128Z",
+        },
+        {
+          id: 6700176094055,
+          name: "Katey",
+          surname: "Lewis",
+          parentId: 7938892587472,
+          work: "work from home",
+          birthDate: "1852-05-19T09:36:47.969Z",
+        },
+        {
+          id: 6869885121153,
+          name: "Rodney",
+          surname: "Saxby",
+          parentId: 576630955195,
+          work: "Cardiovascular Technologist",
+          birthDate: "1852-11-07T03:33:46.973Z",
+        },
+        {
+          id: 1389127579072,
+          name: "Dare",
+          surname: "Kenny",
+          parentId: 4017546822023,
+          work: "Engineering technologist",
+          birthDate: "1852-10-25T23:36:29.109Z",
+        },
+        {
+          id: 6801196917678,
+          name: "Potter",
+          surname: "Bradbury",
+          parentId: 3750611241942,
+          work: "Petroleum geologist",
+          birthDate: "1852-10-12T06:59:33.426Z",
+        },
+        {
+          id: 1981219057492,
+          name: "Charlene",
+          surname: "Stuttaford",
+          parentId: 5645329253708,
+          work: "Harlequin",
+          birthDate: "1853-11-22T01:25:50.328Z",
+        },
+        {
+          id: 8447379393015,
+          name: "Molly",
+          surname: "Lawrenson",
+          parentId: 7440555772320,
+          work: "Healthcare science",
+          birthDate: "1853-01-20T19:18:17.595Z",
+        },
+        {
+          id: 1421335493979,
+          name: "Tyson",
+          surname: "Grennan",
+          parentId: 1518948755485,
+          work: "Pilot",
+          birthDate: "1852-09-04T12:05:31.252Z",
+        },
+        {
+          id: 5260799325935,
+          name: "Sophia",
+          surname: "Buckley",
+          parentId: 8474979566542,
+          work: "Stunt performer",
+          birthDate: "1853-01-05T04:12:27.037Z",
+        },
+        {
+          id: 2231363435720,
+          name: "Melody",
+          surname: "Humpherys",
+          parentId: 2317759882951,
+          work: "work from home",
+          birthDate: "1853-01-12T00:39:05.356Z",
+        },
+        {
+          id: 9555420460973,
+          name: "Kristi",
+          surname: "Adkins",
+          parentId: 9735997282913,
+          work: "Upholsterer",
+          birthDate: "1853-10-19T15:26:25.022Z",
+        },
+        {
+          id: 1613978413981,
+          name: "Paul",
+          surname: "Cook",
+          parentId: 202934661757,
+          work: "Pipefitter",
+          birthDate: "1853-02-21T08:46:25.185Z",
+        },
+        {
+          id: 6752497709181,
+          name: "Kayden",
+          surname: "Woodcock",
+          parentId: 2850592397073,
+          work: "Arborist",
+          birthDate: "1854-03-05T02:17:31.620Z",
+        },
+      ],
+    },
+  ],
 };
 ```
 
@@ -6765,228 +5993,228 @@ const data = {
 
 ```javascript
 const colorPalette = {
-    c1: '561C24',
-    c2: '6D2932',
-    c3: 'C7B7A3',
-    c4: 'E8D8C4'
-}
+  c1: "561C24",
+  c2: "6D2932",
+  c3: "C7B7A3",
+  c4: "E8D8C4",
+};
 const first = {
-    type: "HF",
-    backgroundColor: colorPalette.c2,
-    fontFamily: 'Times New Roman',
-    color: colorPalette.c4
-}
+  type: "HF",
+  backgroundColor: colorPalette.c2,
+  fontFamily: "Times New Roman",
+  color: colorPalette.c4,
+};
 const second = {
-    type: "HF",
-    backgroundColor: colorPalette.c4,
-    fontFamily: 'Times New Roman',
-    color: colorPalette.c2
-}
+  type: "HF",
+  backgroundColor: colorPalette.c4,
+  fontFamily: "Times New Roman",
+  color: colorPalette.c2,
+};
 const data = {
-    creator: 'mr',
-    styles: {
-        first,
-        second
-    },
-    sheet: [
+  creator: "mr",
+  styles: {
+    first,
+    second,
+  },
+  sheet: [
+    {
+      viewOption: {
+        splitOption: {
+          type: "V", //or "VERTICAL"
+          split: 10000,
+          startAt: {
+            l: "C1",
+            r: "E1",
+          },
+        },
+      },
+      headers: [
+        { label: "id", text: "ID" },
+        { label: "name", text: "Name" },
+        { label: "surname", text: "Surname" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "id", text: "ID" },
+        { label: "name", text: "Name" },
+        { label: "surname", text: "Surname" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "id", text: "ID" },
+        { label: "name", text: "Name" },
+        { label: "surname", text: "Surname" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "id", text: "ID" },
+        { label: "name", text: "Name" },
+        { label: "surname", text: "Surname" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "birthDate", text: "Birth Date", size: 40 },
+        { label: "id", text: "ID" },
+        { label: "name", text: "Name" },
+        { label: "surname", text: "Surname" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "birthDate", text: "Birth Date", size: 40 },
+      ],
+      data: [
         {
-            viewOption: {
-                splitOption: {
-                    type: "V",//or "VERTICAL"
-                    split: 10000,
-                    startAt: {
-                        l: 'C1',
-                        r: 'E1'
-                    }
-                }
-            },
-            headers: [
-                { label: "id", text: "ID" },
-                { label: "name", text: "Name" },
-                { label: "surname", text: "Surname" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "id", text: "ID" },
-                { label: "name", text: "Name" },
-                { label: "surname", text: "Surname" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "id", text: "ID" },
-                { label: "name", text: "Name" },
-                { label: "surname", text: "Surname" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "id", text: "ID" },
-                { label: "name", text: "Name" },
-                { label: "surname", text: "Surname" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "birthDate", text: "Birth Date", size: 40 },
-                { label: "id", text: "ID" },
-                { label: "name", text: "Name" },
-                { label: "surname", text: "Surname" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "birthDate", text: "Birth Date", size: 40 }
-            ],
-            data: [
-                {
-                    "id": 1525528872576,
-                    "name": "Declan",
-                    "surname": "Bright",
-                    "parentId": 9193814686664,
-                    "work": "National Park Service ranger",
-                    "birthDate": "1854-02-28T22:39:49.028Z"
-                },
-                {
-                    "id": 1933819177102,
-                    "name": "Phoebe",
-                    "surname": "Austin",
-                    "parentId": 7377315170005,
-                    "work": "Director of audience services",
-                    "birthDate": "1852-04-18T10:17:54.557Z"
-                },
-                {
-                    "id": 9541178576629,
-                    "name": "Waite",
-                    "surname": "Aveyard",
-                    "parentId": 8770728211947,
-                    "work": "Retired",
-                    "birthDate": "1854-12-11T17:36:40.765Z"
-                },
-                {
-                    "id": 2473638123843,
-                    "name": "Kaitlin",
-                    "surname": "Courtney",
-                    "parentId": 3076331620534,
-                    "work": "Maintenance engineering",
-                    "birthDate": "1854-03-04T01:50:50.209Z"
-                },
-                {
-                    "id": 7140741364134,
-                    "name": "Tristan",
-                    "surname": "King",
-                    "parentId": 4674378612151,
-                    "work": "Japanese idol",
-                    "birthDate": "1853-12-08T21:09:19.672Z"
-                },
-                {
-                    "id": 8756865627934,
-                    "name": "Egerton",
-                    "surname": "Mendenhall",
-                    "parentId": 4218847452166,
-                    "work": "Japanese idol",
-                    "birthDate": "1854-10-24T12:41:51.902Z"
-                },
-                {
-                    "id": 5098636603452,
-                    "name": "Adele",
-                    "surname": "Monroe",
-                    "parentId": 9762225632557,
-                    "work": "Unemployed",
-                    "birthDate": "1852-10-11T09:48:24.128Z"
-                },
-                {
-                    "id": 6700176094055,
-                    "name": "Katey",
-                    "surname": "Lewis",
-                    "parentId": 7938892587472,
-                    "work": "work from home",
-                    "birthDate": "1852-05-19T09:36:47.969Z"
-                },
-                {
-                    "id": 6869885121153,
-                    "name": "Rodney",
-                    "surname": "Saxby",
-                    "parentId": 576630955195,
-                    "work": "Cardiovascular Technologist",
-                    "birthDate": "1852-11-07T03:33:46.973Z"
-                },
-                {
-                    "id": 1389127579072,
-                    "name": "Dare",
-                    "surname": "Kenny",
-                    "parentId": 4017546822023,
-                    "work": "Engineering technologist",
-                    "birthDate": "1852-10-25T23:36:29.109Z"
-                },
-                {
-                    "id": 6801196917678,
-                    "name": "Potter",
-                    "surname": "Bradbury",
-                    "parentId": 3750611241942,
-                    "work": "Petroleum geologist",
-                    "birthDate": "1852-10-12T06:59:33.426Z"
-                },
-                {
-                    "id": 1981219057492,
-                    "name": "Charlene",
-                    "surname": "Stuttaford",
-                    "parentId": 5645329253708,
-                    "work": "Harlequin",
-                    "birthDate": "1853-11-22T01:25:50.328Z"
-                },
-                {
-                    "id": 8447379393015,
-                    "name": "Molly",
-                    "surname": "Lawrenson",
-                    "parentId": 7440555772320,
-                    "work": "Healthcare science",
-                    "birthDate": "1853-01-20T19:18:17.595Z"
-                },
-                {
-                    "id": 1421335493979,
-                    "name": "Tyson",
-                    "surname": "Grennan",
-                    "parentId": 1518948755485,
-                    "work": "Pilot",
-                    "birthDate": "1852-09-04T12:05:31.252Z"
-                },
-                {
-                    "id": 5260799325935,
-                    "name": "Sophia",
-                    "surname": "Buckley",
-                    "parentId": 8474979566542,
-                    "work": "Stunt performer",
-                    "birthDate": "1853-01-05T04:12:27.037Z"
-                },
-                {
-                    "id": 2231363435720,
-                    "name": "Melody",
-                    "surname": "Humpherys",
-                    "parentId": 2317759882951,
-                    "work": "work from home",
-                    "birthDate": "1853-01-12T00:39:05.356Z"
-                },
-                {
-                    "id": 9555420460973,
-                    "name": "Kristi",
-                    "surname": "Adkins",
-                    "parentId": 9735997282913,
-                    "work": "Upholsterer",
-                    "birthDate": "1853-10-19T15:26:25.022Z"
-                },
-                {
-                    "id": 1613978413981,
-                    "name": "Paul",
-                    "surname": "Cook",
-                    "parentId": 202934661757,
-                    "work": "Pipefitter",
-                    "birthDate": "1853-02-21T08:46:25.185Z"
-                },
-                {
-                    "id": 6752497709181,
-                    "name": "Kayden",
-                    "surname": "Woodcock",
-                    "parentId": 2850592397073,
-                    "work": "Arborist",
-                    "birthDate": "1854-03-05T02:17:31.620Z"
-                },
-            ]
-        }
-    ]
+          id: 1525528872576,
+          name: "Declan",
+          surname: "Bright",
+          parentId: 9193814686664,
+          work: "National Park Service ranger",
+          birthDate: "1854-02-28T22:39:49.028Z",
+        },
+        {
+          id: 1933819177102,
+          name: "Phoebe",
+          surname: "Austin",
+          parentId: 7377315170005,
+          work: "Director of audience services",
+          birthDate: "1852-04-18T10:17:54.557Z",
+        },
+        {
+          id: 9541178576629,
+          name: "Waite",
+          surname: "Aveyard",
+          parentId: 8770728211947,
+          work: "Retired",
+          birthDate: "1854-12-11T17:36:40.765Z",
+        },
+        {
+          id: 2473638123843,
+          name: "Kaitlin",
+          surname: "Courtney",
+          parentId: 3076331620534,
+          work: "Maintenance engineering",
+          birthDate: "1854-03-04T01:50:50.209Z",
+        },
+        {
+          id: 7140741364134,
+          name: "Tristan",
+          surname: "King",
+          parentId: 4674378612151,
+          work: "Japanese idol",
+          birthDate: "1853-12-08T21:09:19.672Z",
+        },
+        {
+          id: 8756865627934,
+          name: "Egerton",
+          surname: "Mendenhall",
+          parentId: 4218847452166,
+          work: "Japanese idol",
+          birthDate: "1854-10-24T12:41:51.902Z",
+        },
+        {
+          id: 5098636603452,
+          name: "Adele",
+          surname: "Monroe",
+          parentId: 9762225632557,
+          work: "Unemployed",
+          birthDate: "1852-10-11T09:48:24.128Z",
+        },
+        {
+          id: 6700176094055,
+          name: "Katey",
+          surname: "Lewis",
+          parentId: 7938892587472,
+          work: "work from home",
+          birthDate: "1852-05-19T09:36:47.969Z",
+        },
+        {
+          id: 6869885121153,
+          name: "Rodney",
+          surname: "Saxby",
+          parentId: 576630955195,
+          work: "Cardiovascular Technologist",
+          birthDate: "1852-11-07T03:33:46.973Z",
+        },
+        {
+          id: 1389127579072,
+          name: "Dare",
+          surname: "Kenny",
+          parentId: 4017546822023,
+          work: "Engineering technologist",
+          birthDate: "1852-10-25T23:36:29.109Z",
+        },
+        {
+          id: 6801196917678,
+          name: "Potter",
+          surname: "Bradbury",
+          parentId: 3750611241942,
+          work: "Petroleum geologist",
+          birthDate: "1852-10-12T06:59:33.426Z",
+        },
+        {
+          id: 1981219057492,
+          name: "Charlene",
+          surname: "Stuttaford",
+          parentId: 5645329253708,
+          work: "Harlequin",
+          birthDate: "1853-11-22T01:25:50.328Z",
+        },
+        {
+          id: 8447379393015,
+          name: "Molly",
+          surname: "Lawrenson",
+          parentId: 7440555772320,
+          work: "Healthcare science",
+          birthDate: "1853-01-20T19:18:17.595Z",
+        },
+        {
+          id: 1421335493979,
+          name: "Tyson",
+          surname: "Grennan",
+          parentId: 1518948755485,
+          work: "Pilot",
+          birthDate: "1852-09-04T12:05:31.252Z",
+        },
+        {
+          id: 5260799325935,
+          name: "Sophia",
+          surname: "Buckley",
+          parentId: 8474979566542,
+          work: "Stunt performer",
+          birthDate: "1853-01-05T04:12:27.037Z",
+        },
+        {
+          id: 2231363435720,
+          name: "Melody",
+          surname: "Humpherys",
+          parentId: 2317759882951,
+          work: "work from home",
+          birthDate: "1853-01-12T00:39:05.356Z",
+        },
+        {
+          id: 9555420460973,
+          name: "Kristi",
+          surname: "Adkins",
+          parentId: 9735997282913,
+          work: "Upholsterer",
+          birthDate: "1853-10-19T15:26:25.022Z",
+        },
+        {
+          id: 1613978413981,
+          name: "Paul",
+          surname: "Cook",
+          parentId: 202934661757,
+          work: "Pipefitter",
+          birthDate: "1853-02-21T08:46:25.185Z",
+        },
+        {
+          id: 6752497709181,
+          name: "Kayden",
+          surname: "Woodcock",
+          parentId: 2850592397073,
+          work: "Arborist",
+          birthDate: "1854-03-05T02:17:31.620Z",
+        },
+      ],
+    },
+  ],
 };
 ExcelTable.generateExcel(data);
 ```
@@ -7007,228 +6235,228 @@ ExcelTable.generateExcel(data);
 
 ```javascript
 const colorPalette = {
-    c1: '561C24',
-    c2: '6D2932',
-    c3: 'C7B7A3',
-    c4: 'E8D8C4'
-}
+  c1: "561C24",
+  c2: "6D2932",
+  c3: "C7B7A3",
+  c4: "E8D8C4",
+};
 const first = {
-    type: "HF",
-    backgroundColor: colorPalette.c2,
-    fontFamily: 'Times New Roman',
-    color: colorPalette.c4
-}
+  type: "HF",
+  backgroundColor: colorPalette.c2,
+  fontFamily: "Times New Roman",
+  color: colorPalette.c4,
+};
 const second = {
-    type: "HF",
-    backgroundColor: colorPalette.c4,
-    fontFamily: 'Times New Roman',
-    color: colorPalette.c2
-}
+  type: "HF",
+  backgroundColor: colorPalette.c4,
+  fontFamily: "Times New Roman",
+  color: colorPalette.c2,
+};
 const data = {
-    creator: 'mr',
-    styles: {
-        first,
-        second
-    },
-    sheet: [
+  creator: "mr",
+  styles: {
+    first,
+    second,
+  },
+  sheet: [
+    {
+      viewOption: {
+        splitOption: {
+          type: "H", //or "HORIZONTAL"
+          split: 5000,
+          startAt: {
+            t: "A15",
+            b: "A7",
+          },
+        },
+      },
+      headers: [
+        { label: "id", text: "ID" },
+        { label: "name", text: "Name" },
+        { label: "surname", text: "Surname" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "id", text: "ID" },
+        { label: "name", text: "Name" },
+        { label: "surname", text: "Surname" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "id", text: "ID" },
+        { label: "name", text: "Name" },
+        { label: "surname", text: "Surname" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "id", text: "ID" },
+        { label: "name", text: "Name" },
+        { label: "surname", text: "Surname" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "birthDate", text: "Birth Date", size: 40 },
+        { label: "id", text: "ID" },
+        { label: "name", text: "Name" },
+        { label: "surname", text: "Surname" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "birthDate", text: "Birth Date", size: 40 },
+      ],
+      data: [
         {
-            viewOption: {
-                splitOption: {
-                    type: "H",//or "HORIZONTAL"
-                    split: 5000,
-                    startAt: {
-                        t: 'A15',
-                        b: 'A7',
-                    }
-                }
-            },
-            headers: [
-                { label: "id", text: "ID" },
-                { label: "name", text: "Name" },
-                { label: "surname", text: "Surname" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "id", text: "ID" },
-                { label: "name", text: "Name" },
-                { label: "surname", text: "Surname" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "id", text: "ID" },
-                { label: "name", text: "Name" },
-                { label: "surname", text: "Surname" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "id", text: "ID" },
-                { label: "name", text: "Name" },
-                { label: "surname", text: "Surname" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "birthDate", text: "Birth Date", size: 40 },
-                { label: "id", text: "ID" },
-                { label: "name", text: "Name" },
-                { label: "surname", text: "Surname" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "birthDate", text: "Birth Date", size: 40 }
-            ],
-            data: [
-                {
-                    "id": 1525528872576,
-                    "name": "Declan",
-                    "surname": "Bright",
-                    "parentId": 9193814686664,
-                    "work": "National Park Service ranger",
-                    "birthDate": "1854-02-28T22:39:49.028Z"
-                },
-                {
-                    "id": 1933819177102,
-                    "name": "Phoebe",
-                    "surname": "Austin",
-                    "parentId": 7377315170005,
-                    "work": "Director of audience services",
-                    "birthDate": "1852-04-18T10:17:54.557Z"
-                },
-                {
-                    "id": 9541178576629,
-                    "name": "Waite",
-                    "surname": "Aveyard",
-                    "parentId": 8770728211947,
-                    "work": "Retired",
-                    "birthDate": "1854-12-11T17:36:40.765Z"
-                },
-                {
-                    "id": 2473638123843,
-                    "name": "Kaitlin",
-                    "surname": "Courtney",
-                    "parentId": 3076331620534,
-                    "work": "Maintenance engineering",
-                    "birthDate": "1854-03-04T01:50:50.209Z"
-                },
-                {
-                    "id": 7140741364134,
-                    "name": "Tristan",
-                    "surname": "King",
-                    "parentId": 4674378612151,
-                    "work": "Japanese idol",
-                    "birthDate": "1853-12-08T21:09:19.672Z"
-                },
-                {
-                    "id": 8756865627934,
-                    "name": "Egerton",
-                    "surname": "Mendenhall",
-                    "parentId": 4218847452166,
-                    "work": "Japanese idol",
-                    "birthDate": "1854-10-24T12:41:51.902Z"
-                },
-                {
-                    "id": 5098636603452,
-                    "name": "Adele",
-                    "surname": "Monroe",
-                    "parentId": 9762225632557,
-                    "work": "Unemployed",
-                    "birthDate": "1852-10-11T09:48:24.128Z"
-                },
-                {
-                    "id": 6700176094055,
-                    "name": "Katey",
-                    "surname": "Lewis",
-                    "parentId": 7938892587472,
-                    "work": "work from home",
-                    "birthDate": "1852-05-19T09:36:47.969Z"
-                },
-                {
-                    "id": 6869885121153,
-                    "name": "Rodney",
-                    "surname": "Saxby",
-                    "parentId": 576630955195,
-                    "work": "Cardiovascular Technologist",
-                    "birthDate": "1852-11-07T03:33:46.973Z"
-                },
-                {
-                    "id": 1389127579072,
-                    "name": "Dare",
-                    "surname": "Kenny",
-                    "parentId": 4017546822023,
-                    "work": "Engineering technologist",
-                    "birthDate": "1852-10-25T23:36:29.109Z"
-                },
-                {
-                    "id": 6801196917678,
-                    "name": "Potter",
-                    "surname": "Bradbury",
-                    "parentId": 3750611241942,
-                    "work": "Petroleum geologist",
-                    "birthDate": "1852-10-12T06:59:33.426Z"
-                },
-                {
-                    "id": 1981219057492,
-                    "name": "Charlene",
-                    "surname": "Stuttaford",
-                    "parentId": 5645329253708,
-                    "work": "Harlequin",
-                    "birthDate": "1853-11-22T01:25:50.328Z"
-                },
-                {
-                    "id": 8447379393015,
-                    "name": "Molly",
-                    "surname": "Lawrenson",
-                    "parentId": 7440555772320,
-                    "work": "Healthcare science",
-                    "birthDate": "1853-01-20T19:18:17.595Z"
-                },
-                {
-                    "id": 1421335493979,
-                    "name": "Tyson",
-                    "surname": "Grennan",
-                    "parentId": 1518948755485,
-                    "work": "Pilot",
-                    "birthDate": "1852-09-04T12:05:31.252Z"
-                },
-                {
-                    "id": 5260799325935,
-                    "name": "Sophia",
-                    "surname": "Buckley",
-                    "parentId": 8474979566542,
-                    "work": "Stunt performer",
-                    "birthDate": "1853-01-05T04:12:27.037Z"
-                },
-                {
-                    "id": 2231363435720,
-                    "name": "Melody",
-                    "surname": "Humpherys",
-                    "parentId": 2317759882951,
-                    "work": "work from home",
-                    "birthDate": "1853-01-12T00:39:05.356Z"
-                },
-                {
-                    "id": 9555420460973,
-                    "name": "Kristi",
-                    "surname": "Adkins",
-                    "parentId": 9735997282913,
-                    "work": "Upholsterer",
-                    "birthDate": "1853-10-19T15:26:25.022Z"
-                },
-                {
-                    "id": 1613978413981,
-                    "name": "Paul",
-                    "surname": "Cook",
-                    "parentId": 202934661757,
-                    "work": "Pipefitter",
-                    "birthDate": "1853-02-21T08:46:25.185Z"
-                },
-                {
-                    "id": 6752497709181,
-                    "name": "Kayden",
-                    "surname": "Woodcock",
-                    "parentId": 2850592397073,
-                    "work": "Arborist",
-                    "birthDate": "1854-03-05T02:17:31.620Z"
-                },
-            ]
-        }
-    ]
+          id: 1525528872576,
+          name: "Declan",
+          surname: "Bright",
+          parentId: 9193814686664,
+          work: "National Park Service ranger",
+          birthDate: "1854-02-28T22:39:49.028Z",
+        },
+        {
+          id: 1933819177102,
+          name: "Phoebe",
+          surname: "Austin",
+          parentId: 7377315170005,
+          work: "Director of audience services",
+          birthDate: "1852-04-18T10:17:54.557Z",
+        },
+        {
+          id: 9541178576629,
+          name: "Waite",
+          surname: "Aveyard",
+          parentId: 8770728211947,
+          work: "Retired",
+          birthDate: "1854-12-11T17:36:40.765Z",
+        },
+        {
+          id: 2473638123843,
+          name: "Kaitlin",
+          surname: "Courtney",
+          parentId: 3076331620534,
+          work: "Maintenance engineering",
+          birthDate: "1854-03-04T01:50:50.209Z",
+        },
+        {
+          id: 7140741364134,
+          name: "Tristan",
+          surname: "King",
+          parentId: 4674378612151,
+          work: "Japanese idol",
+          birthDate: "1853-12-08T21:09:19.672Z",
+        },
+        {
+          id: 8756865627934,
+          name: "Egerton",
+          surname: "Mendenhall",
+          parentId: 4218847452166,
+          work: "Japanese idol",
+          birthDate: "1854-10-24T12:41:51.902Z",
+        },
+        {
+          id: 5098636603452,
+          name: "Adele",
+          surname: "Monroe",
+          parentId: 9762225632557,
+          work: "Unemployed",
+          birthDate: "1852-10-11T09:48:24.128Z",
+        },
+        {
+          id: 6700176094055,
+          name: "Katey",
+          surname: "Lewis",
+          parentId: 7938892587472,
+          work: "work from home",
+          birthDate: "1852-05-19T09:36:47.969Z",
+        },
+        {
+          id: 6869885121153,
+          name: "Rodney",
+          surname: "Saxby",
+          parentId: 576630955195,
+          work: "Cardiovascular Technologist",
+          birthDate: "1852-11-07T03:33:46.973Z",
+        },
+        {
+          id: 1389127579072,
+          name: "Dare",
+          surname: "Kenny",
+          parentId: 4017546822023,
+          work: "Engineering technologist",
+          birthDate: "1852-10-25T23:36:29.109Z",
+        },
+        {
+          id: 6801196917678,
+          name: "Potter",
+          surname: "Bradbury",
+          parentId: 3750611241942,
+          work: "Petroleum geologist",
+          birthDate: "1852-10-12T06:59:33.426Z",
+        },
+        {
+          id: 1981219057492,
+          name: "Charlene",
+          surname: "Stuttaford",
+          parentId: 5645329253708,
+          work: "Harlequin",
+          birthDate: "1853-11-22T01:25:50.328Z",
+        },
+        {
+          id: 8447379393015,
+          name: "Molly",
+          surname: "Lawrenson",
+          parentId: 7440555772320,
+          work: "Healthcare science",
+          birthDate: "1853-01-20T19:18:17.595Z",
+        },
+        {
+          id: 1421335493979,
+          name: "Tyson",
+          surname: "Grennan",
+          parentId: 1518948755485,
+          work: "Pilot",
+          birthDate: "1852-09-04T12:05:31.252Z",
+        },
+        {
+          id: 5260799325935,
+          name: "Sophia",
+          surname: "Buckley",
+          parentId: 8474979566542,
+          work: "Stunt performer",
+          birthDate: "1853-01-05T04:12:27.037Z",
+        },
+        {
+          id: 2231363435720,
+          name: "Melody",
+          surname: "Humpherys",
+          parentId: 2317759882951,
+          work: "work from home",
+          birthDate: "1853-01-12T00:39:05.356Z",
+        },
+        {
+          id: 9555420460973,
+          name: "Kristi",
+          surname: "Adkins",
+          parentId: 9735997282913,
+          work: "Upholsterer",
+          birthDate: "1853-10-19T15:26:25.022Z",
+        },
+        {
+          id: 1613978413981,
+          name: "Paul",
+          surname: "Cook",
+          parentId: 202934661757,
+          work: "Pipefitter",
+          birthDate: "1853-02-21T08:46:25.185Z",
+        },
+        {
+          id: 6752497709181,
+          name: "Kayden",
+          surname: "Woodcock",
+          parentId: 2850592397073,
+          work: "Arborist",
+          birthDate: "1854-03-05T02:17:31.620Z",
+        },
+      ],
+    },
+  ],
 };
 ExcelTable.generateExcel(data);
 ```
@@ -7249,231 +6477,231 @@ ExcelTable.generateExcel(data);
 
 ```javascript
 const colorPalette = {
-    c1: '561C24',
-    c2: '6D2932',
-    c3: 'C7B7A3',
-    c4: 'E8D8C4'
-}
+  c1: "561C24",
+  c2: "6D2932",
+  c3: "C7B7A3",
+  c4: "E8D8C4",
+};
 const first = {
-    type: "HF",
-    backgroundColor: colorPalette.c2,
-    fontFamily: 'Times New Roman',
-    color: colorPalette.c4
-}
+  type: "HF",
+  backgroundColor: colorPalette.c2,
+  fontFamily: "Times New Roman",
+  color: colorPalette.c4,
+};
 const second = {
-    type: "HF",
-    backgroundColor: colorPalette.c4,
-    fontFamily: 'Times New Roman',
-    color: colorPalette.c2
-}
+  type: "HF",
+  backgroundColor: colorPalette.c4,
+  fontFamily: "Times New Roman",
+  color: colorPalette.c2,
+};
 const data = {
-    creator: 'mr',
-    styles: {
-        first,
-        second
-    },
-    sheet: [
+  creator: "mr",
+  styles: {
+    first,
+    second,
+  },
+  sheet: [
+    {
+      viewOption: {
+        splitOption: {
+          type: "B", //or "BOTH"
+          split: {
+            x: 10000,
+            y: 5000,
+          },
+          startAt: {
+            one: "A15",
+            two: "A7",
+          },
+        },
+      },
+      headers: [
+        { label: "id", text: "ID" },
+        { label: "name", text: "Name" },
+        { label: "surname", text: "Surname" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "id", text: "ID" },
+        { label: "name", text: "Name" },
+        { label: "surname", text: "Surname" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "id", text: "ID" },
+        { label: "name", text: "Name" },
+        { label: "surname", text: "Surname" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "id", text: "ID" },
+        { label: "name", text: "Name" },
+        { label: "surname", text: "Surname" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "birthDate", text: "Birth Date", size: 40 },
+        { label: "id", text: "ID" },
+        { label: "name", text: "Name" },
+        { label: "surname", text: "Surname" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "birthDate", text: "Birth Date", size: 40 },
+      ],
+      data: [
         {
-            viewOption: {
-                splitOption: {
-                    type: "B",//or "BOTH"
-                    split: {
-                        x: 10000,
-                        y: 5000
-                    },
-                    startAt: {
-                        one: 'A15',
-                        two: 'A7',
-                    }
-                }
-            },
-            headers: [
-                { label: "id", text: "ID" },
-                { label: "name", text: "Name" },
-                { label: "surname", text: "Surname" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "id", text: "ID" },
-                { label: "name", text: "Name" },
-                { label: "surname", text: "Surname" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "id", text: "ID" },
-                { label: "name", text: "Name" },
-                { label: "surname", text: "Surname" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "id", text: "ID" },
-                { label: "name", text: "Name" },
-                { label: "surname", text: "Surname" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "birthDate", text: "Birth Date", size: 40 },
-                { label: "id", text: "ID" },
-                { label: "name", text: "Name" },
-                { label: "surname", text: "Surname" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "birthDate", text: "Birth Date", size: 40 }
-            ],
-            data: [
-                {
-                    "id": 1525528872576,
-                    "name": "Declan",
-                    "surname": "Bright",
-                    "parentId": 9193814686664,
-                    "work": "National Park Service ranger",
-                    "birthDate": "1854-02-28T22:39:49.028Z"
-                },
-                {
-                    "id": 1933819177102,
-                    "name": "Phoebe",
-                    "surname": "Austin",
-                    "parentId": 7377315170005,
-                    "work": "Director of audience services",
-                    "birthDate": "1852-04-18T10:17:54.557Z"
-                },
-                {
-                    "id": 9541178576629,
-                    "name": "Waite",
-                    "surname": "Aveyard",
-                    "parentId": 8770728211947,
-                    "work": "Retired",
-                    "birthDate": "1854-12-11T17:36:40.765Z"
-                },
-                {
-                    "id": 2473638123843,
-                    "name": "Kaitlin",
-                    "surname": "Courtney",
-                    "parentId": 3076331620534,
-                    "work": "Maintenance engineering",
-                    "birthDate": "1854-03-04T01:50:50.209Z"
-                },
-                {
-                    "id": 7140741364134,
-                    "name": "Tristan",
-                    "surname": "King",
-                    "parentId": 4674378612151,
-                    "work": "Japanese idol",
-                    "birthDate": "1853-12-08T21:09:19.672Z"
-                },
-                {
-                    "id": 8756865627934,
-                    "name": "Egerton",
-                    "surname": "Mendenhall",
-                    "parentId": 4218847452166,
-                    "work": "Japanese idol",
-                    "birthDate": "1854-10-24T12:41:51.902Z"
-                },
-                {
-                    "id": 5098636603452,
-                    "name": "Adele",
-                    "surname": "Monroe",
-                    "parentId": 9762225632557,
-                    "work": "Unemployed",
-                    "birthDate": "1852-10-11T09:48:24.128Z"
-                },
-                {
-                    "id": 6700176094055,
-                    "name": "Katey",
-                    "surname": "Lewis",
-                    "parentId": 7938892587472,
-                    "work": "work from home",
-                    "birthDate": "1852-05-19T09:36:47.969Z"
-                },
-                {
-                    "id": 6869885121153,
-                    "name": "Rodney",
-                    "surname": "Saxby",
-                    "parentId": 576630955195,
-                    "work": "Cardiovascular Technologist",
-                    "birthDate": "1852-11-07T03:33:46.973Z"
-                },
-                {
-                    "id": 1389127579072,
-                    "name": "Dare",
-                    "surname": "Kenny",
-                    "parentId": 4017546822023,
-                    "work": "Engineering technologist",
-                    "birthDate": "1852-10-25T23:36:29.109Z"
-                },
-                {
-                    "id": 6801196917678,
-                    "name": "Potter",
-                    "surname": "Bradbury",
-                    "parentId": 3750611241942,
-                    "work": "Petroleum geologist",
-                    "birthDate": "1852-10-12T06:59:33.426Z"
-                },
-                {
-                    "id": 1981219057492,
-                    "name": "Charlene",
-                    "surname": "Stuttaford",
-                    "parentId": 5645329253708,
-                    "work": "Harlequin",
-                    "birthDate": "1853-11-22T01:25:50.328Z"
-                },
-                {
-                    "id": 8447379393015,
-                    "name": "Molly",
-                    "surname": "Lawrenson",
-                    "parentId": 7440555772320,
-                    "work": "Healthcare science",
-                    "birthDate": "1853-01-20T19:18:17.595Z"
-                },
-                {
-                    "id": 1421335493979,
-                    "name": "Tyson",
-                    "surname": "Grennan",
-                    "parentId": 1518948755485,
-                    "work": "Pilot",
-                    "birthDate": "1852-09-04T12:05:31.252Z"
-                },
-                {
-                    "id": 5260799325935,
-                    "name": "Sophia",
-                    "surname": "Buckley",
-                    "parentId": 8474979566542,
-                    "work": "Stunt performer",
-                    "birthDate": "1853-01-05T04:12:27.037Z"
-                },
-                {
-                    "id": 2231363435720,
-                    "name": "Melody",
-                    "surname": "Humpherys",
-                    "parentId": 2317759882951,
-                    "work": "work from home",
-                    "birthDate": "1853-01-12T00:39:05.356Z"
-                },
-                {
-                    "id": 9555420460973,
-                    "name": "Kristi",
-                    "surname": "Adkins",
-                    "parentId": 9735997282913,
-                    "work": "Upholsterer",
-                    "birthDate": "1853-10-19T15:26:25.022Z"
-                },
-                {
-                    "id": 1613978413981,
-                    "name": "Paul",
-                    "surname": "Cook",
-                    "parentId": 202934661757,
-                    "work": "Pipefitter",
-                    "birthDate": "1853-02-21T08:46:25.185Z"
-                },
-                {
-                    "id": 6752497709181,
-                    "name": "Kayden",
-                    "surname": "Woodcock",
-                    "parentId": 2850592397073,
-                    "work": "Arborist",
-                    "birthDate": "1854-03-05T02:17:31.620Z"
-                },
-            ]
-        }
-    ]
+          id: 1525528872576,
+          name: "Declan",
+          surname: "Bright",
+          parentId: 9193814686664,
+          work: "National Park Service ranger",
+          birthDate: "1854-02-28T22:39:49.028Z",
+        },
+        {
+          id: 1933819177102,
+          name: "Phoebe",
+          surname: "Austin",
+          parentId: 7377315170005,
+          work: "Director of audience services",
+          birthDate: "1852-04-18T10:17:54.557Z",
+        },
+        {
+          id: 9541178576629,
+          name: "Waite",
+          surname: "Aveyard",
+          parentId: 8770728211947,
+          work: "Retired",
+          birthDate: "1854-12-11T17:36:40.765Z",
+        },
+        {
+          id: 2473638123843,
+          name: "Kaitlin",
+          surname: "Courtney",
+          parentId: 3076331620534,
+          work: "Maintenance engineering",
+          birthDate: "1854-03-04T01:50:50.209Z",
+        },
+        {
+          id: 7140741364134,
+          name: "Tristan",
+          surname: "King",
+          parentId: 4674378612151,
+          work: "Japanese idol",
+          birthDate: "1853-12-08T21:09:19.672Z",
+        },
+        {
+          id: 8756865627934,
+          name: "Egerton",
+          surname: "Mendenhall",
+          parentId: 4218847452166,
+          work: "Japanese idol",
+          birthDate: "1854-10-24T12:41:51.902Z",
+        },
+        {
+          id: 5098636603452,
+          name: "Adele",
+          surname: "Monroe",
+          parentId: 9762225632557,
+          work: "Unemployed",
+          birthDate: "1852-10-11T09:48:24.128Z",
+        },
+        {
+          id: 6700176094055,
+          name: "Katey",
+          surname: "Lewis",
+          parentId: 7938892587472,
+          work: "work from home",
+          birthDate: "1852-05-19T09:36:47.969Z",
+        },
+        {
+          id: 6869885121153,
+          name: "Rodney",
+          surname: "Saxby",
+          parentId: 576630955195,
+          work: "Cardiovascular Technologist",
+          birthDate: "1852-11-07T03:33:46.973Z",
+        },
+        {
+          id: 1389127579072,
+          name: "Dare",
+          surname: "Kenny",
+          parentId: 4017546822023,
+          work: "Engineering technologist",
+          birthDate: "1852-10-25T23:36:29.109Z",
+        },
+        {
+          id: 6801196917678,
+          name: "Potter",
+          surname: "Bradbury",
+          parentId: 3750611241942,
+          work: "Petroleum geologist",
+          birthDate: "1852-10-12T06:59:33.426Z",
+        },
+        {
+          id: 1981219057492,
+          name: "Charlene",
+          surname: "Stuttaford",
+          parentId: 5645329253708,
+          work: "Harlequin",
+          birthDate: "1853-11-22T01:25:50.328Z",
+        },
+        {
+          id: 8447379393015,
+          name: "Molly",
+          surname: "Lawrenson",
+          parentId: 7440555772320,
+          work: "Healthcare science",
+          birthDate: "1853-01-20T19:18:17.595Z",
+        },
+        {
+          id: 1421335493979,
+          name: "Tyson",
+          surname: "Grennan",
+          parentId: 1518948755485,
+          work: "Pilot",
+          birthDate: "1852-09-04T12:05:31.252Z",
+        },
+        {
+          id: 5260799325935,
+          name: "Sophia",
+          surname: "Buckley",
+          parentId: 8474979566542,
+          work: "Stunt performer",
+          birthDate: "1853-01-05T04:12:27.037Z",
+        },
+        {
+          id: 2231363435720,
+          name: "Melody",
+          surname: "Humpherys",
+          parentId: 2317759882951,
+          work: "work from home",
+          birthDate: "1853-01-12T00:39:05.356Z",
+        },
+        {
+          id: 9555420460973,
+          name: "Kristi",
+          surname: "Adkins",
+          parentId: 9735997282913,
+          work: "Upholsterer",
+          birthDate: "1853-10-19T15:26:25.022Z",
+        },
+        {
+          id: 1613978413981,
+          name: "Paul",
+          surname: "Cook",
+          parentId: 202934661757,
+          work: "Pipefitter",
+          birthDate: "1853-02-21T08:46:25.185Z",
+        },
+        {
+          id: 6752497709181,
+          name: "Kayden",
+          surname: "Woodcock",
+          parentId: 2850592397073,
+          work: "Arborist",
+          birthDate: "1854-03-05T02:17:31.620Z",
+        },
+      ],
+    },
+  ],
 };
 ExcelTable.generateExcel(data);
 ```
@@ -7490,7 +6718,7 @@ ExcelTable.generateExcel(data);
 
 <a id="page-break-option"></a>
 
-## 🆕 Page Break [⬆️](#table-of-contents)
+## Page Break [⬆️](#table-of-contents)
 
 You can use the Excel page break with the pageBreak property.
 
@@ -7500,222 +6728,222 @@ You can use the Excel page break with the pageBreak property.
 
 ```javascript
 const colorPalette = {
-    c1: '561C24',
-    c2: '6D2932',
-    c3: 'C7B7A3',
-    c4: 'E8D8C4'
-}
+  c1: "561C24",
+  c2: "6D2932",
+  c3: "C7B7A3",
+  c4: "E8D8C4",
+};
 const first = {
-    type: "HF",
-    backgroundColor: colorPalette.c2,
-    fontFamily: 'Times New Roman',
-    color: colorPalette.c4
-}
+  type: "HF",
+  backgroundColor: colorPalette.c2,
+  fontFamily: "Times New Roman",
+  color: colorPalette.c4,
+};
 const second = {
-    type: "HF",
-    backgroundColor: colorPalette.c4,
-    fontFamily: 'Times New Roman',
-    color: colorPalette.c2
-}
+  type: "HF",
+  backgroundColor: colorPalette.c4,
+  fontFamily: "Times New Roman",
+  color: colorPalette.c2,
+};
 const data = {
-    creator: 'mr',
-    styles: {
-        first,
-        second
-    },
-    sheet: [
+  creator: "mr",
+  styles: {
+    first,
+    second,
+  },
+  sheet: [
+    {
+      pageBreak: {
+        row: [1, 2, 3, 10],
+        column: [4, 6, 15, 17],
+      },
+      headers: [
+        { label: "id", text: "ID" },
+        { label: "name", text: "Name" },
+        { label: "surname", text: "Surname" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "id", text: "ID" },
+        { label: "name", text: "Name" },
+        { label: "surname", text: "Surname" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "id", text: "ID" },
+        { label: "name", text: "Name" },
+        { label: "surname", text: "Surname" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "id", text: "ID" },
+        { label: "name", text: "Name" },
+        { label: "surname", text: "Surname" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "birthDate", text: "Birth Date", size: 40 },
+        { label: "id", text: "ID" },
+        { label: "name", text: "Name" },
+        { label: "surname", text: "Surname" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "birthDate", text: "Birth Date", size: 40 },
+      ],
+      data: [
         {
-            pageBreak: {
-                row: [1, 2, 3, 10],
-                column: [4, 6, 15, 17]
-            },
-            headers: [
-                { label: "id", text: "ID" },
-                { label: "name", text: "Name" },
-                { label: "surname", text: "Surname" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "id", text: "ID" },
-                { label: "name", text: "Name" },
-                { label: "surname", text: "Surname" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "id", text: "ID" },
-                { label: "name", text: "Name" },
-                { label: "surname", text: "Surname" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "id", text: "ID" },
-                { label: "name", text: "Name" },
-                { label: "surname", text: "Surname" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "birthDate", text: "Birth Date", size: 40 },
-                { label: "id", text: "ID" },
-                { label: "name", text: "Name" },
-                { label: "surname", text: "Surname" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "birthDate", text: "Birth Date", size: 40 }
-            ],
-            data: [
-                {
-                    "id": 1525528872576,
-                    "name": "Declan",
-                    "surname": "Bright",
-                    "parentId": 9193814686664,
-                    "work": "National Park Service ranger",
-                    "birthDate": "1854-02-28T22:39:49.028Z"
-                },
-                {
-                    "id": 1933819177102,
-                    "name": "Phoebe",
-                    "surname": "Austin",
-                    "parentId": 7377315170005,
-                    "work": "Director of audience services",
-                    "birthDate": "1852-04-18T10:17:54.557Z"
-                },
-                {
-                    "id": 9541178576629,
-                    "name": "Waite",
-                    "surname": "Aveyard",
-                    "parentId": 8770728211947,
-                    "work": "Retired",
-                    "birthDate": "1854-12-11T17:36:40.765Z"
-                },
-                {
-                    "id": 2473638123843,
-                    "name": "Kaitlin",
-                    "surname": "Courtney",
-                    "parentId": 3076331620534,
-                    "work": "Maintenance engineering",
-                    "birthDate": "1854-03-04T01:50:50.209Z"
-                },
-                {
-                    "id": 7140741364134,
-                    "name": "Tristan",
-                    "surname": "King",
-                    "parentId": 4674378612151,
-                    "work": "Japanese idol",
-                    "birthDate": "1853-12-08T21:09:19.672Z"
-                },
-                {
-                    "id": 8756865627934,
-                    "name": "Egerton",
-                    "surname": "Mendenhall",
-                    "parentId": 4218847452166,
-                    "work": "Japanese idol",
-                    "birthDate": "1854-10-24T12:41:51.902Z"
-                },
-                {
-                    "id": 5098636603452,
-                    "name": "Adele",
-                    "surname": "Monroe",
-                    "parentId": 9762225632557,
-                    "work": "Unemployed",
-                    "birthDate": "1852-10-11T09:48:24.128Z"
-                },
-                {
-                    "id": 6700176094055,
-                    "name": "Katey",
-                    "surname": "Lewis",
-                    "parentId": 7938892587472,
-                    "work": "work from home",
-                    "birthDate": "1852-05-19T09:36:47.969Z"
-                },
-                {
-                    "id": 6869885121153,
-                    "name": "Rodney",
-                    "surname": "Saxby",
-                    "parentId": 576630955195,
-                    "work": "Cardiovascular Technologist",
-                    "birthDate": "1852-11-07T03:33:46.973Z"
-                },
-                {
-                    "id": 1389127579072,
-                    "name": "Dare",
-                    "surname": "Kenny",
-                    "parentId": 4017546822023,
-                    "work": "Engineering technologist",
-                    "birthDate": "1852-10-25T23:36:29.109Z"
-                },
-                {
-                    "id": 6801196917678,
-                    "name": "Potter",
-                    "surname": "Bradbury",
-                    "parentId": 3750611241942,
-                    "work": "Petroleum geologist",
-                    "birthDate": "1852-10-12T06:59:33.426Z"
-                },
-                {
-                    "id": 1981219057492,
-                    "name": "Charlene",
-                    "surname": "Stuttaford",
-                    "parentId": 5645329253708,
-                    "work": "Harlequin",
-                    "birthDate": "1853-11-22T01:25:50.328Z"
-                },
-                {
-                    "id": 8447379393015,
-                    "name": "Molly",
-                    "surname": "Lawrenson",
-                    "parentId": 7440555772320,
-                    "work": "Healthcare science",
-                    "birthDate": "1853-01-20T19:18:17.595Z"
-                },
-                {
-                    "id": 1421335493979,
-                    "name": "Tyson",
-                    "surname": "Grennan",
-                    "parentId": 1518948755485,
-                    "work": "Pilot",
-                    "birthDate": "1852-09-04T12:05:31.252Z"
-                },
-                {
-                    "id": 5260799325935,
-                    "name": "Sophia",
-                    "surname": "Buckley",
-                    "parentId": 8474979566542,
-                    "work": "Stunt performer",
-                    "birthDate": "1853-01-05T04:12:27.037Z"
-                },
-                {
-                    "id": 2231363435720,
-                    "name": "Melody",
-                    "surname": "Humpherys",
-                    "parentId": 2317759882951,
-                    "work": "work from home",
-                    "birthDate": "1853-01-12T00:39:05.356Z"
-                },
-                {
-                    "id": 9555420460973,
-                    "name": "Kristi",
-                    "surname": "Adkins",
-                    "parentId": 9735997282913,
-                    "work": "Upholsterer",
-                    "birthDate": "1853-10-19T15:26:25.022Z"
-                },
-                {
-                    "id": 1613978413981,
-                    "name": "Paul",
-                    "surname": "Cook",
-                    "parentId": 202934661757,
-                    "work": "Pipefitter",
-                    "birthDate": "1853-02-21T08:46:25.185Z"
-                },
-                {
-                    "id": 6752497709181,
-                    "name": "Kayden",
-                    "surname": "Woodcock",
-                    "parentId": 2850592397073,
-                    "work": "Arborist",
-                    "birthDate": "1854-03-05T02:17:31.620Z"
-                },
-            ]
-        }
-    ]
+          id: 1525528872576,
+          name: "Declan",
+          surname: "Bright",
+          parentId: 9193814686664,
+          work: "National Park Service ranger",
+          birthDate: "1854-02-28T22:39:49.028Z",
+        },
+        {
+          id: 1933819177102,
+          name: "Phoebe",
+          surname: "Austin",
+          parentId: 7377315170005,
+          work: "Director of audience services",
+          birthDate: "1852-04-18T10:17:54.557Z",
+        },
+        {
+          id: 9541178576629,
+          name: "Waite",
+          surname: "Aveyard",
+          parentId: 8770728211947,
+          work: "Retired",
+          birthDate: "1854-12-11T17:36:40.765Z",
+        },
+        {
+          id: 2473638123843,
+          name: "Kaitlin",
+          surname: "Courtney",
+          parentId: 3076331620534,
+          work: "Maintenance engineering",
+          birthDate: "1854-03-04T01:50:50.209Z",
+        },
+        {
+          id: 7140741364134,
+          name: "Tristan",
+          surname: "King",
+          parentId: 4674378612151,
+          work: "Japanese idol",
+          birthDate: "1853-12-08T21:09:19.672Z",
+        },
+        {
+          id: 8756865627934,
+          name: "Egerton",
+          surname: "Mendenhall",
+          parentId: 4218847452166,
+          work: "Japanese idol",
+          birthDate: "1854-10-24T12:41:51.902Z",
+        },
+        {
+          id: 5098636603452,
+          name: "Adele",
+          surname: "Monroe",
+          parentId: 9762225632557,
+          work: "Unemployed",
+          birthDate: "1852-10-11T09:48:24.128Z",
+        },
+        {
+          id: 6700176094055,
+          name: "Katey",
+          surname: "Lewis",
+          parentId: 7938892587472,
+          work: "work from home",
+          birthDate: "1852-05-19T09:36:47.969Z",
+        },
+        {
+          id: 6869885121153,
+          name: "Rodney",
+          surname: "Saxby",
+          parentId: 576630955195,
+          work: "Cardiovascular Technologist",
+          birthDate: "1852-11-07T03:33:46.973Z",
+        },
+        {
+          id: 1389127579072,
+          name: "Dare",
+          surname: "Kenny",
+          parentId: 4017546822023,
+          work: "Engineering technologist",
+          birthDate: "1852-10-25T23:36:29.109Z",
+        },
+        {
+          id: 6801196917678,
+          name: "Potter",
+          surname: "Bradbury",
+          parentId: 3750611241942,
+          work: "Petroleum geologist",
+          birthDate: "1852-10-12T06:59:33.426Z",
+        },
+        {
+          id: 1981219057492,
+          name: "Charlene",
+          surname: "Stuttaford",
+          parentId: 5645329253708,
+          work: "Harlequin",
+          birthDate: "1853-11-22T01:25:50.328Z",
+        },
+        {
+          id: 8447379393015,
+          name: "Molly",
+          surname: "Lawrenson",
+          parentId: 7440555772320,
+          work: "Healthcare science",
+          birthDate: "1853-01-20T19:18:17.595Z",
+        },
+        {
+          id: 1421335493979,
+          name: "Tyson",
+          surname: "Grennan",
+          parentId: 1518948755485,
+          work: "Pilot",
+          birthDate: "1852-09-04T12:05:31.252Z",
+        },
+        {
+          id: 5260799325935,
+          name: "Sophia",
+          surname: "Buckley",
+          parentId: 8474979566542,
+          work: "Stunt performer",
+          birthDate: "1853-01-05T04:12:27.037Z",
+        },
+        {
+          id: 2231363435720,
+          name: "Melody",
+          surname: "Humpherys",
+          parentId: 2317759882951,
+          work: "work from home",
+          birthDate: "1853-01-12T00:39:05.356Z",
+        },
+        {
+          id: 9555420460973,
+          name: "Kristi",
+          surname: "Adkins",
+          parentId: 9735997282913,
+          work: "Upholsterer",
+          birthDate: "1853-10-19T15:26:25.022Z",
+        },
+        {
+          id: 1613978413981,
+          name: "Paul",
+          surname: "Cook",
+          parentId: 202934661757,
+          work: "Pipefitter",
+          birthDate: "1853-02-21T08:46:25.185Z",
+        },
+        {
+          id: 6752497709181,
+          name: "Kayden",
+          surname: "Woodcock",
+          parentId: 2850592397073,
+          work: "Arborist",
+          birthDate: "1854-03-05T02:17:31.620Z",
+        },
+      ],
+    },
+  ],
 };
 ExcelTable.generateExcel(data);
 ```
@@ -7732,7 +6960,7 @@ ExcelTable.generateExcel(data);
 
 <a id="as-table-option"></a>
 
-## 🆕 As Table [⬆️](#table-of-contents)
+## As Table [⬆️](#table-of-contents)
 
 The asTable property converts the result into an Excel table.
 
@@ -7742,174 +6970,174 @@ The asTable property converts the result into an Excel table.
 
 ```javascript
 const data = {
-    creator: 'mr',
-    sheet: [
+  creator: "mr",
+  sheet: [
+    {
+      asTable: {},
+      headers: [
+        { label: "id", text: "ID" },
+        { label: "name", text: "Name" },
+        { label: "surname", text: "Surname" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "birthDate", text: "Birth Date", size: 40 },
+      ],
+      data: [
         {
-            asTable: {},
-            headers: [
-                { label: "id", text: "ID" },
-                { label: "name", text: "Name" },
-                { label: "surname", text: "Surname" },
-                { label: "parentId", text: "Parent Id" },
-                { label: "work", text: "Work" },
-                { label: "birthDate", text: "Birth Date",size:40 }
-            ],
-            data: [
-                {
-                    "id": 1525528872576,
-                    "name": "Declan",
-                    "surname": "Bright",
-                    "parentId": 9193814686664,
-                    "work": "National Park Service ranger",
-                    "birthDate": "1854-02-28T22:39:49.028Z"
-                },
-                {
-                    "id": 1933819177102,
-                    "name": "Phoebe",
-                    "surname": "Austin",
-                    "parentId": 7377315170005,
-                    "work": "Director of audience services",
-                    "birthDate": "1852-04-18T10:17:54.557Z"
-                },
-                {
-                    "id": 9541178576629,
-                    "name": "Waite",
-                    "surname": "Aveyard",
-                    "parentId": 8770728211947,
-                    "work": "Retired",
-                    "birthDate": "1854-12-11T17:36:40.765Z"
-                },
-                {
-                    "id": 2473638123843,
-                    "name": "Kaitlin",
-                    "surname": "Courtney",
-                    "parentId": 3076331620534,
-                    "work": "Maintenance engineering",
-                    "birthDate": "1854-03-04T01:50:50.209Z"
-                },
-                {
-                    "id": 7140741364134,
-                    "name": "Tristan",
-                    "surname": "King",
-                    "parentId": 4674378612151,
-                    "work": "Japanese idol",
-                    "birthDate": "1853-12-08T21:09:19.672Z"
-                },
-                {
-                    "id": 8756865627934,
-                    "name": "Egerton",
-                    "surname": "Mendenhall",
-                    "parentId": 4218847452166,
-                    "work": "Japanese idol",
-                    "birthDate": "1854-10-24T12:41:51.902Z"
-                },
-                {
-                    "id": 5098636603452,
-                    "name": "Adele",
-                    "surname": "Monroe",
-                    "parentId": 9762225632557,
-                    "work": "Unemployed",
-                    "birthDate": "1852-10-11T09:48:24.128Z"
-                },
-                {
-                    "id": 6700176094055,
-                    "name": "Katey",
-                    "surname": "Lewis",
-                    "parentId": 7938892587472,
-                    "work": "work from home",
-                    "birthDate": "1852-05-19T09:36:47.969Z"
-                },
-                {
-                    "id": 6869885121153,
-                    "name": "Rodney",
-                    "surname": "Saxby",
-                    "parentId": 576630955195,
-                    "work": "Cardiovascular Technologist",
-                    "birthDate": "1852-11-07T03:33:46.973Z"
-                },
-                {
-                    "id": 1389127579072,
-                    "name": "Dare",
-                    "surname": "Kenny",
-                    "parentId": 4017546822023,
-                    "work": "Engineering technologist",
-                    "birthDate": "1852-10-25T23:36:29.109Z"
-                },
-                {
-                    "id": 6801196917678,
-                    "name": "Potter",
-                    "surname": "Bradbury",
-                    "parentId": 3750611241942,
-                    "work": "Petroleum geologist",
-                    "birthDate": "1852-10-12T06:59:33.426Z"
-                },
-                {
-                    "id": 1981219057492,
-                    "name": "Charlene",
-                    "surname": "Stuttaford",
-                    "parentId": 5645329253708,
-                    "work": "Harlequin",
-                    "birthDate": "1853-11-22T01:25:50.328Z"
-                },
-                {
-                    "id": 8447379393015,
-                    "name": "Molly",
-                    "surname": "Lawrenson",
-                    "parentId": 7440555772320,
-                    "work": "Healthcare science",
-                    "birthDate": "1853-01-20T19:18:17.595Z"
-                },
-                {
-                    "id": 1421335493979,
-                    "name": "Tyson",
-                    "surname": "Grennan",
-                    "parentId": 1518948755485,
-                    "work": "Pilot",
-                    "birthDate": "1852-09-04T12:05:31.252Z"
-                },
-                {
-                    "id": 5260799325935,
-                    "name": "Sophia",
-                    "surname": "Buckley",
-                    "parentId": 8474979566542,
-                    "work": "Stunt performer",
-                    "birthDate": "1853-01-05T04:12:27.037Z"
-                },
-                {
-                    "id": 2231363435720,
-                    "name": "Melody",
-                    "surname": "Humpherys",
-                    "parentId": 2317759882951,
-                    "work": "work from home",
-                    "birthDate": "1853-01-12T00:39:05.356Z"
-                },
-                {
-                    "id": 9555420460973,
-                    "name": "Kristi",
-                    "surname": "Adkins",
-                    "parentId": 9735997282913,
-                    "work": "Upholsterer",
-                    "birthDate": "1853-10-19T15:26:25.022Z"
-                },
-                {
-                    "id": 1613978413981,
-                    "name": "Paul",
-                    "surname": "Cook",
-                    "parentId": 202934661757,
-                    "work": "Pipefitter",
-                    "birthDate": "1853-02-21T08:46:25.185Z"
-                },
-                {
-                    "id": 6752497709181,
-                    "name": "Kayden",
-                    "surname": "Woodcock",
-                    "parentId": 2850592397073,
-                    "work": "Arborist",
-                    "birthDate": "1854-03-05T02:17:31.620Z"
-                },
-            ]
-        }
-    ]
+          id: 1525528872576,
+          name: "Declan",
+          surname: "Bright",
+          parentId: 9193814686664,
+          work: "National Park Service ranger",
+          birthDate: "1854-02-28T22:39:49.028Z",
+        },
+        {
+          id: 1933819177102,
+          name: "Phoebe",
+          surname: "Austin",
+          parentId: 7377315170005,
+          work: "Director of audience services",
+          birthDate: "1852-04-18T10:17:54.557Z",
+        },
+        {
+          id: 9541178576629,
+          name: "Waite",
+          surname: "Aveyard",
+          parentId: 8770728211947,
+          work: "Retired",
+          birthDate: "1854-12-11T17:36:40.765Z",
+        },
+        {
+          id: 2473638123843,
+          name: "Kaitlin",
+          surname: "Courtney",
+          parentId: 3076331620534,
+          work: "Maintenance engineering",
+          birthDate: "1854-03-04T01:50:50.209Z",
+        },
+        {
+          id: 7140741364134,
+          name: "Tristan",
+          surname: "King",
+          parentId: 4674378612151,
+          work: "Japanese idol",
+          birthDate: "1853-12-08T21:09:19.672Z",
+        },
+        {
+          id: 8756865627934,
+          name: "Egerton",
+          surname: "Mendenhall",
+          parentId: 4218847452166,
+          work: "Japanese idol",
+          birthDate: "1854-10-24T12:41:51.902Z",
+        },
+        {
+          id: 5098636603452,
+          name: "Adele",
+          surname: "Monroe",
+          parentId: 9762225632557,
+          work: "Unemployed",
+          birthDate: "1852-10-11T09:48:24.128Z",
+        },
+        {
+          id: 6700176094055,
+          name: "Katey",
+          surname: "Lewis",
+          parentId: 7938892587472,
+          work: "work from home",
+          birthDate: "1852-05-19T09:36:47.969Z",
+        },
+        {
+          id: 6869885121153,
+          name: "Rodney",
+          surname: "Saxby",
+          parentId: 576630955195,
+          work: "Cardiovascular Technologist",
+          birthDate: "1852-11-07T03:33:46.973Z",
+        },
+        {
+          id: 1389127579072,
+          name: "Dare",
+          surname: "Kenny",
+          parentId: 4017546822023,
+          work: "Engineering technologist",
+          birthDate: "1852-10-25T23:36:29.109Z",
+        },
+        {
+          id: 6801196917678,
+          name: "Potter",
+          surname: "Bradbury",
+          parentId: 3750611241942,
+          work: "Petroleum geologist",
+          birthDate: "1852-10-12T06:59:33.426Z",
+        },
+        {
+          id: 1981219057492,
+          name: "Charlene",
+          surname: "Stuttaford",
+          parentId: 5645329253708,
+          work: "Harlequin",
+          birthDate: "1853-11-22T01:25:50.328Z",
+        },
+        {
+          id: 8447379393015,
+          name: "Molly",
+          surname: "Lawrenson",
+          parentId: 7440555772320,
+          work: "Healthcare science",
+          birthDate: "1853-01-20T19:18:17.595Z",
+        },
+        {
+          id: 1421335493979,
+          name: "Tyson",
+          surname: "Grennan",
+          parentId: 1518948755485,
+          work: "Pilot",
+          birthDate: "1852-09-04T12:05:31.252Z",
+        },
+        {
+          id: 5260799325935,
+          name: "Sophia",
+          surname: "Buckley",
+          parentId: 8474979566542,
+          work: "Stunt performer",
+          birthDate: "1853-01-05T04:12:27.037Z",
+        },
+        {
+          id: 2231363435720,
+          name: "Melody",
+          surname: "Humpherys",
+          parentId: 2317759882951,
+          work: "work from home",
+          birthDate: "1853-01-12T00:39:05.356Z",
+        },
+        {
+          id: 9555420460973,
+          name: "Kristi",
+          surname: "Adkins",
+          parentId: 9735997282913,
+          work: "Upholsterer",
+          birthDate: "1853-10-19T15:26:25.022Z",
+        },
+        {
+          id: 1613978413981,
+          name: "Paul",
+          surname: "Cook",
+          parentId: 202934661757,
+          work: "Pipefitter",
+          birthDate: "1853-02-21T08:46:25.185Z",
+        },
+        {
+          id: 6752497709181,
+          name: "Kayden",
+          surname: "Woodcock",
+          parentId: 2850592397073,
+          work: "Arborist",
+          birthDate: "1854-03-05T02:17:31.620Z",
+        },
+      ],
+    },
+  ],
 };
 ExcelTable.generateExcel(data);
 ```
@@ -7920,505 +7148,37 @@ ExcelTable.generateExcel(data);
 
 ## interface [⬆️](#table-of-contents)
 
-This section introduces the primary interface of the library.
-
-<details>
-
-<summary>Display interfaces</summary>
-
-```typescript
-export interface ExcelTable extends ExcelTableOption {
-  sheet: Sheet[];
-}
-export interface ExcelTableOption {
-  notSave?: boolean;
-  creator?: string;
-  backend?: boolean;
-  activateConditionalFormatting?: boolean;
-  fetch?: Function;
-  fileName?: string;
-  generateType?: "nodebuffer" | "array" | "binarystring" | "base64";
-  addDefaultTitleStyle?: boolean;
-  created?: string;
-  modified?: string;
-  numberOfColumn?: number;
-  createType?: string;
-  styles?: Styles;
-}
-
-export interface Sheet extends SheetOption {
-  headers: Header[];
-  data: Data[];
-}
-export interface SheetOption {
-  withoutHeader?: boolean;
-  mapSheetDataOption?: {
-    outlineLevel?: string;
-    hidden?: string;
-    height?: string;
-  };
-  backgroundImage?: string;
-  conditionalFormatting?: ConditionalFormatting[];
-  multiStyleCondition?: MultiStyleConditionFunction;
-  useSplitBaseOnMatch?: boolean;
-  convertStringToNumber?: boolean;
-  images?: ImageTypes[];
-  formula?: Formula;
-  pageOption?: PageOption;
-  name?: string;
-  title?: Title;
-  shiftTop?: number;
-  shiftLeft?: number;
-  selected?: boolean;
-  tabColor?: string;
-  merges?: string[];
-  headerStyleKey?: string;
-  mergeRowDataCondition?: MergeRowDataConditionFunction;
-  styleCellCondition?: StyleCellConditionFunction;
-  commentCondition?: CommentConditionFunction;
-  sortAndFilter?: SortAndFilter;
-  state?: "hidden" | "visible";
-  headerRowOption?: object;
-  protectionOption?: ProtectionOption;
-  headerHeight?: number;
-  checkbox?: Checkbox[];
-  viewOption?: ViewOption;
-  rtl?: boolean;
-  pageBreak?: PageBreak;
-  asTable?: AsTableOption;
-}
-export interface AsTableOption {
-  type?: "Light" | "Medium" | "Dark";
-  styleNumber?: number;
-  firstColumn?: boolean;
-  lastColumn?: boolean;
-  rowStripes?: boolean;
-  columnStripes?: boolean;
-}
-export interface PageBreak {
-  row?: number[];
-  column?: number[];
-}
-export interface ViewStart {
-  t?: string;
-  b?: string;
-  r?: string;
-  l?: string;
-  one?: string;
-  two?: string;
-}
-export interface ViewOption {
-  type?: "pageLayout" | "pageBreakPreview";
-  hideGrid?: boolean;
-  hideHeadlines?: boolean;
-  hideRuler?: boolean;
-  frozenOption?: {
-    type: "ROW" | "COLUMN" | "BOTH" | "R" | "C" | "B";
-    index:
-      | number
-      | {
-          r: number;
-          c: number;
-        };
-  };
-  splitOption?: {
-    type: "VERTICAL" | "HORIZONTAL" | "BOTH" | "V" | "H" | "B";
-    startAt?: ViewStart;
-    split:
-      | number
-      | {
-          x: number;
-          y: number;
-        };
-  };
-}
-export interface HeaderFooterOption {
-  text?: string;
-  styleId?: string;
-}
-export interface HeaderFooterLocationMap {
-  l?: HeaderFooterOption;
-  c?: HeaderFooterOption;
-  r?: HeaderFooterOption;
-}
-export interface HeaderFooterTypes {
-  odd?: HeaderFooterLocationMap;
-  even?: HeaderFooterLocationMap;
-  first?: HeaderFooterLocationMap;
-}
-export interface PageOption {
-  margin?: {
-    left?: number;
-    right?: number;
-    top?: number;
-    bottom?: number;
-    header?: number;
-    footer?: number;
-  };
-  header?: HeaderFooterTypes;
-  footer?: HeaderFooterTypes;
-  isPortrait: boolean;
-}
-export interface Header {
-  label: string;
-  text: string;
-  size?: number;
-  multiStyleValue?: MultiStyleValue;
-  comment?: Comment | string;
-  conditionalFormatting?: ConditionalFormattingOption;
-  formula?: {
-    type: FormulaType;
-    styleId?: string;
-  };
-}
-export type StyleType = "conditionalFormatting" | "CF" | "headerFooter" | "HF";
-export interface StyleBody {
-  fontFamily?: string;
-  type?: StyleType;
-  size?: number;
-  index?: number;
-  alignment?: AlignmentOption;
-  border?: BorderOption;
-  format?: string;
-  bold?: boolean;
-  underline?: boolean;
-  italic?: boolean;
-  doubleUnderline?: boolean;
-  color?: string;
-  backgroundColor?: string;
-}
-export interface Styles {
-  [key: string]: StyleBody;
-}
-export interface Data extends DataOptions {
-  [key: string]: string | number | any | undefined;
-}
-export interface DataOptions {
-  [key: string]:
-    | "0"
-    | "1"
-    | number
-    | string
-    | undefined
-    | MapComment
-    | MapMultiStyleValue;
-  outlineLevel?: number;
-  hidden?: "0" | "1" | number;
-  rowStyle?: string;
-  height?: number;
-  multiStyleValue?: MapMultiStyleValue;
-  comment?: MapComment;
-}
-export interface RowMap {
-  [rowNumber: number]: {
-    startTag: string;
-    endTag: string;
-    details: string;
-  };
-}
-export type ProtectionOption = {
-  [key in ProtectionOptionKey]: "0" | "1" | 0 | 1;
-};
-export type ProtectionOptionKey =
-  | "sheet"
-  | "formatCells"
-  | "formatColumns"
-  | "formatRows"
-  | "insertColumns"
-  | "insertRows"
-  | "insertHyperlinks"
-  | "deleteColumns"
-  | "deleteRows"
-  | "sort"
-  | "autoFilter"
-  | "pivotTables";
-export interface ConditionalFormattingOption {
-  type: "cells" | "dataBar" | "iconSet" | "colorScale" | "top";
-  operator?: string;
-  value?: number | string;
-  priority?: number;
-  colors?: string[];
-  bottom?: boolean;
-  styleId?: string;
-  percent?: number;
-}
-export interface ConditionalFormatting extends ConditionalFormattingOption {
-  start: string;
-  end: string;
-}
-export interface ImageTypes {
-  url: string;
-  from: string;
-  to?: string;
-  type?: "one" | "two";
-  extent?: {
-    cx: number;
-    cy: number;
-  };
-  margin?: {
-    all?: number;
-    right?: number;
-    left?: number;
-    bottom?: number;
-    top?: number;
-  };
-}
-export interface SideBySide {
-  sheetName?: string;
-  spaceX?: number;
-  spaceY?: number;
-  headers: { label: string; text: string }[];
-  data: Data[];
-  headerIndex?: number;
-}
-export type AlignmentOptionKey =
-  | "horizontal"
-  | "vertical"
-  | "wrapText"
-  | "shrinkToFit"
-  | "readingOrder"
-  | "textRotation"
-  | "indent";
-export type AlignmentHorizontal = "center" | "left" | "right";
-export type AlignmentVertical = "center" | "top" | "bottom";
-export interface AlignmentOption {
-  horizontal?: AlignmentHorizontal;
-  vertical?: AlignmentVertical;
-  wrapText?: "0" | "1" | 0 | 1;
-  shrinkToFit?: "0" | "1" | 0 | 1;
-  readingOrder?: "1" | "2" | 2 | 1;
-  textRotation?: number;
-  indent?: number;
-  rtl?: boolean;
-  ltr?: boolean;
-}
-export type BorderDirection = "full" | "top" | "left" | "right" | "bottom";
-export type BorderOption = {
-  [key in BorderDirection]?: {
-    color: string;
-    style:
-      | "slantDashDot"
-      | "dotted"
-      | "thick"
-      | "hair"
-      | "dashDot"
-      | "dashDotDot"
-      | "dashed"
-      | "thin"
-      | "mediumDashDot"
-      | "medium"
-      | "double"
-      | "mediumDashed";
-  };
-};
-
-export interface MapMultiStyleValue {
-  [key: string]: MultiStyleValue;
-}
-export interface MultiStyleValue {
-  [key: string]: string | undefined | MultiStyleRexValue[];
-  reg?: MultiStyleRexValue[];
-}
-export interface MultiStyleRexValue {
-  reg: RegExp | string;
-  styleId: string;
-}
-export interface Comment {
-  comment?: string;
-  styleId?: string;
-  author?: string;
-}
-
-export interface MergeRowConditionMap {
-  [columnKey: string]: {
-    inProgress: boolean;
-    start: number;
-  };
-}
-export type MultiStyleConditionFunction = (
-  data: Header | string | number | undefined,
-  object: null | Data,
-  headerKey: string,
-  rowIndex: number,
-  colIndex: number,
-  fromHeader: boolean
-) => MultiStyleValue | null;
-
-export type CommentConditionFunction = (
-  data: Header | string | number | undefined,
-  object: null | Data,
-  headerKey: string,
-  rowIndex: number,
-  colIndex: number,
-  fromHeader: boolean
-) => Comment | string | false | undefined | null;
-export type StyleCellConditionFunction = (
-  data: Header | string | number | undefined,
-  object: Header | Data,
-  rowIndex: number,
-  colIndex: number,
-  fromHeader: boolean,
-  styleKeys: string[]
-) => string | null;
-export type MergeRowDataConditionFunction = (
-  data: Header | string | number | undefined,
-  key: string | null,
-  index: number,
-  fromHeader: boolean
-) => boolean;
-export interface SortAndFilter {
-  mode: "all" | "ref";
-  ref?: string;
-}
-export interface Title {
-  shiftTop?: number;
-  shiftLeft?: number;
-  consommeRow?: number;
-  consommeCol?: number;
-  height?: number;
-  styleId?: string;
-  text?: string;
-  multiStyleValue?: MultiStyleValue;
-  comment?: Comment | string;
-}
-export interface HeaderRowOption {
-  outlineLevel: "string";
-}
-export interface Checkbox {
-  col: number;
-  row: number;
-  text: string;
-  link?: string;
-  checked?: boolean;
-  mixed?: boolean;
-  threeD?: boolean;
-  startStr?: string;
-  endStr?: string;
-}
-export type NoArgFormulaType =
-  | "NOW"
-  | "TODAY"
-  | "HOUR"
-  | "NOW_YEAR"
-  | "NOW_HOUR"
-  | "NOW_SECOND"
-  | "NOW_MIN"
-  | "NOW_MONTH"
-  | "NOW_DAY"
-  | "NOW_WEEKDAY"
-  | "NOW_MINUTE";
-export type FormulaType = "AVERAGE" | "SUM" | "COUNT" | "MAX" | "MIN";
-export type SingleRefFormulaType =
-  | "LEN"
-  | "MODE"
-  | "UPPER"
-  | "LOWER"
-  | "PROPER"
-  | "RIGHT"
-  | "LEFT"
-  | "ABS"
-  | "POWER"
-  | "MOD"
-  | "FLOOR"
-  | "CEILING"
-  | "ROUND"
-  | "SQRT"
-  | "COS"
-  | "SIN"
-  | "TAN"
-  | "COT"
-  | "COUNTIF"
-  | "SUMIF"
-  | "TRIM";
-export interface FormatMap {
-  [format: string]: {
-    key: number;
-    value?: string;
-  };
-}
-export interface Formula {
-  [insertCell: string]:
-    | FormulaSetting
-    | SingleRefFormulaSetting
-    | NoArgFormulaSetting
-    | CustomFormulaSetting;
-}
-export interface FormulaSetting {
-  type: FormulaType;
-  start: string;
-  end: string;
-  styleId?: string;
-}
-export interface CustomFormulaSetting {
-  isArray?: boolean;
-  referenceCells?: string;
-  formula: string;
-  returnType?: string;
-  styleId?: string;
-}
-export interface SingleRefFormulaSetting {
-  type: SingleRefFormulaType;
-  referenceCell: string;
-  value?: number | string;
-  styleId?: string;
-}
-export interface NoArgFormulaSetting {
-  noArgType: NoArgFormulaType;
-  styleId?: string;
-}
-export interface StyleMapper {
-  conditionalFormatting: {
-    count: number;
-    value: string;
-  };
-  commentSyntax: {
-    value: {
-      [key: string]: string;
-    };
-  };
-  format: {
-    count: number;
-    value: string;
-  };
-  border: {
-    count: number;
-    value: string;
-  };
-  fill: {
-    count: number;
-    value: string;
-  };
-  font: {
-    count: number;
-    value: string;
-  };
-  cell: {
-    count: number;
-    value: string;
-  };
-}
-export interface MapComment {
-  [key: string]: Comment | string;
-}
-export interface ThemeOption {
-  headerIndex?: number;
-  rowIndex?: number;
-  negativeColor?: boolean;
-  headerColor?: string;
-  rowColor?: string;
-  headerBackgroundColor?: string;
-  rowBackgroundColor?: string;
-  fileName?: string;
-}
-
-```
-</details>
+The primary interface of the library is located in the excel-table.d.ts file. [Click here](./dist/excel-table.d.ts)/[here](./src/data-model/excel-table.ts) for direct access.
 
 <a id="migrate"></a>
 
 ## Migrate Version [⬆️](#table-of-contents)
 
 In this section, we define the significant changes that require migration for the upcoming version.
+
+<a id="migrating-5"></a>
+
+## Migrating from 5 to 6 [⬆️](#table-of-contents)
+
+To successfully migrate from version 5 to version 6, please implement the following changes:
+
+- **Main Function Updates**
+  - The input parameters for `convertTableToExcel` have been modified to:
+
+```
+queryForTable?: string,
+table?: HTMLTableElement,
+config: {
+  keepStyle?: boolean;
+  rowHeightScaleFunction?: RowHeightScaleFunction;
+  colWidthScaleFunction?: ColWidthScaleFunction;
+}
+```
+
+- The previously defined theme has been removed in favor of using `themeBaseGenerate`, which now requires a color input.[More details here](#theme-base-generate-usage)
+- The return type for the `extractExcelData` function has been defined. Please ensure that the TypeScript output is updated accordingly.
+- **Import Changes**
+  - Some TypeScript file imports may have changed. If you are importing TypeScript files directlly into your project, please verify these imports. For example, the main functionality has shifted from `utils` to `functions`.
 
 <a id="migrating-4"></a>
 
@@ -8468,15 +7228,33 @@ To migrate from Version 2 to Version 3, you need to follow the steps below:
 
 ## Release Notes [⬆️](#table-of-contents)
 
-## Version 5.3.0 (2024-06-21)
+### Version 6.0.0 (2024-08-07)
 
-### New Feature
+#### New Features
+
+- Introduced formatMap to support new data formats.
+- Added the excelToJson and excelToNode functions.
+
+#### Improvements
+
+- Increased code coverage to 90%.
+- Enhanced capability to use image, checkbox, and comment together.
+- Incorporated GitHub Community Standards for better collaboration.
+- more
+
+#### Bug Fixes
+
+- Resolved issues related to backgroundImage.
+
+### Version 5.3.0 (2024-06-21)
+
+#### New Feature
 
 - feat: add new dollar format (by [Sergio Fernández](https://github.com/xergiodf))
 
-## Version 5.2.0 (2024-02-08)
+### Version 5.2.0 (2024-02-08)
 
-### New Features
+#### New Features
 
 - `generateCSV` & `generateText` functions create files in different formats, namely `.csv` and `.txt`
 

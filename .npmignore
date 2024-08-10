@@ -3,3 +3,4 @@ _test_
 coverage
 .github
 *.backup
+backup

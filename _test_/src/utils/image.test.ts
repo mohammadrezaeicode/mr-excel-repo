@@ -17,6 +17,24 @@ describe("toDataURL2 data tests", () => {
       expect(typeof res).toBe("object");
     });
   }, 120000);
+   test("use valid url input", async () => {
+    await toDataURL2(
+      "https://github.com/mohammadrezaeicode/mr-excel-page-repo/blob/main/public/img/ex16.PNG?raw=true",
+      "image.PNG",
+      true
+    ).then((res: any) => {
+      expect(res).toBeTruthy();
+      expect(typeof res).toBe("object");
+    });
+  }, 120000);
+     test("Error throw use frontend section in backend", async () => {
+    await toDataURL2(
+      "https://github.com/mohammadrezaeicode/mr-excel-page-repo/blob/main/public/img/ex16.PNG?raw=true",
+      "image.PNG"
+    ).catch((e:Error)=>{
+      expect(e.message).toBe("File is not defined")
+    })
+  }, 120000);
   test("use valid url input", async () => {
     await toDataURL2("invalid url", "image.PNG", true, callApi).catch(
       (err: any) => {
@@ -30,8 +48,8 @@ describe("toDataURL2 data tests", () => {
       "image.PNG",
       true,
       callApi
-    ).catch((err:any) => {
+    ).catch((err: any) => {
       expect(err.message).toMatch("Request failed with status code 404");
     });
-  });
+  }, 120000);
 });

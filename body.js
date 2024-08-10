@@ -1,4 +1,5 @@
-const { exec, execSync } = require("child_process");
+import { exec, execSync } from "child_process";
+
 let result = execSync("git log -p -1 -- CHANGELOG.md");
 let stdout = result.toString();
 let x = "*************************";

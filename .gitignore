@@ -3,3 +3,6 @@ coverage
 build/*
 compile/*
 TODO.md
+*.backup
+stats.html
+backup

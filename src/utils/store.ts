@@ -24,10 +24,10 @@ function generatePathRecursive(key: string, path: string, data: object) {
     const value = data[k as keyof object];
     if (typeof value == "object") {
       if (k != "data" && k != "headers") {
-        generatePathRecursive(key, path.length>0 ? path + "." + k : k, value);
+        generatePathRecursive(key, path.length > 0 ? path + "." + k : k, value);
       }
     } else {
-      addGlobalOptions(key, path.length>0 ? path + "." + k : k, value);
+      addGlobalOptions(key, path.length > 0 ? path + "." + k : k, value);
     }
   });
 }
@@ -58,3 +58,7 @@ export function applyConfig(key: string, data: ExcelTable): ExcelTable {
   });
   return data2;
 }
+
+export const exportedForTesting = {
+  generatePathRecursive,
+};
