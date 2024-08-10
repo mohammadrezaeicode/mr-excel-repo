@@ -510,3 +510,35 @@ export interface ReadResult {
   sheetName: IterableIterator<[string, string]>;
   maxLengthOfColumn: Record<string, number>;
 }
+export declare class Buffer extends Uint8Array {
+  constructor(str: string, encoding?: string);
+  constructor(size: number);
+  constructor(array: Uint8Array);
+  constructor(arrayBuffer: ArrayBuffer, byteOffset?: number, length?: number);
+
+  static alloc(
+    size: number,
+    fill?: string | Buffer | number,
+    encoding?: string
+  ): Buffer;
+  static from(
+    arrayBuffer: ArrayBuffer,
+    byteOffset?: number,
+    length?: number
+  ): Buffer;
+  static from(data: number[]): Buffer;
+  static from(str: string, encoding?: string): Buffer;
+
+  write(
+    string: string,
+    offset?: number,
+    length?: number,
+    encoding?: string
+  ): number;
+  toString(encoding?: string, start?: number, end?: number): string;
+  slice(start?: number, end?: number): Buffer;
+  static concat(list: Buffer[], totalLength?: number): Buffer;
+
+  length: number;
+  byteOffset: number;
+}

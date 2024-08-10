@@ -6,36 +6,32 @@ interface ExtractResult {
   [sheetName: string]: ExtractedData;
 }
 function hasTBeforeV(element: string) {
-  // Use regular expression to find 't="s"' before <v>
   const regex = /t="s".*?<v/;
   return regex.test(element);
 }
 function getValueWithinT(element: string) {
-  // Use regular expression to extract the content between <v> and </v>
   const regex = /<t.*?>(.*?)<\/t>/;
   const match = element.match(regex);
   if (match) {
-    return match[1]; // Extracted value
+    return match[1];
   }
-  return null; // Return null if <v> tag is not found
+  return null;
 }
 function getValueWithinV(element: string) {
-  // Use regular expression to extract the content between <v> and </v>
   const regex = /<v.*?>(.*?)<\/v>/;
   const match = element.match(regex);
   if (match) {
-    return match[1]; // Extracted value
+    return match[1];
   }
-  return null; // Return null if <v> tag is not found
+  return null;
 }
 function getRValue(element: string) {
-  // Use regular expression to extract the 'r' attribute value
   const regex = /r="(.*?)"/;
   const match = element.match(regex);
   if (match) {
-    return match[1]; // Extracted 'r' value
+    return match[1];
   }
-  return null; // Return null if 'r' attribute is not found
+  return null;
 }
 export async function readGeneratedFile(
   data: unknown,
@@ -124,8 +120,7 @@ export async function readGeneratedFile(
                 if (prop === "isNameSet") {
                   return target.isNameSet;
                 }
-                // By default, it looks like Reflect.get(target, prop, receiver)
-                // which has a different value of `this`
+
                 return target.counter;
               },
             }

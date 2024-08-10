@@ -9,9 +9,9 @@ import {
   type ProtectionOptionKey,
   type RowMap,
   type StyleMapper,
+  type Buffer,
 } from "../data-model/excel-table";
 import { generateColumnName } from "../utils/generate-column-name";
-
 import { styleGenerator } from "../utils/content-generator/styles";
 import { contentTypeGenerator } from "../utils/content-generator/content-types";
 import { appGenerator } from "../utils/content-generator/app";
@@ -32,7 +32,10 @@ import { getColRowBaseOnRefString } from "../utils/excel-util";
 import { specialCharacterConverter } from "../utils/special-character";
 import { applyConfig } from "../utils/store";
 import type JSZip from "jszip";
-export async function generateExcel(data: ExcelTable, styleKey: string = "") {
+export async function generateExcel(
+  data: ExcelTable,
+  styleKey: string = ""
+): Promise<string | number[] | Blob | Buffer | undefined> {
   if (typeof styleKey == "string" && styleKey.length > 0) {
     data = applyConfig(styleKey, data);
   }
@@ -71,8 +74,8 @@ export async function generateExcel(data: ExcelTable, styleKey: string = "") {
     cols = generateColumnName(cols, data.numberOfColumn);
   }
   const module = await import("jszip");
-  const JSZip = module.default;
-  let zip = new JSZip();
+  const JSZip1 = module.default;
+  let zip = new JSZip1();
   const sheetLength = data.sheet.length;
   // xl
   let xlFolder = zip.folder("xl");
@@ -2645,7 +2648,7 @@ export async function generateExcel(data: ExcelTable, styleKey: string = "") {
         type: data.generateType ? data.generateType : "nodebuffer",
       })
       .then((content) => {
-        return content;
+        return content as string | number[] | Buffer;
       });
   } else {
     if (data.notSave) {

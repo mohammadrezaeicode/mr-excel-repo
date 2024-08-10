@@ -42,6 +42,23 @@ declare type BorderOption = {
     };
 };
 
+declare class Buffer_2 extends Uint8Array {
+    constructor(str: string, encoding?: string);
+    constructor(size: number);
+    constructor(array: Uint8Array);
+    constructor(arrayBuffer: ArrayBuffer, byteOffset?: number, length?: number);
+    static alloc(size: number, fill?: string | Buffer_2 | number, encoding?: string): Buffer_2;
+    static from(arrayBuffer: ArrayBuffer, byteOffset?: number, length?: number): Buffer_2;
+    static from(data: number[]): Buffer_2;
+    static from(str: string, encoding?: string): Buffer_2;
+    write(string: string, offset?: number, length?: number, encoding?: string): number;
+    toString(encoding?: string, start?: number, end?: number): string;
+    slice(start?: number, end?: number): Buffer_2;
+    static concat(list: Buffer_2[], totalLength?: number): Buffer_2;
+    length: number;
+    byteOffset: number;
+}
+
 declare interface Checkbox {
     col: number;
     row: number;
@@ -94,7 +111,7 @@ export declare function convertTableToExcel(queryForTable?: string, table?: HTML
     keepStyle?: boolean;
     rowHeightScaleFunction?: RowHeightScaleFunction;
     colWidthScaleFunction?: ColWidthScaleFunction;
-}): Promise<string | number[] | Blob | Buffer | undefined>;
+}): Promise<string | number[] | DataModel.Buffer | Blob | undefined>;
 
 declare interface CustomFormulaSetting {
     isArray?: boolean;
@@ -171,7 +188,8 @@ declare namespace DataModel {
         ThemeOption,
         ExtractedData,
         ExtractResult,
-        ReadResult
+        ReadResult,
+        Buffer_2 as Buffer
     }
 }
 export { DataModel }
@@ -261,7 +279,7 @@ declare function generalValidationCheck(value: never, validateProperty: Validati
 
 export declare function generateCSV(excelTable: ExcelTable, asZip?: boolean): Promise<string[] | "done" | undefined>;
 
-export declare function generateExcel(data: ExcelTable, styleKey?: string): Promise<string | number[] | Blob | Buffer | undefined>;
+export declare function generateExcel(data: ExcelTable, styleKey?: string): Promise<string | number[] | Blob | Buffer_2 | undefined>;
 
 export declare function generateText(excelTable: ExcelTable, asZip?: boolean): Promise<string[] | "done" | undefined>;
 
@@ -450,7 +468,7 @@ declare interface SideBySide {
     headerIndex?: number;
 }
 
-export declare function sideBySideLineByLine(data: SideBySide[][]): Promise<string | number[] | Blob | Buffer | undefined>;
+export declare function sideBySideLineByLine(data: SideBySide[][]): Promise<string | number[] | DataModel.Buffer | Blob | undefined>;
 
 declare interface SingleRefFormulaSetting {
     type: SingleRefFormulaType;
@@ -522,7 +540,7 @@ declare interface Styles {
 
 declare type StyleType = "conditionalFormatting" | "CF" | "headerFooter" | "HF";
 
-export declare function themeBaseGenerate(data: ExcelTable | Data[] | Data[][], option?: ThemeOption): Promise<string | number[] | Blob | Buffer | undefined>;
+export declare function themeBaseGenerate(data: ExcelTable | Data[] | Data[][], option?: ThemeOption): Promise<string | number[] | DataModel.Buffer | Blob | undefined>;
 
 declare interface ThemeOption {
     negativeColor?: boolean;
