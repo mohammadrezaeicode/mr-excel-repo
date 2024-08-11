@@ -1,5 +1,24 @@
 # Changelog
 
+## Version 6.0.1 (2024-08-11)
+
+### New Features
+
+- Introduced formatMap to support new data formats.
+- Added the excelToJson and excelToNode functions.
+
+### Improvements
+
+- Increased code coverage to 90%.
+- Enhanced capability to use image, checkbox, and comment together.
+- Incorporated GitHub Community Standards for better collaboration.
+- more
+
+### Bug Fixes
+
+- Resolved issues related to backgroundImage.
+- Resolved an issue related to the incorrect package release in version 6.0.0.
+
 ## Version 6.0.0 (2024-08-07)
 
 ### New Features

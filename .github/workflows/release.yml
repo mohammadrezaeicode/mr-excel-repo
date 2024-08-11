@@ -5,11 +5,11 @@ on:
       - main
     paths:
       - CHANGELOG.md
-  pull_request:
-    branches:
-      - main
-    paths:
-      - CHANGELOG.md
+  # pull_request:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - CHANGELOG.md
 jobs:
   release:
     name: Create release package

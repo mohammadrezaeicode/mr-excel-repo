@@ -7228,7 +7228,7 @@ To migrate from Version 2 to Version 3, you need to follow the steps below:
 
 ## Release Notes [⬆️](#table-of-contents)
 
-### Version 6.0.0 (2024-08-07)
+### Version 6.0.1 (2024-08-11)
 
 #### New Features
 
