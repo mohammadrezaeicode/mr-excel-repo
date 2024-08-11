@@ -1197,7 +1197,11 @@ export async function generateExcel(
             innerIndex,
             true
           );
-          if (checkCommentCondition) {
+          if (
+            typeof checkCommentCondition == "string" ||
+            (typeof checkCommentCondition == "object" &&
+              checkCommentCondition != null)
+          ) {
             v.comment = checkCommentCondition;
           }
         }
@@ -1466,7 +1470,11 @@ export async function generateExcel(
                 keyIndex,
                 false
               );
-              if (checkCommentCondition) {
+              if (
+                typeof checkCommentCondition == "string" ||
+                (typeof checkCommentCondition == "object" &&
+                  checkCommentCondition != null)
+              ) {
                 if (typeof mData.comment !== "object") {
                   mData.comment = {};
                 }

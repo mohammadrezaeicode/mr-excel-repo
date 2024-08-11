@@ -57,9 +57,9 @@ function Ut(e) {
 }
 function _t(e, t) {
   let l = Object.keys(e).filter((n) => !t.includes(n)), o = [];
-  return l.reduce((n, h) => (n.push({
-    label: h,
-    text: Ut(h)
+  return l.reduce((n, u) => (n.push({
+    label: u,
+    text: Ut(u)
   }), n), o);
 }
 const ot = {
@@ -114,13 +114,13 @@ const ot = {
       };
   else
     l = e;
-  let o = t && t.headerBackgroundColor ? t.headerBackgroundColor : ot.headerBackgroundColor, r = t && t.rowBackgroundColor ? t.rowBackgroundColor : ot.rowBackgroundColor, n = t && t.negativeColor ? Ft(o) : t && t.headerColor ? t.headerColor : Ot(o), h = t && t.negativeColor ? Ft(r) : t && t.rowColor ? t.rowColor : Ot(r);
+  let o = t && t.headerBackgroundColor ? t.headerBackgroundColor : ot.headerBackgroundColor, r = t && t.rowBackgroundColor ? t.rowBackgroundColor : ot.rowBackgroundColor, n = t && t.negativeColor ? Ft(o) : t && t.headerColor ? t.headerColor : Ot(o), u = t && t.negativeColor ? Ft(r) : t && t.rowColor ? t.rowColor : Ot(r);
   typeof l.styles > "u" && (l.styles = {}), l.styles.themeStyleHeader = {
     backgroundColor: o,
     color: n
   }, l.styles.themeStyleBody = {
     backgroundColor: r,
-    color: h
+    color: u
   };
   const y = l.sheet.length;
   for (let p = 0; p < y; p++)
@@ -129,7 +129,7 @@ const ot = {
     };
   return typeof (t == null ? void 0 : t.fileName) == "string" && (l.fileName = t.fileName), l;
 };
-function Gt(e, t, l, o, r, n, h, y) {
+function Gt(e, t, l, o, r, n, u, y) {
   let p = [], a = "both", m = [];
   !t || t === 0 ? (t = 1, a = "col") : m.push(t - 1), !e || e === 0 ? (e = 0, a = "row") : m.push(e - 1);
   let b = r || {};
@@ -137,11 +137,11 @@ function Gt(e, t, l, o, r, n, h, y) {
   for (let P = 0; P < t; P++) {
     let T = e;
     for (let v = 0; v < o; v++)
-      l <= v ? T >= 1 ? (b["c" + v] = n, n = "", h += "*", T--) : t >= 2 && l == v ? (b["c" + v] = n, n = "", h += "+") : h += "-" : P > 0 && (h += "-");
+      l <= v ? T >= 1 ? (b["c" + v] = n, n = "", u += "*", T--) : t >= 2 && l == v ? (b["c" + v] = n, n = "", u += "+") : u += "-" : P > 0 && (u += "-");
     p.push({
       ...b,
-      mergeString: h
-    }), b = {}, h = "";
+      mergeString: u
+    }), b = {}, u = "";
   }
   return p;
 }
@@ -151,7 +151,7 @@ function Xt(e, t, l, o, r) {
     throw "Error: One of the function inputs is required.";
   let n;
   e ? n = (b = document.querySelector(e)) == null ? void 0 : b.querySelectorAll("tr") : n = t == null ? void 0 : t.querySelectorAll("tr");
-  let h = [], y = [], p = {
+  let u = [], y = [], p = {
     header: {},
     rows: []
   }, a = 40;
@@ -168,61 +168,61 @@ function Xt(e, t, l, o, r) {
           !0
         ) : a = Number(
           M.height.substring(0, M.height.length - 2)
-        ), L.forEach((B, te) => {
-          let j = window.getComputedStyle(B, null), $ = null;
-          if (j.borderBottomWidth !== "0px") {
-            const G = me(j.borderBottomColor);
+        ), L.forEach((B, oe) => {
+          let R = window.getComputedStyle(B, null), $ = null;
+          if (R.borderBottomWidth !== "0px") {
+            const G = me(R.borderBottomColor);
             G && ($ || ($ = {}), $.bottom = {
               style: "thin",
               color: G
             });
           }
-          if (j.borderTopWidth !== "0px") {
-            const G = me(j.borderTopColor);
+          if (R.borderTopWidth !== "0px") {
+            const G = me(R.borderTopColor);
             G && ($ || ($ = {}), $.top = {
               style: "thin",
               color: G
             });
           }
-          if (j.borderLeftWidth !== "0px") {
-            const G = me(j.borderLeftColor);
+          if (R.borderLeftWidth !== "0px") {
+            const G = me(R.borderLeftColor);
             G && ($ || ($ = {}), $.left = {
               style: "thin",
               color: G
             });
           }
-          if (j.borderRightWidth !== "0px") {
-            const G = me(j.borderRightColor);
+          if (R.borderRightWidth !== "0px") {
+            const G = me(R.borderRightColor);
             G && ($ || ($ = {}), $.right = {
               style: "thin",
               color: G
             });
           }
-          let Z = me(j.backgroundColor);
+          let Z = me(R.backgroundColor);
           !Z && V && (Z = V);
           const q = parseInt(
-            j.fontSize.substring(0, j.fontSize.indexOf("p"))
+            R.fontSize.substring(0, R.fontSize.indexOf("p"))
           );
           let H = {
             ...Z ? { backgroundColor: Z } : {},
-            bold: parseInt(j.fontWeight) > 500,
+            bold: parseInt(R.fontWeight) > 500,
             ...isNaN(q) ? {} : { size: q },
             ...$ ? { border: $ } : {},
             alignment: {
-              ...typeof j.textAlign == "string" && j.textAlign.length > 0 ? { horizontal: j.textAlign } : {},
+              ...typeof R.textAlign == "string" && R.textAlign.length > 0 ? { horizontal: R.textAlign } : {},
               vertical: "center",
-              ...j.direction == "rtl" ? { rtl: !0 } : { ltr: !0 }
+              ...R.direction == "rtl" ? { rtl: !0 } : { ltr: !0 }
             }
           };
-          p.header[c + "-" + te] = H;
+          p.header[c + "-" + oe] = H;
           let k;
           typeof r == "function" ? k = r(
-            Number(j.width.substring(0, j.width.length - 2)),
-            te
-          ) : k = Number(j.width.substring(0, j.width.length - 2)) * 0.15;
+            Number(R.width.substring(0, R.width.length - 2)),
+            oe
+          ) : k = Number(R.width.substring(0, R.width.length - 2)) * 0.15;
           const K = B.getAttribute("colspan"), z = B.getAttribute("rowspan");
-          h.push({
-            label: "c" + te,
+          u.push({
+            label: "c" + oe,
             ...K ? { colspan: K } : {},
             ...z ? { rowspan: z } : {},
             text: B.textContent,
@@ -230,8 +230,8 @@ function Xt(e, t, l, o, r) {
           });
         });
       else {
-        let B = {}, te = "", j = !1;
-        y.length >= c && (B = y[c - 1], te = "mergeString" in B ? B.mergeString : "", j = !0);
+        let B = {}, oe = "", R = !1;
+        y.length >= c && (B = y[c - 1], oe = "mergeString" in B ? B.mergeString : "", R = !0);
         let $ = 0;
         L.forEach((Z, q) => {
           if ("c" + (q + $) in B)
@@ -247,7 +247,7 @@ function Xt(e, t, l, o, r) {
               T,
               B,
               Z.textContent,
-              te,
+              oe,
               B
             );
             y.length < c ? y.push(...Y) : Y.forEach((Ce, J) => {
@@ -255,9 +255,9 @@ function Xt(e, t, l, o, r) {
                 ...y[c + J],
                 ...Ce
               };
-            }), B = Y[0], te = Y[0].mergeString, j = !0;
+            }), B = Y[0], oe = Y[0].mergeString, R = !0;
           } else
-            j || (te += "-");
+            R || (oe += "-");
           let k = null;
           if (H.borderBottomWidth !== "0px") {
             const Y = me(H.borderBottomColor);
@@ -322,15 +322,15 @@ function Xt(e, t, l, o, r) {
           return l ? M.includes(v - 1 + "-" + c) ? v - 1 + "-" + c : "" : null;
         },
         data: y,
-        headers: h
+        headers: u
       }
     ]
   };
 }
 function Me(e, t, l = "", o = [], r = -1) {
   const n = e.length;
-  for (let h = 0; h < n; h++)
-    o.push(l + e[h]);
+  for (let u = 0; u < n; u++)
+    o.push(l + e[u]);
   return t < o.length ? o : Me(
     e,
     t,
@@ -343,10 +343,10 @@ function Zt(e, t) {
   return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006">` + (e.format.count > 0 ? '<numFmts count="' + e.format.count + '">' + e.format.value + "</numFmts>" : "") + '<fonts count="' + e.font.count + '"><font><sz val="11" /><color theme="1" /><name val="Calibri" /><family val="2" /><scheme val="minor" /></font><font><sz val="11" /><color rgb="FFFF0000" /><name val="Calibri" /><family val="2" /><scheme val="minor" /></font>' + e.font.value + '</fonts><fills count="' + e.fill.count + '"><fill><patternFill patternType="none" /></fill><fill><patternFill patternType="lightGray" /></fill>' + e.fill.value + '</fills><borders count="' + e.border.count + '"><border />' + e.border.value + '</borders><cellStyleXfs count="1"><xf borderId="0" fillId="0" fontId="0" numFmtId="0" applyAlignment="1" applyFont="1" /></cellStyleXfs><cellXfs count="' + e.cell.count + '"><xf borderId="0" fillId="0" fontId="0" numFmtId="0" xfId="0" applyAlignment="1" applyFont="1"><alignment readingOrder="0" shrinkToFit="0" vertical="bottom" wrapText="0" /></xf><xf borderId="0" fillId="0" fontId="1" numFmtId="0" xfId="0" applyAlignment="1" applyFont="1"><alignment readingOrder="0" /></xf>' + e.cell.value + '</cellXfs><cellStyles count="1"><cellStyle xfId="0" name="Normal" builtinId="0" /></cellStyles> ' + (t ? '<dxfs count="' + e.conditionalFormatting.count + '" >' + e.conditionalFormatting.value + "</dxfs>" : '<dxfs count="0" />') + "</styleSheet>";
 }
-function Jt(e, t, l, o, r, n, h) {
+function Jt(e, t, l, o, r, n, u) {
   let y = {};
   return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels"  ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="vml" ContentType="application/vnd.openxmlformats-officedocument.vmlDrawing" /><Default Extension="xml" ContentType="application/xml" /><Override ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml" PartName="/xl/workbook.xml" /><Override ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml" PartName="/xl/styles.xml" /><Override ContentType="application/vnd.openxmlformats-officedocument.theme+xml" PartName="/xl/theme/theme1.xml" />` + l.reduce((p, a) => (a = a.toLowerCase(), y[a] ? p : a == "svg" ? (y.png = !0, y.svg = !0, p + '<Default Extension="png" ContentType="image/png"/><Default Extension="svg" ContentType="image/svg+xml"/>') : a == "jpeg" || a == "jpg" ? (y.jpeg = !0, y.jpg = !0, p + '<Default Extension="' + a + '" ContentType="image/jpeg"/>') : (y.curr = !0, p + '<Default Extension="' + a + '" ContentType="image/' + a + '"/>')), "") + t.reduce((p, a) => p + '<Override PartName="/xl/comments' + a + '.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.comments+xml" />', "") + e + (h.length > 0 ? h.reduce((p, a) => p + '<Override PartName="/xl/tables/' + a + '" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.table+xml"/>', "") : "") + '<Override ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sharedStrings+xml" PartName="/xl/sharedStrings.xml" />' + (n ? '<Override PartName="/xl/calcChain.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.calcChain+xml"/>' : "") + '<Override PartName="/docProps/core.xml"  ContentType="application/vnd.openxmlformats-package.core-properties+xml" />' + o.reduce((p, a) => p + '<Override PartName="/xl/drawings/' + a + '" ContentType="application/vnd.openxmlformats-officedocument.drawing+xml" />', "") + (r.length > 0 ? r.reduce((p, a, m) => p + '<Override PartName="/xl/ctrlProps/ctrlProp' + (m + 1) + '.xml" ContentType="application/vnd.ms-excel.controlproperties+xml"/>', "") : "") + '<Override PartName="/docProps/app.xml"  ContentType="application/vnd.openxmlformats-officedocument.extended-properties+xml" /></Types>';
+<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels"  ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="vml" ContentType="application/vnd.openxmlformats-officedocument.vmlDrawing" /><Default Extension="xml" ContentType="application/xml" /><Override ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml" PartName="/xl/workbook.xml" /><Override ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml" PartName="/xl/styles.xml" /><Override ContentType="application/vnd.openxmlformats-officedocument.theme+xml" PartName="/xl/theme/theme1.xml" />` + l.reduce((p, a) => (a = a.toLowerCase(), y[a] ? p : a == "svg" ? (y.png = !0, y.svg = !0, p + '<Default Extension="png" ContentType="image/png"/><Default Extension="svg" ContentType="image/svg+xml"/>') : a == "jpeg" || a == "jpg" ? (y.jpeg = !0, y.jpg = !0, p + '<Default Extension="' + a + '" ContentType="image/jpeg"/>') : (y.curr = !0, p + '<Default Extension="' + a + '" ContentType="image/' + a + '"/>')), "") + t.reduce((p, a) => p + '<Override PartName="/xl/comments' + a + '.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.comments+xml" />', "") + e + (u.length > 0 ? u.reduce((p, a) => p + '<Override PartName="/xl/tables/' + a + '" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.table+xml"/>', "") : "") + '<Override ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sharedStrings+xml" PartName="/xl/sharedStrings.xml" />' + (n ? '<Override PartName="/xl/calcChain.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.calcChain+xml"/>' : "") + '<Override PartName="/docProps/core.xml"  ContentType="application/vnd.openxmlformats-package.core-properties+xml" />' + o.reduce((p, a) => p + '<Override PartName="/xl/drawings/' + a + '" ContentType="application/vnd.openxmlformats-officedocument.drawing+xml" />', "") + (r.length > 0 ? r.reduce((p, a, m) => p + '<Override PartName="/xl/ctrlProps/ctrlProp' + (m + 1) + '.xml" ContentType="application/vnd.ms-excel.controlproperties+xml"/>', "") : "") + '<Override PartName="/docProps/app.xml"  ContentType="application/vnd.openxmlformats-officedocument.extended-properties+xml" /></Types>';
 }
 function Qt(e, t) {
   return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -365,7 +365,7 @@ function rt(e, t, l, o) {
       cell: r
     };
   }
-  let n = e.replace(/[0-9]/g, ""), h = parseInt(e.substr(n.length)), y = !1, p = "";
+  let n = e.replace(/[0-9]/g, ""), u = parseInt(e.substr(n.length)), y = !1, p = "";
   if (t.noArgType) {
     const a = t;
     if (a.noArgType == "NOW" || a.noArgType == "TODAY") {
@@ -391,7 +391,7 @@ function rt(e, t, l, o) {
   }
   return {
     column: n,
-    row: h,
+    row: u,
     cell: r,
     needCalcChain: y,
     chainCell: p
@@ -401,8 +401,8 @@ function nt(e, t, l) {
   let o = !1, r, n;
   if (typeof e == "object") {
     if ("author" in e && e.author && (o = !0, n = e.author), "styleId" in e && typeof e.styleId == "string") {
-      let h = t[e.styleId];
-      typeof h == "string" && (l = h);
+      let u = t[e.styleId];
+      typeof u == "string" && (l = u);
     }
     r = "comment" in e && typeof e.comment == "string" ? At(e.comment) : [""];
   } else
@@ -420,15 +420,15 @@ function At(e) {
 }
 function lt(e, t, l, o) {
   let r = '<comment ref="' + e + '" authorId="' + Math.max(0, o - 1) + '" shapeId="0"><text>', n = "";
-  return t.forEach((h, y) => {
+  return t.forEach((u, y) => {
     let p = "";
-    if (h.length == 0) {
+    if (u.length == 0) {
       n += `
 `;
       return;
     }
     y > 0 && (p = ' xml:space="preserve"', n += `
-`), r += "<r>" + l + "<t" + p + ">" + n + h + "</t></r>", n = "";
+`), r += "<r>" + l + "<t" + p + ">" + n + u + "</t></r>", n = "";
   }), n.length > 0 && r.indexOf("<r>") > 0 && (r = r.substring(0, r.length - 8) + n + "</t></r>"), r += "</text></comment>", r;
 }
 const eo = '<rPr><b /><sz val="9" /><color rgb="000000" /><rFont val="Tahoma" /></rPr>', De = function(e) {
@@ -439,12 +439,12 @@ function Ke(e, t) {
     result: [],
     str: t
   }, o = e.reduce((r, n) => {
-    let h = r.str.indexOf(n);
-    return r.result.push(r.str.substring(0, h)), r.str = r.str.substring(h + n.length), r;
+    let u = r.str.indexOf(n);
+    return r.result.push(r.str.substring(0, u)), r.str = r.str.substring(u + n.length), r;
   }, l);
   return o.result.push(o.str), o.result;
 }
-function It(e, t, l, o, r, n, h, y, p) {
+function It(e, t, l, o, r, n, u, y, p) {
   if (o) {
     let a = [], m = [], b = [];
     const P = n.length;
@@ -470,8 +470,8 @@ function It(e, t, l, o, r, n, h, y, p) {
         }
       else
         a.push(T);
-      P > v && (m.push(n[v]), b.push(h[v]));
-    }), r = a, n = m, h = b;
+      P > v && (m.push(n[v]), b.push(u[v]));
+    }), r = a, n = m, u = b;
   } else {
     let a;
     try {
@@ -482,9 +482,9 @@ function It(e, t, l, o, r, n, h, y, p) {
       else
         throw m;
     }
-    a ? y ? (n.push(...a), h.push(
+    a ? y ? (n.push(...a), u.push(
       ...a.reduce((m, b) => [...m, t], [])
-    ), p ? r = Ke(a, l) : r = l.split(e)) : (n.push(e.toString()), h.push(t), p ? r = Ke(a, l) : r = l.split(e).reduce((m, b, P) => P >= 2 ? (m[1] += e + b, m) : [...m, b], [])) : r.push(l), o = !0;
+    ), p ? r = Ke(a, l) : r = l.split(e)) : (n.push(e.toString()), u.push(t), p ? r = Ke(a, l) : r = l.split(e).reduce((m, b, P) => P >= 2 ? (m[1] += e + b, m) : [...m, b], [])) : r.push(l), o = !0;
   }
   return {
     v: e,
@@ -492,12 +492,12 @@ function It(e, t, l, o, r, n, h, y, p) {
     splittedText: o,
     splitValue: r,
     matchValue: n,
-    styleMatchValue: h
+    styleMatchValue: u
   };
 }
 function at(e, t, l, o, r) {
   if (typeof e == "object") {
-    let n = "", h = [], y = [], p = [], a = !1;
+    let n = "", u = [], y = [], p = [], a = !1;
     if (Object.keys(e).forEach((T) => {
       const v = e[T];
       if (T !== "reg") {
@@ -507,12 +507,12 @@ function at(e, t, l, o, r) {
           t,
           a,
           p,
-          h,
+          u,
           y,
           !1,
           r
         );
-        a = c.splittedText, p = c.splitValue, h = c.matchValue, y = c.styleMatchValue;
+        a = c.splittedText, p = c.splitValue, u = c.matchValue, y = c.styleMatchValue;
       }
     }), "reg" in e && Array.isArray(e.reg)) {
       const T = e.reg.length;
@@ -526,18 +526,18 @@ function at(e, t, l, o, r) {
             t,
             a,
             p,
-            h,
+            u,
             y,
             !0,
             r
           );
-          a = L.splittedText, p = L.splitValue, h = L.matchValue, y = L.styleMatchValue;
+          a = L.splittedText, p = L.splitValue, u = L.matchValue, y = L.styleMatchValue;
         }
       }
     }
     const b = p.length - 1, P = o in l ? l[o] : "";
     for (let T = 0; T < b; T++) {
-      const v = p[T], c = h[T], L = y[T];
+      const v = p[T], c = u[T], L = y[T];
       v.length > 0 && (n += "<r>" + P + '<t xml:space="preserve">' + v + "</t></r>"), c.length > 0 && (n += "<r>" + (l[L] ? l[L] : P) + '<t xml:space="preserve">' + c + "</t></r>");
     }
     return p[b].length > 0 ? n = "<si>" + n + "<r>" + P + "<t>" + De(p[b]) + "</t></r></si>" : n = "<si>" + n + "</si>", n;
@@ -697,11 +697,11 @@ const Nt = {
   "Z"
 ], Pt = (e, t, l = !1, o) => {
   let r, n = !1;
-  return typeof o == "function" ? (r = o, n = !0) : r = fetch, r(e).then((h) => n ? h : l ? h.arrayBuffer() : h.blob()).then((h) => n || l ? h : new File([h], t)).catch((h) => {
-    throw h;
+  return typeof o == "function" ? (r = o, n = !0) : r = fetch, r(e).then((u) => n ? u : l ? u.arrayBuffer() : u.blob()).then((u) => n || l ? u : new File([u], t)).catch((u) => {
+    throw u;
   });
 };
-function je(e, t) {
+function Re(e, t) {
   e = e.toUpperCase();
   let l = e.replace(/[0-9]/g, "");
   if (l.length == 0)
@@ -739,11 +739,11 @@ function ro(e, t) {
 function no(e, t) {
   let l = t, o = it[e];
   return Object.keys(o).forEach((n) => {
-    const h = n.split(".");
+    const u = n.split(".");
     let y = l, p = o[n];
-    for (let a = 0; a < h.length; a++) {
-      const m = h[a];
-      y[m] ? y = y[m] : h.length - 1 == a ? y[m] = p : (y[m] = {}, y = y[m]);
+    for (let a = 0; a < u.length; a++) {
+      const m = u[a];
+      y[m] ? y = y[m] : u.length - 1 == a ? y[m] = p : (y[m] = {}, y = y[m]);
     }
   }), l;
 }
@@ -862,7 +862,7 @@ async function ft(e, t = "") {
     }
   );
   m == null || m.file("styles.xml", Zt(B, L));
-  let te = '<Override ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml" PartName="/xl/worksheets/sheet1.xml" />', j = "", $ = 0, Z = "", q = "", H = {};
+  let oe = '<Override ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml" PartName="/xl/worksheets/sheet1.xml" />', R = "", $ = 0, Z = "", q = "", H = {};
   const k = {};
   let K = "", z = 4, G = !1, Y = -1, Ce = [], J = 1;
   const ye = {
@@ -909,7 +909,7 @@ async function ft(e, t = "") {
     let N = "", O = i.shiftTop && i.shiftTop >= 0 ? i.shiftTop + 1 : 1, w = "", X = "", ce = "", Te = "", Ee = "", Ae = "", Ue = !1, pt = "", ht = "", ut = "", yt = "", xe = Object.assign([], i.merges), ue = Object.assign({}, i.formula), We = Object.assign(
       [],
       i.conditionalFormatting
-    ), Ie = !1, pe = [], He = "", Ne = [], gt = [], Ge = [], Xe = [], ke = {}, Pe = "", Re = !1, Ze = "";
+    ), Ie = !1, pe = [], He = "", Ne = [], gt = [], Ge = [], Xe = [], ke = {}, Pe = "", je = !1, Ze = "";
     if (i.rtl && (Ee += ' rightToLeft="1" '), i.pageBreak) {
       const S = i.pageBreak;
       if (S.row && Array.isArray(S.row)) {
@@ -932,7 +932,7 @@ async function ft(e, t = "") {
     let xt = "";
     if (i.pageOption) {
       const S = i.pageOption;
-      if (S.isPortrait && (Re = !0), S.margin) {
+      if (S.isPortrait && (je = !0), S.margin) {
         const _ = S.margin;
         let A = {
           left: 0.7,
@@ -942,22 +942,22 @@ async function ft(e, t = "") {
           header: 0.3,
           footer: 0.3
         };
-        Object.keys(A).forEach((u) => {
-          typeof _[u] == "number" && (A[u] = _[u]);
+        Object.keys(A).forEach((h) => {
+          typeof _[h] == "number" && (A[h] = _[h]);
         }), xt = '<pageMargins left="' + A.left + '" right="' + A.right + '" top="' + A.top + '" bottom="' + A.bottom + '" header="' + A.header + '" footer="' + A.footer + '"/>';
       }
       let s = "", g = "", d = "", f = "";
       if (["header", "footer"].forEach((_) => {
         const A = _.charAt(0).toUpperCase() + _.substring(1);
         if (S[_]) {
-          const u = S[_];
-          typeof u == "object" && Object.keys(u).forEach((F) => {
+          const h = S[_];
+          typeof h == "object" && Object.keys(h).forEach((F) => {
             s.indexOf(F) < 0 && (s += F);
-            const le = u[F];
+            const le = h[F];
             let W = "";
-            if (Object.keys(le).reduce((D, R) => (R == "l" ? D.splice(0, 0, R) : R == "c" ? D.splice(1, 0, R) : R == "r" && D.splice(2, 0, R), D), []).forEach((D) => {
-              const R = le[D];
-              W += "&amp;" + D.toUpperCase(), R.styleId && M[R.styleId] && (W += M[R.styleId]), R.text && (W += R.text);
+            if (Object.keys(le).reduce((D, j) => (j == "l" ? D.splice(0, 0, j) : j == "c" ? D.splice(1, 0, j) : j == "r" && D.splice(2, 0, j), D), []).forEach((D) => {
+              const j = le[D];
+              W += "&amp;" + D.toUpperCase(), j.styleId && M[j.styleId] && (W += M[j.styleId]), j.text && (W += j.text);
             }), W = "<" + F + A + ">" + W + "</" + F + A + ">", F == "odd")
               g += W;
             else if (F == "even")
@@ -969,7 +969,7 @@ async function ft(e, t = "") {
           });
         }
       }), Pe = g + d + f, Pe.length > 0) {
-        Re = !0;
+        je = !0;
         const _ = s.length == 7 || s.length == 12 ? ' differentOddEven="1"' : "", A = s.indexOf("first") >= 0 ? ' differentFirst="1"' : "";
         Pe = "<headerFooter" + _ + A + ">" + Pe + "</headerFooter>";
       }
@@ -979,7 +979,7 @@ async function ft(e, t = "") {
       const s = i.viewOption;
       s.type && (Ae = s.type), s.hideRuler && (Ee += ' showRuler="0" '), s.hideGrid && (Ee += ' showGridLines="0" '), s.hideHeadlines && (Ee += ' showRowColHeaders="0" ');
       let g = s.splitOption;
-      if (typeof g > "u" && (Re = !1, typeof s.frozenOption == "object")) {
+      if (typeof g > "u" && (je = !1, typeof s.frozenOption == "object")) {
         const d = s.frozenOption;
         if (S = ' state="frozen" ', d.type == "R" || d.type == "ROW") {
           let f;
@@ -1025,13 +1025,13 @@ async function ft(e, t = "") {
           g.startAt && (d = g.startAt.two, g.startAt.one && (Ee += ' topLeftCell="' + g.startAt.one + '"')), d || (d = "A1"), Te = '<pane xSplit="' + (typeof g.split == "object" && g.split.x || g.split) + '" ySplit="' + (typeof g.split == "object" && g.split.y || g.split) + '" topLeftCell="' + d + '" activePane="bottomLeft"' + S + "/>";
         }
     }
-    if (Re && (Ae = "pageLayout"), i.checkbox) {
+    if (je && (Ae = "pageLayout"), i.checkbox) {
       Ue = !0;
       const S = ye.checkbox;
       i.checkbox.forEach((s, g) => {
         let d = S;
         if (s.link) {
-          let F = je(s.link, n);
+          let F = Re(s.link, n);
           d = d.replace(
             "**fmlaLink**",
             'fmlaLink="$' + n[F.col] + "$" + (F.row + 1) + '"'
@@ -1042,7 +1042,7 @@ async function ft(e, t = "") {
         let f = E + "" + ve++;
         const I = "_x0000_s" + f;
         ht += we.checkbox.replace("***id***", I).replace("***text***", s.text);
-        let _ = s.startStr, A = s.endStr, u = {
+        let _ = s.startStr, A = s.endStr, h = {
           start: {
             col: 0,
             row: 0
@@ -1052,7 +1052,7 @@ async function ft(e, t = "") {
             row: 1
           }
         };
-        if (s.col && s.row && (u = {
+        if (s.col && s.row && (h = {
           start: {
             col: s.col,
             row: s.row - 1
@@ -1062,21 +1062,21 @@ async function ft(e, t = "") {
             row: s.row
           }
         }), typeof _ == "string" && _.length >= 2) {
-          let F = je(_, n);
-          u.start = {
+          let F = Re(_, n);
+          h.start = {
             ...F
-          }, u.end = {
+          }, h.end = {
             col: F.col + 1,
             row: F.row + 1
           };
         }
         if (typeof A == "string" && A.length >= 2) {
-          let F = je(A, n);
-          F.row += 1, F.col += 1, u.end = {
+          let F = Re(A, n);
+          F.row += 1, F.col += 1, h.end = {
             ...F
           };
         }
-        yt += '<mc:AlternateContent xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"><mc:Choice Requires="x14"><control shapeId="' + f + '" r:id="rId' + (7 + g) + '" name="' + s.text + '"><controlPr defaultSize="0" autoFill="0" autoLine="0" autoPict="0"><anchor moveWithCells="1"><from><xdr:col>' + u.start.col + "</xdr:col><xdr:colOff>19050</xdr:colOff><xdr:row>" + u.start.row + "</xdr:row><xdr:rowOff>19050</xdr:rowOff></from><to><xdr:col>" + u.end.col + "</xdr:col><xdr:colOff>819150</xdr:colOff><xdr:row>" + u.end.row + "</xdr:row><xdr:rowOff>0</xdr:rowOff></to></anchor></controlPr></control></mc:Choice></mc:AlternateContent>", ut += '<Relationship Id="rId' + (7 + g) + '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/ctrlProp" Target="../ctrlProps/ctrlProp' + ae.length + '.xml" />', pt += '<mc:AlternateContent xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"><mc:Choice xmlns:a14="http://schemas.microsoft.com/office/drawing/2010/main" Requires="a14"><xdr:twoCellAnchor editAs="oneCell"><xdr:from><xdr:col>' + u.start.col + "</xdr:col><xdr:colOff>19050</xdr:colOff><xdr:row>" + u.start.row + "</xdr:row><xdr:rowOff>19050</xdr:rowOff></xdr:from><xdr:to><xdr:col>" + u.end.col + "</xdr:col><xdr:colOff>819150</xdr:colOff><xdr:row>" + u.end.row + '</xdr:row><xdr:rowOff>0</xdr:rowOff></xdr:to><xdr:sp macro="" textlink=""><xdr:nvSpPr><xdr:cNvPr id="' + f + '" name="' + s.text + '" hidden="1"><a:extLst><a:ext uri=""><a14:compatExt spid="' + I + '"/></a:ext><a:ext uri=""><a16:creationId xmlns:a16="http://schemas.microsoft.com/office/drawing/2014/main" id=""/></a:ext></a:extLst></xdr:cNvPr><xdr:cNvSpPr/></xdr:nvSpPr><xdr:spPr bwMode="auto"><a:xfrm><a:off x="0" y="0"/><a:ext cx="0" cy="0"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom><a:noFill/><a:ln><a:noFill/></a:ln></xdr:spPr><xdr:txBody><a:bodyPr vertOverflow="clip" wrap="square" lIns="27432" tIns="18288" rIns="0" bIns="18288" anchor="ctr" upright="1"/><a:lstStyle/><a:p><a:pPr algn="l" rtl="0"><a:defRPr sz="1000"/></a:pPr><a:r><a:rPr lang="en-US" sz="800" b="0" i="0" u="none" strike="noStrike" baseline="0"><a:solidFill><a:srgbClr val="000000"/></a:solidFill><a:latin typeface="Segoe UI"/><a:cs typeface="Segoe UI"/></a:rPr><a:t>' + s.text + "</a:t></a:r></a:p></xdr:txBody></xdr:sp><xdr:clientData/></xdr:twoCellAnchor></mc:Choice><mc:Fallback/></mc:AlternateContent>";
+        yt += '<mc:AlternateContent xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"><mc:Choice Requires="x14"><control shapeId="' + f + '" r:id="rId' + (7 + g) + '" name="' + s.text + '"><controlPr defaultSize="0" autoFill="0" autoLine="0" autoPict="0"><anchor moveWithCells="1"><from><xdr:col>' + h.start.col + "</xdr:col><xdr:colOff>19050</xdr:colOff><xdr:row>" + h.start.row + "</xdr:row><xdr:rowOff>19050</xdr:rowOff></from><to><xdr:col>" + h.end.col + "</xdr:col><xdr:colOff>819150</xdr:colOff><xdr:row>" + h.end.row + "</xdr:row><xdr:rowOff>0</xdr:rowOff></to></anchor></controlPr></control></mc:Choice></mc:AlternateContent>", ut += '<Relationship Id="rId' + (7 + g) + '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/ctrlProp" Target="../ctrlProps/ctrlProp' + ae.length + '.xml" />', pt += '<mc:AlternateContent xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"><mc:Choice xmlns:a14="http://schemas.microsoft.com/office/drawing/2010/main" Requires="a14"><xdr:twoCellAnchor editAs="oneCell"><xdr:from><xdr:col>' + h.start.col + "</xdr:col><xdr:colOff>19050</xdr:colOff><xdr:row>" + h.start.row + "</xdr:row><xdr:rowOff>19050</xdr:rowOff></xdr:from><xdr:to><xdr:col>" + h.end.col + "</xdr:col><xdr:colOff>819150</xdr:colOff><xdr:row>" + h.end.row + '</xdr:row><xdr:rowOff>0</xdr:rowOff></xdr:to><xdr:sp macro="" textlink=""><xdr:nvSpPr><xdr:cNvPr id="' + f + '" name="' + s.text + '" hidden="1"><a:extLst><a:ext uri=""><a14:compatExt spid="' + I + '"/></a:ext><a:ext uri=""><a16:creationId xmlns:a16="http://schemas.microsoft.com/office/drawing/2014/main" id=""/></a:ext></a:extLst></xdr:cNvPr><xdr:cNvSpPr/></xdr:nvSpPr><xdr:spPr bwMode="auto"><a:xfrm><a:off x="0" y="0"/><a:ext cx="0" cy="0"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom><a:noFill/><a:ln><a:noFill/></a:ln></xdr:spPr><xdr:txBody><a:bodyPr vertOverflow="clip" wrap="square" lIns="27432" tIns="18288" rIns="0" bIns="18288" anchor="ctr" upright="1"/><a:lstStyle/><a:p><a:pPr algn="l" rtl="0"><a:defRPr sz="1000"/></a:pPr><a:r><a:rPr lang="en-US" sz="800" b="0" i="0" u="none" strike="noStrike" baseline="0"><a:solidFill><a:srgbClr val="000000"/></a:solidFill><a:latin typeface="Segoe UI"/><a:cs typeface="Segoe UI"/></a:rPr><a:t>' + s.text + "</a:t></a:r></a:p></xdr:txBody></xdr:sp><xdr:clientData/></xdr:twoCellAnchor></mc:Choice><mc:Fallback/></mc:AlternateContent>";
       });
     }
     let Je;
@@ -1113,9 +1113,9 @@ async function ft(e, t = "") {
       const S = i.headers.length;
       let s = "";
       if (i.title) {
-        const f = i.title, I = f.comment, _ = f.shiftTop && f.shiftTop >= 0 ? f.shiftTop : 0, A = i.shiftLeft && i.shiftLeft >= 0 ? i.shiftLeft : 0, u = f.shiftLeft && f.shiftLeft + A >= 0 ? f.shiftLeft + A : A, F = f.consommeRow ? f.consommeRow - 1 : 1, le = f.consommeCol ? f.consommeCol : S, W = F == 0 && typeof f.height == "number" ? ' ht="' + f.height + '" customHeight="1" ' : "", D = f.styleId ? f.styleId : "titleStyle", R = n[u] + "" + (O + _);
+        const f = i.title, I = f.comment, _ = f.shiftTop && f.shiftTop >= 0 ? f.shiftTop : 0, A = i.shiftLeft && i.shiftLeft >= 0 ? i.shiftLeft : 0, h = f.shiftLeft && f.shiftLeft + A >= 0 ? f.shiftLeft + A : A, F = f.consommeRow ? f.consommeRow - 1 : 1, le = f.consommeCol ? f.consommeCol : S, W = F == 0 && typeof f.height == "number" ? ' ht="' + f.height + '" customHeight="1" ' : "", D = f.styleId ? f.styleId : "titleStyle", j = n[h] + "" + (O + _);
         if (xe.push(
-          R + ":" + n[u + le - 1] + (O + F + _)
+          j + ":" + n[h + le - 1] + (O + F + _)
         ), typeof I < "u") {
           Ie = !0;
           const ee = nt(
@@ -1126,30 +1126,30 @@ async function ft(e, t = "") {
           let fe = pe.length;
           if (ee.hasAuthor && typeof ee.author < "u") {
             let Q = ee.author.toString();
-            const oe = pe.indexOf(Q);
-            oe < 0 ? pe.push(Q) : fe = oe;
+            const re = pe.indexOf(Q);
+            re < 0 ? pe.push(Q) : fe = re;
           }
           Ne.push({
             row: O + _ - 1,
-            col: u
+            col: h
           }), He += lt(
-            R,
+            j,
             ee.commentStr,
             ee.commentStyle,
             fe
           );
         }
         typeof f.text == "string" && (x[O + _] = {
-          startTag: '<row r="' + (O + _) + '" ' + W + ' spans="1:' + (u + le - 1) + '">',
-          details: '<c r="' + R + '" ' + (e.styles[D] ? ' s="' + e.styles[D].index + '" ' : "") + ' t="s"><v>' + $ + "</v></c>",
+          startTag: '<row r="' + (O + _) + '" ' + W + ' spans="1:' + (h + le - 1) + '">',
+          details: '<c r="' + j + '" ' + (e.styles[D] ? ' s="' + e.styles[D].index + '" ' : "") + ' t="s"><v>' + $ + "</v></c>",
           endTag: "</row>"
-        }, s += '<row r="' + (O + _) + '" ' + W + ' spans="1:' + (u + le - 1) + '">', s += '<c r="' + R + '" ' + (e.styles[D] ? ' s="' + e.styles[D].index + '" ' : "") + ' t="s"><v>' + $ + "</v></c>", s += "</row>", $++, H[f.text] = f.text, f.multiStyleValue ? j += at(
+        }, s += '<row r="' + (O + _) + '" ' + W + ' spans="1:' + (h + le - 1) + '">', s += '<c r="' + j + '" ' + (e.styles[D] ? ' s="' + e.styles[D].index + '" ' : "") + ' t="s"><v>' + $ + "</v></c>", s += "</row>", $++, H[f.text] = f.text, f.multiStyleValue ? R += at(
           f.multiStyleValue,
           f.text,
           B.commentSyntax.value,
           D,
           i.useSplitBaseOnMatch
-        ) : j += "<si><t>" + De(f.text) + "</t></si>"), O += _ + F + 1;
+        ) : R += "<si><t>" + De(f.text) + "</t></si>"), O += _ + F + 1;
       }
       let g = i.headerStyleKey ? i.headerStyleKey : null, d = 0;
       if (typeof i.shiftLeft == "number" && i.shiftLeft >= 0 && (d = i.shiftLeft), se && (N += '<tableColumns count="' + i.headers.length + '">', de || (de = m == null ? void 0 : m.folder("tables"))), U.start = n[d] + "" + O, U.end = n[d + i.headers.length - 1] + "" + (O + i.data.length), i.headers.forEach((f, I) => {
@@ -1172,7 +1172,7 @@ async function ft(e, t = "") {
           return;
         const _ = n[I] + "" + O;
         if (typeof i.commentCondition == "function") {
-          const u = i.commentCondition(
+          const h = i.commentCondition(
             f,
             null,
             f.label,
@@ -1180,18 +1180,18 @@ async function ft(e, t = "") {
             I,
             !0
           );
-          u && (f.comment = u);
+          (typeof h == "string" || typeof h == "object" && h != null) && (f.comment = h);
         }
         if (f.comment) {
           Ie = !0;
-          const u = nt(
+          const h = nt(
             f.comment,
             B.commentSyntax.value,
             c
           );
           let F = pe.length;
-          if (u.hasAuthor && typeof u.author < "u") {
-            let le = u.author.toString();
+          if (h.hasAuthor && typeof h.author < "u") {
+            let le = h.author.toString();
             const W = pe.indexOf(le);
             W < 0 ? pe.push(le) : F = W;
           }
@@ -1200,23 +1200,23 @@ async function ft(e, t = "") {
             col: I
           }), He += lt(
             _,
-            u.commentStr,
-            u.commentStyle,
+            h.commentStr,
+            h.commentStyle,
             F
           );
         }
         const A = ue && ue[_];
         if (A) {
-          const u = rt(
+          const h = rt(
             _,
             A,
             C,
             e.styles
           );
-          u.needCalcChain && (ge = !0, ie += u.chainCell), w += u.cell, delete ue[_];
+          h.needCalcChain && (ge = !0, ie += h.chainCell), w += h.cell, delete ue[_];
         } else {
           if (w += '<c r="' + n[I] + O + '" ' + (g && e.styles && e.styles[g] ? ' s="' + e.styles[g].index + '" ' : "") + ' t="s"><v>' + $ + "</v></c>", typeof i.multiStyleCondition == "function") {
-            const u = i.multiStyleCondition(
+            const h = i.multiStyleCondition(
               f,
               null,
               f.label,
@@ -1224,15 +1224,15 @@ async function ft(e, t = "") {
               I,
               !0
             );
-            u && (f.multiStyleValue = u);
+            h && (f.multiStyleValue = h);
           }
-          f.multiStyleValue ? j += at(
+          f.multiStyleValue ? R += at(
             f.multiStyleValue,
             f.text,
             B.commentSyntax.value,
             g || "",
             i.useSplitBaseOnMatch
-          ) : j += "<si><t>" + De(f.text) + "</t></si>", H[f.text] = f.text, $++;
+          ) : R += "<si><t>" + De(f.text) + "</t></si>", H[f.text] = f.text, $++;
         }
       }), se && (N += "</tableColumns>"), i.withoutHeader)
         w += s;
@@ -1246,37 +1246,37 @@ async function ft(e, t = "") {
       }
       if (Array.isArray(i.data)) {
         const f = i.mapSheetDataOption && i.mapSheetDataOption.outlineLevel ? i.mapSheetDataOption.outlineLevel : "outlineLevel", I = i.mapSheetDataOption && i.mapSheetDataOption.hidden ? i.mapSheetDataOption.hidden : "hidden", _ = i.mapSheetDataOption && i.mapSheetDataOption.height ? i.mapSheetDataOption.height : "height", A = i.data.length;
-        i.data.forEach((u, F) => {
-          if (u.mergeType)
-            for (let R = 0; R < u.mergeType.length; R++) {
-              const ee = u.mergeType[R], fe = u.mergeStart[R], Q = u.mergeValue[E];
-              let oe = "";
-              ee == "both" ? oe = n[fe] + "" + O + ":" + n[fe + Q[1]] + (O + Q[0]) : ee == "col" ? oe = n[fe] + "" + O + ":" + n[fe + Q[0]] + O : oe = n[fe] + "" + O + ":" + n[fe] + (O + Q[0]), xe.push(oe);
+        i.data.forEach((h, F) => {
+          if (h.mergeType)
+            for (let j = 0; j < h.mergeType.length; j++) {
+              const ee = h.mergeType[j], fe = h.mergeStart[j], Q = h.mergeValue[E];
+              let re = "";
+              ee == "both" ? re = n[fe] + "" + O + ":" + n[fe + Q[1]] + (O + Q[0]) : ee == "col" ? re = n[fe] + "" + O + ":" + n[fe + Q[0]] + O : re = n[fe] + "" + O + ":" + n[fe] + (O + Q[0]), xe.push(re);
             }
-          const le = u.rowStyle, W = '<row r="' + O + '" spans="1:' + S + '" ' + (_ in u ? 'ht="' + u[_] + '" customHeight="1"' : "") + (f in u ? ' outlineLevel="' + u[f] + '"' : "") + (I in u ? ' hidden="' + u[I] + '"' : "") + " >";
+          const le = h.rowStyle, W = '<row r="' + O + '" spans="1:' + S + '" ' + (_ in h ? 'ht="' + h[_] + '" customHeight="1"' : "") + (f in h ? ' outlineLevel="' + h[f] + '"' : "") + (I in h ? ' hidden="' + h[I] + '"' : "") + " >";
           w += W;
           let D = "";
-          gt.forEach((R, ee) => {
+          gt.forEach((j, ee) => {
             d && (ee += d);
-            const fe = u[R] * 1;
-            let Q = i.convertStringToNumber && !isNaN(fe) ? fe : u[R], oe = le;
-            if (i.styleCellCondition && typeof i.styleCellCondition == "function" && (oe = i.styleCellCondition(
+            const fe = h[j] * 1;
+            let Q = i.convertStringToNumber && !isNaN(fe) ? fe : h[j], re = le;
+            if (i.styleCellCondition && typeof i.styleCellCondition == "function" && (re = i.styleCellCondition(
               Q,
-              u,
+              h,
               O,
               ee,
               !1,
               v
             ) || le), i.mergeRowDataCondition && typeof i.mergeRowDataCondition == "function") {
-              let re = i.mergeRowDataCondition(
+              let te = i.mergeRowDataCondition(
                 Q,
-                R,
+                j,
                 ee,
                 !1
               );
               const ne = n[ee];
               let be = ke[ne];
-              re === !0 ? (!be || be && !be.inProgress) && (ke[ne] = {
+              te === !0 ? (!be || be && !be.inProgress) && (ke[ne] = {
                 inProgress: !0,
                 start: O
               }) : be && be.inProgress && (xe.push(
@@ -1289,21 +1289,21 @@ async function ft(e, t = "") {
             typeof Q > "u" && (Q = "");
             const $e = n[ee] + "" + O;
             if (typeof i.commentCondition == "function") {
-              const re = i.commentCondition(
+              const te = i.commentCondition(
                 Q,
-                u,
-                R,
+                h,
+                j,
                 O,
                 ee,
                 !1
               );
-              re && (typeof u.comment != "object" && (u.comment = {}), u.comment[R] = re);
+              (typeof te == "string" || typeof te == "object" && te != null) && (typeof h.comment != "object" && (h.comment = {}), h.comment[j] = te);
             }
-            if (typeof u.comment == "object" && R in u.comment) {
-              const re = u.comment[R];
+            if (typeof h.comment == "object" && j in h.comment) {
+              const te = h.comment[j];
               Ie = !0;
               const ne = nt(
-                re,
+                te,
                 B.commentSyntax.value,
                 c
               );
@@ -1326,35 +1326,35 @@ async function ft(e, t = "") {
             }
             const Et = ue && ue[$e];
             if (Et) {
-              const re = rt($e, Et, C);
-              re.needCalcChain && (ge = !0, ie += re.chainCell), w += re.cell, D += re.cell, delete ue[$e];
+              const te = rt($e, Et, C);
+              te.needCalcChain && (ge = !0, ie += te.chainCell), w += te.cell, D += te.cell, delete ue[$e];
             } else if (typeof Q == "string") {
-              const re = '<c r="' + n[ee] + O + '" t="s" ' + (oe && e.styles && e.styles[oe] ? 's="' + e.styles[oe].index + '"' : "") + "><v>" + $ + "</v></c>";
-              if (D += re, w += re, typeof i.multiStyleCondition == "function") {
+              const te = '<c r="' + n[ee] + O + '" t="s" ' + (re && e.styles && e.styles[re] ? 's="' + e.styles[re].index + '"' : "") + "><v>" + $ + "</v></c>";
+              if (D += te, w += te, typeof i.multiStyleCondition == "function") {
                 const ne = i.multiStyleCondition(
                   Q,
-                  u,
-                  R,
+                  h,
+                  j,
                   O,
                   ee,
                   !1
                 );
-                ne && ((!("multiStyleValue" in u) || typeof u.multiStyleValue > "u") && (u.multiStyleValue = {}), u.multiStyleValue[R] = ne);
+                ne && ((!("multiStyleValue" in h) || typeof h.multiStyleValue > "u") && (h.multiStyleValue = {}), h.multiStyleValue[j] = ne);
               }
-              "multiStyleValue" in u && u.multiStyleValue && R in u.multiStyleValue ? j += at(
-                u.multiStyleValue[R],
+              "multiStyleValue" in h && h.multiStyleValue && j in h.multiStyleValue ? R += at(
+                h.multiStyleValue[j],
                 Q,
                 B.commentSyntax.value,
-                oe || "",
+                re || "",
                 i.useSplitBaseOnMatch
-              ) : j += "<si><t>" + De(Q) + "</t></si>", H[Q] = Q, $++;
+              ) : R += "<si><t>" + De(Q) + "</t></si>", H[Q] = Q, $++;
             } else {
-              const re = '<c r="' + n[ee] + O + '" ' + (oe && e.styles && e.styles[oe] ? 's="' + e.styles[oe].index + '"' : "") + "><v>" + Q + "</v></c>";
-              w += re, D += re;
+              const te = '<c r="' + n[ee] + O + '" ' + (re && e.styles && e.styles[re] ? 's="' + e.styles[re].index + '"' : "") + "><v>" + Q + "</v></c>";
+              w += te, D += te;
             }
-          }), A - 1 == F && Object.keys(ke).forEach((R) => {
-            ke[R].inProgress && xe.push(
-              R + ke[R].start + ":" + R + O
+          }), A - 1 == F && Object.keys(ke).forEach((j) => {
+            ke[j].inProgress && xe.push(
+              j + ke[j].start + ":" + j + O
             );
           }), x[O] = {
             startTag: W,
@@ -1393,23 +1393,23 @@ async function ft(e, t = "") {
             );
             A.needCalcChain && (ge = !0, ie += A.chainCell), I[A.row] ? I[A.row] += A.cell : I[A.row] = A.cell;
           }), Object.keys(I).forEach((_) => {
-            const A = _, u = I[A];
+            const A = _, h = I[A];
             let F = x[A];
             if (F) {
-              const le = F.startTag + F.details + u + F.endTag;
+              const le = F.startTag + F.details + h + F.endTag;
               let W = new RegExp(F.startTag + "[\\n\\s\\S]*?</row>");
               w = w.replace(W, le);
             } else
-              w += '<row r="' + _ + '" spans="1:' + S + '"  >' + u + "</row>", x[A] = {
+              w += '<row r="' + _ + '" spans="1:' + S + '"  >' + h + "</row>", x[A] = {
                 startTag: '<row r="' + _ + '" spans="1:' + S + '"  >',
                 endTag: "</row>",
-                details: u
+                details: h
               };
           });
         }
       }
     }
-    E > 0 && (te += '<Override    ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"    PartName="/xl/worksheets/sheet' + (E + 1) + '.xml" />');
+    E > 0 && (oe += '<Override    ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"    PartName="/xl/worksheets/sheet' + (E + 1) + '.xml" />');
     const bt = i.name ? i.name : "sheet" + (E + 1), Vt = i.state ? i.state : "visible";
     Z += '<sheet state="' + Vt + '" name="' + bt + '" sheetId="' + (E + 1) + '" r:id="rId' + (z + 1) + '" />', q += '<Relationship Id="rId' + (z + 1) + '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet' + (E + 1) + '.xml" />', K += "<vt:lpstr>" + ("sheet" + (E + 1)) + "</vt:lpstr>", i.selected && (G = !0, Y = E);
     const Ct = i.sortAndFilter ? 'filterMode="1"' : "";
@@ -1425,7 +1425,7 @@ async function ft(e, t = "") {
         const f = d + 1;
         let I = g.image;
         const _ = g.name;
-        let A = g.obj.from, u = g.obj.to, F = g.obj.margin;
+        let A = g.obj.from, h = g.obj.to, F = g.obj.margin;
         g.type;
         let le = g.obj.type, W = g.obj.extent;
         typeof W > "u" && (W = {
@@ -1447,18 +1447,18 @@ async function ft(e, t = "") {
           }
         };
         if (typeof A == "string" && A.length >= 2) {
-          let R = je(A, n);
+          let j = Re(A, n);
           D.start = {
-            ...R
+            ...j
           }, D.end = {
-            col: R.col + 1,
-            row: R.row + 1
+            col: j.col + 1,
+            row: j.row + 1
           };
         }
-        if (typeof u == "string" && u.length >= 2) {
-          let R = je(u, n);
-          R.row += 1, R.col += 1, D.end = {
-            ...R
+        if (typeof h == "string" && h.length >= 2) {
+          let j = Re(h, n);
+          j.row += 1, j.col += 1, D.end = {
+            ...j
           };
         }
         D.end.mR = 0, D.end.mB = 0, D.start.mL = 0, D.start.mT = 0, F && ((F.all || F.right) && (D.end.mR = F.all || F.right), (F.all || F.bottom) && (D.end.mB = F.all || F.bottom), (F.all || F.left) && (D.start.mL = F.all || F.left), (F.all || F.top) && (D.start.mT = F.all || F.top)), le == "one" ? et += "<xdr:oneCellAnchor><xdr:from><xdr:col>" + D.start.col + "</xdr:col><xdr:colOff>" + D.start.mT + "</xdr:colOff><xdr:row>" + D.start.row + "</xdr:row><xdr:rowOff>" + D.start.mL + '</xdr:rowOff></xdr:from><xdr:ext cx="' + W.cx + '" cy="' + W.cy + '"/><xdr:pic><xdr:nvPicPr><xdr:cNvPr id="' + f + '" name="Picture ' + f + '"></xdr:cNvPr><xdr:cNvPicPr preferRelativeResize="0" /></xdr:nvPicPr><xdr:blipFill><a:blip xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" r:embed="rId' + f + '"></a:blip><a:stretch><a:fillRect /></a:stretch></xdr:blipFill><xdr:spPr><a:prstGeom prst="rect"><a:avLst /></a:prstGeom><a:noFill /></xdr:spPr></xdr:pic><xdr:clientData /></xdr:oneCellAnchor>' : et += '<xdr:twoCellAnchor editAs="oneCell"><xdr:from><xdr:col>' + D.start.col + "</xdr:col><xdr:colOff>" + D.start.mT + "</xdr:colOff><xdr:row>" + D.start.row + "</xdr:row><xdr:rowOff>" + D.start.mL + "</xdr:rowOff></xdr:from><xdr:to><xdr:col>" + D.end.col + "</xdr:col><xdr:colOff>" + D.end.mB + "</xdr:colOff><xdr:row>" + D.end.row + "</xdr:row><xdr:rowOff>" + D.end.mR + '</xdr:rowOff></xdr:to><xdr:pic><xdr:nvPicPr><xdr:cNvPr id="' + f + '" name="Picture ' + f + '"></xdr:cNvPr><xdr:cNvPicPr preferRelativeResize="0" /></xdr:nvPicPr><xdr:blipFill><a:blip xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" r:embed="rId' + f + '"></a:blip><a:stretch><a:fillRect /></a:stretch></xdr:blipFill><xdr:spPr><a:prstGeom prst="rect"><a:avLst /></a:prstGeom><a:noFill /></xdr:spPr></xdr:pic><xdr:clientData /></xdr:twoCellAnchor>', b == null || b.file(_, I), s += '<Relationship Id="rId' + f + '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/' + _ + '" />';
@@ -1491,7 +1491,7 @@ async function ft(e, t = "") {
       cFDataString: Tt,
       sheetMargin: xt,
       sheetHeaderFooter: Pe,
-      isPortrait: Re,
+      isPortrait: je,
       drawersRels: wt,
       hasImages: Be,
       hasCheckbox: Ue,
@@ -1536,7 +1536,7 @@ async function ft(e, t = "") {
   ), m == null || m.file(
     "sharedStrings.xml",
     `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" count="` + ($ - 1) + '" uniqueCount="' + Object.keys(H).length + '"> ' + j + "</sst>"
+<sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" count="` + ($ - 1) + '" uniqueCount="' + Object.keys(H).length + '"> ' + R + "</sst>"
   );
   let Ve = m == null ? void 0 : m.folder("_rels");
   Ve == null || Ve.file(
@@ -1617,7 +1617,7 @@ async function ft(e, t = "") {
   if (p.file(
     "[Content_Types].xml",
     Jt(
-      te,
+      oe,
       mt,
       [...new Set(Ce)],
       Le,
@@ -1666,7 +1666,7 @@ function lo(e) {
       }), c in n || (o[c].labelCounter = 0, n[c] = !0);
       let L = [];
       const M = o[c].headers.length;
-      let V = {}, B = o[c].seenAt == a, te = v.headers.reduce((q, H, k) => (o[c].labelCounter++, M < o[c].labelCounter && L.push({
+      let V = {}, B = o[c].seenAt == a, oe = v.headers.reduce((q, H, k) => (o[c].labelCounter++, M < o[c].labelCounter && L.push({
         label: "c" + o[c].labelCounter,
         text: B ? H.text : ""
       }), V["c" + o[c].labelCounter] = H.text, {
@@ -1680,18 +1680,18 @@ function lo(e) {
             text: ""
           });
       r[c].index + 1 == a && (P[c] = r[c].value);
-      let j = P[c] || 0;
-      j > 0 && (!o[c].headerIndex || o[c].headerIndex && o[c].headerIndex != j ? o[c].data.push(V) : o[c].data[j] = {
-        ...o[c].data[j],
+      let R = P[c] || 0;
+      R > 0 && (!o[c].headerIndex || o[c].headerIndex && o[c].headerIndex != R ? o[c].data.push(V) : o[c].data[R] = {
+        ...o[c].data[R],
         ...V
-      }, o[c].headerIndex = j, j++);
-      let $ = Object.keys(te), Z = v.data.length >= o[c].data.length;
+      }, o[c].headerIndex = R, R++);
+      let $ = Object.keys(oe), Z = v.data.length >= o[c].data.length;
       if (o[c].data = v.data.reduce((q, H, k) => {
         let K = {};
-        return q.length > k + j ? K = q[k + j] : q.push(K), $.forEach((z) => {
-          let G = te[z];
+        return q.length > k + R ? K = q[k + R] : q.push(K), $.forEach((z) => {
+          let G = oe[z];
           K[G] = H[z] ? H[z] : "";
-        }), K.tableIndex = l, K.tableStringIndex = k + "," + T, q[k + j] = K, q;
+        }), K.tableIndex = l, K.tableStringIndex = k + "," + T, q[k + R] = K, q;
       }, o[c].data), Z && v.spaceY) {
         const q = o[c].headers.length;
         for (let H = 0; H < v.spaceY; H++) {
@@ -1710,8 +1710,8 @@ function lo(e) {
     }
     n = {};
   }
-  let h = Object.keys(o), y = [];
-  return h.reduce(
+  let u = Object.keys(o), y = [];
+  return u.reduce(
     (a, m) => {
       let b = o[m];
       return a.sheet.push({
@@ -1895,9 +1895,9 @@ const ao = {
     type: "object",
     validateFunction(e, t, l, o) {
       const r = Object.keys(t), n = ["outlineLevel", "hidden", "height"];
-      return r.forEach((h) => {
-        n.indexOf(h) < 0 && o && console.warn(
-          'The Schema of mapSheetDataOption does not include the "' + h + '" property.'
+      return r.forEach((u) => {
+        n.indexOf(u) < 0 && o && console.warn(
+          'The Schema of mapSheetDataOption does not include the "' + u + '" property.'
         );
       }), !0;
     }
@@ -2164,10 +2164,10 @@ const ao = {
 };
 function Kt(e, t = !0, l = !0) {
   Object.keys(e).forEach((r) => {
-    const n = e[r], h = Object.keys(n);
+    const n = e[r], u = Object.keys(n);
     if (n.format && !Nt[n.format])
       throw 'The "' + n.format + '" format that has been used is not defined.';
-    n.underline && n.doubleUnderline, h.forEach((y) => {
+    n.underline && n.doubleUnderline, u.forEach((y) => {
       let p = n[y];
       const a = ao[y];
       if (qe(p, a, y, t, l))
@@ -2178,16 +2178,16 @@ function Kt(e, t = !0, l = !0) {
 function Mt(e, t = !0, l = !0) {
   Array.isArray(e) || (e = [e]), e.forEach((o) => {
     Object.keys(o).forEach((n) => {
-      const h = o[n], y = so[n];
-      qe(h, y, n, t, l);
+      const u = o[n], y = so[n];
+      qe(u, y, n, t, l);
     });
   });
 }
 function co(e, t = !0, l = !0) {
   Object.keys(e).forEach((r) => {
     let n = e[r];
-    const h = io[r];
-    if (qe(n, h, r, t, l))
+    const u = io[r];
+    if (qe(n, u, r, t, l))
       if (r == "sheet")
         if (Array.isArray(n))
           Mt(n);
@@ -2228,7 +2228,7 @@ const fo = {
   validateSheetArrayFunction: Mt,
   validateStyleObjectFunction: Kt
 }, Symbol.toStringTag, { value: "Module" }));
-function Rt(e) {
+function jt(e) {
   if (typeof e > "u" || e == null)
     return "";
   typeof e != "string" && (e = String(e));
@@ -2238,37 +2238,37 @@ function Rt(e) {
 function mo(e) {
   return e ? " " : ",";
 }
-function jt(e, t) {
+function Rt(e, t) {
   return e.substring(0, e.length - t) + `
 `;
 }
 async function qt(e, t = !1, l = !1) {
   const o = mo(l), r = l ? ".txt" : ".csv", n = o.length;
-  let h = [];
+  let u = [];
   if (e.sheet.forEach((p) => {
     let a = "", m = "";
     const b = p.headers;
     let P = [], T = b.length;
     for (let v = 0; v < T; v++) {
       const c = b[v];
-      P.push(c.label), p.withoutHeader || (m += Rt(c.text) + o);
+      P.push(c.label), p.withoutHeader || (m += jt(c.text) + o);
     }
-    a += jt(m, n), T = p.data.length;
+    a += Rt(m, n), T = p.data.length;
     for (let v = 0; v < T; v++) {
       m = "";
       const c = p.data[v];
       P.forEach((L) => {
-        m += Rt(c[L]) + o;
-      }), a += jt(m, n);
+        m += jt(c[L]) + o;
+      }), a += Rt(m, n);
     }
-    h.push(a);
+    u.push(a);
   }), e.backend)
-    return h;
+    return u;
   const y = await import("./FileSaver.min-Di4lMG3c.js").then((p) => p.F).then((p) => p.saveAs);
   if (t) {
     const p = await import("./jszip.min-DoL7Cu0z.js").then((b) => b.j).then((b) => b.default);
     let a = new p();
-    h.forEach((b, P) => {
+    u.forEach((b, P) => {
       a.file("sheet" + (P + 1) + r, b);
     });
     const m = await a.generateAsync({ type: "blob" }).then(function(b) {
@@ -2279,7 +2279,7 @@ async function qt(e, t = !1, l = !1) {
       (e.fileName ? e.fileName : "tableRecord") + ".zip"
     ), "done";
   }
-  h.forEach((p) => {
+  u.forEach((p) => {
     var a = new Blob([p], {
       type: "text/" + (l ? "plain" : "csv") + ";charset=utf-8"
     });
@@ -2324,7 +2324,7 @@ const Dt = {
     background: "#EEEDEB"
   }
 };
-async function po(e, t, l, o, r = !0, n = !1, h = " ", y = !0, p = {
+async function po(e, t, l, o, r = !0, n = !1, u = " ", y = !0, p = {
   display: "flex",
   flexDirection: "column"
 }, a = {
@@ -2348,12 +2348,12 @@ async function po(e, t, l, o, r = !0, n = !1, h = " ", y = !0, p = {
 }, T = {
   background: "#EEEDEB"
 }) {
-  let v = await import("./read-utils-nvy4HsWt.js").then(
+  let v = await import("./read-utils-BRep2QN2.js").then(
     async (k) => await k.extractExcelData(e, !1, o)
   ), c = null;
   if (t ? c = document.querySelector(t) : l && (c = l), c == null && !n)
     throw "Container Node not found";
-  const L = Object.keys(p), M = Object.keys(a), V = Object.keys(m), B = Object.keys(b), te = Object.keys(P), j = Object.keys(T);
+  const L = Object.keys(p), M = Object.keys(a), V = Object.keys(m), B = Object.keys(b), oe = Object.keys(P), R = Object.keys(T);
   let $ = document.createElement("div");
   B.forEach((k) => {
     $.style[k] = b[k];
@@ -2369,21 +2369,21 @@ async function po(e, t, l, o, r = !0, n = !1, h = " ", y = !0, p = {
     const K = document.createElement("div");
     if (K.style.display = "none", !n) {
       const J = document.createElement("button");
-      te.forEach((ye) => {
+      oe.forEach((ye) => {
         J.style[ye] = P[ye];
       }), J.addEventListener("click", (ye) => {
         const ve = J.getAttribute("data-sheet"), we = c.querySelector(
           'div[data-sheet="' + ve + '"]'
         );
         if (we) {
-          j.forEach((ie) => {
+          R.forEach((ie) => {
             J.style[ie] = T[ie];
           });
           const Se = c.querySelector(
             "[data-sheet-button-activate]"
           );
           let ae = c.querySelector("[data-sheet-activate]");
-          we.setAttribute("data-sheet-activate", "1"), we.style.display = "flex", J.setAttribute("data-sheet-button-activate", "1"), Se && (te.forEach((ie) => {
+          we.setAttribute("data-sheet-activate", "1"), we.style.display = "flex", J.setAttribute("data-sheet-button-activate", "1"), Se && (oe.forEach((ie) => {
             Se.style[ie] = P[ie];
           }), Se.removeAttribute("data-sheet-button-activate")), ae && (ae.style.display = "none", ae.removeAttribute("data-sheet-activate"));
         } else
@@ -2401,7 +2401,7 @@ async function po(e, t, l, o, r = !0, n = !1, h = " ", y = !0, p = {
       for (let ye = 0; ye < J; ye++) {
         const ve = Y[ye], we = document.createElement("tr"), Se = Array.isArray(ve);
         for (let ae = 0; ae <= Ce; ae++) {
-          let ie = h;
+          let ie = u;
           if (Se) {
             const de = ve[ae];
             typeof de == "string" && (ie = de);
@@ -2426,24 +2426,24 @@ async function po(e, t, l, o, r = !0, n = !1, h = " ", y = !0, p = {
     const K = c.querySelector(
       'button[data-sheet="1"]'
     );
-    return K && (j.forEach((z) => {
+    return K && (R.forEach((z) => {
       K.style[z] = T[z];
     }), K.setAttribute("data-sheet-button-activate", "1")), "Done";
   }
 }
 async function uo(e, t, l = !0, o = "property") {
-  let r = await import("./read-utils-nvy4HsWt.js").then(
+  let r = await import("./read-utils-BRep2QN2.js").then(
     async (y) => await y.extractExcelData(e, !1, t)
-  ), n = {}, h = [];
+  ), n = {}, u = [];
   return Object.keys(r.sheetNameObject).forEach((y) => {
     const p = r.sheetNameObject[y], a = r.data[p] || r.data[y], m = r.maxLengthOfColumn[p] || r.maxLengthOfColumn[y];
     for (let T = 0; T <= m; T++)
-      h[T] = o + (T + 1);
+      u[T] = o + (T + 1);
     let b = l, P = [];
     a.forEach((T) => {
       let v = {};
       T.forEach((c, L) => {
-        typeof c == "string" && (b ? h[L] = c : v[h[L]] = c);
+        typeof c == "string" && (b ? u[L] = c : v[u[L]] = c);
       }), b = !1, P.push(v);
     }), n = Object.assign(n, {
       [p]: P
@@ -2469,7 +2469,7 @@ function Co(e, t) {
   return ft(Wt(e, t));
 }
 function vo(e, t = !1, l) {
-  return import("./read-utils-nvy4HsWt.js").then(
+  return import("./read-utils-BRep2QN2.js").then(
     (o) => o.extractExcelData(e, t, l)
   );
 }
@@ -2507,7 +2507,7 @@ export {
   xo as d,
   vo as e,
   wo as f,
-  je as g,
+  Re as g,
   To as h,
   Eo as i,
   ft as j,

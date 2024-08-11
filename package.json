@@ -79,7 +79,7 @@
     "ts-loader": "^9.5.1",
     "typescript": "^5.5.4",
     "vite": "^5.3.4",
-    "vite-plugin-dts": "^4.0.2"
+    "vite-plugin-dts": "^3.9.1"
   },
   "repository": "https://github.com/mohammadrezaeicode/mr-excel-repo.git",
   "bugs": {

@@ -2,7 +2,45 @@
 
 ![Test](https://github.com/mohammadrezaeicode/github-action/actions/workflows/test.yml/badge.svg) [![Release & Publish](https://github.com/mohammadrezaeicode/mr-excel-repo/actions/workflows/release.yml/badge.svg)](https://github.com/mohammadrezaeicode/mr-excel-repo/actions/workflows/release.yml)
 
-MR-Excel is a JavaScript library designed for reading and writing Excel files. This library allows you to extract data from Excel files, and when it comes to writing, it offers a range of features such as commenting, styling, Formulas, merging cells,Grouping rows, conditional formatting (Excel), multi-style values, and functions that can be used for cell merging, adding styles and commenting functionalities. The example has been moved to a separate repository for easier updates. You can find it in the ["**_`mr-excel-example-gallery`_**"](https://github.com/mohammadrezaeicode/mr-excel-example-gallery)([**_link_**](https://github.com/mohammadrezaeicode/mr-excel-example-gallery))
+`MR-Excel` is a powerful JavaScript library designed for reading and writing Excel files. It enables users to extract data seamlessly from Excel documents while providing an array of advanced writing features. These include commenting, styling, applying formulas, merging cells, inserting images into cells, adding background images, grouping rows, and implementing conditional formatting. Additionally, the library supports multi-style values and offers functions for cell merging and styling, as well as commenting features.
+
+For front-end-specific tasks, the library includes functions such as `excelToNode` and `convertTableToExcel`, which facilitate reading and inserting nodes into the DOM.This library also supports the generation of CSV and text file formats, enhancing its versatility for various data handling needs.
+
+important functions of library that are defined with specific use cases as follows:
+
+<a id="generate-excel"></a>
+
+- **`generateExcel`**: This is the primary function and serves as the main entry point for most other functions. Its responsibility is to generate an Excel file based on the received input data. We will provide examples of the various options that can be utilized.
+
+<a id="convert-table-to-excel"></a>
+
+- **`convertTableToExcel`**: This function is designed exclusively for **client-side** use. It requires passing a DOM element (a table element) as a parameter. The output of this function is an Excel file generated from the provided table.
+
+<a id="side-by-side-line-by-line"></a>
+
+- **`sideBySideLineByLine`**: This function offers the capability to generate a single-sheet Excel file containing multiple tables side by side and line by line.
+
+<a id="theme-base-generate"></a>
+
+- **`themeBaseGenerate`**: After version `6.0.0`, the themeBaseGenerate function requires a theme color instead of index-based themes. Previous themes and the corresponding code for necessary changes can be found at [this link](https://mohammadrezaeicode.github.io/mr-excel-theme-page/)
+
+<a id="extract-excel-data"></a>
+
+- **`extractExcelData`**:  This function accepts the URL of an Excel file, retrieves its data, and returns an object containing the sheets. Additionally, it includes a `fetchFunc` parameter that allows users to override the default request call (fetch) for backend use.
+
+<a id="generate-csv-txt"></a>
+
+- **`generateCSV && generateText`**: The `generateCSV` function produces a .csv file based on the excelTable input, while the `generateText` function generates a .txt file. This function includes a boolean property; if set to true, the generated files will be compressed into a zip file. It is important to note that .csv and .txt files do not support styles, formulas, and other similar features.
+
+<a id="excel-to-node"></a>
+
+- **`🆕 excelToNode`**: This function reads an uploaded Excel file and generates a representation of the tables from its sheets. It can either return the table directly or insert it into a specified container node provided as input.
+
+<a id="excel-to-json"></a>
+
+- **`🆕 excelToJson`**: This function reads an Excel file and returns a JSON object that represents the data contained in the file.
+
+The example has been moved to a separate repository for easier updates. You can find it in the ["**_`mr-excel-example-gallery`_**"](https://github.com/mohammadrezaeicode/mr-excel-example-gallery)([**_link_**](https://github.com/mohammadrezaeicode/mr-excel-example-gallery))
 
 ## Table of Contents
 
@@ -12,6 +50,7 @@ MR-Excel is a JavaScript library designed for reading and writing Excel files. T
 > You can return to the table of contents by clicking on ⬆️
 
 - [**`Installation`**](#installation)
+- [**`Install via Github `**](#install-github)
 - [**`Import`**](#import-package)
 - [**`Getting Started`**](#getting-started)
 - [**`generateExcel`**](#generate-excel)
@@ -60,45 +99,6 @@ MR-Excel is a JavaScript library designed for reading and writing Excel files. T
   - [**`Migrating from 3 to 4`**](#migrating-3)
   - [**`Migrating from 2 to 3`**](#migrating-2)
 
-## Introduction [⬆️](#table-of-contents)
-
-Our library offers comprehensive support for a wide range of features, including data formatting, formulas, styles, merged cells, and grouped rows. [Express/backend example](https://github.com/mohammadrezaeicode/mr-excel-repo/tree/main/example/express), [TypeScript example](https://github.com/mohammadrezaeicode/mr-excel-repo/tree/main/example/typescript)
-
-In version 2.1.0, we introduced a new feature called "convertTableToExcel," which enables the generation of an Excel file from a specified table or DOM element (table). The provided query is expected to be a valid input for the querySelector method. This enhancement allows for greater flexibility and convenience when creating Excel files directly from HTML tables.
-
-We have four functions that are defined with specific use cases as follows:
-
-<a id="generate-excel"></a>
-
-- **`generateExcel`**: This is the primary and most important function that serves as the entry point for all other functions. Its responsibility is to generate an Excel file based on the received input data. We will provide examples of the various options that can be utilized.
-
-<a id="convert-table-to-excel"></a>
-
-- **`convertTableToExcel`**: This function is designed exclusively for **client-side** use. It requires passing a DOM element (a table element) as a parameter. The output of this function is an Excel file generated from the provided table.
-
-<a id="side-by-side-line-by-line"></a>
-
-- **`sideBySideLineByLine`**: This function offers the capability to generate a single-sheet Excel file containing multiple tables side by side and line by line.
-
-<a id="theme-base-generate"></a>
-
-- **`themeBaseGenerate`**: After version `6.0.0`, the themeBaseGenerate function requires a theme color instead of index-based themes. Previous themes and the corresponding code for necessary changes can be found at [this link](https://mohammadrezaeicode.github.io/mr-excel-theme-page/)
-
-<a id="theme-base-generate"></a>
-
-- **`extractExcelData`**: We provide 'extract-excel-data-usage,' which takes the URL of an Excel file that needs to be read, retrieves and reads the data, and returns an object containing the sheets as the result.
-
-<a id="generate-csv-txt"></a>
-
-- **`generateCSV && generateText`**: The generateCSV function produces a .csv file based on the excelTable output, while the generateText function generates a .txt file. This function includes a boolean property; if set to true, the generated files will be compressed into a zip file. It is important to note that .csv and .txt files do not support styles, formulas, and other similar features.
-
-<a id="excel-to-node"></a>
-
-- **`🆕 excelToNode`**: The purpose of this function is to read and generate a representation of a sheet table from an uploaded Excel file. It can either return the table directly or insert it into a specified container node received from the input.
-
-<a id="excel-to-json"></a>
-
-- **`🆕 excelToJson`**: This function reads an Excel file and returns a JSON object that represents the data contained in the file.
 
 <a id="installation"></a>
 
@@ -135,6 +135,16 @@ pnpm install mr-excel
 
 Choose the package manager that suits your workflow, and effortlessly bring the power of our library into your project, enabling smooth generation of Excel tables with ease and efficiency.
 
+<a id="install-github"></a>
+
+## Install via Github  [⬆️](#table-of-contents)
+
+You can install the library from a repository by following the example below. This approach allows you to fork, customize, and set up your own repository. In this instance, we will install from the `mr-excel` repository using the `main` branch.
+
+```terminal/bash
+npm install https://github.com/mohammadrezaeicode/mr-excel-repo.git#main
+```
+
 <a id="import-package"></a>
 
 ## Import [⬆️](#table-of-contents)
@@ -156,17 +166,15 @@ import * as ExcelTable from "mr-excel";
 ExcelTable.generateExcel();
 ```
 
-### Lazy Import:
+### Dynamic Import/Lazy Loading:
 
 We recommend using this approach on the client side for import:
 
 ```javascript
-import("mr-excel").then((m) => {
-  m.generateExcel();
-});
+import("mr-excel").then((m) =>m.generateExcel());
 ```
 
-Ensure you choose the appropriate method based on your installation preferences and project requirements.
+Ensure you choose the appropriate method based on your installation preferences and project requirements.["**_`mr-excel-example-gallery`_**"](https://github.com/mohammadrezaeicode/mr-excel-example-gallery)([**_link_**](https://github.com/mohammadrezaeicode/mr-excel-example-gallery))
 
 <a id="getting-started"></a>
 
@@ -637,7 +645,7 @@ ExcelTable.generateText(data, true);
 
 <a id="excel-to-node-usage"></a>
 
-### 🆕 How to use How to use excelToNode
+### 🆕 How to use excelToNode
 
 <details>
 
@@ -653,7 +661,7 @@ ExcelTable.excelToNode(uri, queryForTable, containerElement, config)
 
 <a id="excel-to-json-usage"></a>
 
-### 🆕 How to use How to use excelToJson
+### 🆕 How to use excelToJson
 
 <details>
 
@@ -670,8 +678,6 @@ ExcelTable.excelToJson(uri,fetchFunction,withHeader,defaultPropertyPrefix)
 <a id="side-by-side-line-by-line-usage"></a>
 
 ### How to use sideBySideLineByLine
-
-`sideBySideLineByLine` is a new feature that enables the generation of multiple tables within a single Excel sheet.
 
 <details>
 
@@ -818,7 +824,7 @@ ExcelTable.sideBySideLineByLine(sideData);
 
 <a id="generate-excel-usage"></a>
 
-### generateExcel
+### How to use generateExcel
 
 <details>
 
@@ -985,7 +991,7 @@ ExcelTable.generateExcel(data);
 
 ## General option [⬆️](#table-of-contents)
 
-Each sheet has options for customization. You can change the sheet name using name, adjust the tab name color with tabColor, control visibility with state, add protection to a sheet via protectionOption, and implement sorting and filtering using sortAndFilter. In the example below, we will demonstrate how to utilize these properties. Additionally, for Excel file information, we offer options such as creator, created, notSave, and modified.
+Each sheet offers several customization options. You can rename the sheet using the `name` property, adjust the tab color with tabColor, control its visibility with the `state` property, add protection via `protectionOption`, and implement sorting and filtering using `sortAndFilter`. In the example below, we will demonstrate how to utilize these features effectively. Additionally, for Excel file information, we provide options such as `creator`, `created`, `notSave`, and `modified`.
 
 <details>
 
@@ -1118,7 +1124,7 @@ ExcelTable.generateExcel(data).then((res) => {
 
 ## fetch Option [⬆️](#table-of-contents)
 
-mr-Excel uses fetch (if the images option is used). If it is used with Node lower than 18.0.0, you may encounter problems. To fix this problem, you can add the fetch option. Here’s an example of how the function should look like:
+mr-Excel utilizes the `fetch` API when the images option is enabled. However, if you are using Node.js version lower than `18.0.0`, you may encounter issues. To resolve this, you can add the fetch option. Here’s an example of how the function should be structured:
 
 ```javascript
 import fetch from "cross-fetch";
@@ -1149,9 +1155,9 @@ const data = {
 
 ## Header Option [⬆️](#table-of-contents)
 
-We offer specific header options for Excel headers. The header is a mandatory component, so the withoutHeader option cannot be used to omit it. The headerHeight option is employed to determine the height of the header row. Additionally, we provide the headerStyleKey property, which specifies the most commonly used style for each cell (its value corresponds to the style ID; detailed functionality is explained in the Styles section).
+We provide specific options for customizing Excel headers. Since the header is a mandatory component, the `withoutHeader` option cannot be used to omit it. The `headerHeight` option allows you to set the height of the header row. Additionally, the `headerStyleKey` property specifies the default style for each cell, with its value corresponding to the style ID; detailed functionality is outlined in the Styles section.
 
-Each header cell is endowed with properties beyond the label and text. The size property defines the width of the column, while the formula property applies a formula to all rows (excluding the header) within the column, ultimately affecting the final cell in that column.
+Each header cell comes with additional properties beyond just the label and text. The `size` property defines the width of the column, while the `formula` property applies a formula to all rows (excluding the header) within that column, ultimately affecting the last cell in the column.
 
 <details>
 <summary>Display Code</summary>
@@ -1394,7 +1400,7 @@ ExcelTable.generateExcel(data);
 
 ## Formula Option [⬆️](#table-of-contents)
 
-We provide two distinct methods for defining formulas: customization and column type. In the customization approach, if you employ a cell containing data that is used within the formula, the formula will display an instance of the formula. When using the customization type, it's important to specify the formula type, which can be any of the following: AVERAGE, SUM, COUNT, MAX, or MIN.
+We offer two distinct methods for defining formulas: customization and column type. With the customization approach, if you use a cell containing data referenced in the formula, the formula will display the corresponding result. When utilizing this method, it's essential to specify the formula type, which can be one of the following: AVERAGE, SUM, COUNT, MAX, or MIN.
 
 <details>
 <summary>Display Code</summary>
@@ -1591,7 +1597,7 @@ ExcelTable.generateExcel(data);
 
 ### Time, Math, Custom Formula & etc [⬆️](#table-of-contents)
 
-We offer new formulas for mathematics, time, and more. Additionally, you can create complex formulas using the Custom Formula feature. One notable aspect of the Custom Formula feature is the ability to generate an array result formula. To achieve this, you must specify a range cell where the results are to be inserted and define the formula in the formula property. Moreover, you can use this feature to define a single result formula.
+We offer a variety of new formulas for mathematics, time, and more. Additionally, you can create complex formulas using the Custom Formula feature. A key aspect of this feature is the ability to generate array result formulas. To do this, you need to specify a range of cells where the results will be inserted and define the formula in the formula property. Furthermore, this feature also allows you to define a single result formula.
 
 <details>
 <summary>Display Code</summary>
@@ -2817,8 +2823,6 @@ ExcelTable.generateExcel(data);
 
 ## Comment Option [⬆️](#table-of-contents)
 
-After version 2.4.0 you can add comment on cells.
-
 <details>
 <summary>Display Code</summary>
 
@@ -2965,8 +2969,6 @@ ExcelTable.generateExcel(data);
 <a id="multi-style-value"></a>
 
 ## Multi Style value Option [⬆️](#table-of-contents)
-
-After version 2.4.0, We added Ability to change the style of each character of cells. (only text value)
 
 <details>
 <summary>Display Code</summary>
@@ -3909,8 +3911,6 @@ ExcelTable.generateExcel(data);
 
 ## Image Option [⬆️](#table-of-contents)
 
-After version 2.8.0, we introduced the ability to add images.
-
 <details>
 
 <summary>Display Code</summary>
@@ -4043,8 +4043,6 @@ ExcelTable.generateExcel(data);
 <a id="checkbox"></a>
 
 ## Checkbox [⬆️](#table-of-contents)
-
-After version 3.1.0, `checkbox` has been added to sheets, allowing you to define checkboxes. However, please note that this feature does not work with `images` and `comments` when used together.
 
 <details>
 
