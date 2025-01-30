@@ -1,0 +1,38 @@
+name: Manually Test
+on: 
+  workflow_dispatch:  
+    inputs:  
+      branch:  
+        description: 'Test Branch'  
+        required: true  
+        default: 'main'
+      os:
+        description: 'Operating System'
+        required: true
+        default: 'ubuntu-latest'
+        options:
+          - 'windows-latest'
+          - 'ubuntu-latest'
+      node_version:
+        description: 'Node Environment'
+        required: true  
+        default: '20.x'
+jobs:
+  test:
+    name: Test
+    timeout-minutes: 30
+    continue-on-error: true
+    runs-on: ${{ github.event.inputs.os }}
+    steps:
+    - name: Checkout to code
+      uses: actions/checkout@v4
+      with:
+        ref: ${{ github.event.inputs.branch }}
+    - name: install Node js Version 20
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ github.event.inputs.node_version }}
+    - name: install dependency
+      run: npm install
+    - name: Run test
+      run: npm run test
