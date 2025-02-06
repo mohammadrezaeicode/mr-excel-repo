@@ -4,7 +4,9 @@ import type {
   ExcelTable,
   SideBySide,
   ThemeOption,
+  ExcelToNodeConfig
 } from "./data-model/excel-table";
+import { replaceInExcel } from "./functions/replacer";
 import {
   type ColWidthScaleFunction,
   type RowHeightScaleFunction,
@@ -76,19 +78,7 @@ export function excelToNode(
   uri: string,
   queryForTable?: string | null,
   containerElement?: HTMLDivElement | null,
-  config: {
-    fetchFunc?: Function;
-    firstHeader?: boolean;
-    returnTableNodes?: boolean;
-    emptyNodeDefaultString?: string;
-    removeContainerChildNode?: boolean;
-    containerNodeStyle?: object;
-    tableStyle?: object;
-    cellStyle?: object;
-    buttonContainerStyle?: object;
-    buttonStyle?: object;
-    activeButtonStyle?: object;
-  } = { ...defaultConfig }
+  config: ExcelToNodeConfig = { ...defaultConfig }
 ) {
   config = {
     ...defaultConfig,
@@ -110,6 +100,6 @@ export function excelToNode(
     config.buttonStyle,
     config.activeButtonStyle
   );
-}
+} 
 export type { DataModel };
-export { Validator, generateExcel, excelToJson };
+export { Validator, generateExcel, excelToJson, replaceInExcel };

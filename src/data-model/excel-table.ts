@@ -58,6 +58,7 @@ export interface SheetOption {
   rtl?: boolean;
   pageBreak?: PageBreak;
   asTable?: AsTableOption;
+  dropDowns?: DropDown[];
 }
 export interface AsTableOption {
   type?: "Light" | "Medium" | "Dark";
@@ -135,7 +136,7 @@ export interface Header {
   label: string;
   text: string;
   size?: number;
-  multiStyleValue?: MultiStyleValue;
+  multiStyleValue?: MultiStyleValue[];
   comment?: Comment | string;
   conditionalFormatting?: ConditionalFormattingOption;
   formula?: {
@@ -180,6 +181,11 @@ export interface DataOptions {
   height?: number;
   multiStyleValue?: MapMultiStyleValue;
   comment?: MapComment;
+}
+
+export interface DropDown {
+  option: (string | number)[];
+  for: string[];
 }
 export interface RowMap {
   [rowNumber: number]: {
@@ -304,11 +310,11 @@ export type BorderOption = {
 };
 
 export interface MapMultiStyleValue {
-  [key: string]: MultiStyleValue;
+  [key: string]: MultiStyleValue[];
 }
 export interface MultiStyleValue {
-  [key: string]: string | undefined | MultiStyleRexValue[];
-  reg?: MultiStyleRexValue[];
+  value: string | number;
+  styleId?: string;
 }
 export interface MultiStyleRexValue {
   reg: RegExp | string;
@@ -333,7 +339,7 @@ export type MultiStyleConditionFunction = (
   rowIndex: number,
   colIndex: number,
   fromHeader: boolean
-) => MultiStyleValue | null;
+) => MultiStyleValue[] | null;
 
 export type CommentConditionFunction = (
   data: Header | string | number | undefined,
@@ -369,7 +375,7 @@ export interface Title {
   height?: number;
   styleId?: string;
   text?: string;
-  multiStyleValue?: MultiStyleValue;
+  multiStyleValue?: MultiStyleValue[];
   comment?: Comment | string;
 }
 export interface HeaderRowOption {
@@ -541,4 +547,25 @@ export declare class Buffer extends Uint8Array {
 
   length: number;
   byteOffset: number;
+}
+export interface ReplacerOption {
+  fileName?: string;
+  backend?: boolean;
+  fetch?: Function;
+  data?: Blob | Buffer;
+  notSave?: boolean;
+  generateType?: "nodebuffer" | "array" | "binarystring" | "base64";
+}
+export interface ExcelToNodeConfig {
+  fetchFunc?: Function;
+  firstHeader?: boolean;
+  returnTableNodes?: boolean;
+  emptyNodeDefaultString?: string;
+  removeContainerChildNode?: boolean;
+  containerNodeStyle?: object;
+  tableStyle?: object;
+  cellStyle?: object;
+  buttonContainerStyle?: object;
+  buttonStyle?: object;
+  activeButtonStyle?: object;
 }

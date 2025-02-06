@@ -145,6 +145,7 @@ declare namespace DataModel {
         Styles,
         Data,
         DataOptions,
+        DropDown,
         RowMap,
         ProtectionOption,
         ProtectionOptionKey,
@@ -189,7 +190,9 @@ declare namespace DataModel {
         ExtractedData,
         ExtractResult,
         ReadResult,
-        Buffer_2 as Buffer
+        Buffer_2 as Buffer,
+        ReplacerOption,
+        ExcelToNodeConfig
     }
 }
 export { DataModel }
@@ -202,6 +205,11 @@ declare interface DataOptions {
     height?: number;
     multiStyleValue?: MapMultiStyleValue;
     comment?: MapComment;
+}
+
+declare interface DropDown {
+    option: (string | number)[];
+    for: string[];
 }
 
 declare interface ExcelTable extends ExcelTableOption {
@@ -227,7 +235,9 @@ declare interface ExcelTableOption {
 
 export declare function excelToJson(uri: string, fetchFunc?: Function, withHeader?: boolean, defaultPropertyPrefix?: string): Promise<Record<string, object>>;
 
-export declare function excelToNode(uri: string, queryForTable?: string | null, containerElement?: HTMLDivElement | null, config?: {
+export declare function excelToNode(uri: string, queryForTable?: string | null, containerElement?: HTMLDivElement | null, config?: ExcelToNodeConfig): Promise<HTMLTableElement[] | "Done">;
+
+declare interface ExcelToNodeConfig {
     fetchFunc?: Function;
     firstHeader?: boolean;
     returnTableNodes?: boolean;
@@ -239,7 +249,7 @@ export declare function excelToNode(uri: string, queryForTable?: string | null, 
     buttonContainerStyle?: object;
     buttonStyle?: object;
     activeButtonStyle?: object;
-}): Promise<HTMLTableElement[] | "Done">;
+}
 
 declare const exportedForTesting: {
     checkSheetValidWithOneRef: typeof checkSheetValidWithOneRef;
@@ -287,7 +297,7 @@ declare interface Header {
     label: string;
     text: string;
     size?: number;
-    multiStyleValue?: MultiStyleValue;
+    multiStyleValue?: MultiStyleValue[];
     comment?: Comment_2 | string;
     conditionalFormatting?: ConditionalFormattingOption;
     formula?: {
@@ -340,7 +350,7 @@ declare interface MapComment {
 }
 
 declare interface MapMultiStyleValue {
-    [key: string]: MultiStyleValue;
+    [key: string]: MultiStyleValue[];
 }
 
 declare interface MergeRowConditionMap {
@@ -352,7 +362,7 @@ declare interface MergeRowConditionMap {
 
 declare type MergeRowDataConditionFunction = (data: Header | string | number | undefined, key: string | null, index: number, fromHeader: boolean) => boolean;
 
-declare type MultiStyleConditionFunction = (data: Header | string | number | undefined, object: null | Data, headerKey: string, rowIndex: number, colIndex: number, fromHeader: boolean) => MultiStyleValue | null;
+declare type MultiStyleConditionFunction = (data: Header | string | number | undefined, object: null | Data, headerKey: string, rowIndex: number, colIndex: number, fromHeader: boolean) => MultiStyleValue[] | null;
 
 declare interface MultiStyleRexValue {
     reg: RegExp | string;
@@ -360,8 +370,8 @@ declare interface MultiStyleRexValue {
 }
 
 declare interface MultiStyleValue {
-    [key: string]: string | undefined | MultiStyleRexValue[];
-    reg?: MultiStyleRexValue[];
+    value: string | number;
+    styleId?: string;
 }
 
 declare interface NoArgFormulaSetting {
@@ -401,6 +411,17 @@ declare interface ReadResult {
     sheetNameObject: Record<string, string>;
     sheetName: IterableIterator<[string, string]>;
     maxLengthOfColumn: Record<string, number>;
+}
+
+export declare function replaceInExcel(url: string | null | undefined, replaceData: Record<string, string | number | boolean>, option?: ReplacerOption): Promise<string | number[] | Blob | Buffer | undefined>;
+
+declare interface ReplacerOption {
+    fileName?: string;
+    backend?: boolean;
+    fetch?: Function;
+    data?: Blob | Buffer_2;
+    notSave?: boolean;
+    generateType?: "nodebuffer" | "array" | "binarystring" | "base64";
 }
 
 declare type RowHeightScaleFunction = (data: number, rowIndex: number, fromHeader: boolean) => number;
@@ -454,6 +475,7 @@ declare interface SheetOption {
     rtl?: boolean;
     pageBreak?: PageBreak;
     asTable?: AsTableOption;
+    dropDowns?: DropDown[];
 }
 
 declare interface SideBySide {
@@ -560,7 +582,7 @@ declare interface Title {
     height?: number;
     styleId?: string;
     text?: string;
-    multiStyleValue?: MultiStyleValue;
+    multiStyleValue?: MultiStyleValue[];
     comment?: Comment_2 | string;
 }
 

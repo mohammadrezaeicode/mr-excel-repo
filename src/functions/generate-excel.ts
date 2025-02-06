@@ -22,7 +22,7 @@ import {
   defaultCellCommentStyle,
   generateCommentTag,
 } from "../utils/comment";
-import { generateMultiStyleValue } from "../utils/multi-value";
+import { generateMultiStyleByArray } from "../utils/multi-value";
 import {
   cols as colsDef,
   formatMap as defaultFormatMap,
@@ -32,6 +32,7 @@ import { getColRowBaseOnRefString } from "../utils/excel-util";
 import { specialCharacterConverter } from "../utils/special-character";
 import { applyConfig } from "../utils/store";
 import type JSZip from "jszip";
+import { generateDropDown } from "../utils/drop-down-utils";
 export async function generateExcel(
   data: ExcelTable,
   styleKey: string = ""
@@ -76,6 +77,14 @@ export async function generateExcel(
   const module = await import("jszip");
   const JSZip1 = module.default;
   let zip = new JSZip1();
+  if (!data.sheet) {
+    data.sheet = [
+      {
+        headers: [],
+        data: [],
+      },
+    ];
+  }
   const sheetLength = data.sheet.length;
   // xl
   let xlFolder = zip.folder("xl");
@@ -1089,13 +1098,11 @@ export async function generateExcel(
           titleRow += "</row>";
           sharedStringIndex++;
           sharedStringMap[title.text] = title.text;
-          if (title.multiStyleValue) {
-            sharedString += generateMultiStyleValue(
+          if (title.multiStyleValue && Array.isArray(title.multiStyleValue)) {
+            sharedString += generateMultiStyleByArray(
               title.multiStyleValue,
-              title.text,
               styleMapper.commentSyntax.value,
-              tStyle,
-              sheetData.useSplitBaseOnMatch
+              tStyle
             );
           } else {
             sharedString +=
@@ -1273,13 +1280,11 @@ export async function generateExcel(
               v.multiStyleValue = multi;
             }
           }
-          if (v.multiStyleValue) {
-            sharedString += generateMultiStyleValue(
+          if (v.multiStyleValue && Array.isArray(v.multiStyleValue)) {
+            sharedString += generateMultiStyleByArray(
               v.multiStyleValue,
-              v.text,
               styleMapper.commentSyntax.value,
-              headerStyleKey ? headerStyleKey : "",
-              sheetData.useSplitBaseOnMatch
+              headerStyleKey ? headerStyleKey : ""
             );
           } else {
             sharedString +=
@@ -1566,14 +1571,13 @@ export async function generateExcel(
                 if (
                   "multiStyleValue" in mData &&
                   mData.multiStyleValue &&
-                  key in mData.multiStyleValue
+                  key in mData.multiStyleValue &&
+                  Array.isArray(mData.multiStyleValue[key])
                 ) {
-                  sharedString += generateMultiStyleValue(
+                  sharedString += generateMultiStyleByArray(
                     mData.multiStyleValue[key],
-                    dataEl,
                     styleMapper.commentSyntax.value,
-                    cellStyle ? cellStyle : "",
-                    sheetData.useSplitBaseOnMatch
+                    cellStyle ? cellStyle : ""
                   );
                 } else {
                   sharedString +=
@@ -2153,6 +2157,7 @@ export async function generateExcel(
       sheetDimensions,
       asTable: asTable ? asTable : false,
       sheetDataString,
+      sheetDropDown: generateDropDown(sheetData.dropDowns),
       sheetBreakLine,
       viewType,
       hasComment,
@@ -2605,6 +2610,7 @@ export async function generateExcel(
         "<sheetData>" +
         sh.sheetDataString +
         "</sheetData>" +
+        sh.sheetDropDown +
         sh.protectionOption +
         sh.sheetSortFilter +
         sh.merges +

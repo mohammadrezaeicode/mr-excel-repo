@@ -8,6 +8,7 @@ on:
         default: 'main'
       os:
         description: 'Operating System'
+        type: choice
         required: true
         default: 'ubuntu-latest'
         options:
