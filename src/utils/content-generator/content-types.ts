@@ -43,7 +43,7 @@ export function contentTypeGenerator(
           res + '<Default Extension="' + curr + '" ContentType="image/jpeg"/>'
         );
       } else {
-        typeCheck["curr"] = true;
+        typeCheck[curr] = true;
         return (
           res +
           '<Default Extension="' +

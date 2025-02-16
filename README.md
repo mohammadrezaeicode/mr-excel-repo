@@ -34,13 +34,25 @@ important functions of library that are defined with specific use cases as follo
 
 <a id="excel-to-node"></a>
 
-- **`🆕 excelToNode`**: This function reads an uploaded Excel file and generates a representation of the tables from its sheets. It can either return the table directly or insert it into a specified container node provided as input.
+- **` excelToNode`**: This function reads an uploaded Excel file and generates a representation of the tables from its sheets. It can either return the table directly or insert it into a specified container node provided as input.
 
 <a id="excel-to-json"></a>
 
-- **`🆕 excelToJson`**: This function reads an Excel file and returns a JSON object that represents the data contained in the file.
+- **` excelToJson`**: This function reads an Excel file and returns a JSON object that represents the data contained in the file.
+
+<a id="replace-in-excel"></a>
+
+- **`🆕replaceInExcel`**: This function is used to replace data based on a defined flag, such as {{FLAG}}, in Excel.
 
 The example has been moved to a separate repository for easier updates. You can find it in the ["**_`mr-excel-example-gallery`_**"](https://github.com/mohammadrezaeicode/mr-excel-example-gallery)([**_link_**](https://github.com/mohammadrezaeicode/mr-excel-example-gallery))
+
+## Related Projects
+
+The following list includes new repositories related to this project. Documentation and improvements for these projects can be found in the repositories below.
+
+- **`MR Excel Java`**:A similar project using Java is in development. The release version is coming soon; currently, it is available as a snapshot version.["`repository`"](https://github.com/mohammadrezaeicode/mr-excel-java)
+
+- **`MR Excel Editor`**: An editor that utilizes the library is currently under development. At present, it only generates simple results.["`repository`"](https:///github.com/mohammadrezaeicode/mr-excel-editor)["`Demo`"](https://mohammadrezaeicode.github.io/mr-excel-editor/)
 
 ## Table of Contents
 
@@ -88,16 +100,20 @@ The example has been moved to a separate repository for easier updates. You can 
   - [**`How to use extractExcelData`**](#extract-excel-data-usage)
 - [**`generateCSV && generateText`**](#generate-csv-txt)
   - [**`How to use generateCSV && generateText`**](#generate-csv-txt-usage)
-- [**`🆕 excelToNode`**](#excel-to-node)
-  - [**`🆕 How to use excelToNode`**](#excel-to-node-usage)
-- [**`🆕 excelToJson`**](#excel-to-json)
-  - [**`🆕 How to use excelToJson`**](#excel-to-json-usage)
+- [**` excelToNode`**](#excel-to-node)
+  - [**` How to use excelToNode`**](#excel-to-node-usage)
+- [**` excelToJson`**](#excel-to-json)
+  - [**` How to use excelToJson`**](#excel-to-json-usage)
+- [**`🆕 replaceInExcel`**](#replace-in-excel)
+  - [**`🆕 How to use replaceInExcel`**](#replace-in-excel-usage)
 - [**`interface`**](#interface)
 - [**`Migrate Version`**](#migrate)
+  - [**`Migrating from 6 to 7`**](#migrating-6)
   - [**`Migrating from 5 to 6`**](#migrating-5)
   - [**`Migrating from 4 to 5`**](#migrating-4)
   - [**`Migrating from 3 to 4`**](#migrating-3)
   - [**`Migrating from 2 to 3`**](#migrating-2)
+- [**`Release note`**](#release-note)
 
 
 <a id="installation"></a>
@@ -463,7 +479,7 @@ ExcelTable.themeBaseGenerate(data, { negativeColor: true });
 
 </details>
 
-[More Example](example/CDN/themeBaseGenerate)
+[More Example](https://github.com/mohammadrezaeicode/mr-excel-example-gallery/blob/main/CDN/themeBaseGenerate)
 
 <a id="convert-table-to-excel-usage"></a>
 
@@ -490,9 +506,9 @@ ExcelTable.convertTableToExcel("#table", null, {
 
 <details>
 
-<summary>result of Example in https://github.com/mohammadrezaeicode/mr-excel-repo/blob/main/example/conv1.html</summary>
+<summary>result of Example in  https://github.com/mohammadrezaeicode/mr-excel-example-gallery/blob/main/conv1.html</summary>
 
-![ex](./example/ex13.PNG)
+![ex](https://github.com/mohammadrezaeicode/mr-excel-example-gallery/blob/main/ex13.PNG)
 
 </details>
 
@@ -659,9 +675,34 @@ ExcelTable.excelToNode(uri, queryForTable, containerElement, config)
 
 </details>
 
+<a id="replace-in-excel-usage"></a>
+
+### 🆕 How to use replaceInExcel
+
+To use this function, you should provide {{FLAG}} in Excel. Change the relevant cells to represent the flag ({{name}}, e.g.) and pass them to the function. Additionally, you should supply the data that will replace the flag. Here’s an example for clarification:
+[Excel that used for example](https://github.com/mohammadrezaeicode/mr-excel-page-repo/blob/main/public/replacer.xlsx?raw=true)
+
+<details>
+
+<summary>Display Code</summary>
+
+```javascript
+ExcelTable.excelToNode(Link, Replace Map,Replacer Map)
+-----
+ExcelTable.replaceInExcel("./replacer.xlsx", {
+  V: "test Data",
+  v1: "This is value one",
+  v2: "This is value two",
+});
+```
+
+</details>
+
+![result imag](https://github.com/mohammadrezaeicode/mr-excel-page-repo/blob/main/public/img/replacer.png?raw=true)
+
 <a id="excel-to-json-usage"></a>
 
-### 🆕 How to use excelToJson
+### How to use excelToJson
 
 <details>
 
@@ -820,7 +861,7 @@ ExcelTable.sideBySideLineByLine(sideData);
 
 </details>
 
-[More Example](example/CDN/sideBySideLineByLine)
+[More Example](https://github.com/mohammadrezaeicode/mr-excel-example-gallery/tree/main/CDN/sideBySideLineByLine)
 
 <a id="generate-excel-usage"></a>
 
@@ -985,7 +1026,7 @@ ExcelTable.generateExcel(data);
 
 </details>
 
-[More Example](example/CDN/generateExcel)
+[More Example](https://github.com/mohammadrezaeicode/mr-excel-example-gallery/blob/main/CDN/generateExcel)
 
 <a id="general-option"></a>
 
@@ -7156,6 +7197,24 @@ The primary interface of the library is located in the excel-table.d.ts file. [C
 
 In this section, we define the significant changes that require migration for the upcoming version.
 
+<a id="migrating-6"></a>
+
+## Migrating from 6 to 7 [⬆️](#table-of-contents)
+
+To successfully migrate from version 6 to version 7, you should update the following options:
+
+- change in the interface of `MultiStyleValue`:
+
+```
+export interface MapMultiStyleValue {
+  [key: string]: MultiStyleValue[];
+}
+export interface MultiStyleValue {
+  value: string | number;
+  styleId?: string;
+}
+```
+
 <a id="migrating-5"></a>
 
 ## Migrating from 5 to 6 [⬆️](#table-of-contents)
@@ -7226,7 +7285,27 @@ To migrate from Version 2 to Version 3, you need to follow the steps below:
   - Change "backgroundColor" to "backgroundColor."
   - Replace "color" with "color."
 
+<a id="release-note"></a>
+
 ## Release Notes [⬆️](#table-of-contents)
+
+### Version 7.0.0 (2025-02-16)
+
+#### New Features
+
+- A drop-down option (multi-select option) provides the ability to create a cell that contains multiple selectable values.`sheet`->`[n]`->`dropDowns`
+- The `replaceInExcel` functionality in Excel allows you to replace data in an existing file using flags provided within the spreadsheet.
+
+#### Bug Fixes
+
+- `generateExcel` supports empty objects and will generate an empty Excel file.
+
+> [!NOTE]  
+> The related interface has not changed, so the sheet needs to be provided in TypeScript.
+
+#### Improvements
+
+- Begin adding JSDoc comments to the main functions and interfaces.
 
 ### Version 6.0.1 (2024-08-11)
 
