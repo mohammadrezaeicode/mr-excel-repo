@@ -1,277 +1,75 @@
 import { describe, expect, test } from "@jest/globals";
-import {
-  exportedForTesting,
-  generateMultiStyleValue,
-} from "../../../src/utils/multi-value";
+import { generateMultiStyleByArray } from "../../../src/utils/multi-value";
 // not completed
-describe("splitAndMatching function tests", () => {
+describe("generateMultiStyleByArray function tests", () => {
   test("should be function", () => {
-    expect(typeof exportedForTesting.splitAndMatching).toBe("function");
+    expect(typeof generateMultiStyleByArray).toBe("function");
   });
-  test("splitAndMatching 2", () => {
+  test("check one item", () => {
     expect(
-      exportedForTesting.splitAndMatching(
-        "t",
-        "",
-        "test",
-        false,
-        [],
-        [],
-        [],
-        false
+      generateMultiStyleByArray(
+        [
+          {
+            styleId: "c2",
+            value: "text",
+          },
+        ],
+        {
+          c2: "style2",
+          def:"defaultStyle"
+        },
+        "def"
       )
-    ).toEqual({
-      matchValue: ["t"],
-      splitValue: ["", "est"],
-      splittedText: true,
-      styleMatchValue: [""],
-      text: "test",
-      v: "t",
-    });
-    expect(
-      exportedForTesting.splitAndMatching(
-        "t",
-        "",
-        "test",
-        false,
-        [],
-        [],
-        [],
-        true
-      )
-    ).toEqual({
-      matchValue: ["t"],
-      splitValue: ["", "es",""],
-      splittedText: true,
-      styleMatchValue: [""],
-      text: "test",
-      v: "t",
-    });
-    expect(
-      exportedForTesting.splitAndMatching(
-        "t",
-        "",
-        "test",
-        false,
-        [],
-        [],
-        [],
-        true,
-        true
-      )
-    ).toEqual({
-      matchValue: ["t"],
-      splitValue: ["", "est"],
-      splittedText: true,
-      styleMatchValue: [""],
-      text: "test",
-      v: "t",
-    });
-    expect(
-      exportedForTesting.splitAndMatching(
-        "uniq",
-        "",
-        "test",
-        true,
-        ["uniq"],
-        [],
-        [],
-        true,
-        true
-      )
-    ).toEqual({
-      matchValue: ["uniq"],
-      splitValue: ["", ""],
-      splittedText: true,
-      styleMatchValue: [""],
-      text: "test",
-      v: "uniq",
-    });
-     expect(
-       exportedForTesting.splitAndMatching(
-         "uniq",
-         "",
-         "test",
-         true,
-         ["uniq"],
-         [],
-         [],
-         false,
-         true
-       )
-     ).toEqual({
-       matchValue: ["uniq"],
-       splitValue: ["", ""],
-       splittedText: true,
-       styleMatchValue: [""],
-       text: "test",
-       v: "uniq",
-     });
-      expect(
-        exportedForTesting.splitAndMatching(
-          "uniq",
-          "",
-          "test",
-          true,
-          ["uniq"],
-          [],
-          [],
-          false,
-          false
-        )
-      ).toEqual({
-        matchValue: ["uniq"],
-        splitValue: ["", ""],
-        splittedText: true,
-        styleMatchValue: [""],
-        text: "test",
-        v: "uniq",
-      });
+    ).toBe('<si><r>style2<t xml:space="preserve">text</t></r></si>');
   });
-});
-describe("splitBaseOnMatch function tests", () => {
-  test("should be function", () => {
-    expect(typeof exportedForTesting.splitBaseOnMatch).toBe("function");
+  test("check one item,no style", () => {
+    expect(
+      generateMultiStyleByArray(
+        [
+          {
+            value: "text",
+          },
+        ],
+        {
+          c2: "style2",
+          def:"defaultStyle"
+        },
+        "def"
+      )
+    ).toBe('<si><r>defaultStyle<t xml:space="preserve">text</t></r></si>');
   });
-  test("should be function", () => {
-    expect(exportedForTesting.splitBaseOnMatch(["t", "st"], "test")).toEqual([
-      "",
-      "e",
-      "",
-    ]);
+  test("check multi item", () => {
+    expect(
+      generateMultiStyleByArray(
+        [
+          {
+            value: "text",
+          },
+          {
+            value: "xx",
+            styleId: "c2",
+          },
+        ],
+        {
+          c2: "style2",
+          def:"defaultStyle"
+        },
+        "def"
+      )
+    ).toBe(
+      '<si><r>defaultStyle<t xml:space="preserve">text</t></r><r>style2<t xml:space="preserve">xx</t></r></si>'
+    );
   });
-});
-describe("generateMultiStyleValue function tests", () => {
-  test("should be function", () => {
-    expect(typeof generateMultiStyleValue).toBe("function");
-  });
-  test("should be function", () => {
+  test("check no item", () => {
     expect(
-      generateMultiStyleValue(
+      generateMultiStyleByArray(
+        [],
         {
-          reg: [
-            {
-              reg: /t/g,
-              styleId: "st",
-            },
-          ],
+          c2: "style2",
+          def:"defaultStyle"
         },
-        "test data",
-        {
-          st: "<rPr><b/><i/></rPr>",
-        },
-        "st",
-        false
+        "def"
       )
-    ).toBe(
-      '<si><r><rPr><b/><i/></rPr><t xml:space="preserve">t</t></r><r><rPr><b/><i/></rPr><t xml:space="preserve">es</t></r><r><rPr><b/><i/></rPr><t xml:space="preserve">t</t></r><r><rPr><b/><i/></rPr><t xml:space="preserve"> da</t></r><r><rPr><b/><i/></rPr><t xml:space="preserve">t</t></r><r><rPr><b/><i/></rPr><t>a</t></r></si>'
-    );
-    expect(
-      generateMultiStyleValue(
-        {
-          reg: [
-            {
-              reg: /t/g,
-              styleId: "st",
-            },
-          ],
-        },
-        "test data",
-        {
-          st: "<rPr><b/><i/></rPr>",
-        },
-        "st",
-        true
-      )
-    ).toBe(
-      '<si><r><rPr><b/><i/></rPr><t xml:space="preserve">t</t></r><r><rPr><b/><i/></rPr><t xml:space="preserve">es</t></r><r><rPr><b/><i/></rPr><t xml:space="preserve">t</t></r><r><rPr><b/><i/></rPr><t xml:space="preserve"> da</t></r><r><rPr><b/><i/></rPr><t xml:space="preserve">t</t></r><r><rPr><b/><i/></rPr><t>a</t></r></si>'
-    );
-    expect(
-      generateMultiStyleValue(
-        {
-          reg: [
-            {
-              reg: /t/g,
-              styleId: "st",
-            },
-            {
-              reg: /t/g,
-              styleId: "st",
-            },
-          ],
-        },
-        "test data",
-        {
-          st: "<rPr><b/><i/></rPr>",
-        },
-        "st",
-        true
-      )
-    ).toBe(
-      '<si><r><rPr><b/><i/></rPr><t xml:space="preserve">t</t></r><r><rPr><b/><i/></rPr><t xml:space="preserve">es</t></r><r><rPr><b/><i/></rPr><t xml:space="preserve">t</t></r><r><rPr><b/><i/></rPr><t xml:space="preserve"> da</t></r><r><rPr><b/><i/></rPr><t xml:space="preserve">t</t></r><r><rPr><b/><i/></rPr><t>a</t></r></si>'
-    );
-    expect(
-      generateMultiStyleValue(
-        {
-          reg: [
-            {
-              reg: /t/g,
-              styleId: "st",
-            },
-            {
-              reg: /e/g,
-              styleId: "st",
-            },
-          ],
-        },
-        "test data",
-        {
-          st: "<rPr><b/><i/></rPr>",
-        },
-        "st",
-        false
-      )
-    ).toBe(
-      '<si><r><rPr><b/><i/></rPr><t xml:space="preserve">t</t></r><r><rPr><b/><i/></rPr><t xml:space="preserve">e</t></r><r><rPr><b/><i/></rPr><t xml:space="preserve">s</t></r><r><rPr><b/><i/></rPr><t xml:space="preserve">t</t></r><r><rPr><b/><i/></rPr><t xml:space="preserve"> da</t></r><r><rPr><b/><i/></rPr><t xml:space="preserve">t</t></r><r><rPr><b/><i/></rPr><t>a</t></r></si>'
-    );
-    expect(
-      generateMultiStyleValue(
-        {
-          reg: [
-            {
-              reg: /t/g,
-              styleId: "st",
-            },
-            {
-              reg: /e/g,
-              styleId: "sq",
-            },
-          ],
-        },
-        "test data",
-        {
-          st: "<rPr><b/><i/></rPr>",
-        },
-        "st",
-        false
-      )
-    ).toBe(
-      '<si><r><rPr><b/><i/></rPr><t xml:space="preserve">t</t></r><r><rPr><b/><i/></rPr><t xml:space="preserve">e</t></r><r><rPr><b/><i/></rPr><t xml:space="preserve">s</t></r><r><rPr><b/><i/></rPr><t xml:space="preserve">t</t></r><r><rPr><b/><i/></rPr><t xml:space="preserve"> da</t></r><r><rPr><b/><i/></rPr><t xml:space="preserve">t</t></r><r><rPr><b/><i/></rPr><t>a</t></r></si>'
-    );
-    expect(
-      generateMultiStyleValue(
-        {
-          test: "test",
-        },
-        "test data",
-        {
-          st: "<rPr><b/><i/></rPr>",
-        },
-        "st",
-        false
-      )
-    ).toBe(
-      '<si><r><rPr><b/><i/></rPr><t xml:space="preserve">test</t></r><r><rPr><b/><i/></rPr><t> data</t></r></si>'
-    );
+    ).toBe('<si></si>');
   });
 });

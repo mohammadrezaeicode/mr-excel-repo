@@ -1,22 +1,22 @@
 import { g as O, c as d } from "./_commonjsHelpers-DaMA6jEr.js";
-function A(u, v) {
+function A(f, v) {
   for (var l = 0; l < v.length; l++) {
     const r = v[l];
     if (typeof r != "string" && !Array.isArray(r)) {
-      for (const c in r)
-        if (c !== "default" && !(c in u)) {
-          const s = Object.getOwnPropertyDescriptor(r, c);
-          s && Object.defineProperty(u, c, s.get ? s : {
+      for (const s in r)
+        if (s !== "default" && !(s in f)) {
+          const c = Object.getOwnPropertyDescriptor(r, s);
+          c && Object.defineProperty(f, s, c.get ? c : {
             enumerable: !0,
-            get: () => r[c]
+            get: () => r[s]
           });
         }
     }
   }
-  return Object.freeze(Object.defineProperty(u, Symbol.toStringTag, { value: "Module" }));
+  return Object.freeze(Object.defineProperty(f, Symbol.toStringTag, { value: "Module" }));
 }
 var E = { exports: {} };
-(function(u, v) {
+(function(f, v) {
   (function(l, r) {
     r();
   })(d, function() {
@@ -24,14 +24,14 @@ var E = { exports: {} };
       return typeof t > "u" ? t = { autoBom: !1 } : typeof t != "object" && (console.warn("Deprecated: Expected third argument to be a object"), t = { autoBom: !t }), t.autoBom && /^\s*(?:text\/\S*|application\/xml|\S*\/\S*\+xml)\s*;.*charset\s*=\s*utf-8/i.test(e.type) ? new Blob(["\uFEFF", e], { type: e.type }) : e;
     }
     function r(e, t, i) {
-      var o = new XMLHttpRequest();
-      o.open("GET", e), o.responseType = "blob", o.onload = function() {
-        p(o.response, t, i);
-      }, o.onerror = function() {
+      var n = new XMLHttpRequest();
+      n.open("GET", e), n.responseType = "blob", n.onload = function() {
+        p(n.response, t, i);
+      }, n.onerror = function() {
         console.error("could not download file");
-      }, o.send();
+      }, n.send();
     }
-    function c(e) {
+    function s(e) {
       var t = new XMLHttpRequest();
       t.open("HEAD", e, !1);
       try {
@@ -40,7 +40,7 @@ var E = { exports: {} };
       }
       return 200 <= t.status && 299 >= t.status;
     }
-    function s(e) {
+    function c(e) {
       try {
         e.dispatchEvent(new MouseEvent("click"));
       } catch {
@@ -50,38 +50,38 @@ var E = { exports: {} };
     }
     var a = typeof window == "object" && window.window === window ? window : typeof self == "object" && self.self === self ? self : typeof d == "object" && d.global === d ? d : void 0, y = a.navigator && /Macintosh/.test(navigator.userAgent) && /AppleWebKit/.test(navigator.userAgent) && !/Safari/.test(navigator.userAgent), p = a.saveAs || (typeof window != "object" || window !== a ? function() {
     } : "download" in HTMLAnchorElement.prototype && !y ? function(e, t, i) {
-      var o = a.URL || a.webkitURL, n = document.createElement("a");
-      t = t || e.name || "download", n.download = t, n.rel = "noopener", typeof e == "string" ? (n.href = e, n.origin === location.origin ? s(n) : c(n.href) ? r(e, t, i) : s(n, n.target = "_blank")) : (n.href = o.createObjectURL(e), setTimeout(function() {
-        o.revokeObjectURL(n.href);
+      var n = a.URL || a.webkitURL, o = document.createElement("a");
+      t = t || e.name || "download", o.download = t, o.rel = "noopener", typeof e == "string" ? (o.href = e, o.origin === location.origin ? c(o) : s(o.href) ? r(e, t, i) : c(o, o.target = "_blank")) : (o.href = n.createObjectURL(e), setTimeout(function() {
+        n.revokeObjectURL(o.href);
       }, 4e4), setTimeout(function() {
-        s(n);
+        c(o);
       }, 0));
     } : "msSaveOrOpenBlob" in navigator ? function(e, t, i) {
       if (t = t || e.name || "download", typeof e != "string") navigator.msSaveOrOpenBlob(l(e, i), t);
-      else if (c(e)) r(e, t, i);
+      else if (s(e)) r(e, t, i);
       else {
-        var o = document.createElement("a");
-        o.href = e, o.target = "_blank", setTimeout(function() {
-          s(o);
+        var n = document.createElement("a");
+        n.href = e, n.target = "_blank", setTimeout(function() {
+          c(n);
         });
       }
-    } : function(e, t, i, o) {
-      if (o = o || open("", "_blank"), o && (o.document.title = o.document.body.innerText = "downloading..."), typeof e == "string") return r(e, t, i);
-      var n = e.type === "application/octet-stream", g = /constructor/i.test(a.HTMLElement) || a.safari, b = /CriOS\/[\d]+/.test(navigator.userAgent);
-      if ((b || n && g || y) && typeof FileReader < "u") {
+    } : function(e, t, i, n) {
+      if (n = n || open("", "_blank"), n && (n.document.title = n.document.body.innerText = "downloading..."), typeof e == "string") return r(e, t, i);
+      var o = e.type === "application/octet-stream", g = /constructor/i.test(a.HTMLElement) || a.safari, b = /CriOS\/[\d]+/.test(navigator.userAgent);
+      if ((b || o && g || y) && typeof FileReader < "u") {
         var m = new FileReader();
         m.onloadend = function() {
-          var f = m.result;
-          f = b ? f : f.replace(/^data:[^;]*;/, "data:attachment/file;"), o ? o.location.href = f : location = f, o = null;
+          var u = m.result;
+          u = b ? u : u.replace(/^data:[^;]*;/, "data:attachment/file;"), n ? n.location.href = u : location = u, n = null;
         }, m.readAsDataURL(e);
       } else {
         var j = a.URL || a.webkitURL, w = j.createObjectURL(e);
-        o ? o.location = w : location.href = w, o = null, setTimeout(function() {
+        n ? n.location = w : location.href = w, n = null, setTimeout(function() {
           j.revokeObjectURL(w);
         }, 4e4);
       }
     });
-    a.saveAs = p.saveAs = p, u.exports = p;
+    a.saveAs = p.saveAs = p, f.exports = p;
   });
 })(E);
 var h = E.exports;

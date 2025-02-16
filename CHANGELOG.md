@@ -1,5 +1,24 @@
 # Changelog
 
+## Version 7.0.0 (2025-02-16)
+
+### New Features
+
+- A drop-down option (multi-select option) provides the ability to create a cell that contains multiple selectable values.`sheet`->`[n]`->`dropDowns`
+- The `replaceInExcel` functionality in Excel allows you to replace data in an existing file using flags provided within the spreadsheet.
+
+### Bug Fixes
+
+- `generateExcel` supports empty objects and will generate an empty Excel file.
+
+> [!NOTE]  
+> The related interface has not changed, so the sheet needs to be provided in TypeScript.
+
+### Improvements
+
+- Begin adding JSDoc comments to the main functions and interfaces.
+
+
 ## Version 6.0.1 (2024-08-11)
 
 ### New Features
