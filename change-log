@@ -1,18 +1,19 @@
-## Version 6.0.1 (2024-08-11)
+## Version 7.0.0 (2025-02-16)
 
 ### New Features
 
-- Introduced formatMap to support new data formats.
-- Added the excelToJson and excelToNode functions.
-
-### Improvements
-
-- Increased code coverage to 90%.
-- Enhanced capability to use image, checkbox, and comment together.
-- Incorporated GitHub Community Standards for better collaboration.
-- more
+- A drop-down option (multi-select option) provides the ability to create a cell that contains multiple selectable values.`sheet`->`[n]`->`dropDowns`
+- The `replaceInExcel` functionality in Excel allows you to replace data in an existing file using flags provided within the spreadsheet.
 
 ### Bug Fixes
 
-- Resolved issues related to backgroundImage.
-- Resolved an issue related to the incorrect package release in version 6.0.0.
+- `generateExcel` supports empty objects and will generate an empty Excel file.
+
+> [!NOTE]  
+> The related interface has not changed, so the sheet needs to be provided in TypeScript.
+
+### Improvements
+
+- Begin adding JSDoc comments to the main functions and interfaces.
+
+

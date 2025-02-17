@@ -2300,7 +2300,6 @@ export async function generateExcel(
       " <sheets>" +
       "  " +
       workbookString +
-      "" +
       " </sheets>" +
       " <definedNames />" +
       " <calcPr />" +
@@ -2316,7 +2315,6 @@ export async function generateExcel(
       '">' +
       " " +
       sharedString +
-      "" +
       "</sst>"
   );
 
@@ -2338,9 +2336,7 @@ export async function generateExcel(
       ' Target="sharedStrings.xml" />' +
       " " +
       workbookRelString +
-      "" +
       " " +
-      "" +
       "</Relationships>"
   );
 

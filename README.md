@@ -42,9 +42,17 @@ important functions of library that are defined with specific use cases as follo
 
 <a id="replace-in-excel"></a>
 
-- **`replaceInExcel`**: This function is used to replace data based on a defined flag, such as {{FLAG}}, in Excel.
+- **`🆕replaceInExcel`**: This function is used to replace data based on a defined flag, such as {{FLAG}}, in Excel.
 
 The example has been moved to a separate repository for easier updates. You can find it in the ["**_`mr-excel-example-gallery`_**"](https://github.com/mohammadrezaeicode/mr-excel-example-gallery)([**_link_**](https://github.com/mohammadrezaeicode/mr-excel-example-gallery))
+
+## Related Projects
+
+The following list includes new repositories related to this project. Documentation and improvements for these projects can be found in the repositories below.
+
+- **`MR Excel Java`**:A similar project using Java is in development. The release version is coming soon; currently, it is available as a snapshot version.["`repository`"](https://github.com/mohammadrezaeicode/mr-excel-java)
+
+- **`MR Excel Editor`**: An editor that utilizes the library is currently under development. At present, it only generates simple results.["`repository`"](https:///github.com/mohammadrezaeicode/mr-excel-editor)["`Demo`"](https://mohammadrezaeicode.github.io/mr-excel-editor/)
 
 ## Table of Contents
 
@@ -471,7 +479,7 @@ ExcelTable.themeBaseGenerate(data, { negativeColor: true });
 
 </details>
 
-[More Example](example/CDN/themeBaseGenerate)
+[More Example](https://github.com/mohammadrezaeicode/mr-excel-example-gallery/blob/main/CDN/themeBaseGenerate)
 
 <a id="convert-table-to-excel-usage"></a>
 
@@ -498,9 +506,9 @@ ExcelTable.convertTableToExcel("#table", null, {
 
 <details>
 
-<summary>result of Example in https://github.com/mohammadrezaeicode/mr-excel-repo/blob/main/example/conv1.html</summary>
+<summary>result of Example in  https://github.com/mohammadrezaeicode/mr-excel-example-gallery/blob/main/conv1.html</summary>
 
-![ex](./example/ex13.PNG)
+![ex](https://github.com/mohammadrezaeicode/mr-excel-example-gallery/blob/main/ex13.PNG)
 
 </details>
 
@@ -853,7 +861,7 @@ ExcelTable.sideBySideLineByLine(sideData);
 
 </details>
 
-[More Example](example/CDN/sideBySideLineByLine)
+[More Example](https://github.com/mohammadrezaeicode/mr-excel-example-gallery/tree/main/CDN/sideBySideLineByLine)
 
 <a id="generate-excel-usage"></a>
 
@@ -1018,7 +1026,7 @@ ExcelTable.generateExcel(data);
 
 </details>
 
-[More Example](example/CDN/generateExcel)
+[More Example](https://github.com/mohammadrezaeicode/mr-excel-example-gallery/blob/main/CDN/generateExcel)
 
 <a id="general-option"></a>
 
@@ -7281,6 +7289,8 @@ To migrate from Version 2 to Version 3, you need to follow the steps below:
 
 ## Release Notes [⬆️](#table-of-contents)
 
+### Version 7.0.0 (2025-02-16)
+
 #### New Features
 
 - A drop-down option (multi-select option) provides the ability to create a cell that contains multiple selectable values.`sheet`->`[n]`->`dropDowns`
@@ -7292,6 +7302,10 @@ To migrate from Version 2 to Version 3, you need to follow the steps below:
 
 > [!NOTE]  
 > The related interface has not changed, so the sheet needs to be provided in TypeScript.
+
+#### Improvements
+
+- Begin adding JSDoc comments to the main functions and interfaces.
 
 ### Version 6.0.1 (2024-08-11)
 
