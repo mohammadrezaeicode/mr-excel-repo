@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:dist/read-utils-CU7cU67B.js
 import { g as R, c as T } from "./index-D07Il0Qz.js";
-========
-import { g as R, c as T } from "./index-DMAk0ysA.js";
->>>>>>>> origin/main:dist/read-utils-YAGe6NNW.js
 function B(s) {
   return /t="s".*?<v/.test(s);
 }
