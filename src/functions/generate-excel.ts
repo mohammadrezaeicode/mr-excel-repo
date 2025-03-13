@@ -1063,7 +1063,7 @@ export async function generateExcel(
               '" ' +
               height +
               ' spans="1:' +
-              (left + consommeCol - 1) +
+              Math.max(left + consommeCol - 1, 1) +
               '">',
             details:
               '<c r="' +
@@ -1083,7 +1083,7 @@ export async function generateExcel(
             '" ' +
             height +
             ' spans="1:' +
-            (left + consommeCol - 1) +
+            Math.max(left + consommeCol - 1, 1) +
             '">';
           titleRow +=
             '<c r="' +
@@ -1146,7 +1146,7 @@ export async function generateExcel(
         if (v.formula) {
           headerFormula.push(innerIndex);
         }
-        if (v.conditionalFormatting) {
+        if (v.conditionalFormatting && addCF) {
           headerConditionalFormatting.push(innerIndex);
         }
         objKey.push(v.label);
@@ -1303,7 +1303,7 @@ export async function generateExcel(
           '<row r="' +
           rowCount +
           '" spans="1:' +
-          colsLength +
+          Math.max(colsLength, 1) +
           '" ' +
           (sheetData.headerHeight
             ? 'ht="' + sheetData.headerHeight + '" customHeight="1"'
@@ -1392,7 +1392,7 @@ export async function generateExcel(
             '<row r="' +
             rowCount +
             '" spans="1:' +
-            colsLength +
+            Math.max(colsLength, 1) +
             '" ' +
             (keyHeight in mData
               ? 'ht="' + mData[keyHeight] + '" customHeight="1"'
@@ -1413,7 +1413,9 @@ export async function generateExcel(
               sheetData.convertStringToNumber && !isNaN(cellValue)
                 ? cellValue
                 : mData[key];
-
+            if (typeof dataEl === "boolean") {
+              dataEl = dataEl + "";
+            }
             let cellStyle = rowStyle;
             if (
               sheetData.styleCellCondition &&
@@ -1653,7 +1655,7 @@ export async function generateExcel(
           };
         });
       }
-      if (headerConditionalFormatting.length > 0) {
+      if (headerConditionalFormatting.length > 0 && addCF) {
         headerConditionalFormatting.forEach((v) => {
           const header = sheetData.headers[v];
           if (!header.conditionalFormatting) {
@@ -1691,34 +1693,43 @@ export async function generateExcel(
               rF[f.row] += f.cell;
             }
           });
-          Object.keys(rF).forEach((v) => {
-            const val = v as keyof object;
-            const l = rF[val];
-            let rowDataMap = rowMap[val];
-            if (rowDataMap) {
-              const body =
-                rowDataMap.startTag +
-                rowDataMap.details +
-                l +
-                rowDataMap.endTag;
-              let reg = new RegExp(rowDataMap.startTag + "[\\n\\s\\S]*?</row>");
-              sheetDataString = sheetDataString.replace(reg, body);
-            } else {
-              sheetDataString +=
-                '<row r="' +
-                v +
-                '" spans="1:' +
-                colsLength +
-                '"  >' +
-                l +
-                "</row>";
-              rowMap[val] = {
-                startTag: '<row r="' + v + '" spans="1:' + colsLength + '"  >',
-                endTag: "</row>",
-                details: l,
-              };
-            }
-          });
+          Object.keys(rF)
+            .sort((a, b) => (+a > +b ? 1 : -1))
+            .forEach((v) => {
+              const val = v as keyof object;
+              const l = rF[val];
+              let rowDataMap = rowMap[val];
+              if (rowDataMap) {
+                const body =
+                  rowDataMap.startTag +
+                  rowDataMap.details +
+                  l +
+                  rowDataMap.endTag;
+                let reg = new RegExp(
+                  rowDataMap.startTag + "[\\n\\s\\S]*?</row>"
+                );
+                sheetDataString = sheetDataString.replace(reg, body);
+              } else {
+                sheetDataString +=
+                  '<row r="' +
+                  v +
+                  '" spans="1:' +
+                  Math.max(colsLength, 1) +
+                  '"  >' +
+                  l +
+                  "</row>";
+                rowMap[val] = {
+                  startTag:
+                    '<row r="' +
+                    v +
+                    '" spans="1:' +
+                    Math.max(colsLength, 1) +
+                    '"  >',
+                  endTag: "</row>",
+                  details: l,
+                };
+              }
+            });
         }
       }
     }
@@ -1779,7 +1790,6 @@ export async function generateExcel(
           let from = val.obj.from;
           let to = val.obj.to;
           let margin = val.obj.margin;
-          let imageType = val.type;
           let type = val.obj.type;
           let extent = val.obj.extent;
           if (typeof extent == "undefined") {
@@ -1838,19 +1848,20 @@ export async function generateExcel(
           result.start.mL = 0;
           result.start.mT = 0;
           if (margin) {
-            if (margin.all || margin.right) {
-              result.end.mR = margin.all || margin.right;
+            if (margin.right || margin.all) {
+              result.end.mR = margin.right || margin.all;
             }
-            if (margin.all || margin.bottom) {
-              result.end.mB = margin.all || margin.bottom;
+            if (margin.bottom || margin.all) {
+              result.end.mB = margin.bottom || margin.all;
             }
-            if (margin.all || margin.left) {
-              result.start.mL = margin.all || margin.left;
+            if (margin.left || margin.all) {
+              result.start.mL = margin.left || margin.all;
             }
-            if (margin.all || margin.top) {
-              result.start.mT = margin.all || margin.top;
+            if (margin.top || margin.all) {
+              result.start.mT = margin.top || margin.all;
             }
           }
+
           if (type == "one") {
             drawersContent +=
               "<xdr:oneCellAnchor>" +
@@ -1981,7 +1992,7 @@ export async function generateExcel(
     mergesCellArray = [...new Set(mergesCellArray)];
     let cFDataString: string = "";
     let priorityCounter = 1;
-    if (conditionalFormatting.length > 0) {
+    if (conditionalFormatting.length > 0 && addCF) {
       cFDataString = conditionalFormatting.reduce((cf, cu) => {
         if (cu.type == "cells") {
           if (cu.operator == "ct") {

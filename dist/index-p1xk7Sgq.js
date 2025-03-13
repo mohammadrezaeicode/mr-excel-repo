@@ -124,7 +124,7 @@ const tt = {
   };
   const u = r.sheet.length;
   for (let m = 0; m < u; m++)
-    r.sheet[m].styleCellCondition = function(s, f, v, D, j, S) {
+    r.sheet[m].styleCellCondition = function(s, f, v, D, j, k) {
       return j ? "themeStyleHeader" : "themeStyleBody";
     };
   return typeof (t == null ? void 0 : t.fileName) == "string" && (r.fileName = t.fileName), r;
@@ -150,11 +150,11 @@ async function po(e, t, r) {
       const v = s[f];
       await m.files[v].async("string").then((D) => {
         let j = D;
-        Object.keys(t).forEach((S) => {
+        Object.keys(t).forEach((k) => {
           var d;
           j = j.replace(
-            new RegExp("{{" + S + "}}", "g"),
-            (d = t[S]) == null ? void 0 : d.toString()
+            new RegExp("{{" + k + "}}", "g"),
+            (d = t[k]) == null ? void 0 : d.toString()
           );
         }), o[v] = j;
       });
@@ -188,8 +188,8 @@ function Ut(e, t, r, o, n, l, g, u) {
   v.mergeType = u && u.mergeType ? [...u.mergeType, s] : [s], v.mergeValue = u && u.mergeValue ? [...u.mergeValue, f] : [f], v.mergeStart = u && u.mergeStart ? [...u.mergeStart, r] : [r];
   for (let D = 0; D < t; D++) {
     let j = e;
-    for (let S = 0; S < o; S++)
-      r <= S ? j >= 1 ? (v["c" + S] = l, l = "", g += "*", j--) : t >= 2 && r == S ? (v["c" + S] = l, l = "", g += "+") : g += "-" : D > 0 && (g += "-");
+    for (let k = 0; k < o; k++)
+      r <= k ? j >= 1 ? (v["c" + k] = l, l = "", g += "*", j--) : t >= 2 && r == k ? (v["c" + k] = l, l = "", g += "+") : g += "-" : D > 0 && (g += "-");
     m.push({
       ...v,
       mergeString: g
@@ -209,56 +209,56 @@ function Wt(e, t, r, o, n) {
   }, s = 40;
   if (l) {
     let D = !1, j = 0;
-    l.forEach((S, d) => {
-      var G = [].slice.call(S.children);
-      const z = window.getComputedStyle(S, null);
-      let Z = me(z.backgroundColor);
+    l.forEach((k, d) => {
+      var q = [].slice.call(k.children);
+      const U = window.getComputedStyle(k, null);
+      let X = me(U.backgroundColor);
       if (!D)
-        j = G.length, D = !0, typeof o == "function" ? s = o(
-          Number(z.height.substring(0, z.height.length - 2)),
+        j = q.length, D = !0, typeof o == "function" ? s = o(
+          Number(U.height.substring(0, U.height.length - 2)),
           d,
           !0
         ) : s = Number(
-          z.height.substring(0, z.height.length - 2)
-        ), G.forEach((N, oe) => {
+          U.height.substring(0, U.height.length - 2)
+        ), q.forEach((N, oe) => {
           let P = window.getComputedStyle(N, null), B = null;
           if (P.borderBottomWidth !== "0px") {
-            const U = me(P.borderBottomColor);
-            U && (B || (B = {}), B.bottom = {
+            const W = me(P.borderBottomColor);
+            W && (B || (B = {}), B.bottom = {
               style: "thin",
-              color: U
+              color: W
             });
           }
           if (P.borderTopWidth !== "0px") {
-            const U = me(P.borderTopColor);
-            U && (B || (B = {}), B.top = {
+            const W = me(P.borderTopColor);
+            W && (B || (B = {}), B.top = {
               style: "thin",
-              color: U
+              color: W
             });
           }
           if (P.borderLeftWidth !== "0px") {
-            const U = me(P.borderLeftColor);
-            U && (B || (B = {}), B.left = {
+            const W = me(P.borderLeftColor);
+            W && (B || (B = {}), B.left = {
               style: "thin",
-              color: U
+              color: W
             });
           }
           if (P.borderRightWidth !== "0px") {
-            const U = me(P.borderRightColor);
-            U && (B || (B = {}), B.right = {
+            const W = me(P.borderRightColor);
+            W && (B || (B = {}), B.right = {
               style: "thin",
-              color: U
+              color: W
             });
           }
-          let X = me(P.backgroundColor);
-          !X && Z && (X = Z);
-          const K = parseInt(
+          let J = me(P.backgroundColor);
+          !J && X && (J = X);
+          const $ = parseInt(
             P.fontSize.substring(0, P.fontSize.indexOf("p"))
           );
           let L = {
-            ...X ? { backgroundColor: X } : {},
+            ...J ? { backgroundColor: J } : {},
             bold: parseInt(P.fontWeight) > 500,
-            ...isNaN(K) ? {} : { size: K },
+            ...isNaN($) ? {} : { size: $ },
             ...B ? { border: B } : {},
             alignment: {
               ...typeof P.textAlign == "string" && P.textAlign.length > 0 ? { horizontal: P.textAlign } : {},
@@ -272,11 +272,11 @@ function Wt(e, t, r, o, n) {
             Number(P.width.substring(0, P.width.length - 2)),
             oe
           ) : E = Number(P.width.substring(0, P.width.length - 2)) * 0.15;
-          const $ = N.getAttribute("colspan"), q = N.getAttribute("rowspan");
+          const M = N.getAttribute("colspan"), Y = N.getAttribute("rowspan");
           g.push({
             label: "c" + oe,
-            ...$ ? { colspan: $ } : {},
-            ...q ? { rowspan: q } : {},
+            ...M ? { colspan: M } : {},
+            ...Y ? { rowspan: Y } : {},
             text: N.textContent,
             ...isNaN(E) || E <= 0 ? {} : { size: E }
           });
@@ -285,69 +285,69 @@ function Wt(e, t, r, o, n) {
         let N = {}, oe = "", P = !1;
         u.length >= d && (N = u[d - 1], oe = "mergeString" in N ? N.mergeString : "", P = !0);
         let B = 0;
-        G.forEach((X, K) => {
-          if ("c" + (K + B) in N)
-            for (let M = 0; M <= j + 1 && "c" + (K + M) in N; M++)
+        q.forEach((J, $) => {
+          if ("c" + ($ + B) in N)
+            for (let K = 0; K <= j + 1 && "c" + ($ + K) in N; K++)
               B++;
-          K += B;
-          let L = window.getComputedStyle(X, null);
-          if (X.getAttribute("colspan") || X.getAttribute("rowspan")) {
-            let M = Ut(
-              X.getAttribute("colspan") * 1,
-              X.getAttribute("rowspan") * 1,
-              K,
+          $ += B;
+          let L = window.getComputedStyle(J, null);
+          if (J.getAttribute("colspan") || J.getAttribute("rowspan")) {
+            let K = Ut(
+              J.getAttribute("colspan") * 1,
+              J.getAttribute("rowspan") * 1,
+              $,
               j,
               N,
-              X.textContent,
+              J.textContent,
               oe,
               N
             );
-            u.length < d ? u.push(...M) : M.forEach((Ce, J) => {
-              u.length < d + J ? u.push(...M) : u[d + J] = {
-                ...u[d + J],
+            u.length < d ? u.push(...K) : K.forEach((Ce, Q) => {
+              u.length < d + Q ? u.push(...K) : u[d + Q] = {
+                ...u[d + Q],
                 ...Ce
               };
-            }), N = M[0], oe = M[0].mergeString, P = !0;
+            }), N = K[0], oe = K[0].mergeString, P = !0;
           } else
             P || (oe += "-");
           let E = null;
           if (L.borderBottomWidth !== "0px") {
-            const M = me(L.borderBottomColor);
-            M && (E || (E = {}), E.bottom = {
+            const K = me(L.borderBottomColor);
+            K && (E || (E = {}), E.bottom = {
               style: "thin",
-              color: M
+              color: K
             });
           }
           if (L.borderTopWidth !== "0px") {
-            const M = me(L.borderTopColor);
-            M && (E || (E = {}), E.top = {
+            const K = me(L.borderTopColor);
+            K && (E || (E = {}), E.top = {
               style: "thin",
-              color: M
+              color: K
             });
           }
           if (L.borderLeftWidth !== "0px") {
-            const M = me(L.borderLeftColor);
-            M && (E || (E = {}), E.left = {
+            const K = me(L.borderLeftColor);
+            K && (E || (E = {}), E.left = {
               style: "thin",
-              color: M
+              color: K
             });
           }
           if (L.borderRightWidth !== "0px") {
-            const M = me(L.borderRightColor);
-            M && (E || (E = {}), E.right = {
+            const K = me(L.borderRightColor);
+            K && (E || (E = {}), E.right = {
               style: "thin",
-              color: M
+              color: K
             });
           }
-          let $ = me(L.backgroundColor);
-          !$ && Z && ($ = Z);
-          const q = parseInt(
+          let M = me(L.backgroundColor);
+          !M && X && (M = X);
+          const Y = parseInt(
             L.fontSize.substring(0, L.fontSize.indexOf("p"))
           );
-          let U = {
-            ...$ ? { backgroundColor: $ } : {},
+          let W = {
+            ...M ? { backgroundColor: M } : {},
             bold: parseInt(L.fontWeight) > 500,
-            ...isNaN(q) ? {} : { size: q },
+            ...isNaN(Y) ? {} : { size: Y },
             ...E ? { border: E } : {},
             alignment: {
               ...typeof L.textAlign == "string" && L.textAlign.length > 0 ? { horizontal: L.textAlign } : {},
@@ -355,12 +355,12 @@ function Wt(e, t, r, o, n) {
               ...L.direction == "rtl" ? { rtl: !0 } : { ltr: !0 }
             }
           };
-          m.header[d + "-" + K] = U, N["c" + K] = X.textContent;
+          m.header[d + "-" + $] = W, N["c" + $] = J.textContent;
         }), typeof o == "function" ? N.height = o(
-          Number(z.height.substring(0, z.height.length - 2)),
+          Number(U.height.substring(0, U.height.length - 2)),
           d,
           !1
-        ) : N.height = z.height.substring(0, z.height.length - 2), typeof N.height == "string" && N.height.length == 0 && delete N.height, u.length < d ? u.push(N) : u[d - 1] = N;
+        ) : N.height = U.height.substring(0, U.height.length - 2), typeof N.height == "string" && N.height.length == 0 && delete N.height, u.length < d ? u.push(N) : u[d - 1] = N;
       }
     });
   } else
@@ -370,8 +370,8 @@ function Wt(e, t, r, o, n) {
     sheet: [
       {
         ...s ? { headerHeight: s } : {},
-        styleCellCondition: function(D, j, S, d, G, z) {
-          return r ? z.includes(S - 1 + "-" + d) ? S - 1 + "-" + d : "" : null;
+        styleCellCondition: function(D, j, k, d, q, U) {
+          return r ? U.includes(k - 1 + "-" + d) ? k - 1 + "-" + d : "" : null;
         },
         data: u,
         headers: g
@@ -379,11 +379,11 @@ function Wt(e, t, r, o, n) {
     ]
   };
 }
-function Ke(e, t, r = "", o = [], n = -1) {
+function $e(e, t, r = "", o = [], n = -1) {
   const l = e.length;
   for (let g = 0; g < l; g++)
     o.push(r + e[g]);
-  return t < o.length ? o : Ke(
+  return t < o.length ? o : $e(
     e,
     t,
     o[n + 1],
@@ -408,9 +408,9 @@ function ot(e, t, r, o) {
   e = e.toUpperCase();
   let n = "";
   if (t.formula) {
-    let s = t, f = s.formula.indexOf("=") == 0 ? s.formula.substring(1) : s.formula, v = e.indexOf(":") > 0, D = s.referenceCells ? s.referenceCells : e, j = v ? e.substring(0, e.indexOf(":")) : e, S = j.replace(/[0-9]/g, ""), d = parseInt(e.substr(S.length)), G = s.returnType ? s.returnType : s.isArray || v ? ' t="str"' : "", z = "styleId" in s && o && typeof s.styleId == "string" && o[s.styleId] ? ' s="' + o[s.styleId].index + '"' : "", Z = s.isArray || v ? ' t="array" ref="' + D + '"' : "";
-    return n = '<c r="' + j + '"' + z + G + "><f" + Z + ">" + f + "</f></c>", {
-      column: S,
+    let s = t, f = s.formula.indexOf("=") == 0 ? s.formula.substring(1) : s.formula, v = e.indexOf(":") > 0, D = s.referenceCells ? s.referenceCells : e, j = v ? e.substring(0, e.indexOf(":")) : e, k = j.replace(/[0-9]/g, ""), d = parseInt(e.substr(k.length)), q = s.returnType ? s.returnType : s.isArray || v ? ' t="str"' : "", U = "styleId" in s && o && typeof s.styleId == "string" && o[s.styleId] ? ' s="' + o[s.styleId].index + '"' : "", X = s.isArray || v ? ' t="array" ref="' + D + '"' : "";
+    return n = '<c r="' + j + '"' + U + q + "><f" + X + ">" + f + "</f></c>", {
+      column: k,
       row: d,
       needCalcChain: !1,
       isCustom: !0,
@@ -483,13 +483,13 @@ function nt(e, t, r, o) {
 `), n += "<r>" + r + "<t" + m + ">" + l + g + "</t></r>", l = "";
   }), l.length > 0 && n.indexOf("<r>") > 0 && (n = n.substring(0, n.length - 8) + l + "</t></r>"), n += "</text></comment>", n;
 }
-const Jt = '<rPr><b /><sz val="9" /><color rgb="000000" /><rFont val="Tahoma" /></rPr>', $e = function(e) {
+const Jt = '<rPr><b /><sz val="9" /><color rgb="000000" /><rFont val="Tahoma" /></rPr>', Me = function(e) {
   return e.replace(/\&/g, "&amp;").replace(/\</g, "&lt;").replace(/\>/g, "&gt;");
 };
 function lt(e, t, r) {
   let o = "";
   return e.forEach((n) => {
-    typeof n.value == "string" && (n.value = $e(n.value)), o += "<r>" + (n.styleId && t[n.styleId] ? t[n.styleId] : t[r]) + '<t xml:space="preserve">' + n.value + "</t></r>";
+    typeof n.value == "string" && (n.value = Me(n.value)), o += "<r>" + (n.styleId && t[n.styleId] ? t[n.styleId] : t[r]) + '<t xml:space="preserve">' + n.value + "</t></r>";
   }), "<si>" + o + "</si>";
 }
 const Lt = {
@@ -659,7 +659,7 @@ function Re(e, t) {
     throw "Invalid Row";
   o = Math.max(0, o - 1);
   let n = t.indexOf(r);
-  return n < 0 && (t = Ke(t, Math.pow(10, r.length + 1), ""), n = t.indexOf(r), n < 0 && (n = 0)), {
+  return n < 0 && (t = $e(t, Math.pow(10, r.length + 1), ""), n = t.indexOf(r), n < 0 && (n = 0)), {
     col: n,
     row: o
   };
@@ -726,7 +726,7 @@ async function ct(e, t = "") {
     eq: "equal"
   };
   let l = [...Qt];
-  e.numberOfColumn && e.numberOfColumn > 25 && (l = Ke(l, e.numberOfColumn));
+  e.numberOfColumn && e.numberOfColumn > 25 && (l = $e(l, e.numberOfColumn));
   const u = (await import("./jszip.min-D-TEDr9v.js").then((w) => w.j)).default;
   let m = new u();
   e.sheet || (e.sheet = [
@@ -743,24 +743,24 @@ async function ct(e, t = "") {
       vertical: "center"
     }
   });
-  const S = Object.keys(e.styles), d = Jt, G = e.activateConditionalFormatting ? e.activateConditionalFormatting : !1, z = {}, Z = {};
-  let N = S.reduce(
+  const k = Object.keys(e.styles), d = Jt, q = e.activateConditionalFormatting ? e.activateConditionalFormatting : !1, U = {}, X = {};
+  let N = k.reduce(
     (w, a, b) => {
       const x = e.styles[a];
       if (x.type && (x.type == "headerFooter" || x.type == "HF")) {
-        let C = "", W = "-", ce = "Regular";
-        if (x.fontFamily && (W = x.fontFamily), x.bold && (ce = "Bold"), x.italic && (ce == "Regular" && (ce = ""), ce += "Italic"), (W != "-" || ce != "Regular") && (C = '&amp;"' + W + "," + ce + '"'), x.size && (C += "&amp;" + x.size), x.doubleUnderline ? C += "&amp;E" : x.underline && (C += "&amp;U"), x.color) {
+        let C = "", G = "-", ce = "Regular";
+        if (x.fontFamily && (G = x.fontFamily), x.bold && (ce = "Bold"), x.italic && (ce == "Regular" && (ce = ""), ce += "Italic"), (G != "-" || ce != "Regular") && (C = '&amp;"' + G + "," + ce + '"'), x.size && (C += "&amp;" + x.size), x.doubleUnderline ? C += "&amp;E" : x.underline && (C += "&amp;U"), x.color) {
           const Te = he(x.color, o);
           typeof Te == "string" && Te.length > 0 && (C += "&amp;K" + Te.toUpperCase());
         }
-        return z[a] = C, w;
+        return U[a] = C, w;
       }
-      if (G && typeof x.type == "string" && x.type && (x.type == "conditionalFormatting" || x.type.toUpperCase() == "CF")) {
-        Z[a] = w.conditionalFormatting.count;
-        let C = he(x.color, o), W = he(x.backgroundColor, o);
-        return w.conditionalFormatting.value += '<dxf><font><color rgb="' + C + '"/></font><fill> <patternFill> <bgColor rgb="' + W + '"/></patternFill></fill></dxf>', w.conditionalFormatting.count++, w;
+      if (q && typeof x.type == "string" && x.type && (x.type == "conditionalFormatting" || x.type.toUpperCase() == "CF")) {
+        X[a] = w.conditionalFormatting.count;
+        let C = he(x.color, o), G = he(x.backgroundColor, o);
+        return w.conditionalFormatting.value += '<dxf><font><color rgb="' + C + '"/></font><fill> <patternFill> <bgColor rgb="' + G + '"/></patternFill></fill></dxf>', w.conditionalFormatting.count++, w;
       }
-      const Y = {
+      const V = {
         fillIndex: 0,
         fontIndex: 0,
         borderIndex: 0,
@@ -768,37 +768,37 @@ async function ct(e, t = "") {
       };
       if (x.backgroundColor) {
         let C = he(x.backgroundColor, o);
-        Y.fillIndex = w.fill.count, w.fill.count++, w.fill.value = w.fill.value + '<fill><patternFill patternType="solid">' + (C ? '<fgColor rgb="' + C.replace("#", "") + '" />' : "") + "</patternFill></fill>";
+        V.fillIndex = w.fill.count, w.fill.count++, w.fill.value = w.fill.value + '<fill><patternFill patternType="solid">' + (C ? '<fgColor rgb="' + C.replace("#", "") + '" />' : "") + "</patternFill></fill>";
       }
       if (x.color || x.fontFamily || x.size || x.bold || x.italic || x.underline || x.doubleUnderline) {
         const C = he(x.color, o);
-        Y.fontIndex = w.font.count, w.font.count++, w.font.value = w.font.value + "<font>" + (x.bold ? "<b/>" : "") + (x.italic ? "<i />" : "") + (x.underline || x.doubleUnderline ? "<u " + (x.doubleUnderline ? ' val="double" ' : "") + "/>" : "") + (x.size ? '<sz val="' + x.size + '" />' : "") + (C ? '<color rgb="' + C.replace("#", "") + '" />' : "") + (x.fontFamily ? '<name val="' + x.fontFamily + '" />' : "") + "</font>", w.commentSyntax.value[a] = "<rPr>" + (x.bold ? "<b/>" : "") + (x.italic ? "<i/>" : "") + (x.underline || x.doubleUnderline ? "<u " + (x.doubleUnderline ? 'val="double" ' : "") + "/>" : "") + '<sz val="' + (x.size ? x.size : "9") + '" />' + (C ? '<color rgb="' + C.replace("#", "") + '" />' : "") + '<rFont val="' + (x.fontFamily ? x.fontFamily : "Tahoma") + '" /></rPr>';
+        V.fontIndex = w.font.count, w.font.count++, w.font.value = w.font.value + "<font>" + (x.bold ? "<b/>" : "") + (x.italic ? "<i />" : "") + (x.underline || x.doubleUnderline ? "<u " + (x.doubleUnderline ? ' val="double" ' : "") + "/>" : "") + (x.size ? '<sz val="' + x.size + '" />' : "") + (C ? '<color rgb="' + C.replace("#", "") + '" />' : "") + (x.fontFamily ? '<name val="' + x.fontFamily + '" />' : "") + "</font>", w.commentSyntax.value[a] = "<rPr>" + (x.bold ? "<b/>" : "") + (x.italic ? "<i/>" : "") + (x.underline || x.doubleUnderline ? "<u " + (x.doubleUnderline ? 'val="double" ' : "") + "/>" : "") + '<sz val="' + (x.size ? x.size : "9") + '" />' + (C ? '<color rgb="' + C.replace("#", "") + '" />' : "") + '<rFont val="' + (x.fontFamily ? x.fontFamily : "Tahoma") + '" /></rPr>';
       }
       let se = "/>";
-      x.alignment && (x.alignment.rtl && (x.alignment.readingOrder = 2), delete x.alignment.rtl, x.alignment.ltr && (x.alignment.readingOrder = 1), delete x.alignment.ltr, se = ' applyAlignment="1"><alignment ' + Object.keys(x.alignment).reduce((C, W) => C + " " + W + '="' + x.alignment[W] + '" ', "") + " /></xf>");
+      x.alignment && (x.alignment.rtl && (x.alignment.readingOrder = 2), delete x.alignment.rtl, x.alignment.ltr && (x.alignment.readingOrder = 1), delete x.alignment.ltr, se = ' applyAlignment="1"><alignment ' + Object.keys(x.alignment).reduce((C, G) => C + " " + G + '="' + x.alignment[G] + '" ', "") + " /></xf>");
       const H = x.border;
-      let k = "";
-      if (typeof H == "object" && ((H.left || H.full) && (k += '<left style="' + (H.left || H.full).style + '"><color rgb="' + he(
+      let O = "";
+      if (typeof H == "object" && ((H.left || H.full) && (O += '<left style="' + (H.left || H.full).style + '"><color rgb="' + he(
         (H.left || H.full).color,
         o
-      ).replace("#", "") + '" /></left>'), (H.right || H.full) && (k += '<right style="' + (H.right || H.full).style + '"><color rgb="' + he(
+      ).replace("#", "") + '" /></left>'), (H.right || H.full) && (O += '<right style="' + (H.right || H.full).style + '"><color rgb="' + he(
         (H.right || H.full).color,
         o
-      ).replace("#", "") + '" /></right>'), (H.top || H.full) && (k += '<top style="' + (H.top || H.full).style + '"><color rgb="' + he(
+      ).replace("#", "") + '" /></right>'), (H.top || H.full) && (O += '<top style="' + (H.top || H.full).style + '"><color rgb="' + he(
         (H.top || H.full).color,
         o
-      ).replace("#", "") + '" /></top>'), (H.bottom || H.full) && (k += '<bottom style="' + (H.bottom || H.full).style + '"><color rgb="' + he(
+      ).replace("#", "") + '" /></top>'), (H.bottom || H.full) && (O += '<bottom style="' + (H.bottom || H.full).style + '"><color rgb="' + he(
         (H.bottom || H.full).color,
         o
-      ).replace("#", "") + '" /></bottom>'), Y.borderIndex = w.border.count, w.border.count++, w.border.value += "<border>" + k + "<diagonal /></border>"), x.format) {
+      ).replace("#", "") + '" /></bottom>'), V.borderIndex = w.border.count, w.border.count++, w.border.value += "<border>" + O + "<diagonal /></border>"), x.format) {
         const C = r[x.format];
-        C && (Y.formatIndex = C.key, "value" in C && (w.format.count++, w.format.value += C.value));
+        C && (V.formatIndex = C.key, "value" in C && (w.format.count++, w.format.value += C.value));
       }
-      return w.cell.value = w.cell.value + '<xf numFmtId="' + Y.formatIndex + '" fontId="' + Y.fontIndex + '" fillId="' + Y.fillIndex + '" borderId="' + Y.borderIndex + '" xfId="0"' + (Y.borderIndex > 0 ? ' applyBorder="1" ' : "") + (Y.fillIndex > 0 ? ' applyFill="1" ' : "") + (Y.fontIndex >= 0 ? ' applyFont="1" ' : "") + (Y.formatIndex > 0 ? ' applyNumberFormat="1" ' : "") + se, e.styles[a].index = w.cell.count, w.cell.count++, w;
+      return w.cell.value = w.cell.value + '<xf numFmtId="' + V.formatIndex + '" fontId="' + V.fontIndex + '" fillId="' + V.fillIndex + '" borderId="' + V.borderIndex + '" xfId="0"' + (V.borderIndex > 0 ? ' applyBorder="1" ' : "") + (V.fillIndex > 0 ? ' applyFill="1" ' : "") + (V.fontIndex >= 0 ? ' applyFont="1" ' : "") + (V.formatIndex > 0 ? ' applyNumberFormat="1" ' : "") + se, e.styles[a].index = w.cell.count, w.cell.count++, w;
     },
     {
       conditionalFormatting: {
-        count: G ? 1 : 0,
+        count: q ? 1 : 0,
         value: '<dxf><font><color rgb="FF9C0006"/></font><fill> <patternFill> <bgColor rgb="FFFFC7CE"/></patternFill></fill></dxf>'
       },
       commentSyntax: {
@@ -826,10 +826,10 @@ async function ct(e, t = "") {
       }
     }
   );
-  f == null || f.file("styles.xml", Gt(N, G));
-  let oe = '<Override ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml" PartName="/xl/worksheets/sheet1.xml" />', P = "", B = 0, X = "", K = "", L = {};
+  f == null || f.file("styles.xml", Gt(N, q));
+  let oe = '<Override ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml" PartName="/xl/worksheets/sheet1.xml" />', P = "", B = 0, J = "", $ = "", L = {};
   const E = {};
-  let $ = "", q = 4, U = !1, M = -1, Ce = [], J = 1;
+  let M = "", Y = 4, W = !1, K = -1, Ce = [], Q = 1;
   const ye = {
     checkbox: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <formControlPr xmlns="http://schemas.microsoft.com/office/spreadsheetml/2009/9/main" objectType="CheckBox" **value** **fmlaLink** lockText="1" noThreeD="1"/>`
@@ -866,12 +866,12 @@ async function ct(e, t = "") {
   let ae = [], ie = "", ge = !1, de = null;
   for (let w = 0; w < s; w++) {
     const a = e.sheet[w], b = w + 1;
-    let x = {}, Y = {
+    let x = {}, V = {
       start: "",
       end: ""
     };
     const se = a.asTable;
-    let H = "", k = a.shiftTop && a.shiftTop >= 0 ? a.shiftTop + 1 : 1, C = "", W = "", ce = "", Te = "", Ee = "", _e = "", ze = !1, dt = "", pt = "", ht = "", ut = "", xe = Object.assign([], a.merges), ue = Object.assign({}, a.formula), Ue = Object.assign(
+    let H = "", O = a.shiftTop && a.shiftTop >= 0 ? a.shiftTop + 1 : 1, C = "", G = "", ce = "", Te = "", Ee = "", _e = "", ze = !1, dt = "", pt = "", ht = "", ut = "", xe = Object.assign([], a.merges), ue = Object.assign({}, a.formula), Ue = Object.assign(
       [],
       a.conditionalFormatting
     ), Ie = !1, pe = [], Le = "", He = [], yt = [], We = [], Ge = [], ke = {}, Pe = "", je = !1, Ze = "";
@@ -898,8 +898,8 @@ async function ct(e, t = "") {
     if (a.pageOption) {
       const T = a.pageOption;
       if (T.isPortrait && (je = !0), T.margin) {
-        const F = T.margin;
-        let A = {
+        const S = T.margin;
+        let F = {
           left: 0.7,
           right: 0.7,
           top: 0.75,
@@ -907,36 +907,36 @@ async function ct(e, t = "") {
           header: 0.3,
           footer: 0.3
         };
-        Object.keys(A).forEach((h) => {
-          typeof F[h] == "number" && (A[h] = F[h]);
-        }), gt = '<pageMargins left="' + A.left + '" right="' + A.right + '" top="' + A.top + '" bottom="' + A.bottom + '" header="' + A.header + '" footer="' + A.footer + '"/>';
+        Object.keys(F).forEach((h) => {
+          typeof S[h] == "number" && (F[h] = S[h]);
+        }), gt = '<pageMargins left="' + F.left + '" right="' + F.right + '" top="' + F.top + '" bottom="' + F.bottom + '" header="' + F.header + '" footer="' + F.footer + '"/>';
       }
       let i = "", y = "", p = "", c = "";
-      if (["header", "footer"].forEach((F) => {
-        const A = F.charAt(0).toUpperCase() + F.substring(1);
-        if (T[F]) {
-          const h = T[F];
-          typeof h == "object" && Object.keys(h).forEach((O) => {
-            i.indexOf(O) < 0 && (i += O);
-            const le = h[O];
-            let V = "";
+      if (["header", "footer"].forEach((S) => {
+        const F = S.charAt(0).toUpperCase() + S.substring(1);
+        if (T[S]) {
+          const h = T[S];
+          typeof h == "object" && Object.keys(h).forEach((A) => {
+            i.indexOf(A) < 0 && (i += A);
+            const le = h[A];
+            let z = "";
             if (Object.keys(le).reduce((R, I) => (I == "l" ? R.splice(0, 0, I) : I == "c" ? R.splice(1, 0, I) : I == "r" && R.splice(2, 0, I), R), []).forEach((R) => {
               const I = le[R];
-              V += "&amp;" + R.toUpperCase(), I.styleId && z[I.styleId] && (V += z[I.styleId]), I.text && (V += I.text);
-            }), V = "<" + O + A + ">" + V + "</" + O + A + ">", O == "odd")
-              y += V;
-            else if (O == "even")
-              p += V;
-            else if (O == "first")
-              c += V;
+              z += "&amp;" + R.toUpperCase(), I.styleId && U[I.styleId] && (z += U[I.styleId]), I.text && (z += I.text);
+            }), z = "<" + A + F + ">" + z + "</" + A + F + ">", A == "odd")
+              y += z;
+            else if (A == "even")
+              p += z;
+            else if (A == "first")
+              c += z;
             else
               throw "type error";
           });
         }
       }), Pe = y + p + c, Pe.length > 0) {
         je = !0;
-        const F = i.length == 7 || i.length == 12 ? ' differentOddEven="1"' : "", A = i.indexOf("first") >= 0 ? ' differentFirst="1"' : "";
-        Pe = "<headerFooter" + F + A + ">" + Pe + "</headerFooter>";
+        const S = i.length == 7 || i.length == 12 ? ' differentOddEven="1"' : "", F = i.indexOf("first") >= 0 ? ' differentFirst="1"' : "";
+        Pe = "<headerFooter" + S + F + ">" + Pe + "</headerFooter>";
       }
     }
     if (a.viewOption) {
@@ -957,7 +957,7 @@ async function ct(e, t = "") {
           };
         } else if (p.type == "C" || p.type == "COLUMN") {
           let c;
-          typeof p.index == "object" ? c = p.index.c : c = p.index, c > l.length - 1 && (l = Ke(l, c)), y = {
+          typeof p.index == "object" ? c = p.index.c : c = p.index, c > l.length - 1 && (l = $e(l, c)), y = {
             type: "V",
             startAt: {
               r: l[c] + 1
@@ -996,10 +996,10 @@ async function ct(e, t = "") {
       a.checkbox.forEach((i, y) => {
         let p = T;
         if (i.link) {
-          let O = Re(i.link, l);
+          let A = Re(i.link, l);
           p = p.replace(
             "**fmlaLink**",
-            'fmlaLink="$' + l[O.col] + "$" + (O.row + 1) + '"'
+            'fmlaLink="$' + l[A.col] + "$" + (A.row + 1) + '"'
           );
         } else
           p = p.replace("**fmlaLink**", "");
@@ -1007,7 +1007,7 @@ async function ct(e, t = "") {
         let c = w + "" + ve++;
         const _ = "_x0000_s" + c;
         pt += we.checkbox.replace("***id***", _).replace("***text***", i.text);
-        let F = i.startStr, A = i.endStr, h = {
+        let S = i.startStr, F = i.endStr, h = {
           start: {
             col: 0,
             row: 0
@@ -1026,19 +1026,19 @@ async function ct(e, t = "") {
             col: i.col,
             row: i.row
           }
-        }), typeof F == "string" && F.length >= 2) {
-          let O = Re(F, l);
+        }), typeof S == "string" && S.length >= 2) {
+          let A = Re(S, l);
           h.start = {
-            ...O
+            ...A
           }, h.end = {
-            col: O.col + 1,
-            row: O.row + 1
+            col: A.col + 1,
+            row: A.row + 1
           };
         }
-        if (typeof A == "string" && A.length >= 2) {
-          let O = Re(A, l);
-          O.row += 1, O.col += 1, h.end = {
-            ...O
+        if (typeof F == "string" && F.length >= 2) {
+          let A = Re(F, l);
+          A.row += 1, A.col += 1, h.end = {
+            ...A
           };
         }
         ut += '<mc:AlternateContent xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"><mc:Choice Requires="x14"><control shapeId="' + c + '" r:id="rId' + (7 + y) + '" name="' + i.text + '"><controlPr defaultSize="0" autoFill="0" autoLine="0" autoPict="0"><anchor moveWithCells="1"><from><xdr:col>' + h.start.col + "</xdr:col><xdr:colOff>19050</xdr:colOff><xdr:row>" + h.start.row + "</xdr:row><xdr:rowOff>19050</xdr:rowOff></from><to><xdr:col>" + h.end.col + "</xdr:col><xdr:colOff>819150</xdr:colOff><xdr:row>" + h.end.row + "</xdr:row><xdr:rowOff>0</xdr:rowOff></to></anchor></controlPr></control></mc:Choice></mc:AlternateContent>", ht += '<Relationship Id="rId' + (7 + y) + '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/ctrlProp" Target="../ctrlProps/ctrlProp' + ae.length + '.xml" />', dt += '<mc:AlternateContent xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"><mc:Choice xmlns:a14="http://schemas.microsoft.com/office/drawing/2010/main" Requires="a14"><xdr:twoCellAnchor editAs="oneCell"><xdr:from><xdr:col>' + h.start.col + "</xdr:col><xdr:colOff>19050</xdr:colOff><xdr:row>" + h.start.row + "</xdr:row><xdr:rowOff>19050</xdr:rowOff></xdr:from><xdr:to><xdr:col>" + h.end.col + "</xdr:col><xdr:colOff>819150</xdr:colOff><xdr:row>" + h.end.row + '</xdr:row><xdr:rowOff>0</xdr:rowOff></xdr:to><xdr:sp macro="" textlink=""><xdr:nvSpPr><xdr:cNvPr id="' + c + '" name="' + i.text + '" hidden="1"><a:extLst><a:ext uri=""><a14:compatExt spid="' + _ + '"/></a:ext><a:ext uri=""><a16:creationId xmlns:a16="http://schemas.microsoft.com/office/drawing/2014/main" id=""/></a:ext></a:extLst></xdr:cNvPr><xdr:cNvSpPr/></xdr:nvSpPr><xdr:spPr bwMode="auto"><a:xfrm><a:off x="0" y="0"/><a:ext cx="0" cy="0"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom><a:noFill/><a:ln><a:noFill/></a:ln></xdr:spPr><xdr:txBody><a:bodyPr vertOverflow="clip" wrap="square" lIns="27432" tIns="18288" rIns="0" bIns="18288" anchor="ctr" upright="1"/><a:lstStyle/><a:p><a:pPr algn="l" rtl="0"><a:defRPr sz="1000"/></a:pPr><a:r><a:rPr lang="en-US" sz="800" b="0" i="0" u="none" strike="noStrike" baseline="0"><a:solidFill><a:srgbClr val="000000"/></a:solidFill><a:latin typeface="Segoe UI"/><a:cs typeface="Segoe UI"/></a:rPr><a:t>' + i.text + "</a:t></a:r></a:p></xdr:txBody></xdr:sp><xdr:clientData/></xdr:twoCellAnchor></mc:Choice><mc:Fallback/></mc:AlternateContent>";
@@ -1051,11 +1051,11 @@ async function ct(e, t = "") {
       Xe = new Promise(async (i, y) => {
         let p = T.lastIndexOf("."), c;
         p > 0 ? (c = T.substring(p + 1).toLowerCase(), c.length > 4 && (c.indexOf("gif") >= 0 ? c = "gif" : c.indexOf("jpg") >= 0 ? c = "jpg" : c.indexOf("jpeg") >= 0 ? c = "jpeg" : c = "png")) : c = "png";
-        const _ = J++, F = "image" + _ + "." + c, A = await _t(T, F, o, e.fetch);
-        A || y("image not load"), Ce.push(c), i({
-          name: F,
+        const _ = Q++, S = "image" + _ + "." + c, F = await _t(T, S, o, e.fetch);
+        F || y("image not load"), Ce.push(c), i({
+          name: S,
           type: c,
-          image: A,
+          image: F,
           ref: _
         });
       });
@@ -1065,7 +1065,7 @@ async function ct(e, t = "") {
       ...a.images.map(async (T, i) => {
         let y = T.url.lastIndexOf("."), p;
         y > 0 ? (p = T.url.substring(y + 1).toLowerCase(), p.length > 4 && (p.indexOf("gif") >= 0 ? p = "gif" : p.indexOf("jpg") >= 0 ? p = "jpg" : p.indexOf("jpeg") >= 0 ? p = "jpeg" : p = "png")) : p = "png", Ce.push(p);
-        const c = "image" + J++ + "." + p;
+        const c = "image" + Q++ + "." + p;
         return {
           type: p,
           image: await _t(T.url, c, o, e.fetch),
@@ -1078,68 +1078,68 @@ async function ct(e, t = "") {
       const T = a.headers.length;
       let i = "";
       if (a.title) {
-        const c = a.title, _ = c.comment, F = c.shiftTop && c.shiftTop >= 0 ? c.shiftTop : 0, A = a.shiftLeft && a.shiftLeft >= 0 ? a.shiftLeft : 0, h = c.shiftLeft && c.shiftLeft + A >= 0 ? c.shiftLeft + A : A, O = c.consommeRow ? c.consommeRow - 1 : 1, le = c.consommeCol ? c.consommeCol : T, V = O == 0 && typeof c.height == "number" ? ' ht="' + c.height + '" customHeight="1" ' : "", R = c.styleId ? c.styleId : "titleStyle", I = l[h] + "" + (k + F);
+        const c = a.title, _ = c.comment, S = c.shiftTop && c.shiftTop >= 0 ? c.shiftTop : 0, F = a.shiftLeft && a.shiftLeft >= 0 ? a.shiftLeft : 0, h = c.shiftLeft && c.shiftLeft + F >= 0 ? c.shiftLeft + F : F, A = c.consommeRow ? c.consommeRow - 1 : 1, le = c.consommeCol ? c.consommeCol : T, z = A == 0 && typeof c.height == "number" ? ' ht="' + c.height + '" customHeight="1" ' : "", R = c.styleId ? c.styleId : "titleStyle", I = l[h] + "" + (O + S);
         if (xe.push(
-          I + ":" + l[h + le - 1] + (k + O + F)
+          I + ":" + l[h + le - 1] + (O + A + S)
         ), typeof _ < "u") {
           Ie = !0;
-          const Q = rt(
+          const ee = rt(
             _,
             N.commentSyntax.value,
             d
           );
           let fe = pe.length;
-          if (Q.hasAuthor && typeof Q.author < "u") {
-            let ee = Q.author.toString();
-            const re = pe.indexOf(ee);
-            re < 0 ? pe.push(ee) : fe = re;
+          if (ee.hasAuthor && typeof ee.author < "u") {
+            let Z = ee.author.toString();
+            const re = pe.indexOf(Z);
+            re < 0 ? pe.push(Z) : fe = re;
           }
           He.push({
-            row: k + F - 1,
+            row: O + S - 1,
             col: h
           }), Le += nt(
             I,
-            Q.commentStr,
-            Q.commentStyle,
+            ee.commentStr,
+            ee.commentStyle,
             fe
           );
         }
-        typeof c.text == "string" && (x[k + F] = {
-          startTag: '<row r="' + (k + F) + '" ' + V + ' spans="1:' + (h + le - 1) + '">',
+        typeof c.text == "string" && (x[O + S] = {
+          startTag: '<row r="' + (O + S) + '" ' + z + ' spans="1:' + Math.max(h + le - 1, 1) + '">',
           details: '<c r="' + I + '" ' + (e.styles[R] ? ' s="' + e.styles[R].index + '" ' : "") + ' t="s"><v>' + B + "</v></c>",
           endTag: "</row>"
-        }, i += '<row r="' + (k + F) + '" ' + V + ' spans="1:' + (h + le - 1) + '">', i += '<c r="' + I + '" ' + (e.styles[R] ? ' s="' + e.styles[R].index + '" ' : "") + ' t="s"><v>' + B + "</v></c>", i += "</row>", B++, L[c.text] = c.text, c.multiStyleValue && Array.isArray(c.multiStyleValue) ? P += lt(
+        }, i += '<row r="' + (O + S) + '" ' + z + ' spans="1:' + Math.max(h + le - 1, 1) + '">', i += '<c r="' + I + '" ' + (e.styles[R] ? ' s="' + e.styles[R].index + '" ' : "") + ' t="s"><v>' + B + "</v></c>", i += "</row>", B++, L[c.text] = c.text, c.multiStyleValue && Array.isArray(c.multiStyleValue) ? P += lt(
           c.multiStyleValue,
           N.commentSyntax.value,
           R
-        ) : P += "<si><t>" + $e(c.text) + "</t></si>"), k += F + O + 1;
+        ) : P += "<si><t>" + Me(c.text) + "</t></si>"), O += S + A + 1;
       }
       let y = a.headerStyleKey ? a.headerStyleKey : null, p = 0;
-      if (typeof a.shiftLeft == "number" && a.shiftLeft >= 0 && (p = a.shiftLeft), se && (H += '<tableColumns count="' + a.headers.length + '">', de || (de = f == null ? void 0 : f.folder("tables"))), Y.start = l[p] + "" + k, Y.end = l[p + a.headers.length - 1] + "" + (k + a.data.length), a.headers.forEach((c, _) => {
-        if (se && (H += '<tableColumn id="' + (_ + 1) + '" name="' + c.text + '"/>'), p && (_ += p), c.formula && We.push(_), c.conditionalFormatting && Ge.push(_), yt.push(c.label), a.mergeRowDataCondition && typeof a.mergeRowDataCondition == "function" && a.mergeRowDataCondition(
+      if (typeof a.shiftLeft == "number" && a.shiftLeft >= 0 && (p = a.shiftLeft), se && (H += '<tableColumns count="' + a.headers.length + '">', de || (de = f == null ? void 0 : f.folder("tables"))), V.start = l[p] + "" + O, V.end = l[p + a.headers.length - 1] + "" + (O + a.data.length), a.headers.forEach((c, _) => {
+        if (se && (H += '<tableColumn id="' + (_ + 1) + '" name="' + c.text + '"/>'), p && (_ += p), c.formula && We.push(_), c.conditionalFormatting && q && Ge.push(_), yt.push(c.label), a.mergeRowDataCondition && typeof a.mergeRowDataCondition == "function" && a.mergeRowDataCondition(
           c,
           null,
           _,
           !0
         ) === !0 && (ke[l[_]] = {
           inProgress: !0,
-          start: k
+          start: O
         }), a.styleCellCondition && typeof a.styleCellCondition == "function" && (y = a.styleCellCondition(
           c,
           c,
-          k,
+          O,
           _,
           !0,
-          S
-        ) || y), c.size && c.size > 0 && (W += '<col min="' + (_ + 1) + '" max="' + (_ + 1) + '" width="' + c.size + '" customWidth="1" />'), a.withoutHeader)
+          k
+        ) || y), c.size && c.size > 0 && (G += '<col min="' + (_ + 1) + '" max="' + (_ + 1) + '" width="' + c.size + '" customWidth="1" />'), a.withoutHeader)
           return;
-        const F = l[_] + "" + k;
+        const S = l[_] + "" + O;
         if (typeof a.commentCondition == "function") {
           const h = a.commentCondition(
             c,
             null,
             c.label,
-            k,
+            O,
             _,
             !0
           );
@@ -1152,38 +1152,38 @@ async function ct(e, t = "") {
             N.commentSyntax.value,
             d
           );
-          let O = pe.length;
+          let A = pe.length;
           if (h.hasAuthor && typeof h.author < "u") {
             let le = h.author.toString();
-            const V = pe.indexOf(le);
-            V < 0 ? pe.push(le) : O = V;
+            const z = pe.indexOf(le);
+            z < 0 ? pe.push(le) : A = z;
           }
           He.push({
-            row: k - 1,
+            row: O - 1,
             col: _
           }), Le += nt(
-            F,
+            S,
             h.commentStr,
             h.commentStyle,
-            O
+            A
           );
         }
-        const A = ue && ue[F];
-        if (A) {
+        const F = ue && ue[S];
+        if (F) {
           const h = ot(
+            S,
             F,
-            A,
             b,
             e.styles
           );
-          h.needCalcChain && (ge = !0, ie += h.chainCell), C += h.cell, delete ue[F];
+          h.needCalcChain && (ge = !0, ie += h.chainCell), C += h.cell, delete ue[S];
         } else {
-          if (C += '<c r="' + l[_] + k + '" ' + (y && e.styles && e.styles[y] ? ' s="' + e.styles[y].index + '" ' : "") + ' t="s"><v>' + B + "</v></c>", typeof a.multiStyleCondition == "function") {
+          if (C += '<c r="' + l[_] + O + '" ' + (y && e.styles && e.styles[y] ? ' s="' + e.styles[y].index + '" ' : "") + ' t="s"><v>' + B + "</v></c>", typeof a.multiStyleCondition == "function") {
             const h = a.multiStyleCondition(
               c,
               null,
               c.label,
-              k,
+              O,
               _,
               !0
             );
@@ -1193,69 +1193,71 @@ async function ct(e, t = "") {
             c.multiStyleValue,
             N.commentSyntax.value,
             y || ""
-          ) : P += "<si><t>" + $e(c.text) + "</t></si>", L[c.text] = c.text, B++;
+          ) : P += "<si><t>" + Me(c.text) + "</t></si>", L[c.text] = c.text, B++;
         }
       }), se && (H += "</tableColumns>"), a.withoutHeader)
         C += i;
       else {
-        const c = '<row r="' + k + '" spans="1:' + T + '" ' + (a.headerHeight ? 'ht="' + a.headerHeight + '" customHeight="1"' : "") + (a.headerRowOption ? Object.keys(a.headerRowOption).reduce((_, F) => _ + " " + F + '="' + a.headerRowOption[F] + '" ', "  ") : "") + ">";
-        x[k] = {
+        const c = '<row r="' + O + '" spans="1:' + Math.max(T, 1) + '" ' + (a.headerHeight ? 'ht="' + a.headerHeight + '" customHeight="1"' : "") + (a.headerRowOption ? Object.keys(a.headerRowOption).reduce((_, S) => _ + " " + S + '="' + a.headerRowOption[S] + '" ', "  ") : "") + ">";
+        x[O] = {
           startTag: c,
           endTag: "</row>",
           details: C
-        }, C = i + c + C + "</row>", k++;
+        }, C = i + c + C + "</row>", O++;
       }
       if (Array.isArray(a.data)) {
-        const c = a.mapSheetDataOption && a.mapSheetDataOption.outlineLevel ? a.mapSheetDataOption.outlineLevel : "outlineLevel", _ = a.mapSheetDataOption && a.mapSheetDataOption.hidden ? a.mapSheetDataOption.hidden : "hidden", F = a.mapSheetDataOption && a.mapSheetDataOption.height ? a.mapSheetDataOption.height : "height", A = a.data.length;
-        a.data.forEach((h, O) => {
+        const c = a.mapSheetDataOption && a.mapSheetDataOption.outlineLevel ? a.mapSheetDataOption.outlineLevel : "outlineLevel", _ = a.mapSheetDataOption && a.mapSheetDataOption.hidden ? a.mapSheetDataOption.hidden : "hidden", S = a.mapSheetDataOption && a.mapSheetDataOption.height ? a.mapSheetDataOption.height : "height", F = a.data.length;
+        a.data.forEach((h, A) => {
           if (h.mergeType)
             for (let I = 0; I < h.mergeType.length; I++) {
-              const Q = h.mergeType[I], fe = h.mergeStart[I], ee = h.mergeValue[w];
+              const ee = h.mergeType[I], fe = h.mergeStart[I], Z = h.mergeValue[w];
               let re = "";
-              Q == "both" ? re = l[fe] + "" + k + ":" + l[fe + ee[1]] + (k + ee[0]) : Q == "col" ? re = l[fe] + "" + k + ":" + l[fe + ee[0]] + k : re = l[fe] + "" + k + ":" + l[fe] + (k + ee[0]), xe.push(re);
+              ee == "both" ? re = l[fe] + "" + O + ":" + l[fe + Z[1]] + (O + Z[0]) : ee == "col" ? re = l[fe] + "" + O + ":" + l[fe + Z[0]] + O : re = l[fe] + "" + O + ":" + l[fe] + (O + Z[0]), xe.push(re);
             }
-          const le = h.rowStyle, V = '<row r="' + k + '" spans="1:' + T + '" ' + (F in h ? 'ht="' + h[F] + '" customHeight="1"' : "") + (c in h ? ' outlineLevel="' + h[c] + '"' : "") + (_ in h ? ' hidden="' + h[_] + '"' : "") + " >";
-          C += V;
+          const le = h.rowStyle, z = '<row r="' + O + '" spans="1:' + Math.max(T, 1) + '" ' + (S in h ? 'ht="' + h[S] + '" customHeight="1"' : "") + (c in h ? ' outlineLevel="' + h[c] + '"' : "") + (_ in h ? ' hidden="' + h[_] + '"' : "") + " >";
+          C += z;
           let R = "";
-          yt.forEach((I, Q) => {
-            p && (Q += p);
+          yt.forEach((I, ee) => {
+            p && (ee += p);
             const fe = h[I] * 1;
-            let ee = a.convertStringToNumber && !isNaN(fe) ? fe : h[I], re = le;
+            let Z = a.convertStringToNumber && !isNaN(fe) ? fe : h[I];
+            typeof Z == "boolean" && (Z = Z + "");
+            let re = le;
             if (a.styleCellCondition && typeof a.styleCellCondition == "function" && (re = a.styleCellCondition(
-              ee,
+              Z,
               h,
-              k,
-              Q,
+              O,
+              ee,
               !1,
-              S
+              k
             ) || le), a.mergeRowDataCondition && typeof a.mergeRowDataCondition == "function") {
               let te = a.mergeRowDataCondition(
-                ee,
+                Z,
                 I,
-                Q,
+                ee,
                 !1
               );
-              const ne = l[Q];
+              const ne = l[ee];
               let be = ke[ne];
               te === !0 ? (!be || be && !be.inProgress) && (ke[ne] = {
                 inProgress: !0,
-                start: k
+                start: O
               }) : be && be.inProgress && (xe.push(
-                ne + be.start + ":" + ne + (k - 1)
+                ne + be.start + ":" + ne + (O - 1)
               ), ke[ne] = {
                 inProgress: !1,
                 start: -1
               });
             }
-            typeof ee > "u" && (ee = "");
-            const Be = l[Q] + "" + k;
+            typeof Z > "u" && (Z = "");
+            const Be = l[ee] + "" + O;
             if (typeof a.commentCondition == "function") {
               const te = a.commentCondition(
-                ee,
+                Z,
                 h,
                 I,
-                k,
-                Q,
+                O,
+                ee,
                 !1
               );
               (typeof te == "string" || typeof te == "object" && te != null) && (typeof h.comment != "object" && (h.comment = {}), h.comment[I] = te);
@@ -1269,8 +1271,8 @@ async function ct(e, t = "") {
                 d
               );
               ne.hasAuthor && typeof ne.author < "u" && pe.push(ne.author.toString()), He.push({
-                row: k - 1,
-                col: Q
+                row: O - 1,
+                col: ee
               });
               let be = pe.length;
               if (ne.hasAuthor && typeof ne.author < "u") {
@@ -1289,15 +1291,15 @@ async function ct(e, t = "") {
             if (Tt) {
               const te = ot(Be, Tt, b);
               te.needCalcChain && (ge = !0, ie += te.chainCell), C += te.cell, R += te.cell, delete ue[Be];
-            } else if (typeof ee == "string") {
-              const te = '<c r="' + l[Q] + k + '" t="s" ' + (re && e.styles && e.styles[re] ? 's="' + e.styles[re].index + '"' : "") + "><v>" + B + "</v></c>";
+            } else if (typeof Z == "string") {
+              const te = '<c r="' + l[ee] + O + '" t="s" ' + (re && e.styles && e.styles[re] ? 's="' + e.styles[re].index + '"' : "") + "><v>" + B + "</v></c>";
               if (R += te, C += te, typeof a.multiStyleCondition == "function") {
                 const ne = a.multiStyleCondition(
-                  ee,
+                  Z,
                   h,
                   I,
-                  k,
-                  Q,
+                  O,
+                  ee,
                   !1
                 );
                 ne && ((!("multiStyleValue" in h) || typeof h.multiStyleValue > "u") && (h.multiStyleValue = {}), h.multiStyleValue[I] = ne);
@@ -1306,61 +1308,63 @@ async function ct(e, t = "") {
                 h.multiStyleValue[I],
                 N.commentSyntax.value,
                 re || ""
-              ) : P += "<si><t>" + $e(ee) + "</t></si>", L[ee] = ee, B++;
+              ) : P += "<si><t>" + Me(Z) + "</t></si>", L[Z] = Z, B++;
             } else {
-              const te = '<c r="' + l[Q] + k + '" ' + (re && e.styles && e.styles[re] ? 's="' + e.styles[re].index + '"' : "") + "><v>" + ee + "</v></c>";
+              const te = '<c r="' + l[ee] + O + '" ' + (re && e.styles && e.styles[re] ? 's="' + e.styles[re].index + '"' : "") + "><v>" + Z + "</v></c>";
               C += te, R += te;
             }
-          }), A - 1 == O && Object.keys(ke).forEach((I) => {
+          }), F - 1 == A && Object.keys(ke).forEach((I) => {
             ke[I].inProgress && xe.push(
-              I + ke[I].start + ":" + I + k
+              I + ke[I].start + ":" + I + O
             );
-          }), x[k] = {
-            startTag: V,
+          }), x[O] = {
+            startTag: z,
             endTag: "</row>",
             details: R
-          }, k++, C += "</row>";
-        }), a.sortAndFilter && (a.sortAndFilter.mode == "all" ? ce += '<autoFilter ref="A1:' + l[T - 1] + (k - 1) + '" />' : typeof a.sortAndFilter.ref == "string" && a.sortAndFilter.ref.length > 0 && (ce += '<autoFilter ref="' + a.sortAndFilter.ref + '" />'));
+          }, O++, C += "</row>";
+        }), a.sortAndFilter && (a.sortAndFilter.mode == "all" ? ce += '<autoFilter ref="A1:' + l[T - 1] + (O - 1) + '" />' : typeof a.sortAndFilter.ref == "string" && a.sortAndFilter.ref.length > 0 && (ce += '<autoFilter ref="' + a.sortAndFilter.ref + '" />'));
       }
       if (We.length > 0 && We.forEach((c) => {
-        const _ = a.shiftLeft ? a.shiftLeft : 0, F = a.headers[c - _], A = l[c];
-        ue[A + "" + k] = {
-          start: a.withoutHeader ? A + "1" : A + "2",
-          end: A + "" + (k - 1),
-          type: F.formula.type,
-          ...F.formula.styleId ? { styleId: F.formula.styleId } : {}
+        const _ = a.shiftLeft ? a.shiftLeft : 0, S = a.headers[c - _], F = l[c];
+        ue[F + "" + O] = {
+          start: a.withoutHeader ? F + "1" : F + "2",
+          end: F + "" + (O - 1),
+          type: S.formula.type,
+          ...S.formula.styleId ? { styleId: S.formula.styleId } : {}
         };
-      }), Ge.length > 0 && Ge.forEach((c) => {
+      }), Ge.length > 0 && q && Ge.forEach((c) => {
         const _ = a.headers[c];
         _.conditionalFormatting && Ue.push({
           ..._.conditionalFormatting,
           start: a.withoutHeader ? l[c] + "1" : l[c] + "2",
-          end: l[c] + "" + (k - 1)
+          end: l[c] + "" + (O - 1)
         });
       }), ue) {
         const c = Object.keys(ue).sort(
-          (_, F) => _ > F ? 1 : -1
+          (_, S) => _ > S ? 1 : -1
         );
         if (c.length) {
           let _ = {};
-          c.forEach((F) => {
-            const A = ot(
-              F,
-              ue[F],
+          c.forEach((S) => {
+            const F = ot(
+              S,
+              ue[S],
               b,
               e.styles
             );
-            A.needCalcChain && (ge = !0, ie += A.chainCell), _[A.row] ? _[A.row] += A.cell : _[A.row] = A.cell;
-          }), Object.keys(_).forEach((F) => {
-            const A = F, h = _[A];
-            let O = x[A];
-            if (O) {
-              const le = O.startTag + O.details + h + O.endTag;
-              let V = new RegExp(O.startTag + "[\\n\\s\\S]*?</row>");
-              C = C.replace(V, le);
+            F.needCalcChain && (ge = !0, ie += F.chainCell), _[F.row] ? _[F.row] += F.cell : _[F.row] = F.cell;
+          }), Object.keys(_).sort((S, F) => +S > +F ? 1 : -1).forEach((S) => {
+            const F = S, h = _[F];
+            let A = x[F];
+            if (A) {
+              const le = A.startTag + A.details + h + A.endTag;
+              let z = new RegExp(
+                A.startTag + "[\\n\\s\\S]*?</row>"
+              );
+              C = C.replace(z, le);
             } else
-              C += '<row r="' + F + '" spans="1:' + T + '"  >' + h + "</row>", x[A] = {
-                startTag: '<row r="' + F + '" spans="1:' + T + '"  >',
+              C += '<row r="' + S + '" spans="1:' + Math.max(T, 1) + '"  >' + h + "</row>", x[F] = {
+                startTag: '<row r="' + S + '" spans="1:' + Math.max(T, 1) + '"  >',
                 endTag: "</row>",
                 details: h
               };
@@ -1370,7 +1374,7 @@ async function ct(e, t = "") {
     }
     w > 0 && (oe += '<Override    ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"    PartName="/xl/worksheets/sheet' + (w + 1) + '.xml" />');
     const xt = a.name ? a.name : "sheet" + (w + 1), qt = a.state ? a.state : "visible";
-    X += '<sheet state="' + qt + '" name="' + xt + '" sheetId="' + (w + 1) + '" r:id="rId' + (q + 1) + '" />', K += '<Relationship Id="rId' + (q + 1) + '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet' + (w + 1) + '.xml" />', $ += "<vt:lpstr>" + ("sheet" + (w + 1)) + "</vt:lpstr>", a.selected && (U = !0, M = w);
+    J += '<sheet state="' + qt + '" name="' + xt + '" sheetId="' + (w + 1) + '" r:id="rId' + (Y + 1) + '" />', $ += '<Relationship Id="rId' + (Y + 1) + '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet' + (w + 1) + '.xml" />', M += "<vt:lpstr>" + ("sheet" + (w + 1)) + "</vt:lpstr>", a.selected && (W = !0, K = w);
     const bt = a.sortAndFilter ? 'filterMode="1"' : "";
     let Ct = -1;
     Xe && await Xe.then((T) => {
@@ -1383,11 +1387,9 @@ async function ct(e, t = "") {
       T.forEach((y, p) => {
         const c = p + 1;
         let _ = y.image;
-        const F = y.name;
-        let A = y.obj.from, h = y.obj.to, O = y.obj.margin;
-        y.type;
-        let le = y.obj.type, V = y.obj.extent;
-        typeof V > "u" && (V = {
+        const S = y.name;
+        let F = y.obj.from, h = y.obj.to, A = y.obj.margin, le = y.obj.type, z = y.obj.extent;
+        typeof z > "u" && (z = {
           cx: 2e5,
           cy: 2e5
         });
@@ -1405,8 +1407,8 @@ async function ct(e, t = "") {
             mB: 0
           }
         };
-        if (typeof A == "string" && A.length >= 2) {
-          let I = Re(A, l);
+        if (typeof F == "string" && F.length >= 2) {
+          let I = Re(F, l);
           R.start = {
             ...I
           }, R.end = {
@@ -1420,27 +1422,27 @@ async function ct(e, t = "") {
             ...I
           };
         }
-        R.end.mR = 0, R.end.mB = 0, R.start.mL = 0, R.start.mT = 0, O && ((O.all || O.right) && (R.end.mR = O.all || O.right), (O.all || O.bottom) && (R.end.mB = O.all || O.bottom), (O.all || O.left) && (R.start.mL = O.all || O.left), (O.all || O.top) && (R.start.mT = O.all || O.top)), le == "one" ? Qe += "<xdr:oneCellAnchor><xdr:from><xdr:col>" + R.start.col + "</xdr:col><xdr:colOff>" + R.start.mT + "</xdr:colOff><xdr:row>" + R.start.row + "</xdr:row><xdr:rowOff>" + R.start.mL + '</xdr:rowOff></xdr:from><xdr:ext cx="' + V.cx + '" cy="' + V.cy + '"/><xdr:pic><xdr:nvPicPr><xdr:cNvPr id="' + c + '" name="Picture ' + c + '"></xdr:cNvPr><xdr:cNvPicPr preferRelativeResize="0" /></xdr:nvPicPr><xdr:blipFill><a:blip xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" r:embed="rId' + c + '"></a:blip><a:stretch><a:fillRect /></a:stretch></xdr:blipFill><xdr:spPr><a:prstGeom prst="rect"><a:avLst /></a:prstGeom><a:noFill /></xdr:spPr></xdr:pic><xdr:clientData /></xdr:oneCellAnchor>' : Qe += '<xdr:twoCellAnchor editAs="oneCell"><xdr:from><xdr:col>' + R.start.col + "</xdr:col><xdr:colOff>" + R.start.mT + "</xdr:colOff><xdr:row>" + R.start.row + "</xdr:row><xdr:rowOff>" + R.start.mL + "</xdr:rowOff></xdr:from><xdr:to><xdr:col>" + R.end.col + "</xdr:col><xdr:colOff>" + R.end.mB + "</xdr:colOff><xdr:row>" + R.end.row + "</xdr:row><xdr:rowOff>" + R.end.mR + '</xdr:rowOff></xdr:to><xdr:pic><xdr:nvPicPr><xdr:cNvPr id="' + c + '" name="Picture ' + c + '"></xdr:cNvPr><xdr:cNvPicPr preferRelativeResize="0" /></xdr:nvPicPr><xdr:blipFill><a:blip xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" r:embed="rId' + c + '"></a:blip><a:stretch><a:fillRect /></a:stretch></xdr:blipFill><xdr:spPr><a:prstGeom prst="rect"><a:avLst /></a:prstGeom><a:noFill /></xdr:spPr></xdr:pic><xdr:clientData /></xdr:twoCellAnchor>', v == null || v.file(F, _), i += '<Relationship Id="rId' + c + '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/' + F + '" />';
+        R.end.mR = 0, R.end.mB = 0, R.start.mL = 0, R.start.mT = 0, A && ((A.right || A.all) && (R.end.mR = A.right || A.all), (A.bottom || A.all) && (R.end.mB = A.bottom || A.all), (A.left || A.all) && (R.start.mL = A.left || A.all), (A.top || A.all) && (R.start.mT = A.top || A.all)), le == "one" ? Qe += "<xdr:oneCellAnchor><xdr:from><xdr:col>" + R.start.col + "</xdr:col><xdr:colOff>" + R.start.mT + "</xdr:colOff><xdr:row>" + R.start.row + "</xdr:row><xdr:rowOff>" + R.start.mL + '</xdr:rowOff></xdr:from><xdr:ext cx="' + z.cx + '" cy="' + z.cy + '"/><xdr:pic><xdr:nvPicPr><xdr:cNvPr id="' + c + '" name="Picture ' + c + '"></xdr:cNvPr><xdr:cNvPicPr preferRelativeResize="0" /></xdr:nvPicPr><xdr:blipFill><a:blip xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" r:embed="rId' + c + '"></a:blip><a:stretch><a:fillRect /></a:stretch></xdr:blipFill><xdr:spPr><a:prstGeom prst="rect"><a:avLst /></a:prstGeom><a:noFill /></xdr:spPr></xdr:pic><xdr:clientData /></xdr:oneCellAnchor>' : Qe += '<xdr:twoCellAnchor editAs="oneCell"><xdr:from><xdr:col>' + R.start.col + "</xdr:col><xdr:colOff>" + R.start.mT + "</xdr:colOff><xdr:row>" + R.start.row + "</xdr:row><xdr:rowOff>" + R.start.mL + "</xdr:rowOff></xdr:from><xdr:to><xdr:col>" + R.end.col + "</xdr:col><xdr:colOff>" + R.end.mB + "</xdr:colOff><xdr:row>" + R.end.row + "</xdr:row><xdr:rowOff>" + R.end.mR + '</xdr:rowOff></xdr:to><xdr:pic><xdr:nvPicPr><xdr:cNvPr id="' + c + '" name="Picture ' + c + '"></xdr:cNvPr><xdr:cNvPicPr preferRelativeResize="0" /></xdr:nvPicPr><xdr:blipFill><a:blip xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" r:embed="rId' + c + '"></a:blip><a:stretch><a:fillRect /></a:stretch></xdr:blipFill><xdr:spPr><a:prstGeom prst="rect"><a:avLst /></a:prstGeom><a:noFill /></xdr:spPr></xdr:pic><xdr:clientData /></xdr:twoCellAnchor>', v == null || v.file(S, _), i += '<Relationship Id="rId' + c + '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/' + S + '" />';
       }), vt = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">` + i + "</Relationships>";
     })), xe = [...new Set(xe)];
     let wt = "", Ae = 1;
-    Ue.length > 0 && (wt = Ue.reduce((T, i) => {
+    Ue.length > 0 && q && (wt = Ue.reduce((T, i) => {
       if (i.type == "cells")
-        return i.operator == "ct" ? T + '<conditionalFormatting sqref="' + i.start + ":" + i.end + '"><cfRule type="containsText" dxfId="' + (i.styleId && Z[i.styleId] ? Z[i.styleId] : 0) + '" priority="' + (i.priority ? i.priority : Ae++) + '"  operator="containsText" text="' + i.value + '"><formula>NOT(ISERROR(SEARCH("' + i.value + '",' + i.start + ")))</formula></cfRule></conditionalFormatting>" : typeof i.operator > "u" || typeof n[i.operator] > "u" ? T : T + '<conditionalFormatting sqref="' + i.start + ":" + i.end + '"><cfRule type="cellIs" dxfId="' + (i.styleId && typeof Z[i.styleId] < "u" ? Z[i.styleId] : 0) + '" priority="' + (i.priority ? i.priority : Ae++) + '" operator="' + n[i.operator] + '">' + (Array.isArray(i.value) ? i.value.reduce((y, p) => y + "<formula>" + p.value + "</formula>", "") : "<formula>" + i.value + "</formula>") + "</cfRule></conditionalFormatting>";
+        return i.operator == "ct" ? T + '<conditionalFormatting sqref="' + i.start + ":" + i.end + '"><cfRule type="containsText" dxfId="' + (i.styleId && X[i.styleId] ? X[i.styleId] : 0) + '" priority="' + (i.priority ? i.priority : Ae++) + '"  operator="containsText" text="' + i.value + '"><formula>NOT(ISERROR(SEARCH("' + i.value + '",' + i.start + ")))</formula></cfRule></conditionalFormatting>" : typeof i.operator > "u" || typeof n[i.operator] > "u" ? T : T + '<conditionalFormatting sqref="' + i.start + ":" + i.end + '"><cfRule type="cellIs" dxfId="' + (i.styleId && typeof X[i.styleId] < "u" ? X[i.styleId] : 0) + '" priority="' + (i.priority ? i.priority : Ae++) + '" operator="' + n[i.operator] + '">' + (Array.isArray(i.value) ? i.value.reduce((y, p) => y + "<formula>" + p.value + "</formula>", "") : "<formula>" + i.value + "</formula>") + "</cfRule></conditionalFormatting>";
       if (i.type == "top")
-        return T + '<conditionalFormatting sqref="' + i.start + ":" + i.end + '"><cfRule type="' + (i.operator ? "aboveAverage" : "top10") + '" dxfId="' + (i.styleId && typeof Z[i.styleId] < "u" ? Z[i.styleId] : 0) + '" priority="' + (i.priority ? i.priority : Ae++) + '" ' + (i.bottom ? 'bottom="1"' : "") + " " + (i.percent ? 'percent="1"' : "") + '  rank="' + i.value + '" ' + (i.operator == "belowAverage" ? 'aboveAverage="0"' : "") + "/></conditionalFormatting>";
+        return T + '<conditionalFormatting sqref="' + i.start + ":" + i.end + '"><cfRule type="' + (i.operator ? "aboveAverage" : "top10") + '" dxfId="' + (i.styleId && typeof X[i.styleId] < "u" ? X[i.styleId] : 0) + '" priority="' + (i.priority ? i.priority : Ae++) + '" ' + (i.bottom ? 'bottom="1"' : "") + " " + (i.percent ? 'percent="1"' : "") + '  rank="' + i.value + '" ' + (i.operator == "belowAverage" ? 'aboveAverage="0"' : "") + "/></conditionalFormatting>";
       if (i.type == "iconSet") {
         let y = "";
         return typeof i.operator > "u" ? T : (i.operator.indexOf("5") == 0 ? y = '<cfvo type="percent" val="0"/><cfvo type="percent" val="20"/><cfvo type="percent" val="40"/><cfvo type="percent" val="60"/><cfvo type="percent" val="80"/>' : i.operator.indexOf("4") == 0 ? y = '<cfvo type="percent" val="0"/><cfvo type="percent" val="25"/><cfvo type="percent" val="50"/><cfvo type="percent" val="75"/>' : y = '<cfvo type="percent" val="0"/><cfvo type="percent" val="33"/><cfvo type="percent" val="67"/>', T + '<conditionalFormatting sqref="' + i.start + ":" + i.end + '"><cfRule type="iconSet" priority="' + (i.priority ? i.priority : Ae++) + '"><iconSet iconSet="' + i.operator + '">' + y + "</iconSet></cfRule></conditionalFormatting>");
       } else return i.type == "colorScale" ? T + '<conditionalFormatting sqref="' + i.start + ":" + i.end + '"><cfRule type="colorScale" priority="' + (i.priority ? i.priority : Ae++) + '"><colorScale><cfvo type="min"/>' + (i.operator == "percentile" ? '<cfvo type="percentile" val="' + i.value + '"/>' : "") + '<cfvo type="max"/>' + (i.colors && Array.isArray(i.colors) ? i.colors.reduce((y, p) => y + '<color rgb="' + he(p, o) + '"/>', "") : '<color rgb="FFF8696B"/><color rgb="FFFFEB84"/><color rgb="FF63BE7B"/>') + "</colorScale></cfRule></conditionalFormatting>" : i.type == "dataBar" ? T + '<conditionalFormatting sqref="' + i.start + ":" + i.end + '"><cfRule type="dataBar" priority="' + (i.priority ? i.priority : Ae++) + '"><dataBar><cfvo type="min"/><cfvo type="max"/>' + (i.colors && Array.isArray(i.colors) ? i.colors.reduce((y, p) => y + '<color rgb="' + he(p, o) + '"/>', "") : '<color rgb="FF638EC6"/>') + "</dataBar></cfRule></conditionalFormatting>" : T;
     }, "")), (ze || Ie || Ne) && D == null && (D = f == null ? void 0 : f.folder("drawings")), Ne && j == null && (j = D == null ? void 0 : D.folder("_rels")), E["sheet" + (w + 1)] = {
-      indexId: q + 1,
+      indexId: Y + 1,
       key: "sheet" + (w + 1),
       sheetName: xt,
       sheetDataTableColumns: H,
       backgroundImageRef: Ct,
-      sheetDimensions: Y,
+      sheetDimensions: V,
       asTable: se || !1,
       sheetDataString: C,
       sheetDropDown: ro(a.dropDowns),
@@ -1465,20 +1467,20 @@ async function ct(e, t = "") {
       shapeCommentRowCol: He,
       splitOption: Te,
       sheetViewProperties: Ee,
-      sheetSizeString: W.length > 0 ? "<cols>" + W + "</cols>" : "",
+      sheetSizeString: G.length > 0 ? "<cols>" + G + "</cols>" : "",
       protectionOption: a.protectionOption ? Object.keys(a.protectionOption).reduce((T, i) => T + " " + i + '="' + a.protectionOption[i] + '" ', "<sheetProtection ") + "/>" : "",
       merges: xe.length > 0 ? xe.reduce((T, i) => T + ' <mergeCell ref="' + i + '" />', '<mergeCells count="' + xe.length + '">') + " </mergeCells>" : "",
       selectedView: !!a.selected,
       sheetSortFilter: ce,
       tabColor: a.tabColor ? '<sheetPr codeName="' + ("Sheet" + (w + 1)) + '" ' + bt + ' ><tabColor rgb="' + a.tabColor.replace("#", "") + '" /></sheetPr>' : "<sheetPr " + bt + ' ><outlinePr summaryBelow="0" summaryRight="0" /></sheetPr>'
-    }, q++;
+    }, Y++;
   }
-  ge && (q++, K += '<Relationship Id="rId' + q + '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/calcChain" Target="calcChain.xml"/>', f == null || f.file(
+  ge && (Y++, $ += '<Relationship Id="rId' + Y + '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/calcChain" Target="calcChain.xml"/>', f == null || f.file(
     "calcChain.xml",
     `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <calcChain xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">` + ie + "</calcChain>"
   ));
-  let Mt = Object.keys(E), qe = m.folder("_rels");
+  let Kt = Object.keys(E), qe = m.folder("_rels");
   qe == null || qe.file(
     ".rels",
     `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -1489,10 +1491,10 @@ async function ct(e, t = "") {
     "core.xml",
     `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:dcmitype="http://purl.org/dc/dcmitype/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">` + (e.creator ? "<dc:creator>" + e.creator + "</dc:creator>" : "") + (e.created ? '<dcterms:created xsi:type="dcterms:W3CDTF">' + e.created + "</dcterms:created>" : "") + (e.modified ? '<dcterms:modified xsi:type="dcterms:W3CDTF">' + e.modified + "</dcterms:modified>" : "") + "</cp:coreProperties>"
-  ), Oe == null || Oe.file("app.xml", Xt(s, $)), f == null || f.file(
+  ), Oe == null || Oe.file("app.xml", Xt(s, M)), f == null || f.file(
     "workbook.xml",
     `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:mx="http://schemas.microsoft.com/office/mac/excel/2008/main" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mv="urn:schemas-microsoft-com:mac:vml" xmlns:x14="http://schemas.microsoft.com/office/spreadsheetml/2009/9/main" xmlns:x15="http://schemas.microsoft.com/office/spreadsheetml/2010/11/main" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac" xmlns:xm="http://schemas.microsoft.com/office/excel/2006/main"> <workbookPr />` + (U ? '<bookViews><workbookView xWindow="3540" yWindow="1365" windowWidth="21600" windowHeight="11325" activeTab="' + M + '"/></bookViews>' : "") + " <sheets>  " + X + " </sheets> <definedNames /> <calcPr /></workbook>"
+<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:mx="http://schemas.microsoft.com/office/mac/excel/2008/main" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mv="urn:schemas-microsoft-com:mac:vml" xmlns:x14="http://schemas.microsoft.com/office/spreadsheetml/2009/9/main" xmlns:x15="http://schemas.microsoft.com/office/spreadsheetml/2010/11/main" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac" xmlns:xm="http://schemas.microsoft.com/office/excel/2006/main"> <workbookPr />` + (W ? '<bookViews><workbookView xWindow="3540" yWindow="1365" windowWidth="21600" windowHeight="11325" activeTab="' + K + '"/></bookViews>' : "") + " <sheets>  " + J + " </sheets> <definedNames /> <calcPr /></workbook>"
   ), f == null || f.file(
     "sharedStrings.xml",
     `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -1502,7 +1504,7 @@ async function ct(e, t = "") {
   Ye == null || Ye.file(
     "workbook.xml.rels",
     `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"> <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme" Target="theme/theme1.xml" /> <Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml" /> <Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/sharedStrings" Target="sharedStrings.xml" /> ` + K + " </Relationships>"
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"> <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme" Target="theme/theme1.xml" /> <Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml" /> <Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/sharedStrings" Target="sharedStrings.xml" /> ` + $ + " </Relationships>"
   );
   let Ve = f == null ? void 0 : f.folder("theme");
   Ve == null || Ve.file(
@@ -1511,9 +1513,9 @@ async function ct(e, t = "") {
 <a:theme xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"  name="Office Theme"><a:themeElements><a:clrScheme name="Office"><a:dk1><a:sysClr val="windowText" lastClr="000000"/></a:dk1><a:lt1><a:sysClr val="window" lastClr="FFFFFF"/></a:lt1><a:dk2><a:srgbClr val="44546A"/></a:dk2><a:lt2><a:srgbClr val="E7E6E6"/></a:lt2><a:accent1><a:srgbClr val="5B9BD5"/></a:accent1><a:accent2><a:srgbClr val="ED7D31"/></a:accent2><a:accent3><a:srgbClr val="A5A5A5"/></a:accent3><a:accent4><a:srgbClr val="FFC000"/></a:accent4><a:accent5><a:srgbClr val="4472C4"/></a:accent5><a:accent6><a:srgbClr val="70AD47"/></a:accent6><a:hlink><a:srgbClr val="0563C1"/></a:hlink><a:folHlink><a:srgbClr val="954F72"/></a:folHlink></a:clrScheme><a:fontScheme name="Office"><a:majorFont><a:latin typeface="Calibri Light" panose="020F0302020204030204"/><a:ea typeface=""/><a:cs typeface=""/><a:font script="Jpan" typeface="游ゴシック Light"/><a:font script="Hang" typeface="맑은 고딕"/><a:font script="Hans" typeface="等线 Light"/><a:font script="Hant" typeface="新細明體"/><a:font script="Arab" typeface="Times New Roman"/><a:font script="Hebr" typeface="Times New Roman"/><a:font script="Thai" typeface="Tahoma"/><a:font script="Ethi" typeface="Nyala"/><a:font script="Beng" typeface="Vrinda"/><a:font script="Gujr" typeface="Shruti"/><a:font script="Khmr" typeface="MoolBoran"/><a:font script="Knda" typeface="Tunga"/><a:font script="Guru" typeface="Raavi"/><a:font script="Cans" typeface="Euphemia"/><a:font script="Cher" typeface="Plantagenet Cherokee"/><a:font script="Yiii" typeface="Microsoft Yi Baiti"/><a:font script="Tibt" typeface="Microsoft Himalaya"/><a:font script="Thaa" typeface="MV Boli"/><a:font script="Deva" typeface="Mangal"/><a:font script="Telu" typeface="Gautami"/><a:font script="Taml" typeface="Latha"/><a:font script="Syrc" typeface="Estrangelo Edessa"/><a:font script="Orya" typeface="Kalinga"/><a:font script="Mlym" typeface="Kartika"/><a:font script="Laoo" typeface="DokChampa"/><a:font script="Sinh" typeface="Iskoola Pota"/><a:font script="Mong" typeface="Mongolian Baiti"/><a:font script="Viet" typeface="Times New Roman"/><a:font script="Uigh" typeface="Microsoft Uighur"/><a:font script="Geor" typeface="Sylfaen"/></a:majorFont><a:minorFont><a:latin typeface="Calibri" panose="020F0502020204030204"/><a:ea typeface=""/><a:cs typeface=""/><a:font script="Jpan" typeface="游ゴシック"/><a:font script="Hang" typeface="맑은 고딕"/><a:font script="Hans" typeface="等线"/><a:font script="Hant" typeface="新細明體"/><a:font script="Arab" typeface="Arial"/><a:font script="Hebr" typeface="Arial"/><a:font script="Thai" typeface="Tahoma"/><a:font script="Ethi" typeface="Nyala"/><a:font script="Beng" typeface="Vrinda"/><a:font script="Gujr" typeface="Shruti"/><a:font script="Khmr" typeface="DaunPenh"/><a:font script="Knda" typeface="Tunga"/><a:font script="Guru" typeface="Raavi"/><a:font script="Cans" typeface="Euphemia"/><a:font script="Cher" typeface="Plantagenet Cherokee"/><a:font script="Yiii" typeface="Microsoft Yi Baiti"/><a:font script="Tibt" typeface="Microsoft Himalaya"/><a:font script="Thaa" typeface="MV Boli"/><a:font script="Deva" typeface="Mangal"/><a:font script="Telu" typeface="Gautami"/><a:font script="Taml" typeface="Latha"/><a:font script="Syrc" typeface="Estrangelo Edessa"/><a:font script="Orya" typeface="Kalinga"/><a:font script="Mlym" typeface="Kartika"/><a:font script="Laoo" typeface="DokChampa"/><a:font script="Sinh" typeface="Iskoola Pota"/><a:font script="Mong" typeface="Mongolian Baiti"/><a:font script="Viet" typeface="Arial"/><a:font script="Uigh" typeface="Microsoft Uighur"/><a:font script="Geor" typeface="Sylfaen"/></a:minorFont></a:fontScheme><a:fmtScheme name="Office"><a:fillStyleLst><a:solidFill><a:schemeClr val="phClr"/></a:solidFill><a:gradFill rotWithShape="1"><a:gsLst><a:gs pos="0"><a:schemeClr val="phClr"><a:lumMod val="110000"/><a:satMod val="105000"/><a:tint val="67000"/></a:schemeClr></a:gs><a:gs pos="50000"><a:schemeClr val="phClr"><a:lumMod val="105000"/><a:satMod val="103000"/><a:tint val="73000"/></a:schemeClr></a:gs><a:gs pos="100000"><a:schemeClr val="phClr"><a:lumMod val="105000"/><a:satMod val="109000"/><a:tint val="81000"/></a:schemeClr></a:gs></a:gsLst><a:lin ang="5400000" scaled="0"/></a:gradFill><a:gradFill rotWithShape="1"><a:gsLst><a:gs pos="0"><a:schemeClr val="phClr"><a:satMod val="103000"/><a:lumMod val="102000"/><a:tint val="94000"/></a:schemeClr></a:gs><a:gs pos="50000"><a:schemeClr val="phClr"><a:satMod val="110000"/><a:lumMod val="100000"/><a:shade val="100000"/></a:schemeClr></a:gs><a:gs pos="100000"><a:schemeClr val="phClr"><a:lumMod val="99000"/><a:satMod val="120000"/><a:shade val="78000"/></a:schemeClr></a:gs></a:gsLst><a:lin ang="5400000" scaled="0"/></a:gradFill></a:fillStyleLst><a:lnStyleLst><a:ln w="6350" cap="flat" cmpd="sng" algn="ctr"><a:solidFill><a:schemeClr val="phClr"/></a:solidFill><a:prstDash val="solid"/><a:miter lim="800000"/></a:ln><a:ln w="12700" cap="flat" cmpd="sng" algn="ctr"><a:solidFill><a:schemeClr val="phClr"/></a:solidFill><a:prstDash val="solid"/><a:miter lim="800000"/></a:ln><a:ln w="19050" cap="flat" cmpd="sng" algn="ctr"><a:solidFill><a:schemeClr val="phClr"/></a:solidFill><a:prstDash val="solid"/><a:miter lim="800000"/></a:ln></a:lnStyleLst><a:effectStyleLst><a:effectStyle><a:effectLst/></a:effectStyle><a:effectStyle><a:effectLst/></a:effectStyle><a:effectStyle><a:effectLst><a:outerShdw blurRad="57150" dist="19050" dir="5400000" algn="ctr" rotWithShape="0"><a:srgbClr val="000000"><a:alpha val="63000"/></a:srgbClr></a:outerShdw></a:effectLst></a:effectStyle></a:effectStyleLst><a:bgFillStyleLst><a:solidFill><a:schemeClr val="phClr"/></a:solidFill><a:solidFill><a:schemeClr val="phClr"><a:tint val="95000"/><a:satMod val="170000"/></a:schemeClr></a:solidFill><a:gradFill rotWithShape="1"><a:gsLst><a:gs pos="0"><a:schemeClr val="phClr"><a:tint val="93000"/><a:satMod val="150000"/><a:shade val="98000"/><a:lumMod val="102000"/></a:schemeClr></a:gs><a:gs pos="50000"><a:schemeClr val="phClr"><a:tint val="98000"/><a:satMod val="130000"/><a:shade val="90000"/><a:lumMod val="103000"/></a:schemeClr></a:gs><a:gs pos="100000"><a:schemeClr val="phClr"><a:shade val="63000"/><a:satMod val="120000"/></a:schemeClr></a:gs></a:gsLst><a:lin ang="5400000" scaled="0"/></a:gradFill></a:bgFillStyleLst></a:fmtScheme></a:themeElements><a:objectDefaults/><a:extraClrSchemeLst/></a:theme>`
   );
   let Fe = f == null ? void 0 : f.folder("worksheets"), ft = [], mt = [], De = [];
-  if (Mt.forEach((w, a) => {
+  if (Kt.forEach((w, a) => {
     const b = E[w];
-    let x = "", Y = {
+    let x = "", V = {
       form: !1,
       drawing: !1,
       vmlDrwing: !1,
@@ -1524,18 +1526,18 @@ async function ct(e, t = "") {
     const se = b.sheetDataTableColumns;
     if (se.length > 0) {
       mt.push("table" + (a + 1) + ".xml");
-      const C = b.asTable, W = b.sheetDimensions;
+      const C = b.asTable, G = b.sheetDimensions;
       de == null || de.file(
         "table" + (a + 1) + ".xml",
         `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<table xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="xr xr3" xmlns:xr="http://schemas.microsoft.com/office/spreadsheetml/2014/revision" xmlns:xr3="http://schemas.microsoft.com/office/spreadsheetml/2016/revision3" id="` + (a + 1) + '"  name="Table' + (a + 1) + '" displayName="Table' + (a + 1) + '" ref="' + W.start + ":" + W.end + '" totalsRowShown="0"><autoFilter ref="' + W.start + ":" + W.end + '"/>' + se + '<tableStyleInfo name="TableStyle' + (C.type ? C.type : "Medium") + (C.styleNumber ? C.styleNumber : 2) + '" showFirstColumn="' + (C.firstColumn ? C.firstColumn : "0") + '" showLastColumn="' + (C.lastColumn ? C.lastColumn : "0") + '" showRowStripes="' + (C.rowStripes ? C.rowStripes : "1") + '" showColumnStripes="' + (C.columnStripes ? C.columnStripes : "0") + '"/></table>'
+<table xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="xr xr3" xmlns:xr="http://schemas.microsoft.com/office/spreadsheetml/2014/revision" xmlns:xr3="http://schemas.microsoft.com/office/spreadsheetml/2016/revision3" id="` + (a + 1) + '"  name="Table' + (a + 1) + '" displayName="Table' + (a + 1) + '" ref="' + G.start + ":" + G.end + '" totalsRowShown="0"><autoFilter ref="' + G.start + ":" + G.end + '"/>' + se + '<tableStyleInfo name="TableStyle' + (C.type ? C.type : "Medium") + (C.styleNumber ? C.styleNumber : 2) + '" showFirstColumn="' + (C.firstColumn ? C.firstColumn : "0") + '" showLastColumn="' + (C.lastColumn ? C.lastColumn : "0") + '" showRowStripes="' + (C.rowStripes ? C.rowStripes : "1") + '" showColumnStripes="' + (C.columnStripes ? C.columnStripes : "0") + '"/></table>'
       ), x += '<Relationship Id="rId15" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/table" Target="../tables/table' + (a + 1) + '.xml"/>';
     }
     const H = "drawing" + (De.length + 1) + ".xml";
-    if (b.hasImages && (De.push(H), Y.sheetDrawingsPushed = !0, j == null || j.file(
+    if (b.hasImages && (De.push(H), V.sheetDrawingsPushed = !0, j == null || j.file(
       H + ".rels",
       b.drawersRels.toString()
-    ), Y.drawing = !0, x += '<Relationship Id="rId2"  Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing"  Target="../drawings/' + H + '" />'), b.hasCheckbox && (Y.sheetDrawingsPushed || De.push(H), x += '<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing" Target="../drawings/vmlDrawing' + (a + 1) + '.vml" />' + (Y.drawing ? "" : '<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing" Target="../drawings/' + H + '" />'), Y.drawing = !0, Y.vmlDrwing = !0, x += b.formRel), (b.hasCheckbox || b.hasImages) && (D == null || D.file(
+    ), V.drawing = !0, x += '<Relationship Id="rId2"  Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing"  Target="../drawings/' + H + '" />'), b.hasCheckbox && (V.sheetDrawingsPushed || De.push(H), x += '<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing" Target="../drawings/vmlDrawing' + (a + 1) + '.vml" />' + (V.drawing ? "" : '<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing" Target="../drawings/' + H + '" />'), V.drawing = !0, V.vmlDrwing = !0, x += b.formRel), (b.hasCheckbox || b.hasImages) && (D == null || D.file(
       H,
       `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <xdr:wsDr xmlns:xdr="http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing"  xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"  xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"  xmlns:c="http://schemas.openxmlformats.org/drawingml/2006/chart"  xmlns:cx="http://schemas.microsoft.com/office/drawing/2014/chartex"  xmlns:cx1="http://schemas.microsoft.com/office/drawing/2015/9/8/chartex"  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"  xmlns:dgm="http://schemas.openxmlformats.org/drawingml/2006/diagram"  xmlns:x3Unk="http://schemas.microsoft.com/office/drawing/2010/slicer"  xmlns:sle15="http://schemas.microsoft.com/office/drawing/2012/slicer">` + (b.hasImages ? b.drawersContent : "") + (b.hasCheckbox ? b.checkboxDrawingContent : "") + "</xdr:wsDr>"
@@ -1546,14 +1548,14 @@ async function ct(e, t = "") {
         "comments" + (a + 1) + ".xml",
         `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <comments xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"  xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><authors>` + (Array.isArray(C) && C.length > 0 ? C.reduce(
-          (W, ce) => W + "<author>" + ce + "</author>",
+          (G, ce) => G + "<author>" + ce + "</author>",
           ""
         ) : "<author></author>") + "</authors><commentList>" + b.commentString + "</commentList></comments>"
-      ), x += '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments" Target="../comments' + (a + 1) + '.xml" />' + (Y.vmlDrwing ? "" : '<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing" Target="../drawings/vmlDrawing' + (a + 1) + '.vml" />');
+      ), x += '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments" Target="../comments' + (a + 1) + '.xml" />' + (V.vmlDrwing ? "" : '<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing" Target="../drawings/vmlDrawing' + (a + 1) + '.vml" />');
     }
     if ((b.hasComment || b.hasCheckbox) && (D == null || D.file(
       "vmlDrawing" + (a + 1) + ".vml",
-      '<xml xmlns:p="http://schemas.openxmlformats.org/presentationml/2006/main" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:oa="urn:schemas-microsoft-com:office:activation" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:pvml="urn:schemas-microsoft-com:office:powerpoint"><o:shapelayout v:ext="edit"><o:idmap v:ext="edit" data="1"/></o:shapelayout>' + (b.hasCheckbox ? Se.checkbox + b.checkboxShape : "") + (b.hasComment ? '  <v:shapetype id="_x0000_t202" coordsize="21600,21600" o:spt="202"     path="m,l,21600r21600,l21600,xe">    <v:stroke joinstyle="miter"/>    <v:path gradientshapeok="t" o:connecttype="rect"/>  </v:shapetype>' + b.shapeCommentRowCol.reduce((C, W) => C + `<v:shape id="_x0000_s1025" type="#_x0000_t202" style='position:absolute;margin-left:77.25pt;margin-top:23.25pt;width:264pt;height:42.75pt;z-index:1;visibility:hidden' fillcolor="#ffffe1">  <v:fill color2="#ffffe1"/>  <v:shadow on="t" color="black" obscured="t"/>  <v:path o:connecttype="none"/>  <v:textbox>   <div style='text-align:left'></div>  </v:textbox>  <x:ClientData ObjectType="Note">   <x:MoveWithCells/>   <x:SizeWithCells/>   <x:Anchor>    1, 15, 1, 10, 5, 15, 4, 4</x:Anchor>   <x:AutoFill>False</x:AutoFill>   <x:Row>` + W.row + "</x:Row>   <x:Column>" + W.col + "</x:Column>  </x:ClientData></v:shape>", "") : "") + "</xml>"
+      '<xml xmlns:p="http://schemas.openxmlformats.org/presentationml/2006/main" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:oa="urn:schemas-microsoft-com:office:activation" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:pvml="urn:schemas-microsoft-com:office:powerpoint"><o:shapelayout v:ext="edit"><o:idmap v:ext="edit" data="1"/></o:shapelayout>' + (b.hasCheckbox ? Se.checkbox + b.checkboxShape : "") + (b.hasComment ? '  <v:shapetype id="_x0000_t202" coordsize="21600,21600" o:spt="202"     path="m,l,21600r21600,l21600,xe">    <v:stroke joinstyle="miter"/>    <v:path gradientshapeok="t" o:connecttype="rect"/>  </v:shapetype>' + b.shapeCommentRowCol.reduce((C, G) => C + `<v:shape id="_x0000_s1025" type="#_x0000_t202" style='position:absolute;margin-left:77.25pt;margin-top:23.25pt;width:264pt;height:42.75pt;z-index:1;visibility:hidden' fillcolor="#ffffe1">  <v:fill color2="#ffffe1"/>  <v:shadow on="t" color="black" obscured="t"/>  <v:path o:connecttype="none"/>  <v:textbox>   <div style='text-align:left'></div>  </v:textbox>  <x:ClientData ObjectType="Note">   <x:MoveWithCells/>   <x:SizeWithCells/>   <x:Anchor>    1, 15, 1, 10, 5, 15, 4, 4</x:Anchor>   <x:AutoFill>False</x:AutoFill>   <x:Row>` + G.row + "</x:Row>   <x:Column>" + G.col + "</x:Column>  </x:ClientData></v:shape>", "") : "") + "</xml>"
     )), b.backgroundImageRef > 0 && (x += '<Relationship Id="rId16" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/image' + b.backgroundImageRef + '.png"/>'), b.hasImages || b.hasComment || b.hasCheckbox || se.length > 0 || b.backgroundImageRef > 0) {
       const C = Fe == null ? void 0 : Fe.folder("_rels");
       C == null || C.file(
@@ -1562,11 +1564,11 @@ async function ct(e, t = "") {
 <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"> ` + x + "</Relationships>"
       );
     }
-    let k = "";
-    b.selectedView || b.splitOption ? k = '<sheetViews><sheetView tabSelected="1"' + b.sheetViewProperties + (b.viewType.length > 0 ? ' view="' + b.viewType + '"' : "") + ' workbookViewId="0">' + b.splitOption + (b.selectedView ? '<selection activeCell="A0" sqref="A0" />' : "") + "</sheetView></sheetViews>" : k = '<sheetViews><sheetView workbookViewId="0"' + b.sheetViewProperties + (b.viewType.length > 0 ? ' view="' + b.viewType + '"' : "") + "/></sheetViews>", Fe == null || Fe.file(
+    let O = "";
+    b.selectedView || b.splitOption ? O = '<sheetViews><sheetView tabSelected="1"' + b.sheetViewProperties + (b.viewType.length > 0 ? ' view="' + b.viewType + '"' : "") + ' workbookViewId="0">' + b.splitOption + (b.selectedView ? '<selection activeCell="A0" sqref="A0" />' : "") + "</sheetView></sheetViews>" : O = '<sheetViews><sheetView workbookViewId="0"' + b.sheetViewProperties + (b.viewType.length > 0 ? ' view="' + b.viewType + '"' : "") + "/></sheetViews>", Fe == null || Fe.file(
       b.key + ".xml",
       `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:mx="http://schemas.microsoft.com/office/mac/excel/2008/main" xmlns:xdr="http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing"  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mv="urn:schemas-microsoft-com:mac:vml" xmlns:xr="http://schemas.microsoft.com/office/spreadsheetml/2014/revision" xmlns:xr2="http://schemas.microsoft.com/office/spreadsheetml/2015/revision2" xmlns:xr3="http://schemas.microsoft.com/office/spreadsheetml/2016/revision3" xmlns:x14="http://schemas.microsoft.com/office/spreadsheetml/2009/9/main" xmlns:x15="http://schemas.microsoft.com/office/spreadsheetml/2010/11/main" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac" xmlns:xm="http://schemas.microsoft.com/office/excel/2006/main">` + b.tabColor + k + '<sheetFormatPr customHeight="1" defaultColWidth="12.63" defaultRowHeight="15.75" />' + b.sheetSizeString + "<sheetData>" + b.sheetDataString + "</sheetData>" + b.sheetDropDown + b.protectionOption + b.sheetSortFilter + b.merges + b.cFDataString + (b.hasImages || b.hasCheckbox ? '<drawing r:id="rId2" />' : "") + (b.hasComment || b.hasCheckbox ? '<legacyDrawing r:id="rId3" />' : "") + (b.hasCheckbox ? '<mc:AlternateContent xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"><mc:Choice Requires="x14"><controls>' + b.checkboxSheetContent + "</controls></mc:Choice></mc:AlternateContent>" : "") + b.sheetMargin + (b.isPortrait || b.sheetBreakLine.length > 0 ? '<pageSetup orientation="portrait" r:id="rId' + (a + 1) + '"/>' : "") + b.sheetBreakLine + b.sheetHeaderFooter + (b.backgroundImageRef > 0 ? '<picture r:id="rId16"/>' : "") + (se.length > 0 ? '<tableParts count="1"> <tablePart r:id="rId15"/></tableParts>' : "") + "</worksheet>"
+<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:mx="http://schemas.microsoft.com/office/mac/excel/2008/main" xmlns:xdr="http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing"  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mv="urn:schemas-microsoft-com:mac:vml" xmlns:xr="http://schemas.microsoft.com/office/spreadsheetml/2014/revision" xmlns:xr2="http://schemas.microsoft.com/office/spreadsheetml/2015/revision2" xmlns:xr3="http://schemas.microsoft.com/office/spreadsheetml/2016/revision3" xmlns:x14="http://schemas.microsoft.com/office/spreadsheetml/2009/9/main" xmlns:x15="http://schemas.microsoft.com/office/spreadsheetml/2010/11/main" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac" xmlns:xm="http://schemas.microsoft.com/office/excel/2006/main">` + b.tabColor + O + '<sheetFormatPr customHeight="1" defaultColWidth="12.63" defaultRowHeight="15.75" />' + b.sheetSizeString + "<sheetData>" + b.sheetDataString + "</sheetData>" + b.sheetDropDown + b.protectionOption + b.sheetSortFilter + b.merges + b.cFDataString + (b.hasImages || b.hasCheckbox ? '<drawing r:id="rId2" />' : "") + (b.hasComment || b.hasCheckbox ? '<legacyDrawing r:id="rId3" />' : "") + (b.hasCheckbox ? '<mc:AlternateContent xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"><mc:Choice Requires="x14"><controls>' + b.checkboxSheetContent + "</controls></mc:Choice></mc:AlternateContent>" : "") + b.sheetMargin + (b.isPortrait || b.sheetBreakLine.length > 0 ? '<pageSetup orientation="portrait" r:id="rId' + (a + 1) + '"/>' : "") + b.sheetBreakLine + b.sheetHeaderFooter + (b.backgroundImageRef > 0 ? '<picture r:id="rId16"/>' : "") + (se.length > 0 ? '<tableParts count="1"> <tablePart r:id="rId15"/></tableParts>' : "") + "</worksheet>"
     );
   }), ae.length > 0) {
     let w = f == null ? void 0 : f.folder("ctrlProps");
@@ -1613,9 +1615,9 @@ function no(e) {
     let D = {};
     for (let j = 0; j < v; j++) {
       r++;
-      const S = f[j];
+      const k = f[j];
       let d;
-      S.sheetName ? d = S.sheetName : d = "Sheet 1", d in o || (o[d] = {
+      k.sheetName ? d = k.sheetName : d = "Sheet 1", d in o || (o[d] = {
         headers: [],
         data: [],
         labelCounter: 0,
@@ -1624,41 +1626,41 @@ function no(e) {
         index: s,
         value: 0
       }), d in l || (o[d].labelCounter = 0, l[d] = !0);
-      let G = [];
-      const z = o[d].headers.length;
-      let Z = {}, N = o[d].seenAt == s, oe = S.headers.reduce((K, L, E) => (o[d].labelCounter++, z < o[d].labelCounter && G.push({
+      let q = [];
+      const U = o[d].headers.length;
+      let X = {}, N = o[d].seenAt == s, oe = k.headers.reduce(($, L, E) => (o[d].labelCounter++, U < o[d].labelCounter && q.push({
         label: "c" + o[d].labelCounter,
         text: N ? L.text : ""
-      }), Z["c" + o[d].labelCounter] = L.text, {
-        ...K,
+      }), X["c" + o[d].labelCounter] = L.text, {
+        ...$,
         [L.label]: "c" + o[d].labelCounter
       }), {});
-      if (o[d].headers.push(...G), S.spaceX)
-        for (let K = 0; K < S.spaceX; K++)
-          o[d].labelCounter++, z <= o[d].labelCounter && o[d].headers.push({
+      if (o[d].headers.push(...q), k.spaceX)
+        for (let $ = 0; $ < k.spaceX; $++)
+          o[d].labelCounter++, U <= o[d].labelCounter && o[d].headers.push({
             label: "c" + o[d].labelCounter,
             text: ""
           });
       n[d].index + 1 == s && (D[d] = n[d].value);
       let P = D[d] || 0;
-      P > 0 && (!o[d].headerIndex || o[d].headerIndex && o[d].headerIndex != P ? o[d].data.push(Z) : o[d].data[P] = {
+      P > 0 && (!o[d].headerIndex || o[d].headerIndex && o[d].headerIndex != P ? o[d].data.push(X) : o[d].data[P] = {
         ...o[d].data[P],
-        ...Z
+        ...X
       }, o[d].headerIndex = P, P++);
-      let B = Object.keys(oe), X = S.data.length >= o[d].data.length;
-      if (o[d].data = S.data.reduce((K, L, E) => {
-        let $ = {};
-        return K.length > E + P ? $ = K[E + P] : K.push($), B.forEach((q) => {
-          let U = oe[q];
-          $[U] = L[q] ? L[q] : "";
-        }), $.tableIndex = r, $.tableStringIndex = E + "," + j, K[E + P] = $, K;
-      }, o[d].data), X && S.spaceY) {
-        const K = o[d].headers.length;
-        for (let L = 0; L < S.spaceY; L++) {
+      let B = Object.keys(oe), J = k.data.length >= o[d].data.length;
+      if (o[d].data = k.data.reduce(($, L, E) => {
+        let M = {};
+        return $.length > E + P ? M = $[E + P] : $.push(M), B.forEach((Y) => {
+          let W = oe[Y];
+          M[W] = L[Y] ? L[Y] : "";
+        }), M.tableIndex = r, M.tableStringIndex = E + "," + j, $[E + P] = M, $;
+      }, o[d].data), J && k.spaceY) {
+        const $ = o[d].headers.length;
+        for (let L = 0; L < k.spaceY; L++) {
           let E = {};
-          for (let $ = 0; $ < K; $++) {
-            const q = o[d].headers[$];
-            E[q.label] = "";
+          for (let M = 0; M < $; M++) {
+            const Y = o[d].headers[M];
+            E[Y.label] = "";
           }
           o[d].data.push(E);
         }
@@ -2130,16 +2132,16 @@ function Bt(e, t = !0, r = !0) {
     l.underline && l.doubleUnderline, g.forEach((u) => {
       let m = l[u];
       const s = lo[u];
-      if (Me(m, s, u, t, r))
+      if (Ke(m, s, u, t, r))
         return !0;
     });
   });
 }
-function $t(e, t = !0, r = !0) {
+function Mt(e, t = !0, r = !0) {
   Array.isArray(e) || (e = [e]), e.forEach((o) => {
     Object.keys(o).forEach((l) => {
       const g = o[l], u = io[l];
-      Me(g, u, l, t, r);
+      Ke(g, u, l, t, r);
     });
   });
 }
@@ -2147,16 +2149,16 @@ function so(e, t = !0, r = !0) {
   Object.keys(e).forEach((n) => {
     let l = e[n];
     const g = ao[n];
-    if (Me(l, g, n, t, r))
+    if (Ke(l, g, n, t, r))
       if (n == "sheet")
         if (Array.isArray(l))
-          $t(l);
+          Mt(l);
         else
           throw "Sheet must be Array.";
       else n == "styles" && Bt(l);
   });
 }
-function Me(e, t, r, o, n) {
+function Ke(e, t, r, o, n) {
   if (t) {
     if (typeof e != t.type) {
       if (t.type == "object" || t.type == "string" || o)
@@ -2180,12 +2182,12 @@ function Me(e, t, r, o, n) {
 const co = {
   checkSheetValidWithOneRef: st,
   checkSheetValidWithTwoRef: it,
-  generalValidationCheck: Me
+  generalValidationCheck: Ke
 }, ho = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   exportedForTesting: co,
   validateExcelTableObjectFunction: so,
-  validateSheetArrayFunction: $t,
+  validateSheetArrayFunction: Mt,
   validateStyleObjectFunction: Bt
 }, Symbol.toStringTag, { value: "Module" }));
 function It(e) {
@@ -2202,23 +2204,23 @@ function Pt(e, t) {
   return e.substring(0, e.length - t) + `
 `;
 }
-async function Kt(e, t = !1, r = !1) {
+async function $t(e, t = !1, r = !1) {
   const o = fo(r), n = r ? ".txt" : ".csv", l = o.length;
   let g = [];
   if (e.sheet.forEach((m) => {
     let s = "", f = "";
     const v = m.headers;
     let D = [], j = v.length;
-    for (let S = 0; S < j; S++) {
-      const d = v[S];
+    for (let k = 0; k < j; k++) {
+      const d = v[k];
       D.push(d.label), m.withoutHeader || (f += It(d.text) + o);
     }
     s += Pt(f, l), j = m.data.length;
-    for (let S = 0; S < j; S++) {
+    for (let k = 0; k < j; k++) {
       f = "";
-      const d = m.data[S];
-      D.forEach((G) => {
-        f += It(d[G]) + o;
+      const d = m.data[k];
+      D.forEach((q) => {
+        f += It(d[q]) + o;
       }), s += Pt(f, l);
     }
     g.push(s);
@@ -2308,91 +2310,91 @@ async function mo(e, t, r, o, n = !0, l = !1, g = " ", u = !0, m = {
 }, j = {
   background: "#EEEDEB"
 }) {
-  let S = await import("./read-utils-YAGe6NNW.js").then(
+  let k = await import("./read-utils-DnAqiCj7.js").then(
     async (E) => await E.extractExcelData(e, !1, o)
   ), d = null;
   if (t ? d = document.querySelector(t) : r && (d = r), d == null && !l)
     throw "Container Node not found";
-  const G = Object.keys(m), z = Object.keys(s), Z = Object.keys(f), N = Object.keys(v), oe = Object.keys(D), P = Object.keys(j);
+  const q = Object.keys(m), U = Object.keys(s), X = Object.keys(f), N = Object.keys(v), oe = Object.keys(D), P = Object.keys(j);
   let B = document.createElement("div");
   N.forEach((E) => {
     B.style[E] = v[E];
-  }), l || (u && d != null && (d.innerText = ""), G.forEach((E) => {
+  }), l || (u && d != null && (d.innerText = ""), q.forEach((E) => {
     d.style[E] = m[E];
   }), d.appendChild(B));
-  let X = [], K = !1, L = 0;
+  let J = [], $ = !1, L = 0;
   do {
     L++;
-    const E = S.sheetName.next();
+    const E = k.sheetName.next();
     if (!E.value)
       break;
-    const $ = document.createElement("div");
-    if ($.style.display = "none", !l) {
-      const J = document.createElement("button");
+    const M = document.createElement("div");
+    if (M.style.display = "none", !l) {
+      const Q = document.createElement("button");
       oe.forEach((ye) => {
-        J.style[ye] = D[ye];
-      }), J.addEventListener("click", (ye) => {
-        const ve = J.getAttribute("data-sheet"), we = d.querySelector(
+        Q.style[ye] = D[ye];
+      }), Q.addEventListener("click", (ye) => {
+        const ve = Q.getAttribute("data-sheet"), we = d.querySelector(
           'div[data-sheet="' + ve + '"]'
         );
         if (we) {
           P.forEach((ie) => {
-            J.style[ie] = j[ie];
+            Q.style[ie] = j[ie];
           });
           const Se = d.querySelector(
             "[data-sheet-button-activate]"
           );
           let ae = d.querySelector("[data-sheet-activate]");
-          we.setAttribute("data-sheet-activate", "1"), we.style.display = "flex", J.setAttribute("data-sheet-button-activate", "1"), Se && (oe.forEach((ie) => {
+          we.setAttribute("data-sheet-activate", "1"), we.style.display = "flex", Q.setAttribute("data-sheet-button-activate", "1"), Se && (oe.forEach((ie) => {
             Se.style[ie] = D[ie];
           }), Se.removeAttribute("data-sheet-button-activate")), ae && (ae.style.display = "none", ae.removeAttribute("data-sheet-activate"));
         } else
           console.error("Sheet content not found!! id is " + ve);
-      }), J.setAttribute("data-sheet", L + ""), $.setAttribute("data-sheet", L + ""), J.innerText = E.value[1] || E.value[0], B.appendChild(J), d.appendChild($);
+      }), Q.setAttribute("data-sheet", L + ""), M.setAttribute("data-sheet", L + ""), Q.innerText = E.value[1] || E.value[0], B.appendChild(Q), d.appendChild(M);
     }
-    let q = n ? "th" : "td";
-    const U = document.createElement("table");
-    z.forEach((J) => {
-      U.style[J] = s[J];
+    let Y = n ? "th" : "td";
+    const W = document.createElement("table");
+    U.forEach((Q) => {
+      W.style[Q] = s[Q];
     });
-    const M = S.data[E.value[0]] || S.data[E.value[1]], Ce = S.maxLengthOfColumn[E.value[0]] || S.maxLengthOfColumn[E.value[1]];
-    if (Array.isArray(M)) {
-      const J = M.length;
-      for (let ye = 0; ye < J; ye++) {
-        const ve = M[ye], we = document.createElement("tr"), Se = Array.isArray(ve);
+    const K = k.data[E.value[0]] || k.data[E.value[1]], Ce = k.maxLengthOfColumn[E.value[0]] || k.maxLengthOfColumn[E.value[1]];
+    if (Array.isArray(K)) {
+      const Q = K.length;
+      for (let ye = 0; ye < Q; ye++) {
+        const ve = K[ye], we = document.createElement("tr"), Se = Array.isArray(ve);
         for (let ae = 0; ae <= Ce; ae++) {
           let ie = g;
           if (Se) {
             const de = ve[ae];
             typeof de == "string" && (ie = de);
           }
-          const ge = document.createElement(q);
-          Z.forEach((de) => {
+          const ge = document.createElement(Y);
+          X.forEach((de) => {
             ge.style[de] = f[de];
           }), ge.innerText = ie, we.appendChild(ge);
         }
-        U.appendChild(we), q = "td";
+        W.appendChild(we), Y = "td";
       }
     }
-    l ? X.push(U) : ($.appendChild(U), d == null || d.appendChild($)), K = E.done;
-  } while (!K);
+    l ? J.push(W) : (M.appendChild(W), d == null || d.appendChild(M)), $ = E.done;
+  } while (!$);
   if (l)
-    return X;
+    return J;
   {
     const E = d.querySelector(
       'div[data-sheet="1"]'
     );
     E && (E.style.display = "flex", E.setAttribute("data-sheet-activate", "1"));
-    const $ = d.querySelector(
+    const M = d.querySelector(
       'button[data-sheet="1"]'
     );
-    return $ && (P.forEach((q) => {
-      $.style[q] = j[q];
-    }), $.setAttribute("data-sheet-button-activate", "1")), "Done";
+    return M && (P.forEach((Y) => {
+      M.style[Y] = j[Y];
+    }), M.setAttribute("data-sheet-button-activate", "1")), "Done";
   }
 }
 async function uo(e, t, r = !0, o = "property") {
-  let n = await import("./read-utils-YAGe6NNW.js").then(
+  let n = await import("./read-utils-DnAqiCj7.js").then(
     async (u) => await u.extractExcelData(e, !1, t)
   ), l = {}, g = [];
   return Object.keys(n.sheetNameObject).forEach((u) => {
@@ -2401,10 +2403,10 @@ async function uo(e, t, r = !0, o = "property") {
       g[j] = o + (j + 1);
     let v = r, D = [];
     s.forEach((j) => {
-      let S = {};
-      j.forEach((d, G) => {
-        typeof d == "string" && (v ? g[G] = d : S[g[G]] = d);
-      }), v = !1, D.push(S);
+      let k = {};
+      j.forEach((d, q) => {
+        typeof d == "string" && (v ? g[q] = d : k[g[q]] = d);
+      }), v = !1, D.push(k);
     }), l = Object.assign(l, {
       [m]: D
     });
@@ -2429,15 +2431,15 @@ function Co(e, t) {
   return ct(zt(e, t));
 }
 function vo(e, t = !1, r) {
-  return import("./read-utils-YAGe6NNW.js").then(
+  return import("./read-utils-DnAqiCj7.js").then(
     (o) => o.extractExcelData(e, t, r)
   );
 }
 function wo(e, t = !1) {
-  return Kt(e, t, !1);
+  return $t(e, t, !1);
 }
 function To(e, t = !1) {
-  return Kt(e, t, !0);
+  return $t(e, t, !0);
 }
 function Eo(e, t, r, o = { ...jt }) {
   return o = {

@@ -81,7 +81,10 @@
     "vite": "^5.3.4",
     "vite-plugin-dts": "^3.9.1"
   },
-  "repository": "https://github.com/mohammadrezaeicode/mr-excel-repo.git",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mohammadrezaeicode/mr-excel-repo.git"
+  },
   "bugs": {
     "url": "https://github.com/mohammadrezaeicode/mr-excel-repo.git/issues",
     "email": "mohammadrezaeicode@gmail.com"
