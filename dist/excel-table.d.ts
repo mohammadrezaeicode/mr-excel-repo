@@ -215,7 +215,7 @@ declare type ConditionalFormattingTopOperation = "belowAverage" | "aboveAverage"
  * @param {boolean} [config.keepStyle] - Whether to keep the style.
  * @param {RowHeightScaleFunction} [config.rowHeightScaleFunction] - The function to scale row height.
  * @param {ColWidthScaleFunction} [config.colWidthScaleFunction] - The function to scale column width.
- * @returns {Promise<ExcelTable>} The generated Excel table.
+ * @returns {Promise<string | number[] | Blob | DataModel.Buffer | undefined>} The generated Excel table.
  */
 export declare function convertTableToExcel(queryForTable?: string, table?: HTMLTableElement, config?: {
     keepStyle?: boolean;
@@ -396,8 +396,8 @@ export declare function excelToJson(uri: string, fetchFunc?: Function, withHeade
  * @param {string} uri - The URI of the Excel file.
  * @param {string | null} [queryForTable] - The query selector for the table.
  * @param {HTMLDivElement | null} [containerElement] - The container element.
- * @param {ExcelToNodeConfig} [config={}] - The configuration options.
- * @returns {Promise<void>} The result of the conversion.
+ * @param {ExcelToNodeConfig} [config=defaultConfig] - The configuration options.
+ * @returns {Promise<HTMLTableElement[] | "Done">} The result of the conversion.
  */
 export declare function excelToNode(uri: string, queryForTable?: string | null, containerElement?: HTMLDivElement | null, config?: ExcelToNodeConfig): Promise<HTMLTableElement[] | "Done">;
 
@@ -436,7 +436,7 @@ declare type ExtractedData = (string | null | undefined)[][];
  * @param {string} uri - The URI of the Excel file.
  * @param {boolean} [isBackend=false] - Whether the extraction is done on the backend.
  * @param {Function} [fetchFunc] - The function to fetch data.
- * @returns {Promise<ExtractResult>} The extracted data.
+ * @returns {Promise<DataModel.ReadResult>} The extracted data.
  */
 export declare function extractExcelData(uri: string, isBackend?: boolean, fetchFunc?: Function): Promise<DataModel.ReadResult>;
 
@@ -487,20 +487,20 @@ declare type FormulaType = "AVERAGE" | "SUM" | "COUNT" | "MAX" | "MIN";
 declare function generalValidationCheck(value: never, validateProperty: ValidationObject, property: string, strict: boolean, warn: boolean): boolean;
 
 /**
- * Generates a CSV file from an Excel table.
+ * Generates a CSV file from an Excel table Object.
  * @param {ExcelTable} excelTable - The Excel table.
  * @param {boolean} [asZip=false] - Whether to generate the CSV as a ZIP file.
- * @returns {Promise<Blob>} The generated CSV file.
+ * @returns {Promise<string[] | "done" | undefined>} The generated CSV file.
  */
 export declare function generateCSV(excelTable: ExcelTable, asZip?: boolean): Promise<string[] | "done" | undefined>;
 
 export declare function generateExcel(data: ExcelTable, styleKey?: string): Promise<string | number[] | Blob | Buffer_2 | undefined>;
 
 /**
- * Generates a text file from an Excel table.
+ * Generates a text file from an Excel table Object.
  * @param {ExcelTable} excelTable - The Excel table.
  * @param {boolean} [asZip=false] - Whether to generate the text file as a ZIP file.
- * @returns {Promise<Blob>} The generated text file.
+ * @returns {Promise<string[] | "done" | undefined>} The generated text file.
  */
 export declare function generateText(excelTable: ExcelTable, asZip?: boolean): Promise<string[] | "done" | undefined>;
 
@@ -891,7 +891,7 @@ declare interface SideBySide {
 /**
  * Generates an Excel file with side-by-side data.
  * @param {SideBySide[][]} data - The side-by-side data.
- * @returns {Promise<ExcelTable>} The generated Excel table.
+ * @returns {Promise<string | number[] | Blob | DataModel.Buffer | undefined>} The generated Excel table.
  */
 export declare function sideBySideLineByLine(data: SideBySide[][]): Promise<string | number[] | DataModel.Buffer | Blob | undefined>;
 
@@ -1021,7 +1021,7 @@ declare type StyleType = "conditionalFormatting" | "CF" | "headerFooter" | "HF";
  * Generates an Excel file with a theme.
  * @param {ExcelTable | Data[] | Data[][]} data - The data for the Excel file.
  * @param {ThemeOption} [option] - The theme options.
- * @returns {Promise<ExcelTable>} The generated Excel table.
+ * @returns {Promise<string | number[] | Blob | DataModel.Buffer | undefined>} The generated Excel table.
  */
 export declare function themeBaseGenerate(data: ExcelTable | Data[] | Data[][], option?: ThemeOption): Promise<string | number[] | DataModel.Buffer | Blob | undefined>;
 

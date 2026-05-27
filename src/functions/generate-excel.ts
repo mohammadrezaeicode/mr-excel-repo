@@ -1092,7 +1092,7 @@ export async function generateExcel<T extends object = object>(
               '" ' +
               height +
               ' spans="1:' +
-              (left + consommeCol - 1) +
+              Math.max(left + consommeCol - 1, 1) +
               '">',
             details:
               '<c r="' +
@@ -1112,7 +1112,7 @@ export async function generateExcel<T extends object = object>(
             '" ' +
             height +
             ' spans="1:' +
-            (left + consommeCol - 1) +
+            Math.max(left + consommeCol - 1, 1) +
             '">';
           titleRow +=
             '<c r="' +
@@ -1175,7 +1175,7 @@ export async function generateExcel<T extends object = object>(
         if (v.formula) {
           headerFormula.push(innerIndex);
         }
-        if (v.conditionalFormatting) {
+        if (v.conditionalFormatting && addCF) {
           headerConditionalFormatting.push(innerIndex);
         }
         objKey.push(v.label);
@@ -1335,7 +1335,7 @@ export async function generateExcel<T extends object = object>(
           '<row r="' +
           rowCount +
           '" spans="1:' +
-          colsLength +
+          Math.max(colsLength, 1) +
           '" ' +
           (sheetData.headerHeight
             ? 'ht="' + sheetData.headerHeight + '" customHeight="1"'
@@ -1432,7 +1432,7 @@ export async function generateExcel<T extends object = object>(
             '<row r="' +
             rowCount +
             '" spans="1:' +
-            colsLength +
+            Math.max(colsLength, 1) +
             '" ' +
             (keyHeight in mData
               ? 'ht="' + mData[keyHeight] + '" customHeight="1"'
@@ -1704,7 +1704,7 @@ export async function generateExcel<T extends object = object>(
           };
         });
       }
-      if (headerConditionalFormatting.length > 0) {
+      if (headerConditionalFormatting.length > 0 && addCF) {
         headerConditionalFormatting.forEach((v) => {
           const header = sheetData.headers[v];
           if (!header?.conditionalFormatting) {
@@ -1841,7 +1841,6 @@ export async function generateExcel<T extends object = object>(
           let from = val.obj.from;
           let to = val.obj.to;
           let margin = val.obj.margin;
-          let imageType = val.type;
           let type = val.obj.type;
           let extent = val.obj.extent;
           if (typeof extent == "undefined") {
@@ -1907,6 +1906,7 @@ export async function generateExcel<T extends object = object>(
 
             result.start.mT = margin.top ?? margin.all ?? 0;
           }
+
           if (type == "one") {
             drawersContent +=
               "<xdr:oneCellAnchor>" +
@@ -2037,7 +2037,7 @@ export async function generateExcel<T extends object = object>(
     mergesCellArray = [...new Set(mergesCellArray)];
     let cFDataString: string = "";
     let priorityCounter = 1;
-    if (conditionalFormatting.length > 0) {
+    if (conditionalFormatting.length > 0 && addCF) {
       cFDataString = conditionalFormatting.reduce((cf, cu) => {
         if (cu.type == "cells") {
           if (cu.operator == "ct") {

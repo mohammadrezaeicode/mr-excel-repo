@@ -7289,6 +7289,13 @@ To migrate from Version 2 to Version 3, you need to follow the steps below:
 
 ## Release Notes [⬆️](#table-of-contents)
 
+### Version 7.0.1 (2025-03-13)
+
+#### Bug Fixes
+
+- Related to formating. (more info-PR)[https://github.com/mohammadrezaeicode/mr-excel-repo/pull/5/] (by [Sergio Fernández](https://github.com/xergiodf))
+- Data range error.
+
 ### Version 7.0.0 (2025-02-16)
 
 #### New Features
