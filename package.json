@@ -19,9 +19,12 @@
   "scripts": {
     "build1": "tsc --noEmit && vite build",
     "start": "tsc",
-    "build": "tsc && vite build",
+    "prebuild": "npm run start",
+    "build": "vite build",
+    "postbuild": "echo build DONE!",
     "dev": "tsc -w",
     "test": "jest",
+    "test:clear": "jest --clearCache",
     "test:coverage": "jest --coverage",
     "test:coverage-text-summary": "jest --coverage --coverageReporters=\"text-summary\"",
     "test:coverage-json-summary": "jest --coverage --coverageReporters=\"json-summary\""
@@ -65,7 +68,8 @@
     "xlsx-generation",
     "data-to-xlsx",
     "xlsx-creator",
-    "object-to-xlsx"
+    "object-to-xlsx",
+    "data-validation"
   ],
   "author": "M.Rezaei",
   "license": "MIT",
@@ -74,12 +78,12 @@
     "@types/file-saver": "2.0.5",
     "cross-fetch": "^4.0.0",
     "jest": "^29.7.0",
-    "jest-environment-jsdom": "^29.7.0",
+    "jest-environment-jsdom": "^30.3.0",
     "ts-jest": "^29.1.1",
     "ts-loader": "^9.5.1",
     "typescript": "^5.5.4",
-    "vite": "^5.3.4",
-    "vite-plugin-dts": "^3.9.1"
+    "vite": "^8.0.8",
+    "vite-plugin-dts": "^4.5.4"
   },
   "repository": {
     "type": "git",
