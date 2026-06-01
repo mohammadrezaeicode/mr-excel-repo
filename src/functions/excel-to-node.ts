@@ -1,4 +1,4 @@
-import { type ReadResult } from "../data-model/excel-table";
+import { ExtractedData, type ReadResult } from "../data-model/excel-table";
 export const defaultConfig = {
   firstHeader: true,
   returnTableNodes: false,
@@ -71,10 +71,10 @@ export async function excelToNode(
   },
   activeButtonStyle: object = {
     background: "#EEEDEB",
-  }
+  },
 ) {
   let excelData: ReadResult = await import("../utils/read-utils").then(
-    async (m) => await m.extractExcelData(uri, false, fetchFunc)
+    async (m) => await m.extractExcelData(uri, false, fetchFunc),
   );
   let containerNode: HTMLElement | null = null;
   if (queryForTable) {
@@ -109,7 +109,6 @@ export async function excelToNode(
   }
   let resultTables: HTMLTableElement[] = [];
   let isDone = false;
-  let displayTab = "unset";
   let sheetCounter = 0;
   do {
     sheetCounter++;
@@ -125,10 +124,10 @@ export async function excelToNode(
         button.style[keyStyle as keyof object] =
           buttonStyle[keyStyle as keyof object];
       });
-      button.addEventListener("click", (ev: MouseEvent) => {
+      button.addEventListener("click", (_: MouseEvent) => {
         const sheetId = button.getAttribute("data-sheet");
         const element: HTMLDivElement | null = containerNode!.querySelector(
-          'div[data-sheet="' + sheetId + '"]'
+          'div[data-sheet="' + sheetId + '"]',
         );
 
         if (element) {
@@ -137,7 +136,7 @@ export async function excelToNode(
               activeButtonStyle[styleKey as keyof object];
           });
           const perviousBtn: HTMLElement | null = containerNode!.querySelector(
-            "[data-sheet-button-activate]"
+            "[data-sheet-button-activate]",
           );
           let perviousElement: HTMLElement | null =
             containerNode!.querySelector("[data-sheet-activate]");
@@ -156,7 +155,6 @@ export async function excelToNode(
             perviousElement.removeAttribute("data-sheet-activate");
           }
         } else {
-          console.error("Sheet content not found!!" + " id is " + sheetId);
         }
       });
       button.setAttribute("data-sheet", sheetCounter + "");
@@ -171,11 +169,12 @@ export async function excelToNode(
       tableNode.style[keyStyle as keyof object] =
         tableStyle[keyStyle as keyof object];
     });
-    const sheetData: (string | null | undefined)[][] =
+    const sheetData: ExtractedData | undefined =
       excelData.data[element.value[0]] || excelData.data[element.value[1]];
     const colLength =
-      excelData.maxLengthOfColumn[element.value[0]] ||
-      excelData.maxLengthOfColumn[element.value[1]];
+      (excelData.maxLengthOfColumn[element.value[0]] ||
+        excelData.maxLengthOfColumn[element.value[1]]) ??
+      0;
     if (Array.isArray(sheetData)) {
       const len = sheetData.length;
       for (let index = 0; index < len; index++) {
@@ -210,20 +209,19 @@ export async function excelToNode(
       containerNode?.appendChild(tabContentContainer);
     }
     isDone = element.done!;
-    displayTab = "hidden";
   } while (!isDone);
   if (returnTableNodes) {
     return resultTables;
   } else {
     const one: HTMLElement | null = containerNode!.querySelector(
-      'div[data-sheet="1"]'
+      'div[data-sheet="1"]',
     );
     if (one) {
       one.style.display = "flex";
       one.setAttribute("data-sheet-activate", "1");
     }
     const oneButton: HTMLElement | null = containerNode!.querySelector(
-      'button[data-sheet="1"]'
+      'button[data-sheet="1"]',
     );
     if (oneButton) {
       activeButtonStyleKeys.forEach((styleKey: string) => {

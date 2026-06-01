@@ -249,7 +249,7 @@ export async function generateExcel<T extends object = object>(
         endPart =
           ' applyAlignment="1">' +
           "<alignment " +
-          Object.entries(styleObject.alignment ?? {}).reduce(
+          Object.entries(styleObject.alignment).reduce(
             (al, [alignmentOptionName, alignmentOptionValue]) => {
               if (alignmentOptionName === "rtl") {
                 alignmentOptionName = "readingOrder";

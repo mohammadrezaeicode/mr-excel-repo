@@ -1,4 +1,4 @@
-import { describe, expect, test, jest } from "@jest/globals";
+import { describe, expect, test } from "@jest/globals";
 import { appGenerator } from "../../../../src/utils/content-generator/app";
 
 describe("hexToRgbArray function tests", () => {

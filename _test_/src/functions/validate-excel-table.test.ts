@@ -3,7 +3,6 @@ import {
   exportedForTesting,
   validateExcelTableObjectFunction,
 } from "../../../src/functions/validate-excel-table";
-import { ExcelTable } from "../../../src/data-model/excel-table";
 
 describe("getColRowBaseOnRefString data tests", () => {
   test("should be function", () => {
@@ -491,7 +490,7 @@ describe("getColRowBaseOnRefString data tests", () => {
     expect(exportedForTesting.checkSheetValidWithOneRef("AA2")).toBeTruthy();
   });
   test("conditionalFormatting", () => {
-    let spy = jest.spyOn(console, "warn");
+    jest.spyOn(console, "warn");
     let excelData: any = {
       sheet: [
         {

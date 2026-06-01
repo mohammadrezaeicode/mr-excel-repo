@@ -7,7 +7,7 @@ export default defineConfig({
       entry: resolve(__dirname, "src/index.ts"),
       name: "ExcelTable",
       fileName: "excel-table",
-      formats: ["umd", "cjs", "es", "system", "iife", "amd"],
+      formats: ["es" , "cjs" , "esm" , "module" , "commonjs" , "iife" , "umd"],
     },
 
     rollupOptions: {

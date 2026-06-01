@@ -1,8 +1,11 @@
-import { afterEach, describe, expect, it, jest, test } from "@jest/globals";
-import {
-  generateCSV,
-  exportedForTesting,
-} from "../../../src/functions/generate-csv";
+import { describe, expect,test } from "@jest/globals";
+import { exportedForTesting } from "../../../src/functions/generate-csv";
+import { generateCSV, generateText } from "../../../src";
+import { type ExcelTable } from "../../../src/data-model/excel-table";
+export type DataModelAB = {
+  a: number;
+  b: string;
+};
 describe("generateCSV data tests", () => {
   test("should be function", () => {
     expect(typeof generateCSV).toBe("function");
@@ -21,9 +24,9 @@ describe("generateCSV data tests", () => {
     expect(exportedForTesting.converterCSV("TEST,")).toBe('"TEST,"');
     expect(exportedForTesting.converterCSV(1 as any)).toBe("1");
   });
-  test("generateCSV",async () => {
+  test("generateCSV", async () => {
     expect(
-    await  generateCSV({
+      await generateCSV({
         backend: true,
         sheet: [
           {
@@ -43,10 +46,10 @@ describe("generateCSV data tests", () => {
             ],
           },
         ],
-      })
+      } as ExcelTable<DataModelAB>),
     ).toEqual(["a,b\n1,b1\n2,b2\n"]);
     expect(
-     await generateCSV(
+      await generateText(
         {
           backend: true,
           sheet: [
@@ -68,11 +71,10 @@ describe("generateCSV data tests", () => {
             },
           ],
         },
-        false,
-        true
-      )
+        false
+      ),
     ).toEqual(["a b\n1 b1\n2 b2\n"]);
-  },50000);
+  }, 50000);
   test("nextLine", () => {
     expect(exportedForTesting.nextLine("nextLine ", 1)).toBe("nextLine\n");
     expect(exportedForTesting.nextLine("nextLine,", 1)).toBe("nextLine\n");

@@ -4,19 +4,23 @@ export async function excelToJson(
   uri: string,
   fetchFunc?: Function,
   withHeader = true,
-  defaultPropertyPrefix = "property"
+  defaultPropertyPrefix = "property",
 ) {
   let excelData: ReadResult = await import("../utils/read-utils").then(
-    async (m) => await m.extractExcelData(uri, false, fetchFunc)
+    async (m) => await m.extractExcelData(uri, false, fetchFunc),
   );
   let result: Record<string, object> = {};
   let objectKey: string[] = [];
   Object.keys(excelData.sheetNameObject).forEach((sheetName) => {
     const name = excelData.sheetNameObject[sheetName];
-    const data = excelData.data[name] || excelData.data[sheetName];
+    if(!name){
+      throw new Error('sheet name not found')
+    }
+    const data = (excelData.data[name ?? ""] || excelData.data[sheetName])??[];
     const sheetLength =
-      excelData.maxLengthOfColumn[name] ||
-      excelData.maxLengthOfColumn[sheetName];
+      (excelData.maxLengthOfColumn[name ?? ""] ??
+        excelData.maxLengthOfColumn[sheetName]) ??
+      0;
     for (let index = 0; index <= sheetLength; index++) {
       objectKey[index] = defaultPropertyPrefix + (index + 1);
     }
@@ -29,7 +33,7 @@ export async function excelToJson(
           if (isHeader) {
             objectKey[index] = value;
           } else {
-            arrayObject[objectKey[index]] = value;
+            arrayObject[objectKey[index]??''] = value;
           }
         }
       });

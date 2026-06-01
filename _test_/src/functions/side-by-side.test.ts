@@ -28,7 +28,7 @@ describe("getColRowBaseOnRefString data tests", () => {
     expect(typeof sideBySide).toBe("function");
   });
   test("1D input - 1 sheet", () => {
-    let excelTable: ExcelTable = {
+    let excelTable: ExcelTable<any> = {
       sheet: [
         {
           name: "Sheet 1",
@@ -298,7 +298,7 @@ describe("getColRowBaseOnRefString data tests", () => {
     ).toEqual(excelTable);
   });
   test("1D input - 1 sheet with space", () => {
-    let excelTable: ExcelTable = {
+    let excelTable: ExcelTable<{c1:string;c2?:string;}> = {
       sheet: [
         {
           name: "Sheet 1",
@@ -347,7 +347,7 @@ describe("getColRowBaseOnRefString data tests", () => {
 
   });
   test("1D input - multi sheet", () => {
-    let excelTable: ExcelTable = {
+    let excelTable: ExcelTable<any> = {
       sheet: [
         {
           name: "sheet 2",
@@ -587,7 +587,7 @@ describe("getColRowBaseOnRefString data tests", () => {
     ).toEqual(excelTable);
   });
   test("2D input - 1 sheet", () => {
-    let excelTable: ExcelTable = {
+    let excelTable: ExcelTable<any> = {
       sheet: [
         {
           name: "Sheet 1",
@@ -815,7 +815,7 @@ describe("getColRowBaseOnRefString data tests", () => {
     ).toEqual(excelTable);
   });
   test("2D input - multi sheet", () => {
-    let excelTable: ExcelTable = {
+    let excelTable: ExcelTable<any> = {
       sheet: [
         {
           name: "Sheet 1",

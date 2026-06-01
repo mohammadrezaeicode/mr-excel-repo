@@ -3,9 +3,11 @@
  * @interface
  * @extends {ExcelTableOption}
  */
-export interface ExcelTable extends ExcelTableOption {
+export interface ExcelTable<
+  T extends ObjectLiteral = ObjectLiteral,
+> extends ExcelTableOption {
   /** Array of sheets in the Excel table. */
-  sheet: Sheet[];
+  sheet: Sheet<T>[];
 }
 
 /**
@@ -41,24 +43,34 @@ export interface ExcelTableOption {
   styles?: Styles;
   /** Format map for the Excel. */
   formatMap?: FormatMap;
+  /** Specify the default font family  */
+  mainFontFamily?: string;
+  /** hide sheets */
+  hidden?: boolean;
+  /* use compression for generate result file */
+  useCompression?: boolean;
 }
 /**
  * Represents a sheet in the Excel.
  * @interface
  * @extends {SheetOption}
  */
-export interface Sheet extends SheetOption {
+export interface Sheet<
+  T extends ObjectLiteral = ObjectLiteral,
+> extends SheetOption<T> {
   /** Array of headers in the sheet. */
   headers: Header[];
   /** Array of data in the sheet. */
-  data: Data[];
+  data: Data<T>[];
 }
 
 /**
  * Options for configuring a sheet.
  * @interface
  */
-export interface SheetOption {
+export interface SheetOption<T extends ObjectLiteral = ObjectLiteral> {
+  /** data validation for sheet  */
+  dataValidations?: DataValidation[];
   /** Indicates if the sheet should be without a header. */
   withoutHeader?: boolean;
   /** Options for configure property name that maybe provide for apply outlineLevel, hidden, height option of row*/
@@ -78,7 +90,7 @@ export interface SheetOption {
   /** Array of conditional formatting rules. */
   conditionalFormatting?: ConditionalFormatting[];
   /** Function for multi-style condition. */
-  multiStyleCondition?: MultiStyleConditionFunction;
+  multiStyleCondition?: MultiStyleConditionFunction<T>;
   /** Indicates if the sheet should use split based on match. */
   useSplitBaseOnMatch?: boolean;
   /** Indicates if strings should be converted to numbers Automatically. */
@@ -103,14 +115,14 @@ export interface SheetOption {
   tabColor?: string;
   /** Array of merge ranges in the sheet. */
   merges?: string[];
-  /** Key for the header style. */
+  /** Key(Id) for the header style. */
   headerStyleKey?: string;
   /** Function for merge row data base on condition. */
   mergeRowDataCondition?: MergeRowDataConditionFunction;
   /** Function for style cell base on condition. */
-  styleCellCondition?: StyleCellConditionFunction;
+  styleCellCondition?: StyleCellConditionFunction<T>;
   /** Function for comment base on condition. */
-  commentCondition?: CommentConditionFunction;
+  commentCondition?: CommentConditionFunction<T>;
   /** Sort and filter options for the sheet. */
   sortAndFilter?: SortAndFilter;
   /** State of the sheet (hidden or visible). */
@@ -133,7 +145,73 @@ export interface SheetOption {
   asTable?: AsTableOption;
   /** Array of dropdowns in the sheet. */
   dropDowns?: DropDown[];
+  /** increase zoom scale  */
+  zoomScale?: {
+    scale: number;
+    startAt: string;
+  };
 }
+/**
+ * Options for add data validation to cells.
+ * @interface
+ */
+export interface DataValidation {
+  /** type of data validation - {@link DataValidationType}  */
+  type: DataValidationType;
+  /** allow blank cell- default:true*/
+  allowBlank?: boolean;
+  /** show input message- default:true*/
+  showInputMessage?: boolean;
+  /** show Drop Down for list type */
+  showDropDown?: boolean;
+  /** show error message- default:true*/
+  showErrorMessage?: boolean;
+  /** cell start  */
+  start: string;
+  /** cell end  */
+  end: string;
+  /** operator of data validation - {@link DataValidationOperator}  */
+  operator?: DataValidationOperator;
+  /** starting value for operation  */
+  value: CellStrReference | CellNumReference | string | number;
+  // /** starting value for operation is needed - required for type between, notBetween   */
+  // value2?: string | number;
+}
+/** possible type for data validation */
+export type DataValidationType =
+  | "whole"
+  | "decimal"
+  | "time"
+  | "list"
+  | "custom";
+/**  possible type for data validation operator  */
+export type DataValidationOperator =
+  | "between"
+  | "notBetween"
+  | "equal"
+  | "notEqual"
+  | "greaterThan"
+  | "lessThan"
+  | "greaterThanOrEqual"
+  | "lessThanOrEqual";
+
+/**
+ * use for reference range cell(Sheet A1-...)
+ * @interface
+ */
+export interface CellStrReference {
+  start: string;
+  end: string;
+}
+/**
+ * use for reference range cell(Sheet A1-...)
+ * @interface
+ */
+export interface CellNumReference {
+  min: number;
+  max: number;
+}
+
 /**
  * Options for displaying the sheet as a table.
  * @interface
@@ -314,15 +392,13 @@ export type StyleType = "conditionalFormatting" | "CF" | "headerFooter" | "HF";
  * Represents the body of a style.
  * @interface
  */
-export interface StyleBody {
+export type StyleBody = {
   /** The font family of the text. */
   fontFamily?: string;
   /** The type of the style.(if not define used for cells, for other type should be define) */
   type?: StyleType;
   /** The size of the font. */
   size?: number;
-  /** The index of the style(!!it's will override by process,Don't set value for it). */
-  index?: number;
   /** The alignment options of the text. */
   alignment?: AlignmentOption;
   /** The border options. */
@@ -330,18 +406,28 @@ export interface StyleBody {
   /** The format of the text. */
   format?: string;
   /** Indicates if the style is bold. */
-  bold?: boolean;
-  /** Indicates if the style is underlined. */
-  underline?: boolean;
+  bold?: true;
   /** Indicates if the style is italic. */
-  italic?: boolean;
-  /** Indicates if the style has double underline. */
-  doubleUnderline?: boolean;
+  italic?: true;
   /** The color of the style. */
   color?: string;
   /** The background color of the style. */
   backgroundColor?: string;
-}
+} & UnderlineType;
+
+export type SingleUnderline = {
+  /** Indicates if the style is underlined. */
+  underline?: true;
+};
+
+export type DoubleUnderline = {
+  /** Indicates if the style has double underline. */
+  doubleUnderline?: true;
+};
+
+export type UnderlineType =
+  | (SingleUnderline & { doubleUnderline?: never })
+  | (DoubleUnderline & { underline?: never });
 
 /**
  * Represents a collection of styles.
@@ -353,26 +439,19 @@ export interface Styles {
 /**
  * Represents data in the sheet.
  * @interface
- * @extends {DataOptions}
+ * @extends {object, DataOptions}
  */
-export interface Data extends DataOptions {
-  [key: string]: string | number | any | undefined;
-}
+// export interface Data extends DataOptions {
+//   [key: string]: string | number | any | undefined;
+// }
+export type Data<T extends ObjectLiteral = ObjectLiteral> = T & DataOptions;
+// & DataOptions<T>;
 
 /**
  * Options for configuring data in the sheet.
  * @interface
  */
 export interface DataOptions {
-  [key: string]:
-    | "0"
-    | "1"
-    | number
-    | string
-    | undefined
-    | MapComment
-    /** Array of multi-style values for the data. */
-    | MapMultiStyleValue;
   outlineLevel?: number;
   hidden?: "0" | "1" | number;
   rowStyle?: string;
@@ -536,12 +615,12 @@ export interface ImageTypes {
  * Represents side-by-side data in the sheet.
  * @interface
  */
-export interface SideBySide {
+export interface SideBySide<T extends ObjectLiteral = ObjectLiteral> {
   sheetName?: string;
   spaceX?: number;
   spaceY?: number;
   headers: { label: string; text: string }[];
-  data: Data[];
+  data: Data<T>[];
   headerIndex?: number;
 }
 
@@ -574,17 +653,28 @@ export type AlignmentVertical = "center" | "top" | "bottom";
  * Options for configuring alignment.
  * @interface
  */
-export interface AlignmentOption {
+export type AlignmentOption = {
   horizontal?: AlignmentHorizontal;
   vertical?: AlignmentVertical;
   wrapText?: "0" | "1" | 0 | 1;
   shrinkToFit?: "0" | "1" | 0 | 1;
-  readingOrder?: "1" | "2" | 2 | 1;
+  // readingOrder?: "1" | "2" | 2 | 1;
   textRotation?: number;
   indent?: number;
-  rtl?: boolean;
-  ltr?: boolean;
-}
+} & SheetDirection;
+type RTLDirection = {
+  rtl?: true;
+};
+type LTRDirection = {
+  ltr?: true;
+};
+type ReadingOrder = {
+  readingOrder?: "1" | "2" | 2 | 1;
+};
+type SheetDirection =
+  | (RTLDirection & { ltr?: never; readingOrder?: never })
+  | (LTRDirection & { rtl?: never; readingOrder?: never })
+  | (ReadingOrder & { rtl?: never; ltr?: never });
 
 /**
  * Directions for border options.
@@ -673,13 +763,15 @@ export interface MergeRowConditionMap {
  * @param {boolean} fromHeader - Indicates if the condition is from the header.
  * @returns {MultiStyleValue[] | null} The multi-style values or null.
  */
-export type MultiStyleConditionFunction = (
+export type MultiStyleConditionFunction<
+  T extends ObjectLiteral = ObjectLiteral,
+> = (
   data: Header | string | number | undefined,
-  object: null | Data,
+  object: null | Data<T>,
   headerKey: string,
   rowIndex: number,
   colIndex: number,
-  fromHeader: boolean
+  fromHeader: boolean,
 ) => MultiStyleValue[] | null;
 
 /**
@@ -693,14 +785,15 @@ export type MultiStyleConditionFunction = (
  * @param {boolean} fromHeader - Indicates if the condition is from the header.
  * @returns {Comment | string | false | undefined | null} The comment or null.
  */
-export type CommentConditionFunction = (
-  data: Header | string | number | undefined,
-  object: null | Data,
-  headerKey: string,
-  rowIndex: number,
-  colIndex: number,
-  fromHeader: boolean
-) => Comment | string | false | undefined | null;
+export type CommentConditionFunction<T extends ObjectLiteral = ObjectLiteral> =
+  (
+    data: Header | string | number | undefined,
+    object: null | Data<T>,
+    headerKey: string,
+    rowIndex: number,
+    colIndex: number,
+    fromHeader: boolean,
+  ) => Comment | string | false | undefined | null;
 
 /**
  * Function type for style cell condition.
@@ -713,13 +806,15 @@ export type CommentConditionFunction = (
  * @param {string[]} styleKeys - The style keys.
  * @returns {string | null} The style key or null.
  */
-export type StyleCellConditionFunction = (
+export type StyleCellConditionFunction<
+  T extends ObjectLiteral = ObjectLiteral,
+> = (
   data: Header | string | number | undefined,
-  object: Header | Data,
+  object: Header | Data<T>,
   rowIndex: number,
   colIndex: number,
   fromHeader: boolean,
-  styleKeys: string[]
+  styleKeys: string[],
 ) => string | null;
 
 /**
@@ -735,7 +830,7 @@ export type MergeRowDataConditionFunction = (
   data: Header | string | number | undefined,
   key: string | null,
   index: number,
-  fromHeader: boolean
+  fromHeader: boolean,
 ) => boolean;
 
 /**
@@ -912,6 +1007,7 @@ export interface StyleMapper {
     count: number;
     value: string;
   };
+  styleIndexMap: Record<string, number>;
   commentSyntax: {
     value: {
       [key: string]: string;
@@ -961,6 +1057,7 @@ export interface ThemeOption {
   filterKeys?: string[];
 }
 
+
 /**
  * Represents extracted data.
  * @typedef {(string | null | undefined)[][]} ExtractedData
@@ -1000,12 +1097,12 @@ export declare class Buffer extends Uint8Array {
   static alloc(
     size: number,
     fill?: string | Buffer | number,
-    encoding?: string
+    encoding?: string,
   ): Buffer;
   static from(
     arrayBuffer: ArrayBuffer,
     byteOffset?: number,
-    length?: number
+    length?: number,
   ): Buffer;
   static from(data: number[]): Buffer;
   static from(str: string, encoding?: string): Buffer;
@@ -1014,7 +1111,7 @@ export declare class Buffer extends Uint8Array {
     string: string,
     offset?: number,
     length?: number,
-    encoding?: string
+    encoding?: string,
   ): number;
   toString(encoding?: string, start?: number, end?: number): string;
   slice(start?: number, end?: number): Buffer;
@@ -1054,3 +1151,55 @@ export interface ExcelToNodeConfig {
   buttonStyle?: object;
   activeButtonStyle?: object;
 }
+
+export interface SheetProcessResult {
+  indexId: number;
+  key: string;
+  sheetName: string;
+  sheetDataTableColumns: string;
+  backgroundImageRef: number;
+  sheetDimensions: CellStrReference;
+  asTable: AsTableOption | boolean;
+  sheetDataString: string;
+  sheetDropDown: string;
+  sheetBreakLine: string;
+  viewType: string;
+  hasComment: boolean;
+  drawersContent: string;
+  cFDataString: string;
+  sheetMargin: string;
+  sheetHeaderFooter: string;
+  isPortrait: boolean;
+  drawersRels: string;
+  hasImages: boolean;
+  hasCheckbox: boolean;
+  formRel: string;
+  checkboxDrawingContent: string;
+  checkboxForm: string[];
+  checkboxSheetContent: string;
+  checkboxShape: string;
+  commentString: string;
+  sheetValidation: DataValidation[];
+  commentAuthor: string[];
+  shapeCommentRowCol: ShapeRC[];
+  splitOption: string;
+  sheetViewProperties: string;
+  sheetSizeString: string;
+  protectionOption: string;
+  merges: string;
+  selectedView: boolean;
+  sheetSortFilter: string;
+  tabColor: string;
+}
+export interface ShapeRC {
+  row: string | number;
+  col: string | number;
+}
+
+export interface ObjectLiteral {
+  [key: string]: any;
+}
+
+export type ExcelTableReturnType = Promise<
+  string | number[] | Blob | Buffer | undefined | void
+>;

@@ -20,7 +20,7 @@ interface SideBySideCounterRow {
     value: number;
   };
 }
-export function sideBySide(data: SideBySide[][]): ExcelTable {
+export function sideBySide<T extends object = object>(data: SideBySide<T>[][]): ExcelTable<object>{
   const lengthData = data.length;
   let tableIndex = 0;
   let rowTable: SideBySideRowTable = {};
@@ -30,145 +30,156 @@ export function sideBySide(data: SideBySide[][]): ExcelTable {
   } = {};
   for (let index = 0; index < lengthData; index++) {
     const element = data[index];
+    if (!element) {
+      continue;
+    }
     const elementLength = element.length;
-    let firstTime = false;
     let sheetCount: {
       [key: string]: number;
     } = {};
     for (let innerIndex = 0; innerIndex < elementLength; innerIndex++) {
       tableIndex++;
       const mainData = element[innerIndex];
-      let name: string;
+      if (!mainData) {
+        continue;
+      }
+      let name: keyof SideBySideRowTable;
       if (mainData.sheetName) {
         name = mainData.sheetName;
       } else {
         name = "Sheet " + 1;
       }
-      if (!(name in rowTable)) {
-        rowTable[name] = {
-          headers: [],
-          data: [],
-          labelCounter: 0,
-          seenAt: index,
-        };
-        firstTime = true;
-      }
-      if (!(name in counterRow)) {
-        counterRow[name] = {
-          index,
-          value: 0,
-        };
-      }
+      //TODO
+      // if (typeof rowTable[name] === "undefined") {
+      //   rowTable[name] = {
+      //     headers: [],
+      //     data: [],
+      //     labelCounter: 0,
+      //     seenAt: index,
+      //   };
+      // }
+      const tempRowTable = rowTable[name] ?? {
+        headers: [],
+        data: [],
+        labelCounter: 0,
+        seenAt: index,
+      };
+      const tempCounterRow = counterRow[name] ?? {
+        index,
+        value: 0,
+      };
       if (!(name in resetMap)) {
-        rowTable[name].labelCounter = 0;
+        tempRowTable.labelCounter = 0;
         resetMap[name] = true;
       }
 
       let newHeader: Header[] = [];
-      const headerLength = rowTable[name].headers.length;
+      const headerLength = tempRowTable.headers.length;
       let headerAsRow: {
         [key: string]: string;
       } = {};
-      let withText = rowTable[name].seenAt == index;
+      let withText = tempRowTable.seenAt == index;
       let header: {
         [key: string]: string;
-      } = mainData.headers.reduce((res, curr, index) => {
-        rowTable[name].labelCounter++;
-        if (headerLength < rowTable[name].labelCounter) {
+      } = mainData.headers.reduce((res, curr, _index) => {
+        tempRowTable.labelCounter++;
+        if (headerLength < tempRowTable.labelCounter) {
           newHeader.push({
-            label: "c" + rowTable[name].labelCounter,
+            label: "c" + tempRowTable.labelCounter,
             text: withText ? curr.text : "",
           });
         }
-        headerAsRow["c" + rowTable[name].labelCounter] = curr.text;
+        headerAsRow["c" + tempRowTable.labelCounter] = curr.text;
         return {
           ...res,
-          [curr.label]: "c" + rowTable[name].labelCounter,
+          [curr.label]: "c" + tempRowTable.labelCounter,
         };
       }, {});
-      rowTable[name].headers.push(...newHeader);
+      tempRowTable.headers.push(...newHeader);
       if (mainData.spaceX) {
         for (let space = 0; space < mainData.spaceX; space++) {
-          rowTable[name].labelCounter++;
-          if (headerLength <= rowTable[name].labelCounter) {
-            rowTable[name].headers.push({
-              label: "c" + rowTable[name].labelCounter,
+          tempRowTable.labelCounter++;
+          if (headerLength <= tempRowTable.labelCounter) {
+            tempRowTable.headers.push({
+              label: "c" + tempRowTable.labelCounter,
               text: "",
             });
           }
         }
       }
-      if (counterRow[name].index + 1 == index) {
-        sheetCount[name] = counterRow[name].value;
+      if (tempCounterRow.index + 1 == index) {
+        sheetCount[name] = tempCounterRow.value;
       }
       let sta = sheetCount[name] || 0;
       if (sta > 0) {
         if (
-          !rowTable[name].headerIndex ||
-          (rowTable[name].headerIndex && rowTable[name].headerIndex != sta)
+          !tempRowTable.headerIndex ||
+          (tempRowTable.headerIndex && tempRowTable.headerIndex != sta)
         ) {
-          rowTable[name].data.push(headerAsRow);
+          tempRowTable.data.push(headerAsRow);
         } else {
-          rowTable[name].data[sta] = {
-            ...rowTable[name].data[sta],
+          tempRowTable.data[sta] = {
+            ...tempRowTable.data[sta],
             ...headerAsRow,
           };
         }
-        rowTable[name].headerIndex = sta;
-
+        tempRowTable.headerIndex = sta;
         sta++;
       }
 
       let objKey = Object.keys(header);
-      let spaceApply = mainData.data.length >= rowTable[name].data.length;
-      rowTable[name].data = mainData.data.reduce((res, curr, index) => {
-        let needObj: {
-          [key: string]: any;
-        } = {};
-        if (res.length > index + sta) {
-          needObj = res[index + sta];
+      let spaceApply = mainData.data.length >= tempRowTable.data.length;
+      tempRowTable.data = mainData.data.reduce((res, curr, index) => {
+        let needObj: Record<string,any> = {};
+        if (res.length > index + sta && res[index + sta]) {
+          // TODO
+          needObj = res[index + sta]??{};
         } else {
           res.push(needObj);
         }
         objKey.forEach((v: string) => {
           let newKey = header[v];
-          needObj[newKey] = curr[v] ? curr[v] : "";
+          if(!newKey){
+            return
+          }
+          needObj[newKey] = curr[v as keyof object]??"";
         });
         needObj["tableIndex"] = tableIndex;
         needObj["tableStringIndex"] = index + "," + innerIndex;
         res[index + sta] = needObj;
         return res;
-      }, rowTable[name].data);
+      }, tempRowTable.data);
       if (spaceApply && mainData.spaceY) {
-        const hy = rowTable[name].headers.length;
+        const hy = tempRowTable.headers.length;
         for (let space = 0; space < mainData.spaceY; space++) {
           let newObject: { [key: string]: any } = {};
           for (let hIndex = 0; hIndex < hy; hIndex++) {
-            const element = rowTable[name].headers[hIndex];
-            newObject[element.label] = "";
+            const element = tempRowTable.headers[hIndex];
+            if (element) {
+              newObject[element.label] = "";
+            }
           }
-          rowTable[name].data.push(newObject);
+          tempRowTable.data.push(newObject);
         }
       }
       counterRow[name] = {
-        value: Math.max(rowTable[name].data.length, counterRow[name].value),
+        value: Math.max(tempRowTable.data.length, tempCounterRow.value),
         index,
       };
+      rowTable[name] = tempRowTable;
     }
     resetMap = {};
   }
-  let keys = Object.keys(rowTable);
   let sheet: Sheet[] = [];
-  let sheets: ExcelTable = keys.reduce(
-    (re, cu) => {
-      let val = rowTable[cu];
+  let sheets: ExcelTable = Object.entries(rowTable).reduce(
+    (re, [cu,val]) => {
       re.sheet.push({
         ...val,
         name: cu,
       });
       return re;
     },
-    { sheet }
+    { sheet },
   );
   return sheets;
 }

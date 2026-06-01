@@ -14,7 +14,7 @@ function generateRowsBaseOnColAndRowSpan(
   rowV: any,
   text: string | number,
   mergeString: string,
-  data: any
+  data: any,
 ) {
   let rows = [];
   let type = "both";
@@ -73,7 +73,7 @@ function generateRowsBaseOnColAndRowSpan(
 export type RowHeightScaleFunction = (
   data: number,
   rowIndex: number,
-  fromHeader: boolean
+  fromHeader: boolean,
 ) => number;
 export type ColWidthScaleFunction = (data: number, colIndex: number) => number;
 export function createExcelTableBaseOnDomElement(
@@ -81,7 +81,7 @@ export function createExcelTableBaseOnDomElement(
   table?: HTMLTableElement | null,
   keepStyle?: boolean,
   rowHeightScaleFunction?: RowHeightScaleFunction,
-  colWidthScaleFunction?: ColWidthScaleFunction
+  colWidthScaleFunction?: ColWidthScaleFunction,
 ): ExcelTable {
   if (!queryForTable && !table) {
     throw "Error: One of the function inputs is required.";
@@ -115,11 +115,11 @@ export function createExcelTableBaseOnDomElement(
           headerHeight = rowHeightScaleFunction(
             Number(trEl.height.substring(0, trEl.height.length - 2)),
             rowIndex,
-            true
+            true,
           );
         } else {
           headerHeight = Number(
-            trEl.height.substring(0, trEl.height.length - 2)
+            trEl.height.substring(0, trEl.height.length - 2),
           );
         }
         a.forEach((n, index) => {
@@ -178,11 +178,12 @@ export function createExcelTableBaseOnDomElement(
             backgroundColor = bgTr;
           }
           const fontSizeStyle = parseInt(
-            styles.fontSize.substring(0, styles.fontSize.indexOf("p"))
+            styles.fontSize.substring(0, styles.fontSize.indexOf("p")),
           );
+          const bold = parseInt(styles.fontWeight) > 500;
           let style = {
             ...(backgroundColor ? { backgroundColor } : {}),
-            bold: parseInt(styles.fontWeight) > 500,
+            ...(bold ? { bold } : {}),
             ...(isNaN(fontSizeStyle) ? {} : { size: fontSizeStyle }),
             ...(border ? { border } : {}),
             alignment: {
@@ -200,7 +201,7 @@ export function createExcelTableBaseOnDomElement(
           if (typeof colWidthScaleFunction == "function") {
             headWidth = colWidthScaleFunction(
               Number(styles.width.substring(0, styles.width.length - 2)),
-              index
+              index,
             );
           } else {
             headWidth =
@@ -252,7 +253,7 @@ export function createExcelTableBaseOnDomElement(
               data,
               (n as any).textContent,
               mergeString,
-              data
+              data,
             );
             if (dataObjs.length < rowIndex) {
               dataObjs.push(...mergeData);
@@ -330,11 +331,12 @@ export function createExcelTableBaseOnDomElement(
             backgroundColor = bgTr;
           }
           const fontSizeStyle = parseInt(
-            styles.fontSize.substring(0, styles.fontSize.indexOf("p"))
+            styles.fontSize.substring(0, styles.fontSize.indexOf("p")),
           );
+          const bold = parseInt(styles.fontWeight) > 500;
           let style = {
             ...(backgroundColor ? { backgroundColor } : {}),
-            bold: parseInt(styles.fontWeight) > 500,
+            ...(bold ? { bold } : {}),
             ...(isNaN(fontSizeStyle) ? {} : { size: fontSizeStyle }),
             ...(border ? { border } : {}),
             alignment: {
@@ -354,7 +356,7 @@ export function createExcelTableBaseOnDomElement(
           data.height = rowHeightScaleFunction(
             Number(trEl.height.substring(0, trEl.height.length - 2)),
             rowIndex,
-            false
+            false,
           );
         } else {
           data.height = trEl.height.substring(0, trEl.height.length - 2);
@@ -378,12 +380,12 @@ export function createExcelTableBaseOnDomElement(
       {
         ...(headerHeight ? { headerHeight } : {}),
         styleCellCondition: function (
-          data: Header | string | number | undefined,
-          object: Header | Data,
+          _: Header | string | number | undefined,
+          __: Header | Data,
           rowIndex: number,
           colIndex: number,
           fromHeader: boolean,
-          styleKeys: string[]
+          styleKeys: string[],
         ) {
           if (keepStyle) {
             if (fromHeader) {

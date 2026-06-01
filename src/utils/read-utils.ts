@@ -41,7 +41,7 @@ function getRValue(element: string) {
 export async function extractExcelData(
   uri: string,
   isBackend: boolean = false,
-  fetchFunc?: Function
+  fetchFunc?: Function,
 ): Promise<ReadResult> {
   let apiCaller: Function;
   let convertCall = false;
@@ -73,14 +73,15 @@ export async function extractExcelData(
         }
         const rValue = getRValue(v);
         let rC = getColRowBaseOnRefString(rValue!, cols);
-        if (typeof resultData[rC.row] == "undefined") {
+        if (!resultData[rC.row]) {
           resultData[rC.row] = [];
         }
-        resultData[rC.row][rC.col] = value;
+        // add empty array if resultData[rC.row]
+        resultData[rC.row]![rC.col] = value;
         maxCol = Math.max(rC.col, maxCol);
       });
     }
-    if (filename.indexOf("xl/worksheets/sheet") == 0) {
+    if (filename.startsWith("xl/worksheets/sheet")) {
       let key = filename.substring(14, filename.lastIndexOf("."));
       if (nameMap.has(key)) {
         key = nameMap.get(key)!;
@@ -104,9 +105,12 @@ export async function extractExcelData(
     })
     .then(async (res: any) => {
       const module = await import("jszip");
-      const JSZip = module.default;
+      let JSZip = module;
+      if ("default" in JSZip) {
+        JSZip = (JSZip as any)?.default;
+      }
       let fileCounter = 0;
-      return await new Promise<ReadResult>((resolve, reject) => {
+      return await new Promise<ReadResult>((resolve, _) => {
         JSZip.loadAsync(res).then(function (zip) {
           const keys = Object.keys(zip.files);
           fileCounter = keys.length;
@@ -137,82 +141,81 @@ export async function extractExcelData(
                 }
                 return true;
               },
-              get(target, prop, receiver) {
+              get(target, prop, _receiver) {
                 if (prop === "isNameSet") {
                   return target.isNameSet;
                 }
-                // By default, it looks like Reflect.get(target, prop, receiver)
-                // which has a different value of `this`
                 return target.counter;
               },
-            }
+            },
           );
           keys.forEach(function (filename) {
-            zip.files[filename].async("string").then(function (fileData) {
-              if (filename.indexOf("sharedStrings") >= 0) {
-                let rows = fileData.match(/<si[\s\S\n]*?<\/si>/g);
-                if (Array.isArray(rows)) {
-                  rows.forEach((va) => {
-                    let t = va.match(/<t[\s\S\n]*?<\/t>/g);
-                    if (Array.isArray(t)) {
-                      let result = t.reduce((res, curr) => {
-                        return res + getValueWithinT(curr);
-                      }, "");
-                      sharedStrings.push(result);
-                    }
-                  });
-                }
-                seenShardString = true;
-                if (queueSheet.length > 0) {
-                  queueSheet.forEach((v) => {
-                    generateDataArray(v.filename, v.fileData);
-                  });
-                  queueSheet = [];
-                }
-              }
-              if (filename.indexOf("sheet") >= 0) {
-                if (seenShardString) {
-                  generateDataArray(filename, fileData);
-                } else {
-                  queueSheet.push({
-                    filename,
-                    fileData,
-                  });
-                }
-              }
-              if (filename.indexOf("workbook") >= 0) {
-                const sheetsTag = fileData.replace(
-                  /(.*[\n\s\S]*)(<sheets[\n\s\S]*?sheets>)(.*[\n\s\S]*)/,
-                  "$2"
-                );
-                const sheets = sheetsTag.split("<sheet ").slice(1);
-                sheets.forEach((v, i) => {
-                  let id = i + 1;
-                  let name = "Sheet " + id;
-                  if (v.indexOf("name=") >= 0) {
-                    name = v.replace(
-                      /(.*[\n\s\S]*?)name="([^"]*)"(.*[\n\s\S]*)/,
-                      "$2"
-                    );
+            if (zip.files[filename])
+              zip.files[filename].async("string").then(function (fileData) {
+                if (filename.indexOf("sharedStrings") >= 0) {
+                  let rows = fileData.match(/<si[\s\S\n]*?<\/si>/g);
+                  if (Array.isArray(rows)) {
+                    rows.forEach((va) => {
+                      let t = va.match(/<t[\s\S\n]*?<\/t>/g);
+                      if (Array.isArray(t)) {
+                        let result = t.reduce((res, curr) => {
+                          return res + getValueWithinT(curr);
+                        }, "");
+                        sharedStrings.push(result);
+                      }
+                    });
                   }
-                  if (v.indexOf("sheetId=") > 0) {
-                    id = Number(
-                      v.replace(
-                        /(.*[\n\s\S]*?)sheetId="([^"]*)"(.*[\n\s\S]*)/,
-                        "$2"
-                      )
-                    );
-                    if (isNaN(id)) {
-                      id = i + 1;
-                    }
+                  seenShardString = true;
+                  if (queueSheet.length > 0) {
+                    queueSheet.forEach((v) => {
+                      generateDataArray(v.filename, v.fileData);
+                    });
+                    queueSheet = [];
                   }
-                  nameMap.set("sheet" + id, name);
-                  nameObject["sheet" + id] = name;
-                });
-                proxy.isNameSet = true;
-              }
-              proxy.counter++;
-            });
+                }
+                if (filename.startsWith("xl/worksheets/sheet")) {
+                  if (seenShardString) {
+                    generateDataArray(filename, fileData);
+                  } else {
+                    queueSheet.push({
+                      filename,
+                      fileData,
+                    });
+                  }
+                }
+                if (filename.indexOf("workbook") >= 0) {
+                  const sheetsTag = fileData.replace(
+                    /(.*[\n\s\S]*)(<sheets[\n\s\S]*?sheets>)(.*[\n\s\S]*)/,
+                    "$2",
+                  );
+                  const sheets = sheetsTag.split("<sheet ").slice(1);
+                  sheets.forEach((v, i) => {
+                    let id = i + 1;
+                    let name = "Sheet " + id;
+                    if (v.indexOf("name=") >= 0) {
+                      name = v.replace(
+                        /(.*[\n\s\S]*?)name="([^"]*)"(.*[\n\s\S]*)/,
+                        "$2",
+                      );
+                    }
+                    if (v.indexOf("sheetId=") > 0) {
+                      id = Number(
+                        v.replace(
+                          /(.*[\n\s\S]*?)sheetId="([^"]*)"(.*[\n\s\S]*)/,
+                          "$2",
+                        ),
+                      );
+                      if (isNaN(id)) {
+                        id = i + 1;
+                      }
+                    }
+                    nameMap.set("sheet" + id, name);
+                    nameObject["sheet" + id] = name;
+                  });
+                  proxy.isNameSet = true;
+                }
+                proxy.counter++;
+              });
           });
         });
       });

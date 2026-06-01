@@ -1,33 +1,23 @@
-import { describe, expect, test, jest, it } from "@jest/globals";
+import { describe, expect, test, jest } from "@jest/globals";
 import { generateExcel } from "../../../src/functions/generate-excel";
-import {
-  Data,
+import type {
   ExcelTable,
-  Header,
   PageOption,
   StyleBody,
 } from "../../../src/data-model/excel-table";
-import { extractExcelData } from "../../../src/utils/read-utils";
-import { readGeneratedFile, readSheet1 } from "../read";
+import { readGeneratedFile, readSheet1, type ResponseApi } from "../read";
 import { callApi } from "../utils/call-api";
 import * as generateColumn from "../../../src/utils/generate-column-name";
 import { cols } from "../../../src/data-model/const-data";
-import JSZip from "jszip";
 import { countOccurrences } from "../utils";
 // not completed
-interface ResponseApi {
-  data: {
-    [sheetName: string]: string[][];
-  };
-  sheetName: Object;
-  fileList: string[];
-}
+
 describe("generateExcel data tests", () => {
   test("should be function", () => {
     expect(typeof generateExcel).toBe("function");
   });
   test("basic test", async () => {
-    let excelTable: ExcelTable = {
+    let excelTable: ExcelTable<{ test: string }> = {
       backend: true,
       notSave: true,
       sheet: [
@@ -58,7 +48,7 @@ describe("generateExcel data tests", () => {
         "xl/worksheets/sheet1.xml",
         "[Content_Types].xml",
       ]);
-      let sheet;
+      let sheet: any;
       if (result.data["Sheet 1"]) {
         sheet = result.data["Sheet 1"];
       } else {
@@ -102,7 +92,7 @@ describe("generateExcel data tests", () => {
         "xl/worksheets/sheet1.xml",
         "[Content_Types].xml",
       ]);
-      let sheet;
+      let sheet: any;
       if (result.data["Sheet 1"]) {
         sheet = result.data["Sheet 1"];
       } else {
@@ -116,7 +106,6 @@ describe("generateExcel data tests", () => {
     excelTable = {
       backend: true,
       notSave: true,
-
       sheet: [
         {
           shiftLeft: 2,
@@ -147,7 +136,7 @@ describe("generateExcel data tests", () => {
         "xl/worksheets/sheet1.xml",
         "[Content_Types].xml",
       ]);
-      let sheet;
+      let sheet: any;
       if (result.data["Sheet 1"]) {
         sheet = result.data["Sheet 1"];
       } else {
@@ -193,7 +182,7 @@ describe("generateExcel data tests", () => {
         "xl/worksheets/sheet1.xml",
         "[Content_Types].xml",
       ]);
-      let sheet;
+      let sheet: any;
       if (result.data["Sheet 1"]) {
         sheet = result.data["Sheet 1"];
       } else {
@@ -243,7 +232,7 @@ describe("generateExcel data tests", () => {
         "xl/worksheets/sheet1.xml",
         "[Content_Types].xml",
       ]);
-      let sheet;
+      let sheet: any;
       if (result.data["Sheet 1"]) {
         sheet = result.data["Sheet 1"];
       } else {
@@ -294,7 +283,7 @@ describe("generateExcel data tests", () => {
         "xl/worksheets/sheet1.xml",
         "[Content_Types].xml",
       ]);
-      let sheet;
+      let sheet: any;
       if (result.data["Sheet 1"]) {
         sheet = result.data["Sheet 1"];
       } else {
@@ -345,7 +334,7 @@ describe("generateExcel data tests", () => {
         "xl/worksheets/sheet1.xml",
         "[Content_Types].xml",
       ]);
-      let sheet;
+      let sheet: any;
       if (result.data["Sheet 1"]) {
         sheet = result.data["Sheet 1"];
       } else {
@@ -397,7 +386,7 @@ describe("generateExcel data tests", () => {
         "xl/worksheets/sheet1.xml",
         "[Content_Types].xml",
       ]);
-      let sheet;
+      let sheet: any;
       if (result.data["Sheet 1"]) {
         sheet = result.data["Sheet 1"];
       } else {
@@ -450,7 +439,7 @@ describe("generateExcel data tests", () => {
         "xl/worksheets/sheet1.xml",
         "[Content_Types].xml",
       ]);
-      let sheet;
+      let sheet: any;
       if (result.data["Sheet 1"]) {
         sheet = result.data["Sheet 1"];
       } else {
@@ -542,7 +531,7 @@ describe("generateExcel data tests", () => {
         "xl/worksheets/sheet1.xml",
         "[Content_Types].xml",
       ]);
-      let sheet;
+      let sheet: any;
       if (result.data["Sheet 1"]) {
         sheet = result.data["Sheet 1"];
       } else {
@@ -713,7 +702,7 @@ describe("generateExcel data tests", () => {
     //     "xl/worksheets/sheet1.xml",
     //     "[Content_Types].xml",
     //   ]);
-    //   let sheet;
+    //   let sheet:any;
     //   if (result.data["Sheet 1"]) {
     //     sheet = result.data["Sheet 1"];
     //   } else {
@@ -730,7 +719,7 @@ describe("generateExcel data tests", () => {
     // })
   }, 150000);
   test("test for comment & image", async () => {
-    let excelTable: ExcelTable = {
+    let excelTable: ExcelTable<{ test: string }> = {
       backend: true,
       notSave: true,
       sheet: [
@@ -774,7 +763,7 @@ describe("generateExcel data tests", () => {
         "xl/worksheets/sheet1.xml",
         "[Content_Types].xml",
       ]);
-      let sheet;
+      let sheet: any;
       if (result.data["Sheet 1"]) {
         sheet = result.data["Sheet 1"];
       } else {
@@ -842,7 +831,7 @@ describe("generateExcel data tests", () => {
         "xl/worksheets/sheet1.xml",
         "[Content_Types].xml",
       ]);
-      let sheet;
+      let sheet: any;
       if (result.data["Sheet 1"]) {
         sheet = result.data["Sheet 1"];
       } else {
@@ -901,7 +890,7 @@ describe("generateExcel data tests", () => {
         "xl/worksheets/sheet1.xml",
         "[Content_Types].xml",
       ]);
-      let sheet;
+      let sheet: any;
       if (result.data["Sheet 1"]) {
         sheet = result.data["Sheet 1"];
       } else {
@@ -915,7 +904,7 @@ describe("generateExcel data tests", () => {
     });
   }, 100000);
   test("test for checkbox", async () => {
-    let excelTable: ExcelTable = {
+    let excelTable: ExcelTable<{ test: string }> = {
       backend: true,
       notSave: true,
       sheet: [
@@ -959,7 +948,7 @@ describe("generateExcel data tests", () => {
         "xl/ctrlProps/ctrlProp1.xml",
         "[Content_Types].xml",
       ]);
-      let sheet;
+      let sheet: any;
       if (result.data["Sheet 1"]) {
         sheet = result.data["Sheet 1"];
       } else {
@@ -1034,7 +1023,7 @@ describe("generateExcel data tests", () => {
         "xl/ctrlProps/ctrlProp2.xml",
         "[Content_Types].xml",
       ]);
-      let sheet;
+      let sheet: any;
       if (result.data["Sheet 1"]) {
         sheet = result.data["Sheet 1"];
       } else {
@@ -1050,7 +1039,7 @@ describe("generateExcel data tests", () => {
   test("Data large number of header", async () => {
     const generateColumnSpyObj = jest.spyOn(
       generateColumn,
-      "generateColumnName"
+      "generateColumnName",
     );
     let excelTable: ExcelTable = {
       backend: true,
@@ -1221,7 +1210,7 @@ describe("generateExcel data tests", () => {
         "xl/worksheets/sheet1.xml",
         "[Content_Types].xml",
       ]);
-      let sheet;
+      let sheet: any;
       if (result.data["Sheet 1"]) {
         sheet = result.data["Sheet 1"];
       } else {
@@ -1239,7 +1228,7 @@ describe("generateExcel data tests", () => {
         sheet: [],
       }).catch((e) => {
         return e;
-      })
+      }),
     ).toBe('length of "creator" most be bigger then 0');
     expect(
       await generateExcel({
@@ -1247,7 +1236,7 @@ describe("generateExcel data tests", () => {
         sheet: [],
       }).catch((e) => {
         return e;
-      })
+      }),
     ).toBe('"created" is not valid date');
     expect(
       await generateExcel({
@@ -1255,7 +1244,7 @@ describe("generateExcel data tests", () => {
         sheet: [],
       }).catch((e) => {
         return e;
-      })
+      }),
     ).toBe('"created" is not valid date');
     expect(
       await generateExcel({
@@ -1263,7 +1252,7 @@ describe("generateExcel data tests", () => {
         sheet: [],
       }).catch((e) => {
         return e;
-      })
+      }),
     ).toBe('"modified" is not valid date');
     expect(
       await generateExcel({
@@ -1271,7 +1260,7 @@ describe("generateExcel data tests", () => {
         sheet: [],
       }).catch((e) => {
         return e;
-      })
+      }),
     ).toBe('"modified" is not valid date');
     expect(
       await generateExcel({
@@ -1288,7 +1277,7 @@ describe("generateExcel data tests", () => {
         ],
       } as any).catch((e) => {
         return e;
-      })
+      }),
     ).toBe("type error");
   }, 150000);
   test("comment option", async () => {
@@ -1313,11 +1302,14 @@ describe("generateExcel data tests", () => {
       fontFamily: "Times New Roman",
       color: "#FFFFFF",
     };
-    let data: ExcelTable = {
+    let data: ExcelTable<{ c1: number; c2: number; c3: string; c5: number }> = {
       addDefaultTitleStyle: true,
       backend: true,
       notSave: true,
       creator: "mr",
+      hidden: true,
+      created: "2024-01-02T22:11:56Z",
+      modified: "2026-05-31T23:57:48Z",
       styles: {
         "c0<0.3": {
           backgroundColor: "DCD6F7",
@@ -1345,6 +1337,7 @@ describe("generateExcel data tests", () => {
         {
           shiftTop: 1,
           shiftLeft: 1,
+          selected: true,
           title: {
             comment: "This is comment on table",
             shiftTop: 1,
@@ -1355,11 +1348,11 @@ describe("generateExcel data tests", () => {
           },
           commentCondition: function (
             data,
-            object,
-            headerKey,
-            rowIndex,
-            colIndex,
-            fromHeader
+            _object,
+            _headerKey,
+            _rowIndex,
+            _colIndex,
+            fromHeader,
           ) {
             if (fromHeader) {
               if (typeof data == "object" && "text" in data) {
@@ -1375,7 +1368,7 @@ Header should start with ${textDataC0.toUpperCase()}`,
             }
             return false;
           },
-          styleCellCondition(data, fullData, rowIndex, colIndex, fromHeader) {
+          styleCellCondition(data, _fullData, _rowIndex, colIndex, fromHeader) {
             if (fromHeader) {
               return "headerStyle";
             } else {
@@ -1473,11 +1466,11 @@ Header should start with ${textDataC0.toUpperCase()}`,
           },
           commentCondition: function (
             data,
-            object,
-            headerKey,
-            rowIndex,
-            colIndex,
-            fromHeader
+            _object,
+            _headerKey,
+            _rowIndex,
+            _colIndex,
+            fromHeader,
           ) {
             if (fromHeader) {
               if (typeof data == "object" && "text" in data) {
@@ -1493,7 +1486,7 @@ Header should start with ${textDataC0.toUpperCase()}`,
             }
             return false;
           },
-          styleCellCondition(data, fullData, rowIndex, colIndex, fromHeader) {
+          styleCellCondition(data, _fullData, _rowIndex, colIndex, fromHeader) {
             if (fromHeader) {
               return "headerStyle";
             } else {
@@ -1546,7 +1539,16 @@ Header should start with ${textDataC0.toUpperCase()}`,
     expect(sheetResultData.indexOf("<legacyDrawing")).toBeGreaterThan(0);
   }, 150000);
   test("Conditional Formatting option", async () => {
-    const data: ExcelTable = {
+    const data: ExcelTable<{
+      Column1: number;
+      Column2: number;
+      Column3: number;
+      Column4: number;
+      Column5: number;
+      Column6: number;
+      Column7: number;
+      Column8: number;
+    }> = {
       backend: true,
       notSave: true,
       activateConditionalFormatting: true,
@@ -1679,7 +1681,7 @@ Header should start with ${textDataC0.toUpperCase()}`,
     const exData = await generateExcel(data);
     const sheetResultData = await readSheet1(exData);
     expect(sheetResultData.indexOf("<conditionalFormatting")).toBeGreaterThan(
-      0
+      0,
     );
   }, 150000);
   test("header option", async () => {
@@ -1705,7 +1707,14 @@ Header should start with ${textDataC0.toUpperCase()}`,
       fontFamily: "Times New Roman",
       color: colorPalette.c2,
     };
-    const data: ExcelTable = {
+    const data: ExcelTable<{
+      id: number;
+      name: string;
+      surname: string;
+      parentId: number;
+      work: string;
+      birthDate: string;
+    }> = {
       creator: "mr",
       notSave: true,
       backend: true,
@@ -1969,7 +1978,14 @@ Header should start with ${textDataC0.toUpperCase()}`,
       fontFamily: "Times New Roman",
       color: colorPalette.c2,
     };
-    const data: ExcelTable = {
+    const data: ExcelTable<{
+      id: number;
+      name: string;
+      surname: string;
+      parentId: number;
+      work: string;
+      birthDate: string;
+    }> = {
       creator: "mr",
       backend: true,
       notSave: true,
@@ -2044,7 +2060,7 @@ Header should start with ${textDataC0.toUpperCase()}`,
     expect(cBIndex).toBeGreaterThan(0);
     expect(cBEIndex).toBeGreaterThan(cBIndex);
     expect(sheetResultData.indexOf('orientation="portrait"')).toBeGreaterThan(
-      0
+      0,
     );
   }, 150000);
   test("view option", async () => {
@@ -2066,7 +2082,14 @@ Header should start with ${textDataC0.toUpperCase()}`,
       fontFamily: "Times New Roman",
       color: colorPalette.c2,
     };
-    const data: ExcelTable = {
+    const data: ExcelTable<{
+      id: number;
+      name: string;
+      surname: string;
+      parentId: number;
+      work: string;
+      birthDate: string;
+    }> = {
       creator: "mr",
       notSave: true,
       backend: true,
@@ -2116,7 +2139,7 @@ Header should start with ${textDataC0.toUpperCase()}`,
     expect(sheetResultData.indexOf('view="pageLayout"')).toBeGreaterThan(0);
     expect(sheetResultData.indexOf('showRuler="0"')).toBeGreaterThan(0);
 
-    data.sheet[0].viewOption = {
+    data.sheet[0]!.viewOption = {
       type: "pageBreakPreview",
       hideHeadlines: true,
       hideGrid: true,
@@ -2124,11 +2147,11 @@ Header should start with ${textDataC0.toUpperCase()}`,
     exData = await generateExcel(data);
     sheetResultData = await readSheet1(exData);
     expect(sheetResultData.indexOf('view="pageBreakPreview"')).toBeGreaterThan(
-      0
+      0,
     );
     expect(sheetResultData.indexOf('showRowColHeaders="0"')).toBeGreaterThan(0);
     expect(sheetResultData.indexOf('showGridLines="0"')).toBeGreaterThan(0);
-    data.sheet[0].viewOption = {
+    data.sheet[0]!.viewOption = {
       frozenOption: {
         type: "R",
         index: {
@@ -2142,7 +2165,7 @@ Header should start with ${textDataC0.toUpperCase()}`,
     expect(sheetResultData.indexOf('state="frozen"')).toBeGreaterThan(0);
     expect(sheetResultData.indexOf('<pane ySplit="')).toBeGreaterThan(0);
 
-    data.sheet[0].viewOption = {
+    data.sheet[0]!.viewOption = {
       frozenOption: {
         type: "C",
         index: {
@@ -2156,7 +2179,7 @@ Header should start with ${textDataC0.toUpperCase()}`,
     expect(sheetResultData.indexOf('state="frozen"')).toBeGreaterThan(0);
     expect(sheetResultData.indexOf('<pane xSplit="')).toBeGreaterThan(0);
 
-    data.sheet[0].viewOption = {
+    data.sheet[0]!.viewOption = {
       frozenOption: {
         type: "BOTH",
         index: 1,
@@ -2167,7 +2190,7 @@ Header should start with ${textDataC0.toUpperCase()}`,
     expect(sheetResultData.indexOf('state="frozen"')).toBeGreaterThan(0);
     expect(sheetResultData.indexOf('<pane xSplit="')).toBeGreaterThan(0);
 
-    data.sheet[0].viewOption = {
+    data.sheet[0]!.viewOption = {
       frozenOption: {
         type: "R",
         index: 1,
@@ -2177,7 +2200,7 @@ Header should start with ${textDataC0.toUpperCase()}`,
     sheetResultData = await readSheet1(exData);
     expect(sheetResultData.indexOf('state="frozen"')).toBeGreaterThan(0);
     expect(sheetResultData.indexOf('<pane ySplit="')).toBeGreaterThan(0);
-    data.sheet[0].viewOption = {
+    data.sheet[0]!.viewOption = {
       frozenOption: {
         type: "C",
         index: 1,
@@ -2187,7 +2210,7 @@ Header should start with ${textDataC0.toUpperCase()}`,
     sheetResultData = await readSheet1(exData);
     expect(sheetResultData.indexOf('state="frozen"')).toBeGreaterThan(0);
     expect(sheetResultData.indexOf('<pane xSplit="')).toBeGreaterThan(0);
-    data.sheet[0].viewOption = {
+    data.sheet[0]!.viewOption = {
       frozenOption: {
         type: "B",
         index: {
@@ -2200,7 +2223,7 @@ Header should start with ${textDataC0.toUpperCase()}`,
     sheetResultData = await readSheet1(exData);
     expect(sheetResultData.indexOf('state="frozen"')).toBeGreaterThan(0);
     expect(sheetResultData.indexOf('<pane xSplit="')).toBeGreaterThan(0);
-    data.sheet[0].viewOption = {
+    data.sheet[0]!.viewOption = {
       splitOption: {
         type: "V", //or "VERTICAL"
         split: 10000,
@@ -2214,7 +2237,7 @@ Header should start with ${textDataC0.toUpperCase()}`,
     sheetResultData = await readSheet1(exData);
     expect(sheetResultData.indexOf('state="frozen"')).toBe(-1);
     expect(sheetResultData.indexOf('<pane xSplit="')).toBeGreaterThan(0);
-    data.sheet[0].viewOption = {
+    data.sheet[0]!.viewOption = {
       splitOption: {
         type: "H", //or "HORIZONTAL"
         split: 5000,
@@ -2228,7 +2251,7 @@ Header should start with ${textDataC0.toUpperCase()}`,
     sheetResultData = await readSheet1(exData);
     expect(sheetResultData.indexOf('state="frozen"')).toBe(-1);
     expect(sheetResultData.indexOf('<pane ySplit="')).toBeGreaterThan(0);
-    data.sheet[0].viewOption = {
+    data.sheet[0]!.viewOption = {
       splitOption: {
         type: "B", //or "BOTH"
         split: {

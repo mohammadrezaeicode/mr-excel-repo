@@ -3,17 +3,20 @@ import { ReplacerOption } from "../data-model/excel-table";
 export async function replaceInExcel(
   url: string | null | undefined,
   replaceData: Record<string, string | number | boolean>,
-  option?: ReplacerOption
+  option?: ReplacerOption,
 ) {
   let result: Record<string, string> = {};
   const module = await import("jszip");
-  const JSZip = module.default;
+  let JSZip = module;
+  if ("default" in JSZip) {
+    JSZip = (JSZip as any)?.default;
+  }
   let data;
   if (typeof url == "string" && url.length) {
     let apiCaller: Function;
     let convertCall = false;
     if (typeof option?.fetch == "function") {
-      apiCaller = option?.fetch;
+      apiCaller = option.fetch;
       convertCall = true;
     } else {
       apiCaller = fetch;
@@ -33,22 +36,28 @@ export async function replaceInExcel(
   } else {
     data = option?.data;
   }
+  if(!data){
+    throw "A data or file URL must be provided.";
+  }
   let zips = await JSZip.loadAsync(data).then(async function (zip) {
     let keys = Object.keys(zip.files).filter(
       (value) =>
         (value.indexOf("xl/worksheets/") == 0 &&
           value.length - 4 == value.lastIndexOf(".xml")) ||
-        value == "xl/sharedStrings.xml"
+        value == "xl/sharedStrings.xml",
     );
 
     for (let index = 0; index < keys.length; index++) {
       const element = keys[index];
-      await zip.files[element].async("string").then((data) => {
+      if (!element) {
+        continue;
+      }
+      await zip.files[element]?.async("string").then((data) => {
         let k = data;
-        Object.keys(replaceData).forEach((val: string) => {
+        Object.entries(replaceData).forEach(([key, value]) => {
           k = k.replace(
-            new RegExp("{{" + val + "}}", "g"),
-            replaceData[val]?.toString()
+            new RegExp("{{" + key + "}}", "g"),
+            value.toString() as string,
           );
         });
         result[element] = k;
@@ -56,8 +65,8 @@ export async function replaceInExcel(
     }
     return zip;
   });
-  Object.keys(result).forEach((val) => {
-    zips.file(val, result[val]);
+  Object.keys(result).forEach((val: string) => {
+    zips.file(val, result[val] ?? "");
   });
   if (option?.backend) {
     return zips
@@ -73,7 +82,7 @@ export async function replaceInExcel(
         return content.slice(
           0,
           content.size,
-          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         );
       });
     } else {
@@ -81,14 +90,9 @@ export async function replaceInExcel(
       const module = await import("file-saver");
       module.saveAs(
         content,
-        (option?.fileName ? option?.fileName : "tableRecord") + ".xlsx"
+        (option?.fileName ? option.fileName : "tableRecord") + ".xlsx",
       );
+      return "done";
     }
   }
 }
-export const myFunction = async () => {
-  const content = new Blob(["Hello World"], { type: "text/plain" });
-  const filename = "test.txt";
-  const module = await import("file-saver");
-  module.saveAs(content, filename);
-};

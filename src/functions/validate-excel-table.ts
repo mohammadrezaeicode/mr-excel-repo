@@ -4,6 +4,7 @@ import {
   type Sheet,
   type Styles,
   type BorderOption,
+  Header,
 } from "../data-model/excel-table";
 import { formatMap } from "../data-model/const-data";
 function checkSheetValidWithTwoRef(ref: string): boolean {
@@ -14,17 +15,18 @@ function checkSheetValidWithOneRef(ref: string): boolean {
 }
 interface ValidationObject {
   mode: ValidationType;
-  type: string;
+  type?: "string" | "object" | "number" | "function" | "boolean";
   isEnum?: boolean;
   enum?: string[];
   isArray?: boolean;
   notEmpty?: boolean;
   min?: number;
+  validationFunction?: (value: any, strict: boolean, warn: boolean) => void;
   validateFunction?: (
     key: string,
     value: any,
     strict: boolean,
-    warn: boolean
+    warn: boolean,
   ) => boolean;
 }
 type ValidationType = "TYPE_CHECK";
@@ -44,18 +46,18 @@ const validationStyleObject: ValidationMap = {
     mode: "TYPE_CHECK",
     type: "number",
   },
-  index: {
-    mode: "TYPE_CHECK",
-    type: "number",
-  },
+  // index: { index has been removed
+  //   mode: "TYPE_CHECK",
+  //   type: "number"
+  // },
   alignment: {
     mode: "TYPE_CHECK",
     type: "object",
     validateFunction(
-      key: string,
+      _key: string,
       value: AlignmentOption,
-      strict: boolean,
-      warn: boolean
+      _strict: boolean,
+      warn: boolean,
     ) {
       if (value.rtl && value.ltr) {
         warn && console.warn("Alignment-rtl and ltr cannot be used together.");
@@ -66,7 +68,7 @@ const validationStyleObject: ValidationMap = {
       ) {
         warn &&
           console.warn(
-            "Alignment-readingOrder cannot be used with rtl or ltr."
+            "Alignment-readingOrder cannot be used with rtl or ltr.",
           );
       }
       return true;
@@ -76,10 +78,10 @@ const validationStyleObject: ValidationMap = {
     mode: "TYPE_CHECK",
     type: "object",
     validateFunction(
-      key: string,
+      _key: string,
       value: BorderOption,
-      strict: boolean,
-      warn: boolean
+      _strict: boolean,
+      _warn: boolean,
     ) {
       const borderType = ["full", "top", "left", "right", "bottom"];
       const borderStyle = [
@@ -148,6 +150,42 @@ const validationStyleObject: ValidationMap = {
     type: "string",
   },
 };
+const validationHeaderObject: ValidationMap = {
+  label: {
+    mode: "TYPE_CHECK",
+    type: "string",
+  },
+  text: {
+    mode: "TYPE_CHECK",
+    type: "string",
+  },
+  size: {
+    mode: "TYPE_CHECK",
+    type: "number",
+  },
+  multiStyleValue: {
+    mode: "TYPE_CHECK",
+    type: "object",
+    isArray: true,
+  },
+  comment: {
+    mode: "TYPE_CHECK",
+    validateFunction(_key, value, _strict, _warn) {
+      if (typeof value === "string" || typeof value === "object") {
+        throw 'The Type of The "comment" is not valid';
+      }
+      return true;
+    },
+  },
+  conditionalFormatting: {
+    mode: "TYPE_CHECK",
+    type: "object",
+  },
+  formula: {
+    mode: "TYPE_CHECK",
+    type: "object",
+  },
+};
 const validationExcelTableObject: ValidationMap = {
   notSave: {
     mode: "TYPE_CHECK",
@@ -203,11 +241,13 @@ const validationExcelTableObject: ValidationMap = {
   styles: {
     mode: "TYPE_CHECK",
     type: "object",
+    validationFunction: validateStyleObjectFunction,
   },
   sheet: {
     mode: "TYPE_CHECK",
     type: "object",
     isArray: true,
+    validationFunction: validateSheetArrayFunction,
   },
 };
 const validationSheetObject: ValidationMap = {
@@ -215,6 +255,37 @@ const validationSheetObject: ValidationMap = {
     mode: "TYPE_CHECK",
     isArray: true,
     type: "object",
+    validateFunction(_key, value, strict, warn) {
+      if (value && Array.isArray(value)) {
+        value.forEach((header,headerIndex) => {
+          const headerKey = Object.keys(header);
+          headerKey.forEach((key) => {
+            const value = header[key];
+            const validateProperty =
+              validationHeaderObject[key as keyof Header];
+            if (
+              validateProperty &&
+              generalValidationCheck(
+                value,
+                validateProperty,
+                key,
+                strict,
+                warn,
+              )
+            ) {
+            } else {
+              invalidPropertyWarning(
+                !validateProperty && warn,
+                "headers[" + headerIndex + "]->" + key,
+              );
+            }
+          });
+        });
+      } else {
+        throw 'The Type of The "headers" is not valid';
+      }
+      return true;
+    },
   },
   data: {
     mode: "TYPE_CHECK",
@@ -228,7 +299,7 @@ const validationSheetObject: ValidationMap = {
   mapSheetDataOption: {
     mode: "TYPE_CHECK",
     type: "object",
-    validateFunction(key, value, strict, warn) {
+    validateFunction(_key, value, _strict, warn) {
       const keys = Object.keys(value);
       const mKey = ["outlineLevel", "hidden", "height"];
       keys.forEach((v) => {
@@ -237,7 +308,7 @@ const validationSheetObject: ValidationMap = {
             console.warn(
               'The Schema of mapSheetDataOption does not include the "' +
                 v +
-                '" property.'
+                '" property.',
             );
         }
       });
@@ -253,7 +324,7 @@ const validationSheetObject: ValidationMap = {
     mode: "TYPE_CHECK",
     isArray: true,
     type: "object",
-    validateFunction(key, value, strict, warn) {
+    validateFunction(_key, value, _strict, _warn) {
       //not exist p can be added
       if (Array.isArray(value)) {
         value.forEach((cf) => {
@@ -338,7 +409,7 @@ const validationSheetObject: ValidationMap = {
     mode: "TYPE_CHECK",
     isArray: true,
     type: "object",
-    validateFunction(key, value, strict, warn) {
+    validateFunction(_key, value, _strict, _warn) {
       //need check reference
       if (Array.isArray(value)) {
         const type = ["one", "two"];
@@ -409,13 +480,13 @@ const validationSheetObject: ValidationMap = {
     mode: "TYPE_CHECK",
     isArray: true,
     type: "object",
-    validateFunction(key, value, strict, warn) {
+    validateFunction(_key, value, _strict, _warn) {
       if (Array.isArray(value)) {
         let invalidData: string[] = [];
         value.forEach((v) => {
           if (!checkSheetValidWithTwoRef(v)) {
             invalidData.push(
-              "The " + v + ' reference is not valid in the "merges" property.'
+              "The " + v + ' reference is not valid in the "merges" property.',
             );
           }
         });
@@ -450,7 +521,7 @@ const validationSheetObject: ValidationMap = {
   sortAndFilter: {
     mode: "TYPE_CHECK",
     type: "object",
-    validateFunction(key, value, strict, warn) {
+    validateFunction(_key, value, _strict, _warn) {
       if (typeof value == "object") {
         const mode = ["all", "ref"];
         if (!value.mode) {
@@ -485,7 +556,7 @@ const validationSheetObject: ValidationMap = {
   protectionOption: {
     mode: "TYPE_CHECK",
     type: "object",
-    validateFunction(key, value, strict, warn) {
+    validateFunction(_key, value, _strict, _warn) {
       const acceptKeys = [
         "sheet",
         "formatCells",
@@ -523,7 +594,7 @@ const validationSheetObject: ValidationMap = {
     mode: "TYPE_CHECK",
     isArray: true,
     type: "object",
-    validateFunction(key, value, strict, warn) {
+    validateFunction(_key, value, _strict, _warn) {
       if (Array.isArray(value)) {
         value.forEach((checkbox) => {
           if (!checkbox.col || !checkbox.row) {
@@ -539,7 +610,7 @@ const validationSheetObject: ValidationMap = {
   viewOption: {
     mode: "TYPE_CHECK",
     type: "object",
-    validateFunction(key, value, strict, warn) {
+    validateFunction(_key, value, _strict, _warn) {
       // can add more
       const types = ["pageLayout", "pageBreakPreview"];
       if (value.type && types.indexOf(value.type) < 0) {
@@ -565,20 +636,23 @@ const validationSheetObject: ValidationMap = {
 export function validateStyleObjectFunction(
   styles: Styles,
   strict = true,
-  warn = true
+  warn = true,
 ) {
   const keys = Object.keys(styles);
   keys.forEach((styleKey) => {
     const styleBody = styles[styleKey as keyof object];
+    if (!styleBody) {
+      return;
+    }
     const styleBodyKeys = Object.keys(styleBody);
-    if (styleBody.format && !formatMap[styleBody.format]) {
+    if (styleBody?.format && !formatMap[styleBody.format]) {
       throw (
         'The "' +
         styleBody.format +
         '" format that has been used is not defined.'
       );
     }
-    if (styleBody.underline && styleBody.doubleUnderline) {
+    if (styleBody?.underline && styleBody.doubleUnderline) {
       warn &&
         "When using both underline and double underline together, in this case, the double underline will be applied.(Style key is " +
           styleKey +
@@ -588,9 +662,15 @@ export function validateStyleObjectFunction(
       let value = styleBody[property as keyof object];
       const validateProperty = validationStyleObject[property];
       if (
+        validateProperty &&
         generalValidationCheck(value, validateProperty, property, strict, warn)
       ) {
-        return true;
+        // return true;
+      } else {
+        invalidPropertyWarning(
+          !validateProperty && warn,
+          "styles[" + styleKey + "]->" + property,
+        );
       }
     });
   });
@@ -598,19 +678,25 @@ export function validateStyleObjectFunction(
 export function validateSheetArrayFunction(
   sheets: Sheet[] | Sheet,
   strict = true,
-  warn = true
+  warn = true,
 ) {
   if (!Array.isArray(sheets)) {
     sheets = [sheets];
   }
-  sheets.forEach((sheet) => {
+  sheets.forEach((sheet, index) => {
     const keys = Object.keys(sheet);
     keys.forEach((sheetKey) => {
       const value = sheet[sheetKey as keyof object];
       const validateProperty = validationSheetObject[sheetKey];
       if (
+        validateProperty &&
         generalValidationCheck(value, validateProperty, sheetKey, strict, warn)
       ) {
+      } else {
+        invalidPropertyWarning(
+          !validateProperty && warn,
+          "sheet[" + index + "]->" + sheetKey,
+        );
       }
     });
   });
@@ -618,24 +704,30 @@ export function validateSheetArrayFunction(
 export function validateExcelTableObjectFunction(
   data: ExcelTable,
   strict = true,
-  warn = true
+  warn = true,
 ) {
   const keys = Object.keys(data);
   keys.forEach((property) => {
     let value = data[property as keyof object];
     const validateProperty = validationExcelTableObject[property];
     if (
+      validateProperty &&
       generalValidationCheck(value, validateProperty, property, strict, warn)
     ) {
-      if (property == "sheet") {
-        if (Array.isArray(value)) {
-          validateSheetArrayFunction(value);
-        } else {
-          throw "Sheet must be Array.";
-        }
-      } else if (property == "styles") {
-        validateStyleObjectFunction(value);
+      if (typeof validateProperty.validationFunction === "function") {
+        validateProperty.validationFunction(value, strict, warn);
       }
+      // if (property == "sheet") {
+      //   if (Array.isArray(value)) {
+      //     validateSheetArrayFunction(value,strict,warn);
+      //   } else {
+      //     throw "Sheet must be Array.";
+      //   }
+      // } else if (property == "styles") {
+      //   validateStyleObjectFunction(value,strict,warn);
+      // }
+    } else {
+      invalidPropertyWarning(!validateProperty && warn, property);
     }
     // if (validateProperty) {
     //   if (typeof value != validateProperty.type) {
@@ -672,14 +764,14 @@ export function validateExcelTableObjectFunction(
   });
 }
 function generalValidationCheck(
-  value: never,
+  value: any,
   validateProperty: ValidationObject,
   property: string,
   strict: boolean,
-  warn: boolean
+  warn: boolean,
 ): boolean {
   if (validateProperty) {
-    if (typeof value != validateProperty.type) {
+    if (validateProperty.type && typeof value != validateProperty.type) {
       if (
         validateProperty.type == "object" ||
         validateProperty.type == "string" ||
@@ -719,12 +811,17 @@ function generalValidationCheck(
   } else {
     warn &&
       console.warn(
-        'The Schema Object does not include the "' + property + '" property.'
+        'The Schema Object does not include the "' + property + '" property.',
       );
     return false;
   }
 }
-
+function invalidPropertyWarning(display = false, property: string) {
+  display &&
+    console.warn(
+      'The Schema Object does not include the "' + property + '" property.',
+    );
+}
 export const exportedForTesting = {
   checkSheetValidWithOneRef,
   checkSheetValidWithTwoRef,

@@ -92,7 +92,7 @@ export function contentTypeGenerator(
       );
     }, "") +
     (checkboxForm.length > 0
-      ? checkboxForm.reduce((res, curr, index) => {
+      ? checkboxForm.reduce((res, _, index) => {
           return (
             res +
             '<Override PartName="/xl/ctrlProps/ctrlProp' +

@@ -4,7 +4,6 @@
  */
 import { describe, expect, jest, test } from "@jest/globals";
 import { excelToJson } from "../../../src/functions/excel-to-json";
-import { callApi } from "../utils/call-api";
 import { extractExcelData } from "../../../src/utils/read-utils";
 import { ReadResult } from "../../../src/data-model/excel-table";
 jest.mock("../../../src/utils/read-utils.ts");

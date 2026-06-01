@@ -27,17 +27,14 @@ declare type AlignmentHorizontal = "center" | "left" | "right";
  * Options for configuring alignment.
  * @interface
  */
-declare interface AlignmentOption {
+declare type AlignmentOption = {
     horizontal?: AlignmentHorizontal;
     vertical?: AlignmentVertical;
     wrapText?: "0" | "1" | 0 | 1;
     shrinkToFit?: "0" | "1" | 0 | 1;
-    readingOrder?: "1" | "2" | 2 | 1;
     textRotation?: number;
     indent?: number;
-    rtl?: boolean;
-    ltr?: boolean;
-}
+} & SheetDirection;
 
 /**
  * Keys for alignment options.
@@ -110,6 +107,24 @@ declare class Buffer_2 extends Uint8Array {
 }
 
 /**
+ * use for reference range cell(Sheet A1-...)
+ * @interface
+ */
+declare interface CellNumReference {
+    min: number;
+    max: number;
+}
+
+/**
+ * use for reference range cell(Sheet A1-...)
+ * @interface
+ */
+declare interface CellStrReference {
+    start: string;
+    end: string;
+}
+
+/**
  * Represents a checkbox in the sheet.
  * @interface
  */
@@ -152,7 +167,7 @@ declare interface Comment_2 {
  * @param {boolean} fromHeader - Indicates if the condition is from the header.
  * @returns {Comment | string | false | undefined | null} The comment or null.
  */
-declare type CommentConditionFunction = (data: Header | string | number | undefined, object: null | Data, headerKey: string, rowIndex: number, colIndex: number, fromHeader: boolean) => Comment_2 | string | false | undefined | null;
+declare type CommentConditionFunction<T extends ObjectLiteral = ObjectLiteral> = (data: Header | string | number | undefined, object: null | Data<T>, headerKey: string, rowIndex: number, colIndex: number, fromHeader: boolean) => Comment_2 | string | false | undefined | null;
 
 /**
  * Represents conditional formatting in the sheet.
@@ -215,13 +230,13 @@ declare type ConditionalFormattingTopOperation = "belowAverage" | "aboveAverage"
  * @param {boolean} [config.keepStyle] - Whether to keep the style.
  * @param {RowHeightScaleFunction} [config.rowHeightScaleFunction] - The function to scale row height.
  * @param {ColWidthScaleFunction} [config.colWidthScaleFunction] - The function to scale column width.
- * @returns {Promise<string | number[] | Blob | DataModel.Buffer | undefined>} The generated Excel table.
+ * @returns {ExcelTableReturnType} The generated Excel table.
  */
 export declare function convertTableToExcel(queryForTable?: string, table?: HTMLTableElement, config?: {
     keepStyle?: boolean;
     rowHeightScaleFunction?: RowHeightScaleFunction;
     colWidthScaleFunction?: ColWidthScaleFunction;
-}): Promise<string | number[] | DataModel.Buffer | Blob | undefined>;
+}): ExcelTableReturnType;
 
 /**
  * Represents a custom formula setting.
@@ -238,11 +253,9 @@ declare interface CustomFormulaSetting {
 /**
  * Represents data in the sheet.
  * @interface
- * @extends {DataOptions}
+ * @extends {object, DataOptions}
  */
-declare interface Data extends DataOptions {
-    [key: string]: string | number | any | undefined;
-}
+declare type Data<T extends ObjectLiteral = ObjectLiteral> = T & DataOptions;
 
 declare namespace DataModel {
     export {
@@ -250,6 +263,11 @@ declare namespace DataModel {
         ExcelTableOption,
         Sheet,
         SheetOption,
+        DataValidation,
+        DataValidationType,
+        DataValidationOperator,
+        CellStrReference,
+        CellNumReference,
         AsTableOption,
         PageBreak,
         ViewStart,
@@ -262,6 +280,9 @@ declare namespace DataModel {
         HeaderOption,
         StyleType,
         StyleBody,
+        SingleUnderline,
+        DoubleUnderline,
+        UnderlineType,
         Styles,
         Data,
         DataOptions,
@@ -312,7 +333,11 @@ declare namespace DataModel {
         ReadResult,
         Buffer_2 as Buffer,
         ReplacerOption,
-        ExcelToNodeConfig
+        ExcelToNodeConfig,
+        SheetProcessResult,
+        ShapeRC,
+        ObjectLiteral,
+        ExcelTableReturnType
     }
 }
 export { DataModel }
@@ -322,9 +347,6 @@ export { DataModel }
  * @interface
  */
 declare interface DataOptions {
-    [key: string]: "0" | "1" | number | string | undefined | MapComment
-    /** Array of multi-style values for the data. */
-    | MapMultiStyleValue;
     outlineLevel?: number;
     hidden?: "0" | "1" | number;
     rowStyle?: string;
@@ -332,6 +354,42 @@ declare interface DataOptions {
     multiStyleValue?: MapMultiStyleValue;
     comment?: MapComment;
 }
+
+/**
+ * Options for add data validation to cells.
+ * @interface
+ */
+declare interface DataValidation {
+    /** type of data validation - {@link DataValidationType}  */
+    type: DataValidationType;
+    /** allow blank cell- default:true*/
+    allowBlank?: boolean;
+    /** show input message- default:true*/
+    showInputMessage?: boolean;
+    /** show Drop Down for list type */
+    showDropDown?: boolean;
+    /** show error message- default:true*/
+    showErrorMessage?: boolean;
+    /** cell start  */
+    start: string;
+    /** cell end  */
+    end: string;
+    /** operator of data validation - {@link DataValidationOperator}  */
+    operator?: DataValidationOperator;
+    /** starting value for operation  */
+    value: CellStrReference | CellNumReference | string | number;
+}
+
+/**  possible type for data validation operator  */
+declare type DataValidationOperator = "between" | "notBetween" | "equal" | "notEqual" | "greaterThan" | "lessThan" | "greaterThanOrEqual" | "lessThanOrEqual";
+
+/** possible type for data validation */
+declare type DataValidationType = "whole" | "decimal" | "time" | "list" | "custom";
+
+declare type DoubleUnderline = {
+    /** Indicates if the style has double underline. */
+    doubleUnderline?: true;
+};
 
 /**
  * Represents a dropdown in the sheet.
@@ -349,9 +407,9 @@ declare interface DropDown {
  * @interface
  * @extends {ExcelTableOption}
  */
-declare interface ExcelTable extends ExcelTableOption {
+declare interface ExcelTable<T extends ObjectLiteral = ObjectLiteral> extends ExcelTableOption {
     /** Array of sheets in the Excel table. */
-    sheet: Sheet[];
+    sheet: Sheet<T>[];
 }
 
 /**
@@ -387,7 +445,14 @@ declare interface ExcelTableOption {
     styles?: Styles;
     /** Format map for the Excel. */
     formatMap?: FormatMap;
+    /** Specify the default font family  */
+    mainFontFamily?: string;
+    /** hide sheets */
+    hidden?: boolean;
+    useCompression?: boolean;
 }
+
+declare type ExcelTableReturnType = Promise<string | number[] | Blob | Buffer_2 | undefined | void>;
 
 export declare function excelToJson(uri: string, fetchFunc?: Function, withHeader?: boolean, defaultPropertyPrefix?: string): Promise<Record<string, object>>;
 
@@ -484,7 +549,7 @@ declare interface FormulaSetting {
  */
 declare type FormulaType = "AVERAGE" | "SUM" | "COUNT" | "MAX" | "MIN";
 
-declare function generalValidationCheck(value: never, validateProperty: ValidationObject, property: string, strict: boolean, warn: boolean): boolean;
+declare function generalValidationCheck(value: any, validateProperty: ValidationObject, property: string, strict: boolean, warn: boolean): boolean;
 
 /**
  * Generates a CSV file from an Excel table Object.
@@ -492,9 +557,9 @@ declare function generalValidationCheck(value: never, validateProperty: Validati
  * @param {boolean} [asZip=false] - Whether to generate the CSV as a ZIP file.
  * @returns {Promise<string[] | "done" | undefined>} The generated CSV file.
  */
-export declare function generateCSV(excelTable: ExcelTable, asZip?: boolean): Promise<string[] | "done" | undefined>;
+export declare function generateCSV<T extends object = object>(excelTable: ExcelTable<T>, asZip?: boolean): Promise<string[] | "done">;
 
-export declare function generateExcel(data: ExcelTable, styleKey?: string): Promise<string | number[] | Blob | Buffer_2 | undefined>;
+export declare function generateExcel<T extends object = object>(data: ExcelTable<T>, styleKey?: string): ExcelTableReturnType;
 
 /**
  * Generates a text file from an Excel table Object.
@@ -502,7 +567,7 @@ export declare function generateExcel(data: ExcelTable, styleKey?: string): Prom
  * @param {boolean} [asZip=false] - Whether to generate the text file as a ZIP file.
  * @returns {Promise<string[] | "done" | undefined>} The generated text file.
  */
-export declare function generateText(excelTable: ExcelTable, asZip?: boolean): Promise<string[] | "done" | undefined>;
+export declare function generateText<T extends object = object>(excelTable: ExcelTable<T>, asZip?: boolean): Promise<string[] | "done">;
 
 /**
  * Represents a header in the sheet.
@@ -599,6 +664,10 @@ declare interface ImageTypes {
     };
 }
 
+declare type LTRDirection = {
+    ltr?: true;
+};
+
 /**
  * Represents a map of comments.
  * @interface
@@ -648,7 +717,7 @@ declare type MergeRowDataConditionFunction = (data: Header | string | number | u
  * @param {boolean} fromHeader - Indicates if the condition is from the header.
  * @returns {MultiStyleValue[] | null} The multi-style values or null.
  */
-declare type MultiStyleConditionFunction = (data: Header | string | number | undefined, object: null | Data, headerKey: string, rowIndex: number, colIndex: number, fromHeader: boolean) => MultiStyleValue[] | null;
+declare type MultiStyleConditionFunction<T extends ObjectLiteral = ObjectLiteral> = (data: Header | string | number | undefined, object: null | Data<T>, headerKey: string, rowIndex: number, colIndex: number, fromHeader: boolean) => MultiStyleValue[] | null;
 
 /**
  * Represents a multi-style regex value.
@@ -682,6 +751,10 @@ declare interface NoArgFormulaSetting {
  * @typedef {"NOW" | "TODAY" | "HOUR" | "NOW_YEAR" | "NOW_HOUR" | "NOW_SECOND" | "NOW_MIN" | "NOW_MONTH" | "NOW_DAY" | "NOW_WEEKDAY" | "NOW_MINUTE"} NoArgFormulaType
  */
 declare type NoArgFormulaType = "NOW" | "TODAY" | "HOUR" | "NOW_YEAR" | "NOW_HOUR" | "NOW_SECOND" | "NOW_MIN" | "NOW_MONTH" | "NOW_DAY" | "NOW_WEEKDAY" | "NOW_MINUTE";
+
+declare interface ObjectLiteral {
+    [key: string]: any;
+}
 
 /**
  * Options for page breaks in the sheet.
@@ -742,6 +815,10 @@ declare type ProtectionOption = {
  */
 declare type ProtectionOptionKey = "sheet" | "formatCells" | "formatColumns" | "formatRows" | "insertColumns" | "insertRows" | "insertHyperlinks" | "deleteColumns" | "deleteRows" | "sort" | "autoFilter" | "pivotTables";
 
+declare type ReadingOrder = {
+    readingOrder?: "1" | "2" | 2 | 1;
+};
+
 /**
  * Represents the result of reading data.
  * @interface
@@ -753,7 +830,7 @@ declare interface ReadResult {
     maxLengthOfColumn: Record<string, number>;
 }
 
-export declare function replaceInExcel(url: string | null | undefined, replaceData: Record<string, string | number | boolean>, option?: ReplacerOption): Promise<string | number[] | Blob | Buffer | undefined>;
+export declare function replaceInExcel(url: string | null | undefined, replaceData: Record<string, string | number | boolean>, option?: ReplacerOption): Promise<string | number[] | Blob | Buffer<ArrayBufferLike>>;
 
 /**
  * Represents options for the replacer.
@@ -782,23 +859,45 @@ declare interface RowMap {
     };
 }
 
+declare type RTLDirection = {
+    rtl?: true;
+};
+
+declare interface ShapeRC {
+    row: string | number;
+    col: string | number;
+}
+
 /**
  * Represents a sheet in the Excel.
  * @interface
  * @extends {SheetOption}
  */
-declare interface Sheet extends SheetOption {
+declare interface Sheet<T extends ObjectLiteral = ObjectLiteral> extends SheetOption<T> {
     /** Array of headers in the sheet. */
     headers: Header[];
     /** Array of data in the sheet. */
-    data: Data[];
+    data: Data<T>[];
 }
+
+declare type SheetDirection = (RTLDirection & {
+    ltr?: never;
+    readingOrder?: never;
+}) | (LTRDirection & {
+    rtl?: never;
+    readingOrder?: never;
+}) | (ReadingOrder & {
+    rtl?: never;
+    ltr?: never;
+});
 
 /**
  * Options for configuring a sheet.
  * @interface
  */
-declare interface SheetOption {
+declare interface SheetOption<T extends ObjectLiteral = ObjectLiteral> {
+    /** data validation for sheet  */
+    dataValidations?: DataValidation[];
     /** Indicates if the sheet should be without a header. */
     withoutHeader?: boolean;
     /** Options for configure property name that maybe provide for apply outlineLevel, hidden, height option of row*/
@@ -815,7 +914,7 @@ declare interface SheetOption {
     /** Array of conditional formatting rules. */
     conditionalFormatting?: ConditionalFormatting[];
     /** Function for multi-style condition. */
-    multiStyleCondition?: MultiStyleConditionFunction;
+    multiStyleCondition?: MultiStyleConditionFunction<T>;
     /** Indicates if the sheet should use split based on match. */
     useSplitBaseOnMatch?: boolean;
     /** Indicates if strings should be converted to numbers Automatically. */
@@ -840,14 +939,14 @@ declare interface SheetOption {
     tabColor?: string;
     /** Array of merge ranges in the sheet. */
     merges?: string[];
-    /** Key for the header style. */
+    /** Key(Id) for the header style. */
     headerStyleKey?: string;
     /** Function for merge row data base on condition. */
     mergeRowDataCondition?: MergeRowDataConditionFunction;
     /** Function for style cell base on condition. */
-    styleCellCondition?: StyleCellConditionFunction;
+    styleCellCondition?: StyleCellConditionFunction<T>;
     /** Function for comment base on condition. */
-    commentCondition?: CommentConditionFunction;
+    commentCondition?: CommentConditionFunction<T>;
     /** Sort and filter options for the sheet. */
     sortAndFilter?: SortAndFilter;
     /** State of the sheet (hidden or visible). */
@@ -870,13 +969,58 @@ declare interface SheetOption {
     asTable?: AsTableOption;
     /** Array of dropdowns in the sheet. */
     dropDowns?: DropDown[];
+    /** increase zoom scale  */
+    zoomScale?: {
+        scale: number;
+        startAt: string;
+    };
+}
+
+declare interface SheetProcessResult {
+    indexId: number;
+    key: string;
+    sheetName: string;
+    sheetDataTableColumns: string;
+    backgroundImageRef: number;
+    sheetDimensions: CellStrReference;
+    asTable: AsTableOption | boolean;
+    sheetDataString: string;
+    sheetDropDown: string;
+    sheetBreakLine: string;
+    viewType: string;
+    hasComment: boolean;
+    drawersContent: string;
+    cFDataString: string;
+    sheetMargin: string;
+    sheetHeaderFooter: string;
+    isPortrait: boolean;
+    drawersRels: string;
+    hasImages: boolean;
+    hasCheckbox: boolean;
+    formRel: string;
+    checkboxDrawingContent: string;
+    checkboxForm: string[];
+    checkboxSheetContent: string;
+    checkboxShape: string;
+    commentString: string;
+    sheetValidation: DataValidation[];
+    commentAuthor: string[];
+    shapeCommentRowCol: ShapeRC[];
+    splitOption: string;
+    sheetViewProperties: string;
+    sheetSizeString: string;
+    protectionOption: string;
+    merges: string;
+    selectedView: boolean;
+    sheetSortFilter: string;
+    tabColor: string;
 }
 
 /**
  * Represents side-by-side data in the sheet.
  * @interface
  */
-declare interface SideBySide {
+declare interface SideBySide<T extends ObjectLiteral = ObjectLiteral> {
     sheetName?: string;
     spaceX?: number;
     spaceY?: number;
@@ -884,16 +1028,16 @@ declare interface SideBySide {
         label: string;
         text: string;
     }[];
-    data: Data[];
+    data: Data<T>[];
     headerIndex?: number;
 }
 
 /**
  * Generates an Excel file with side-by-side data.
  * @param {SideBySide[][]} data - The side-by-side data.
- * @returns {Promise<string | number[] | Blob | DataModel.Buffer | undefined>} The generated Excel table.
+ * @returns {ExcelTableReturnType} The generated Excel table.
  */
-export declare function sideBySideLineByLine(data: SideBySide[][]): Promise<string | number[] | DataModel.Buffer | Blob | undefined>;
+export declare function sideBySideLineByLine(data: SideBySide[][]): ExcelTableReturnType;
 
 /**
  * Represents a single-reference formula setting.
@@ -912,6 +1056,11 @@ declare interface SingleRefFormulaSetting {
  */
 declare type SingleRefFormulaType = "LEN" | "MODE" | "UPPER" | "LOWER" | "PROPER" | "RIGHT" | "LEFT" | "ABS" | "POWER" | "MOD" | "FLOOR" | "CEILING" | "ROUND" | "SQRT" | "COS" | "SIN" | "TAN" | "COT" | "COUNTIF" | "SUMIF" | "TRIM";
 
+declare type SingleUnderline = {
+    /** Indicates if the style is underlined. */
+    underline?: true;
+};
+
 /**
  * Represents sort and filter options.
  * @interface
@@ -925,15 +1074,13 @@ declare interface SortAndFilter {
  * Represents the body of a style.
  * @interface
  */
-declare interface StyleBody {
+declare type StyleBody = {
     /** The font family of the text. */
     fontFamily?: string;
     /** The type of the style.(if not define used for cells, for other type should be define) */
     type?: StyleType;
     /** The size of the font. */
     size?: number;
-    /** The index of the style(!!it's will override by process,Don't set value for it). */
-    index?: number;
     /** The alignment options of the text. */
     alignment?: AlignmentOption;
     /** The border options. */
@@ -941,18 +1088,14 @@ declare interface StyleBody {
     /** The format of the text. */
     format?: string;
     /** Indicates if the style is bold. */
-    bold?: boolean;
-    /** Indicates if the style is underlined. */
-    underline?: boolean;
+    bold?: true;
     /** Indicates if the style is italic. */
-    italic?: boolean;
-    /** Indicates if the style has double underline. */
-    doubleUnderline?: boolean;
+    italic?: true;
     /** The color of the style. */
     color?: string;
     /** The background color of the style. */
     backgroundColor?: string;
-}
+} & UnderlineType;
 
 /**
  * Function type for style cell condition.
@@ -965,7 +1108,7 @@ declare interface StyleBody {
  * @param {string[]} styleKeys - The style keys.
  * @returns {string | null} The style key or null.
  */
-declare type StyleCellConditionFunction = (data: Header | string | number | undefined, object: Header | Data, rowIndex: number, colIndex: number, fromHeader: boolean, styleKeys: string[]) => string | null;
+declare type StyleCellConditionFunction<T extends ObjectLiteral = ObjectLiteral> = (data: Header | string | number | undefined, object: Header | Data<T>, rowIndex: number, colIndex: number, fromHeader: boolean, styleKeys: string[]) => string | null;
 
 /**
  * Represents a style mapper.
@@ -976,6 +1119,7 @@ declare interface StyleMapper {
         count: number;
         value: string;
     };
+    styleIndexMap: Record<string, number>;
     commentSyntax: {
         value: {
             [key: string]: string;
@@ -1021,9 +1165,9 @@ declare type StyleType = "conditionalFormatting" | "CF" | "headerFooter" | "HF";
  * Generates an Excel file with a theme.
  * @param {ExcelTable | Data[] | Data[][]} data - The data for the Excel file.
  * @param {ThemeOption} [option] - The theme options.
- * @returns {Promise<string | number[] | Blob | DataModel.Buffer | undefined>} The generated Excel table.
+ * @returns {ExcelTableReturnType} The generated Excel table.
  */
-export declare function themeBaseGenerate(data: ExcelTable | Data[] | Data[][], option?: ThemeOption): Promise<string | number[] | DataModel.Buffer | Blob | undefined>;
+export declare function themeBaseGenerate<T extends object = object>(data: ExcelTable<T> | Data<T>[] | Data[][], option?: ThemeOption): ExcelTableReturnType;
 
 /**
  * Represents theme options.
@@ -1055,6 +1199,12 @@ declare interface Title {
     comment?: Comment_2 | string;
 }
 
+declare type UnderlineType = (SingleUnderline & {
+    doubleUnderline?: never;
+}) | (DoubleUnderline & {
+    underline?: never;
+});
+
 declare function validateExcelTableObjectFunction(data: ExcelTable, strict?: boolean, warn?: boolean): void;
 
 declare function validateSheetArrayFunction(sheets: Sheet[] | Sheet, strict?: boolean, warn?: boolean): void;
@@ -1063,12 +1213,13 @@ declare function validateStyleObjectFunction(styles: Styles, strict?: boolean, w
 
 declare interface ValidationObject {
     mode: ValidationType;
-    type: string;
+    type?: "string" | "object" | "number" | "function" | "boolean";
     isEnum?: boolean;
     enum?: string[];
     isArray?: boolean;
     notEmpty?: boolean;
     min?: number;
+    validationFunction?: (value: any, strict: boolean, warn: boolean) => void;
     validateFunction?: (key: string, value: any, strict: boolean, warn: boolean) => boolean;
 }
 

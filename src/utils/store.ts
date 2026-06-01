@@ -15,7 +15,7 @@ let proxy = new Proxy(target, {
       return {};
     }
   },
-  set(target, property, value, receiver) {
+  set(target, property, value, _receiver) {
     target[property] = value;
     return true;
   },
@@ -67,7 +67,10 @@ export function addGlobalOptionFromExcelTable(key: string, data: ExcelTable) {
  * @param {ExcelTable} data - The Excel table data.
  * @returns {ExcelTable} The updated Excel table.
  */
-export function applyConfig(key: string, data: ExcelTable): ExcelTable {
+export function applyConfig<T extends object>(
+  key: string,
+  data: ExcelTable<T>,
+): ExcelTable<T> {
   let data2 = data as any;
   let proxy2 = proxy[key];
   let keys = Object.keys(proxy2);
@@ -77,6 +80,9 @@ export function applyConfig(key: string, data: ExcelTable): ExcelTable {
     let value = proxy2[keyP];
     for (let index = 0; index < path.length; index++) {
       const p = path[index];
+      if (!p) {
+        continue;
+      }
       if (dataC[p]) {
         dataC = dataC[p];
       } else {

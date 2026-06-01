@@ -7,6 +7,9 @@ export function generateDropDown(dropDowns: DropDown[] | undefined) {
   let result = "<dataValidations>";
   for (let index = 0; index < dropDownLength; index++) {
     const dropDown = dropDowns[index];
+    if(!dropDown){
+      continue
+    }
     const sqref = dropDown.for.reduce((result: string, current: string) => {
       return result + " " + current;
     }, "");

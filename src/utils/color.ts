@@ -12,16 +12,16 @@ function extendHexValue(hex: string) {
     return hex;
   }
 }
-export function hexToRgbArray(hex: string): number[] {
+export function hexToRgbArray(hex: string): [number, number, number] {
   if (/^#?([a-f\d]{3})$/i.test(hex)) {
     hex = extendHexValue(hex);
   }
   var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result
     ? [
-        parseInt(result[1], 16),
-        parseInt(result[2], 16),
-        parseInt(result[3], 16),
+        parseInt(result[1] ?? "00", 16),
+        parseInt(result[2] ?? "00", 16),
+        parseInt(result[3] ?? "00", 16),
       ]
     : [0, 0, 0];
 }
@@ -40,7 +40,7 @@ export function generateContrastTextColor(b: string) {
 
   return textColor;
 }
-export function hexToRgbNegative(hex: string) {
+export function hexToRgbNegative(hex: string):string {
   // /(^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$)|(^#?([a-f\d]{3})$)/i;
   if (/^#?([a-f\d]{3})$/i.test(hex)) {
     hex = extendHexValue(hex);
@@ -48,11 +48,11 @@ export function hexToRgbNegative(hex: string) {
   var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result
     ? "rgb(" +
-        (255 - parseInt(result[1], 16)) +
+        (255 - parseInt(result[1] ?? "255", 16)) +
         "," +
-        (255 - parseInt(result[2], 16)) +
+        (255 - parseInt(result[2] ?? "255", 16)) +
         "," +
-        (255 - parseInt(result[3], 16)) +
+        (255 - parseInt(result[3] ?? "255", 16)) +
         ")"
     : "rgb(0,0,0)";
 }
@@ -79,9 +79,9 @@ export function rgbToHex(rgb: string): string | null {
     return null;
   }
   return (
-    valueToHex(spResult[0]) +
-    valueToHex(spResult[1]) +
-    valueToHex(spResult[2])
+    valueToHex(spResult[0] ?? "0") +
+    valueToHex(spResult[1] ?? "0") +
+    valueToHex(spResult[2] ?? "0")
   ).toUpperCase();
 }
 

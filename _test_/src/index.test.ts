@@ -1,7 +1,5 @@
 import { describe, expect, test, jest, afterEach } from "@jest/globals";
 import {
-  DataModel,
-  Validator,
   addGlobalOptionFromExcelTable,
   addGlobalOptions,
   convertTableToExcel,
@@ -16,7 +14,6 @@ import {
   replaceInExcel as rep,
 } from "../../src/index";
 import {
-  defaultConfig,
   excelToNode as mainExcelToNode,
 } from "../../src/functions/excel-to-node";
 import { createExcelTableBaseOnDomElement } from "../../src/functions/create-excel-data";
@@ -66,7 +63,7 @@ describe("index function tests", () => {
     // var rowHeightScaleFunction = null;
     // var colWidthScaleFunction = null;
     try {
-      await convertTableToExcel("").catch((e) => {
+      await convertTableToExcel("").catch((_e) => {
         return "";
       });
     } catch (error) {}

@@ -4,7 +4,8 @@ import type {
   ExcelTable,
   SideBySide,
   ThemeOption,
-  ExcelToNodeConfig
+  ExcelToNodeConfig,
+  ExcelTableReturnType,
 } from "./data-model/excel-table";
 import { replaceInExcel } from "./functions/replacer";
 import {
@@ -38,7 +39,7 @@ export const addGlobalOptionFromExcelTable = addGlobalOptionFromExcelTableFunc;
  * @param {boolean} [config.keepStyle] - Whether to keep the style.
  * @param {RowHeightScaleFunction} [config.rowHeightScaleFunction] - The function to scale row height.
  * @param {ColWidthScaleFunction} [config.colWidthScaleFunction] - The function to scale column width.
- * @returns {Promise<string | number[] | Blob | DataModel.Buffer | undefined>} The generated Excel table.
+ * @returns {ExcelTableReturnType} The generated Excel table.
  */
 export function convertTableToExcel(
   queryForTable?: string,
@@ -47,14 +48,14 @@ export function convertTableToExcel(
     keepStyle?: boolean;
     rowHeightScaleFunction?: RowHeightScaleFunction;
     colWidthScaleFunction?: ColWidthScaleFunction;
-  } = {}
-) {
+  } = {},
+): ExcelTableReturnType {
   const data = createExcelTableBaseOnDomElement(
     queryForTable,
     table,
     config.keepStyle,
     config.rowHeightScaleFunction,
-    config.colWidthScaleFunction
+    config.colWidthScaleFunction,
   );
   return generateExcel(data);
 }
@@ -62,9 +63,11 @@ export function convertTableToExcel(
 /**
  * Generates an Excel file with side-by-side data.
  * @param {SideBySide[][]} data - The side-by-side data.
- * @returns {Promise<string | number[] | Blob | DataModel.Buffer | undefined>} The generated Excel table.
+ * @returns {ExcelTableReturnType} The generated Excel table.
  */
-export function sideBySideLineByLine(data: SideBySide[][]) {
+export function sideBySideLineByLine(
+  data: SideBySide[][],
+): ExcelTableReturnType {
   const exData: ExcelTable = sideBySide(data);
   return generateExcel(exData);
 }
@@ -73,13 +76,13 @@ export function sideBySideLineByLine(data: SideBySide[][]) {
  * Generates an Excel file with a theme.
  * @param {ExcelTable | Data[] | Data[][]} data - The data for the Excel file.
  * @param {ThemeOption} [option] - The theme options.
- * @returns {Promise<string | number[] | Blob | DataModel.Buffer | undefined>} The generated Excel table.
+ * @returns {ExcelTableReturnType} The generated Excel table.
  */
-export function themeBaseGenerate(
-  data: ExcelTable | Data[] | Data[][],
-  option?: ThemeOption
-) {
-  return generateExcel(themeGenerator(data, option));
+export function themeBaseGenerate<T extends object = object>(
+  data: ExcelTable<T> | Data<T>[] | Data[][],
+  option?: ThemeOption,
+): ExcelTableReturnType {
+  return generateExcel<T>(themeGenerator(data, option));
 }
 
 /**
@@ -92,10 +95,10 @@ export function themeBaseGenerate(
 export function extractExcelData(
   uri: string,
   isBackend: boolean = false,
-  fetchFunc?: Function
+  fetchFunc?: Function,
 ) {
   return import("./utils/read-utils").then((m) =>
-    m.extractExcelData(uri, isBackend, fetchFunc)
+    m.extractExcelData(uri, isBackend, fetchFunc),
   );
 }
 
@@ -105,7 +108,10 @@ export function extractExcelData(
  * @param {boolean} [asZip=false] - Whether to generate the CSV as a ZIP file.
  * @returns {Promise<string[] | "done" | undefined>} The generated CSV file.
  */
-export function generateCSV(excelTable: ExcelTable, asZip: boolean = false) {
+export function generateCSV<T extends object = object>(
+  excelTable: ExcelTable<T>,
+  asZip: boolean = false,
+) {
   return gCSV(excelTable, asZip, false);
 }
 
@@ -115,7 +121,10 @@ export function generateCSV(excelTable: ExcelTable, asZip: boolean = false) {
  * @param {boolean} [asZip=false] - Whether to generate the text file as a ZIP file.
  * @returns {Promise<string[] | "done" | undefined>} The generated text file.
  */
-export function generateText(excelTable: ExcelTable, asZip: boolean = false) {
+export function generateText<T extends object = object>(
+  excelTable: ExcelTable<T>,
+  asZip: boolean = false,
+) {
   return gCSV(excelTable, asZip, true);
 }
 
@@ -131,7 +140,7 @@ export function excelToNode(
   uri: string,
   queryForTable?: string | null,
   containerElement?: HTMLDivElement | null,
-  config: ExcelToNodeConfig = { ...defaultConfig }
+  config: ExcelToNodeConfig = { ...defaultConfig },
 ) {
   config = {
     ...defaultConfig,
@@ -151,7 +160,7 @@ export function excelToNode(
     config.cellStyle,
     config.buttonContainerStyle,
     config.buttonStyle,
-    config.activeButtonStyle
+    config.activeButtonStyle,
   );
 }
 

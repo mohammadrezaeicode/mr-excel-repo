@@ -1,0 +1,94 @@
+import { i as e } from "./chunk-DeC0fbbY.js";
+import { n as t, t as n } from "./excel-util-DL6aFqQ4.js";
+//#region src/utils/read-utils.ts
+function r(e) {
+	return /t="s".*?<v/.test(e);
+}
+function i(e) {
+	let t = e.match(/<t.*?>(.*?)<\/t>/);
+	return t ? t[1] : null;
+}
+function a(e) {
+	let t = e.match(/<v.*?>(.*?)<\/v>/);
+	return t ? t[1] : null;
+}
+function o(e) {
+	let t = e.match(/r="(.*?)"/);
+	return t ? t[1] : null;
+}
+async function s(s, c = !1, l) {
+	let u, d = !1;
+	typeof l == "function" ? (u = l, d = !0) : u = fetch;
+	let f = [], p = /* @__PURE__ */ new Map(), m = {}, h = [], g = {}, _ = {}, v = !1;
+	function y(e, i) {
+		let s = 0, c = [], l = i.match(/<c[\s\S\n]*?<\/c>/g);
+		if (Array.isArray(l) && l.forEach((e) => {
+			let i = a(e);
+			r(e) && i && (i = h[parseInt(i)]);
+			let l = n(o(e), t);
+			c[l.row] || (c[l.row] = []), c[l.row][l.col] = i, s = Math.max(l.col, s);
+		}), e.startsWith("xl/worksheets/sheet")) {
+			let t = e.substring(14, e.lastIndexOf("."));
+			p.has(t) && (t = p.get(t)), g[t] = c, _[t] = s;
+		}
+	}
+	return await u(s).then((e) => {
+		if (e == null || e == null) throw "response is null";
+		return d ? e : c ? e.arrayBuffer() : e.blob();
+	}).then(async (t) => {
+		let n = await import("./jszip.min-C9V4eRVj.js").then((t) => /* @__PURE__ */ e(t.default, 1));
+		"default" in n && (n = n?.default);
+		let r = 0;
+		return await new Promise((e, a) => {
+			n.loadAsync(t).then(function(t) {
+				let n = Object.keys(t.files);
+				r = n.length;
+				let a = new Proxy({
+					counter: 0,
+					isNameSet: !1
+				}, {
+					set(t, n, i) {
+						if (n === "isNameSet") return t.isNameSet = i, !0;
+						if (typeof i != "number") throw "value most be number";
+						return t.counter = i, t.isNameSet && t.counter === r && e({
+							data: g,
+							sheetNameObject: m,
+							sheetName: p.entries(),
+							maxLengthOfColumn: _
+						}), !0;
+					},
+					get(e, t, n) {
+						return t === "isNameSet" ? e.isNameSet : e.counter;
+					}
+				});
+				n.forEach(function(e) {
+					t.files[e] && t.files[e].async("string").then(function(t) {
+						if (e.indexOf("sharedStrings") >= 0) {
+							let e = t.match(/<si[\s\S\n]*?<\/si>/g);
+							Array.isArray(e) && e.forEach((e) => {
+								let t = e.match(/<t[\s\S\n]*?<\/t>/g);
+								if (Array.isArray(t)) {
+									let e = t.reduce((e, t) => e + i(t), "");
+									h.push(e);
+								}
+							}), v = !0, f.length > 0 && (f.forEach((e) => {
+								y(e.filename, e.fileData);
+							}), f = []);
+						}
+						e.startsWith("xl/worksheets/sheet") && (v ? y(e, t) : f.push({
+							filename: e,
+							fileData: t
+						})), e.indexOf("workbook") >= 0 && (t.replace(/(.*[\n\s\S]*)(<sheets[\n\s\S]*?sheets>)(.*[\n\s\S]*)/, "$2").split("<sheet ").slice(1).forEach((e, t) => {
+							let n = t + 1, r = "Sheet " + n;
+							e.indexOf("name=") >= 0 && (r = e.replace(/(.*[\n\s\S]*?)name="([^"]*)"(.*[\n\s\S]*)/, "$2")), e.indexOf("sheetId=") > 0 && (n = Number(e.replace(/(.*[\n\s\S]*?)sheetId="([^"]*)"(.*[\n\s\S]*)/, "$2")), isNaN(n) && (n = t + 1)), p.set("sheet" + n, r), m["sheet" + n] = r;
+						}), a.isNameSet = !0), a.counter++;
+					});
+				});
+			});
+		});
+	}).catch((e) => {
+		throw e;
+	});
+}
+//#endregion
+export { s as extractExcelData };

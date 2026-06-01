@@ -17,7 +17,7 @@ describe("generateCellRowCol data tests", () => {
       start: "b2",
       type: "AVERAGE",
     };
-    expect(generateCellRowCol("A1", formula, 1)).toEqual({
+    expect(generateCellRowCol("A1", formula, 1, {})).toEqual({
       column: "A",
       row: 1,
       cell: '<c r="A1"><f>AVERAGE(B2:C4)</f></c>',
@@ -33,10 +33,11 @@ describe("generateCellRowCol data tests", () => {
     };
     expect(
       generateCellRowCol("A1", formula, 1, {
-        formula: {
-          index: 1,
-        },
-      })
+        formula:1,
+        // formula: {
+        //   index: 1,
+        // },
+      }),
     ).toEqual({
       column: "A",
       row: 1,
@@ -46,10 +47,11 @@ describe("generateCellRowCol data tests", () => {
     });
     expect(
       generateCellRowCol("A1", formula, 1, {
-        formulax: {
-          index: 1,
-        },
-      })
+        formulax:1,
+        // formulax: {
+        //   index: 1,
+        // },
+      }),
     ).toEqual({
       column: "A",
       row: 1,
@@ -62,7 +64,7 @@ describe("generateCellRowCol data tests", () => {
     let formula: NoArgFormulaSetting = {
       noArgType: "NOW",
     };
-    expect(generateCellRowCol("A1", formula, 1)).toEqual({
+    expect(generateCellRowCol("A1", formula, 1, {})).toEqual({
       column: "A",
       row: 1,
       cell: '<c r="A1"><f>NOW()</f></c>',
@@ -76,10 +78,11 @@ describe("generateCellRowCol data tests", () => {
     };
     expect(
       generateCellRowCol("A1", formula, 1, {
-        fo: {
-          index: 1,
-        },
-      })
+        fo:1
+        // fo: {
+        //   index: 1,
+        // },
+      }),
     ).toEqual({
       column: "A",
       row: 1,
@@ -94,10 +97,11 @@ describe("generateCellRowCol data tests", () => {
     };
     expect(
       generateCellRowCol("A1", formula, 1, {
-        fo: {
-          index: 1,
-        },
-      })
+        fo: 1,
+        // fo: {
+        //   index: 1,
+        // },
+      }),
     ).toEqual({
       column: "A",
       row: 1,
@@ -111,10 +115,11 @@ describe("generateCellRowCol data tests", () => {
     };
     expect(
       generateCellRowCol("A1", formula, 1, {
-        fo: {
-          index: 1,
-        },
-      })
+        fo: 1,
+        // fo: {
+        //   index: 1,
+        // },
+      }),
     ).toEqual({
       column: "A",
       row: 1,
@@ -128,7 +133,7 @@ describe("generateCellRowCol data tests", () => {
       referenceCell: "G2",
       type: "ABS",
     };
-    expect(generateCellRowCol("A1", formula, 1)).toEqual({
+    expect(generateCellRowCol("A1", formula, 1, {})).toEqual({
       column: "A",
       row: 1,
       cell: '<c r="A1"><f>ABS(G2)</f></c>',
@@ -143,10 +148,11 @@ describe("generateCellRowCol data tests", () => {
     };
     expect(
       generateCellRowCol("A1", formula, 1, {
-        fo: {
-          index: 1,
-        },
-      })
+        fo: 1,
+        // fo: {
+        //   index: 1,
+        // },
+      }),
     ).toEqual({
       column: "A",
       row: 1,
@@ -163,10 +169,11 @@ describe("generateCellRowCol data tests", () => {
     };
     expect(
       generateCellRowCol("A1", formula, 1, {
-        xf: {
-          index: 1,
-        },
-      })
+        xf: 1,
+        // xf: {
+        //   index: 1,
+        // },
+      }),
     ).toEqual({
       column: "A",
       row: 1,
@@ -182,10 +189,11 @@ describe("generateCellRowCol data tests", () => {
     };
     expect(
       generateCellRowCol("A1", formula, 1, {
-        xf: {
-          index: 1,
-        },
-      })
+        xf: 1,
+        // xf: {
+        //   index: 1,
+        // },
+      }),
     ).toEqual({
       column: "A",
       row: 1,
@@ -202,10 +210,11 @@ describe("generateCellRowCol data tests", () => {
     };
     expect(
       generateCellRowCol("A1", formula, 1, {
-        xfx: {
-          index: 1,
-        },
-      })
+        xfx: 1,
+        // xfx: {
+        //   index: 1,
+        // },
+      }),
     ).toEqual({
       column: "A",
       row: 1,
@@ -221,10 +230,11 @@ describe("generateCellRowCol data tests", () => {
     };
     expect(
       generateCellRowCol("A1", formula, 1, {
-        xfx: {
-          index: 1,
-        },
-      })
+        xfx: 1,
+        // xfx: {
+        //   index: 1,
+        // },
+      }),
     ).toEqual({
       column: "A",
       row: 1,
@@ -240,10 +250,11 @@ describe("generateCellRowCol data tests", () => {
     };
     expect(
       generateCellRowCol("A1", formula, 1, {
-        xf: {
-          index: 1,
-        },
-      })
+        xf: 1,
+        // xf: {
+        //   index: 1,
+        // },
+      }),
     ).toEqual({
       column: "A",
       row: 1,
@@ -259,10 +270,11 @@ describe("generateCellRowCol data tests", () => {
     };
     expect(
       generateCellRowCol("A1", formula, 1, {
-        xfx: {
-          index: 1,
-        },
-      })
+        xfx: 1,
+        // xfx: {
+        //   index: 1,
+        // },
+      }),
     ).toEqual({
       column: "A",
       row: 1,
@@ -275,7 +287,7 @@ describe("generateCellRowCol data tests", () => {
     let formula: CustomFormulaSetting = {
       formula: "NOW()-A1:A12",
     };
-    expect(generateCellRowCol("A1", formula, 1)).toEqual({
+    expect(generateCellRowCol("A1", formula, 1, {})).toEqual({
       column: "A",
       row: 1,
       cell: '<c r="A1"><f>NOW()-A1:A12</f></c>',
@@ -286,10 +298,11 @@ describe("generateCellRowCol data tests", () => {
 
     expect(
       generateCellRowCol("A1", formula, 1, {
-        kilW: {
-          index: 1,
-        },
-      })
+        kilW:1,
+        // kilW: {
+        //   index: 1,
+        // },
+      }),
     ).toEqual({
       column: "A",
       row: 1,
@@ -300,10 +313,11 @@ describe("generateCellRowCol data tests", () => {
 
     expect(
       generateCellRowCol("A1", formula, 1, {
-        kil: {
-          index: 1,
-        },
-      })
+        kil: 1,
+        // kil: {
+        //   index: 1,
+        // },
+      }),
     ).toEqual({
       column: "A",
       row: 1,
@@ -315,7 +329,7 @@ describe("generateCellRowCol data tests", () => {
     formula = {
       formula: "NOW()-A1:A12",
     };
-    expect(generateCellRowCol("A1:A5", formula, 1)).toEqual({
+    expect(generateCellRowCol("A1:A5", formula, 1, {})).toEqual({
       column: "A",
       row: 1,
       cell: '<c r="A1" t="str"><f t="array" ref="A1:A5">NOW()-A1:A12</f></c>',
@@ -325,10 +339,11 @@ describe("generateCellRowCol data tests", () => {
     formula.styleId = "kil";
     expect(
       generateCellRowCol("A1:A5", formula, 1, {
-        kilW: {
-          index: 1,
-        },
-      })
+        kilW: 1,
+        // kilW: {
+        //   index: 1,
+        // },
+      }),
     ).toEqual({
       column: "A",
       row: 1,
@@ -337,11 +352,14 @@ describe("generateCellRowCol data tests", () => {
       isCustom: true,
     });
 
-    expect(generateCellRowCol("A1:A5", formula, 1,{
-        kil:{
-            index:1
-        }
-    })).toEqual({
+    expect(
+      generateCellRowCol("A1:A5", formula, 1, {
+        kil: 1,
+        // kil:{
+        //     index:1
+        // }
+      }),
+    ).toEqual({
       column: "A",
       row: 1,
       cell: '<c r="A1" s="1" t="str"><f t="array" ref="A1:A5">NOW()-A1:A12</f></c>',
