@@ -46,7 +46,7 @@ describe("excel-to-node data tests", () => {
     ).catch((e: string) => {
       return e;
     });
-    expect(extractExcelData).toBeCalledTimes(1);
+    expect(extractExcelData).toHaveBeenCalledTimes(1);
     expect(result).toEqual({
       nameSheet: [
         {},
@@ -103,7 +103,7 @@ describe("excel-to-node data tests", () => {
     ).catch((e: string) => {
       return e;
     });
-    expect(extractExcelData).toBeCalledTimes(1);
+    expect(extractExcelData).toHaveBeenCalledTimes(1);
     expect(result).toEqual({
       Sheet1: [
         {},
@@ -163,7 +163,7 @@ describe("excel-to-node data tests", () => {
     ).catch((e: string) => {
       return e;
     });
-    expect(extractExcelData).toBeCalledTimes(1);
+    expect(extractExcelData).toHaveBeenCalledTimes(1);
     expect(result).toEqual({
       Sheet1: [
         { random2: "3", random1: "test value for cell" },

@@ -71,18 +71,14 @@ export async function generateCSV<T extends object = object>(
   }
   const saveAs = await import("file-saver").then((module) => module.saveAs);
   if (asZip) {
-    let Zip = await import("jszip");
-    if ("default" in Zip) {
-      Zip = (Zip as any)?.default;
-    }
-
-    let zip = new Zip();
+    const JSZipModule = (await import("jszip")).default;
+    const zip = new JSZipModule();
     contents.forEach((content, index) => {
       zip.file("sheet" + (index + 1) + type, content);
     });
     const content = await zip
       .generateAsync({ type: "blob" })
-      .then(function (content) {
+      .then(function (content:Blob) {
         return content;
       });
     saveAs(
@@ -90,7 +86,7 @@ export async function generateCSV<T extends object = object>(
       (excelTable.fileName ? excelTable.fileName : "tableRecord") + ".zip",
     );
   } else {
-    contents.forEach((content) => {
+    contents.forEach((content:string) => {
       var blob = new Blob([content], {
         type: "text/" + (isText ? "plain" : "csv") + ";charset=utf-8",
       });

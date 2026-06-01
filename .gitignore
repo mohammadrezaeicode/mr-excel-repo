@@ -6,3 +6,6 @@ TODO.md
 *.backup
 stats.html
 backup
+
+# API Extractor working folder
+temp

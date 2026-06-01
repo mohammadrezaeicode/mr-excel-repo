@@ -82,8 +82,8 @@ describe("replaceInExcel branch coverage - additional", () => {
   });
 
   test("replaceInExcel with convertCall using custom fetch", async () => {
-    const mockFetch = jest.fn(() =>
-      Promise.resolve(Buffer.from("test-data"))
+    const mockFetch = jest.fn((arg) =>
+      Promise.resolve(Buffer.from("test-data"+arg))
     );
 
     const mockZip = {

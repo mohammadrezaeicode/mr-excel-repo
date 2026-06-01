@@ -1,4 +1,4 @@
-import { t as e } from "./chunk-DeC0fbbY.js";
+import { t as e } from "./excel-table.esm.js";
 //#region node_modules/file-saver/dist/FileSaver.min.js
 var t = /* @__PURE__ */ e(((e, t) => {
 	(function(t, n) {

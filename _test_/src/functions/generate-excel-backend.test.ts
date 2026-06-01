@@ -1219,7 +1219,7 @@ describe("generateExcel data tests", () => {
       expect(sheet.length).toBe(2);
       expect(sheet[0].length).toBe(31);
     });
-    expect(generateColumnSpyObj).toBeCalledWith(cols, 31);
+    expect(generateColumnSpyObj).toHaveBeenCalledWith(cols, 31);
   }, 150000);
   test("exceptions", async () => {
     expect(

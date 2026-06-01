@@ -1023,7 +1023,7 @@ describe("createExcelTableBaseOnDomElement function test", () => {
 });
 
 describe("createExcelTableBaseOnDomElement assertion test", () => {
-  test("test for assertion", () => {
+  test("test for assertion", async () => {
     document.body.innerHTML = `
     <table class="table table-primary" id="table">
         <thead>
@@ -1050,7 +1050,7 @@ describe("createExcelTableBaseOnDomElement assertion test", () => {
     </table>
     `;
 
-    expect(() => createExcelTableBaseOnDomElement(null)).toThrowError(
+    await expect(() => createExcelTableBaseOnDomElement(null)).toThrow(
       "Error: One of the function inputs is required.",
     );
   });

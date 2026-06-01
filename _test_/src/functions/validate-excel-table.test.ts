@@ -19,7 +19,7 @@ describe("getColRowBaseOnRefString data tests", () => {
     expect(console.warn).toHaveBeenCalledWith(
       'The Schema Object does not include the "aaa" property.'
     );
-    expect(console.warn).toBeCalledTimes(1);
+    expect(console.warn).toHaveBeenCalledTimes(1);
     spy.mockReset();
     excelData = {
       sheet: [],
@@ -34,7 +34,7 @@ describe("getColRowBaseOnRefString data tests", () => {
     expect(console.warn).toHaveBeenCalledWith(
       'The Schema Object does not include the "test2" property.'
     );
-    expect(console.warn).toBeCalledTimes(2);
+    expect(console.warn).toHaveBeenCalledTimes(2);
     spy.mockReset();
     excelData = {
       sheet: [],
@@ -50,7 +50,7 @@ describe("getColRowBaseOnRefString data tests", () => {
     expect(console.warn).toHaveBeenCalledWith(
       'The Schema Object does not include the "test2" property.'
     );
-    expect(console.warn).toBeCalledTimes(3);
+    expect(console.warn).toHaveBeenCalledTimes(3);
     spy.mockReset();
     excelData = {
       sheet: [
@@ -90,7 +90,7 @@ describe("getColRowBaseOnRefString data tests", () => {
     };
 
     validateExcelTableObjectFunction(excelData, false, true);
-    expect(console.warn).toBeCalledTimes(0);
+    expect(console.warn).toHaveBeenCalledTimes(0);
     spy.mockReset();
     excelData = {
       sheet: [
@@ -168,7 +168,7 @@ describe("getColRowBaseOnRefString data tests", () => {
     };
 
     validateExcelTableObjectFunction(excelData, false, true);
-    expect(console.warn).toBeCalledTimes(0);
+    expect(console.warn).toHaveBeenCalledTimes(0);
     excelData = {
       sheet: [
         {
@@ -210,7 +210,7 @@ describe("getColRowBaseOnRefString data tests", () => {
       ],
     };
     validateExcelTableObjectFunction(excelData, false, true);
-    expect(console.warn).toBeCalledTimes(0);
+    expect(console.warn).toHaveBeenCalledTimes(0);
     excelData = {
       sheet: [
         {
@@ -246,7 +246,7 @@ describe("getColRowBaseOnRefString data tests", () => {
       ],
     };
     validateExcelTableObjectFunction(excelData, false, true);
-    expect(console.warn).toBeCalledTimes(0);
+    expect(console.warn).toHaveBeenCalledTimes(0);
     excelData = {
       sheet: [
         {
@@ -261,7 +261,7 @@ describe("getColRowBaseOnRefString data tests", () => {
     expect(console.warn).toHaveBeenCalledWith(
       'The Schema of mapSheetDataOption does not include the "random" property.'
     );
-    expect(console.warn).toBeCalledTimes(1);
+    expect(console.warn).toHaveBeenCalledTimes(1);
     spy.mockReset();
     excelData = {
       sheet: [
@@ -273,7 +273,7 @@ describe("getColRowBaseOnRefString data tests", () => {
       ],
     };
     validateExcelTableObjectFunction(excelData, false, true);
-    expect(console.warn).toBeCalledTimes(0);
+    expect(console.warn).toHaveBeenCalledTimes(0);
     excelData = {
       sheet: [
         {
@@ -442,7 +442,7 @@ describe("getColRowBaseOnRefString data tests", () => {
       ],
     };
     validateExcelTableObjectFunction(excelData, false, true);
-    expect(console.warn).toBeCalledTimes(0);
+    expect(console.warn).toHaveBeenCalledTimes(0);
     excelData = {
       sheet: [
         {
@@ -722,11 +722,11 @@ describe("getColRowBaseOnRefString data tests", () => {
       sheet: [],
     };
     validateExcelTableObjectFunction(excelData, false, true);
-    expect(console.warn).toBeCalledTimes(2);
-    expect(console.warn).toBeCalledWith(
+    expect(console.warn).toHaveBeenCalledTimes(2);
+    expect(console.warn).toHaveBeenCalledWith(
       "Alignment-rtl and ltr cannot be used together."
     );
-    expect(console.warn).toBeCalledWith(
+    expect(console.warn).toHaveBeenCalledWith(
       "Alignment-readingOrder cannot be used with rtl or ltr."
     );
     spy.mockReset();
@@ -741,7 +741,7 @@ describe("getColRowBaseOnRefString data tests", () => {
       sheet: [],
     };
     validateExcelTableObjectFunction(excelData, false, true);
-    expect(console.warn).toBeCalledTimes(0);
+    expect(console.warn).toHaveBeenCalledTimes(0);
     excelData = {
       styles: {
         test: {

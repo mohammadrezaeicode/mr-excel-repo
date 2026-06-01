@@ -146,6 +146,6 @@ describe("replaceInExcel tests", () => {
 
 //   //   await myFunction();
 
-//   //   expect(saveAs).toBeCalledTimes(1);
+//   //   expect(saveAs).toHaveBeenCalledTimes(1);
 //   // });
 // });

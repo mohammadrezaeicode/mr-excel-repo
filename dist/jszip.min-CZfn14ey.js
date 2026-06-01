@@ -1,4 +1,4 @@
-import { r as e, t } from "./chunk-DeC0fbbY.js";
+import { n as e, t } from "./excel-table.esm.js";
 //#region node_modules/jszip/dist/jszip.min.js
 var n = /* @__PURE__ */ t(((t, n) => {
 	(function(e) {

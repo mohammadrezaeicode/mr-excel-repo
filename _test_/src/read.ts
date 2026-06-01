@@ -1,4 +1,4 @@
-import * as JSZip from "jszip";
+import JSZip from "jszip";
 import { cols } from "../../src/data-model/const-data";
 import { getColRowBaseOnRefString } from "../../src/utils/excel-util";
 type ExtractedData = (string | null)[][];

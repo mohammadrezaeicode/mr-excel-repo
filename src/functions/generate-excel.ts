@@ -35,7 +35,7 @@ import { toDataURL2 } from "../utils/image";
 import { getColRowBaseOnRefString } from "../utils/excel-util";
 import { specialCharacterConverter } from "../utils/special-character";
 import { applyConfig } from "../utils/store";
-import type * as JSZip from "jszip";
+import type  JSZip from "jszip";
 import { generateDropDown } from "../utils/drop-down-utils";
 import { processDataValidation } from "../utils/data-validation.utils";
 export async function generateExcel<T extends object = object>(
@@ -79,12 +79,8 @@ export async function generateExcel<T extends object = object>(
   if (data.numberOfColumn && data.numberOfColumn > 25) {
     cols = generateColumnName(cols, data.numberOfColumn);
   }
-  const module = await import("jszip");
-  let JSZip1 = module;
-  if ("default" in JSZip1) {
-    JSZip1 = (JSZip1 as any)?.default;
-  }
-  let zip = new JSZip1();
+  const JSZipModule = (await import("jszip")).default;
+  let zip = new JSZipModule();
   const sheetsData = data.sheet ?? [
     {
       headers: [],
@@ -93,7 +89,7 @@ export async function generateExcel<T extends object = object>(
   ];
   const sheetLength = sheetsData.length;
   // xl
-  let xlFolder = zip.folder("xl");
+  const xlFolder: JSZip | null = zip.folder("xl");
   let xl_media_Folder: JSZip | null | undefined = null;
 
   let xl_drawingsFolder: JSZip | null | undefined = null;
@@ -2381,7 +2377,7 @@ export async function generateExcel<T extends object = object>(
 
   //xl/_rels
 
-  let xl__relsFolder = xlFolder?.folder("_rels");
+  const xl__relsFolder = xlFolder?.folder("_rels");
   xl__relsFolder?.file(
     "workbook.xml.rels",
     '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +

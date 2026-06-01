@@ -23,7 +23,7 @@ describe("excel-to-node data tests", () => {
     ).catch((e: string) => {
       return e;
     });
-    expect(extractExcelData).toBeCalledTimes(1);
+    expect(extractExcelData).toHaveBeenCalledTimes(1);
     expect(result).toBe("Container Node not found");
   }, 150000);
   test("excelToNode", async () => {
@@ -68,7 +68,7 @@ describe("excel-to-node data tests", () => {
     ).catch((e: string) => {
       return e;
     });
-    expect(extractExcelData).toBeCalledTimes(1);
+    expect(extractExcelData).toHaveBeenCalledTimes(1);
     expect(result.length).toBe(2);
     expect((result[0] as HTMLTableElement).querySelector("td")?.innerText).toBe(
       "test value for cell",
@@ -112,7 +112,7 @@ describe("excel-to-node data tests", () => {
     ).catch((e: string) => {
       return e;
     });
-    expect(extractExcelData).toBeCalledTimes(1);
+    expect(extractExcelData).toHaveBeenCalledTimes(1);
     expect(result.length).toBe(2);
     expect((result[0] as HTMLTableElement).querySelector("th")?.innerText).toBe(
       "test value for cell",
@@ -157,7 +157,7 @@ describe("excel-to-node data tests", () => {
       return e;
     });
     let body = document.querySelector("body") as any;    
-    expect(extractExcelData).toBeCalledTimes(1);
+    expect(extractExcelData).toHaveBeenCalledTimes(1);
     expect(result).toBe("Done");
     expect(body.querySelector("th")?.innerText).toBe("test value for cell");
     body.querySelectorAll("button")[1].click();
@@ -203,7 +203,7 @@ describe("excel-to-node data tests", () => {
     ).catch((e: string) => {
       return e;
     });
-    expect(extractExcelData).toBeCalledTimes(1);
+    expect(extractExcelData).toHaveBeenCalledTimes(1);
     expect(result).toBe("Done");
     expect(div.querySelector("th")?.innerText).toBe("test value for cell");
     div.querySelectorAll("button")[1].click();
@@ -234,7 +234,7 @@ describe("excel-to-node data tests", () => {
       callApi,
     );
 
-    expect(extractExcelData).toBeCalledTimes(1);
+    expect(extractExcelData).toHaveBeenCalledTimes(1);
     expect(result).toBe("Done");
     expect(container.querySelector("button")?.innerText).toBe("sheet1");
     expect(container.querySelector("th")?.innerText).toBe("single value");
