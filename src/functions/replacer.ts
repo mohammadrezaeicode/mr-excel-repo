@@ -1,4 +1,4 @@
-import { ReplacerOption } from "../data-model/excel-table";
+import type { ReplacerOption, Buffer } from "../data-model/excel-table";
 
 export async function replaceInExcel(
   url: string | null | undefined,
@@ -36,7 +36,7 @@ export async function replaceInExcel(
   } else {
     data = option?.data;
   }
-  if(!data){
+  if (!data) {
     throw "A data or file URL must be provided.";
   }
   let zips = await JSZip.loadAsync(data).then(async function (zip) {

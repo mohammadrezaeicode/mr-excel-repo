@@ -1,4 +1,9 @@
 import { DropDown } from "../data-model/excel-table";
+/**
+ * generateDropDown - TODO: describe this function.
+ * @param {any} dropDowns - 
+ * @returns {any} - TODO: return description.
+ */
 export function generateDropDown(dropDowns: DropDown[] | undefined) {
   if (!Array.isArray(dropDowns) || !dropDowns.length) {
     return "";

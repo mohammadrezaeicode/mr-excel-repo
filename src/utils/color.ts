@@ -12,6 +12,11 @@ function extendHexValue(hex: string) {
     return hex;
   }
 }
+/**
+ * hexToRgbArray - TODO: describe this function.
+ * @param {any} hex - 
+ * @returns {any} - TODO: return description.
+ */
 export function hexToRgbArray(hex: string): [number, number, number] {
   if (/^#?([a-f\d]{3})$/i.test(hex)) {
     hex = extendHexValue(hex);
@@ -25,6 +30,11 @@ export function hexToRgbArray(hex: string): [number, number, number] {
       ]
     : [0, 0, 0];
 }
+/**
+ * generateContrastTextColor - TODO: describe this function.
+ * @param {any} b - 
+ * @returns {any} - TODO: return description.
+ */
 export function generateContrastTextColor(b: string) {
   const background = hexToRgbArray(b);
   if (background == null) {
@@ -40,6 +50,11 @@ export function generateContrastTextColor(b: string) {
 
   return textColor;
 }
+/**
+ * hexToRgbNegative - TODO: describe this function.
+ * @param {any} hex - 
+ * @returns {any} - TODO: return description.
+ */
 export function hexToRgbNegative(hex: string):string {
   // /(^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$)|(^#?([a-f\d]{3})$)/i;
   if (/^#?([a-f\d]{3})$/i.test(hex)) {
@@ -62,6 +77,11 @@ function valueToHex(c: number | string): string {
   var hex = c.toString(16);
   return hex.length == 1 ? "0" + hex : hex;
 }
+/**
+ * rgbToHex - TODO: describe this function.
+ * @param {any} rgb - 
+ * @returns {any} - TODO: return description.
+ */
 export function rgbToHex(rgb: string): string | null {
   rgb = removeSpace(rgb);
   let spResult =

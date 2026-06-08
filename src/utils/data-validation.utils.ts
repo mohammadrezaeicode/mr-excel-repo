@@ -4,6 +4,11 @@ import type {
   DataValidation,
 } from "../data-model/excel-table";
 
+/**
+ * processDataValidation - TODO: describe this function.
+ * @param {any} dataValidations - 
+ * @returns {any} - TODO: return description.
+ */
 export function processDataValidation(dataValidations: DataValidation[]) {
   return (
     dataValidations.reduce(

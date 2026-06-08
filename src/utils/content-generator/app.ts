@@ -1,3 +1,9 @@
+/**
+ * appGenerator - TODO: describe this function.
+ * @param {any} sheetLength - 
+ * @param {any} sheetNameApp - 
+ * @returns {any} - TODO: return description.
+ */
 export function appGenerator(sheetLength: number, sheetNameApp: string) {
   return (
     '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +

@@ -39,6 +39,11 @@ export function commentConvertor(
     commentStr,
   };
 }
+/**
+ * splitBaseOnBreakLine - TODO: describe this function.
+ * @param {any} str - 
+ * @returns {any} - TODO: return description.
+ */
 export function splitBaseOnBreakLine(str: string): string[] {
   // Split the string on \n or \r characters
   var separateLines = str.split(/\r?\n|\r|\n/g);

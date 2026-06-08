@@ -4,9 +4,9 @@
 
 `MR-Excel` is a powerful JavaScript library designed for reading and writing Excel files. It enables users to extract data seamlessly from Excel documents while providing an array of advanced writing features. These include commenting, styling, applying formulas, merging cells, inserting images into cells, adding background images, grouping rows, and implementing conditional formatting. Additionally, the library supports multi-style values and offers functions for cell merging and styling, as well as commenting features.
 
-For front-end-specific tasks, the library includes functions such as `excelToNode` and `convertTableToExcel`, which facilitate reading and inserting nodes into the DOM.This library also supports the generation of CSV and text file formats, enhancing its versatility for various data handling needs.
+For front-end-specific tasks, the library includes functions such as `excelToNode` and `convertTableToExcel`, which facilitate reading and inserting nodes into the DOM. This library also supports the generation of CSV and text file formats, enhancing its versatility for various data handling needs.
 
-important functions of library that are defined with specific use cases as follows:
+Important functions of the library are defined with specific use cases as follows:
 
 <a id="generate-excel"></a>
 
@@ -34,11 +34,11 @@ important functions of library that are defined with specific use cases as follo
 
 <a id="excel-to-node"></a>
 
-- **` excelToNode`**: This function reads an uploaded Excel file and generates a representation of the tables from its sheets. It can either return the table directly or insert it into a specified container node provided as input.
+- **`excelToNode`**: This function reads an uploaded Excel file and generates a representation of the tables from its sheets. It can either return the table directly or insert it into a specified container node provided as input.
 
 <a id="excel-to-json"></a>
 
-- **` excelToJson`**: This function reads an Excel file and returns a JSON object that represents the data contained in the file.
+- **`excelToJson`**: This function reads an Excel file and returns a JSON object that represents the data contained in the file.
 
 <a id="replace-in-excel"></a>
 
@@ -50,9 +50,9 @@ The example has been moved to a separate repository for easier updates. You can 
 
 The following list includes new repositories related to this project. Documentation and improvements for these projects can be found in the repositories below.
 
-- **`MR Excel Java`**:A similar project using Java is in development. The release version is coming soon; currently, it is available as a snapshot version.["`repository`"](https://github.com/mohammadrezaeicode/mr-excel-java)
+- **`MR Excel Java`**: A similar project using Java is in development. The release version is coming soon; currently, it is available as a snapshot version. ["repository"](https://github.com/mohammadrezaeicode/mr-excel-java)
 
-- **`MR Excel Editor`**: An editor that utilizes the library is currently under development. At present, it only generates simple results.["`repository`"](https:///github.com/mohammadrezaeicode/mr-excel-editor)["`Demo`"](https://mohammadrezaeicode.github.io/mr-excel-editor/)
+- **`MR Excel Editor`**: An editor that utilizes the library is currently under development. At present, it only generates simple results. ["repository"](https://github.com/mohammadrezaeicode/mr-excel-editor) ["Demo"](https://mohammadrezaeicode.github.io/mr-excel-editor/) 
 
 ## Table of Contents
 
@@ -100,10 +100,10 @@ The following list includes new repositories related to this project. Documentat
   - [**`How to use extractExcelData`**](#extract-excel-data-usage)
 - [**`generateCSV && generateText`**](#generate-csv-txt)
   - [**`How to use generateCSV && generateText`**](#generate-csv-txt-usage)
-- [**` excelToNode`**](#excel-to-node)
-  - [**` How to use excelToNode`**](#excel-to-node-usage)
-- [**` excelToJson`**](#excel-to-json)
-  - [**` How to use excelToJson`**](#excel-to-json-usage)
+- [**`excelToNode`**](#excel-to-node)
+  - [**`How to use excelToNode`**](#excel-to-node-usage)
+- [**`excelToJson`**](#excel-to-json)
+  - [**`How to use excelToJson`**](#excel-to-json-usage)
 - [**`🆕 replaceInExcel`**](#replace-in-excel)
   - [**`🆕 How to use replaceInExcel`**](#replace-in-excel-usage)
 - [**`interface`**](#interface)
@@ -506,7 +506,7 @@ ExcelTable.convertTableToExcel("#table", null, {
 
 <details>
 
-<summary>result of Example in  https://github.com/mohammadrezaeicode/mr-excel-example-gallery/blob/main/conv1.html</summary>
+<summary>result of Example in https://github.com/mohammadrezaeicode/mr-excel-example-gallery/blob/main/conv1.html</summary>
 
 ![ex](https://github.com/mohammadrezaeicode/mr-excel-example-gallery/blob/main/ex13.PNG)
 
@@ -698,7 +698,7 @@ ExcelTable.replaceInExcel("./replacer.xlsx", {
 
 </details>
 
-![result imag](https://github.com/mohammadrezaeicode/mr-excel-page-repo/blob/main/public/img/replacer.png?raw=true)
+![result image](https://github.com/mohammadrezaeicode/mr-excel-page-repo/blob/main/public/img/replacer.png?raw=true)
 
 <a id="excel-to-json-usage"></a>
 

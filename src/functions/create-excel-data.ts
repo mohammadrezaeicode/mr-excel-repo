@@ -70,11 +70,17 @@ function generateRowsBaseOnColAndRowSpan(
   }
   return rows;
 }
+/**
+ * RowHeightScaleFunction - TODO: describe this type.
+ */
 export type RowHeightScaleFunction = (
   data: number,
   rowIndex: number,
   fromHeader: boolean,
 ) => number;
+/**
+ * ColWidthScaleFunction - TODO: describe this type.
+ */
 export type ColWidthScaleFunction = (data: number, colIndex: number) => number;
 export function createExcelTableBaseOnDomElement(
   queryForTable?: string | null,

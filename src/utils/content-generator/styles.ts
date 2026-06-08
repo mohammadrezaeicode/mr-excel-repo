@@ -1,5 +1,11 @@
 import { type StyleMapper } from "../../data-model/excel-table";
 
+/**
+ * styleGenerator - TODO: describe this function.
+ * @param {any} styles - 
+ * @param {any} addCF - 
+ * @returns {any} - TODO: return description.
+ */
 export function styleGenerator(styles: StyleMapper, addCF: boolean) {
   return (
     '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
