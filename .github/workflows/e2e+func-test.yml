@@ -1,0 +1,15 @@
+name: E2E+Functional Test
+on: push
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    environment: TEST_REPO
+    steps:
+      - name: Trigger MR Excel workflow
+        run: |
+          curl -X POST \
+            -H "Authorization: token ${{ secrets.ACCESS_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/mohammadrezaeicode/mr-excel-example-gallery/actions/workflows/e2e+func.yml/dispatches \
+            -d '{"ref":"main","inputs":{"reason":"triggered by MR Excel"}}'
