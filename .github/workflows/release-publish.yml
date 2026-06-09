@@ -45,6 +45,10 @@ jobs:
         with:
           node-version: '24.x'
           registry-url: 'https://registry.npmjs.org'
+      - name: Check npm auth
+        run: npm whoami
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - run: npm ci
       - run: npm publish --provenance --access public
         env:
