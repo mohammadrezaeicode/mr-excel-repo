@@ -34,6 +34,6 @@ jobs:
       with:
         node-version: ${{ github.event.inputs.node_version }}
     - name: install dependency
-      run: npm install
+      run: npm ci
     - name: Run test
       run: npm run test
