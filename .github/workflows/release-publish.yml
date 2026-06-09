@@ -34,19 +34,18 @@ jobs:
         release_name: Release v${{env.PV}}
         body: ${{env.PB}}
   publish:
-        name: Publish to NPM
-        needs: release
-        runs-on: ubuntu-latest
-        steps:    
-        - name: Checkout to code
-          uses: actions/checkout@v4
-        - name: install Node js Version 20.x
-          uses: actions/setup-node@v4
-          with:
-            node-version: '24.x'
-            registry-url: 'https://registry.npmjs.org'
-        - run: npm ci
-        - name: publish to npm
-          run: npm publish
-          env:
-              NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+    needs: release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.x'
+          registry-url: 'https://registry.npmjs.org'
+      - run: npm ci
+      - run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
