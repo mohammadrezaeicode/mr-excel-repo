@@ -1,7 +1,5 @@
 import { describe, expect, test, jest, afterEach } from "@jest/globals";
 import {
-  DataModel,
-  Validator,
   addGlobalOptionFromExcelTable,
   addGlobalOptions,
   convertTableToExcel,
@@ -16,7 +14,6 @@ import {
   replaceInExcel as rep,
 } from "../../src/index";
 import {
-  defaultConfig,
   excelToNode as mainExcelToNode,
 } from "../../src/functions/excel-to-node";
 import { createExcelTableBaseOnDomElement } from "../../src/functions/create-excel-data";
@@ -45,7 +42,7 @@ describe("index function tests", () => {
     try {
       await rep("", {}, {});
     } catch (error) {}
-    expect(replaceInExcel).toBeCalledTimes(1);
+    expect(replaceInExcel).toHaveBeenCalledTimes(1);
   });
   test("generate should be exist", () => {
     expect(typeof generate).toBe("function");
@@ -66,12 +63,12 @@ describe("index function tests", () => {
     // var rowHeightScaleFunction = null;
     // var colWidthScaleFunction = null;
     try {
-      await convertTableToExcel("").catch((e) => {
+      await convertTableToExcel("").catch((_e) => {
         return "";
       });
     } catch (error) {}
-    expect(createExcelTableBaseOnDomElement).toBeCalledTimes(1);
-    expect(generateExcel).toBeCalledTimes(1);
+    expect(createExcelTableBaseOnDomElement).toHaveBeenCalledTimes(1);
+    expect(generateExcel).toHaveBeenCalledTimes(1);
   });
   test("excelToNode should be exist", () => {
     expect(typeof excelToNode).toBe("function");
@@ -80,7 +77,7 @@ describe("index function tests", () => {
     try {
       await excelToNode("", "", null);
     } catch (error) {}
-    expect(mainExcelToNode).toBeCalledTimes(1);
+    expect(mainExcelToNode).toHaveBeenCalledTimes(1);
   });
   test("themeGenerator should be called", () => {
     try {
@@ -88,8 +85,8 @@ describe("index function tests", () => {
         sheet: [],
       });
     } catch (error) {}
-    expect(themeGenerator).toBeCalledTimes(1);
-    expect(generateExcel).toBeCalledTimes(1);
+    expect(themeGenerator).toHaveBeenCalledTimes(1);
+    expect(generateExcel).toHaveBeenCalledTimes(1);
   });
   test("extractExcelData should be exist", () => {
     expect(typeof extractExcelData).toBe("function");
@@ -98,7 +95,7 @@ describe("index function tests", () => {
     try {
      await extractExcelData("");
     } catch (error) {}
-    expect(eE).toBeCalledTimes(1);
+    expect(eE).toHaveBeenCalledTimes(1);
   });
   test("generateCSV should be exist", () => {
     expect(typeof gCSV).toBe("function");

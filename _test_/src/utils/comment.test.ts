@@ -1,4 +1,4 @@
-import { describe, expect, test, jest, it } from "@jest/globals";
+import { describe, expect, test, it } from "@jest/globals";
 import {
   commentConvertor,
   defaultCellCommentStyle,

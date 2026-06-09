@@ -3,7 +3,6 @@ import {
   type FormulaSetting,
   type NoArgFormulaSetting,
   type SingleRefFormulaSetting,
-  type Styles,
 } from "../data-model/excel-table";
 
 export function generateCellRowCol(
@@ -14,7 +13,7 @@ export function generateCellRowCol(
     | NoArgFormulaSetting
     | CustomFormulaSetting,
   sheetIndex: number,
-  styles?: Styles
+  styleIndexMap: Record<string,number>
 ) {
   string = string.toUpperCase();
   let cell = "";
@@ -36,10 +35,9 @@ export function generateCellRowCol(
       : "";
     let style =
       "styleId" in form &&
-      styles &&
       typeof form.styleId === "string" &&
-      styles[form.styleId]
-        ? ' s="' + styles![form.styleId!].index + '"'
+      styleIndexMap[form.styleId]
+        ? ' s="' + styleIndexMap[form.styleId] + '"'
         : "";
     let arrayStr =
       form.isArray || multiInsertCell ? ' t="array" ref="' + ref + '"' : "";
@@ -71,10 +69,9 @@ export function generateCellRowCol(
     if (form.noArgType == "NOW" || form.noArgType == "TODAY") {
       const styleString =
         "styleId" in form &&
-        styles &&
         typeof form.styleId === "string" &&
-        styles[form.styleId]
-          ? ' s="' + styles![form.styleId!].index + '"'
+        styleIndexMap[form.styleId]
+          ? ' s="' + styleIndexMap[form.styleId] + '"'
           : "";
       cell =
         '<c r="' +
@@ -88,10 +85,9 @@ export function generateCellRowCol(
       let value = "NOW()";
       const styleString =
         "styleId" in form &&
-        styles &&
         typeof form.styleId === "string" &&
-        styles[form.styleId]
-          ? ' s="' + styles![form.styleId!].index + '"'
+        styleIndexMap[form.styleId]
+          ? ' s="' + styleIndexMap[form.styleId!] + '"'
           : "";
       cell =
         '<c r="' +
@@ -118,10 +114,9 @@ export function generateCellRowCol(
     }
     const styleString =
       "styleId" in form &&
-      styles &&
       typeof form.styleId === "string" &&
-      styles[form.styleId]
-        ? ' s="' + styles![form.styleId!].index + '"'
+      styleIndexMap[form.styleId]
+        ? ' s="' + styleIndexMap[form.styleId!] + '"'
         : "";
     cell =
       '<c r="' +
@@ -143,8 +138,8 @@ export function generateCellRowCol(
       '<c r="' +
       string +
       '"' +
-      (styles && typeof form.styleId === "string" && styles[form.styleId]
-        ? ' s="' + styles[form.styleId].index + '"'
+      (typeof form.styleId === "string" && styleIndexMap[form.styleId]
+        ? ' s="' + styleIndexMap[form.styleId] + '"'
         : "") +
       ">" +
       "<f>" +

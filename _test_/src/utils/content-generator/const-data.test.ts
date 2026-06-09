@@ -1,4 +1,4 @@
-import { describe, expect, test, jest } from "@jest/globals";
+import { describe, expect, test } from "@jest/globals";
 import { cols, formatMap } from "../../../../src/data-model/const-data";
 
 const def: string[] = [
@@ -37,7 +37,7 @@ describe("formatMap object tests", () => {
   });
   test("test data", () => {
     Object.keys(formatMap).forEach((element: string) => {
-      let record = formatMap[element];
+      let record = formatMap[element] as any;
       expect(record.key).toBeTruthy();
       expect(
         typeof record.value == "undefined" || typeof record.value == "string"

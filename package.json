@@ -1,6 +1,6 @@
 {
   "name": "mr-excel",
-  "version": "7.0.1",
+  "version": "8.0.0",
   "type": "module",
   "main": "dist/excel-table.cjs",
   "module": "dist/excel-table.js",
@@ -19,9 +19,17 @@
   "scripts": {
     "build1": "tsc --noEmit && vite build",
     "start": "tsc",
-    "build": "tsc && vite build",
+    "vite:build": "vite build",
+    "prebuild": "npm run start",
+    "build": "npm run vite:build",
+    "postbuild": "npm run api-documenter:markdown && echo build DONE!",
     "dev": "tsc -w",
+    "api-extractor": "api-extractor",
+    "api-extractor:run":"api-extractor run --local",
+    "preapi-documenter:markdown":"npm run api-extractor:run",
+    "api-documenter:markdown":"api-documenter markdown -i temp -o docs",
     "test": "jest",
+    "test:clear": "jest --clearCache",
     "test:coverage": "jest --coverage",
     "test:coverage-text-summary": "jest --coverage --coverageReporters=\"text-summary\"",
     "test:coverage-json-summary": "jest --coverage --coverageReporters=\"json-summary\""
@@ -65,21 +73,24 @@
     "xlsx-generation",
     "data-to-xlsx",
     "xlsx-creator",
-    "object-to-xlsx"
+    "object-to-xlsx",
+    "data-validation"
   ],
   "author": "M.Rezaei",
   "license": "MIT",
   "devDependencies": {
-    "@jest/globals": "^29.7.0",
-    "@types/file-saver": "2.0.5",
-    "cross-fetch": "^4.0.0",
-    "jest": "^29.7.0",
-    "jest-environment-jsdom": "^29.7.0",
-    "ts-jest": "^29.1.1",
-    "ts-loader": "^9.5.1",
-    "typescript": "^5.5.4",
-    "vite": "^5.3.4",
-    "vite-plugin-dts": "^3.9.1"
+    "@jest/globals": "^30.4.1",
+    "@microsoft/api-documenter": "^7.30.5",
+    "@microsoft/api-extractor": "^7.58.7",
+    "@types/file-saver": "2.0.7",
+    "cross-fetch": "^4.1.0",
+    "jest": "^30.4.1",
+    "jest-environment-jsdom": "^30.4.1",
+    "ts-jest": "^29.4.11",
+    "ts-loader": "^9.6.0",
+    "typescript": "^6.0.3",
+    "vite": "^8.0.14",
+    "vite-plugin-dts": "^5.0.1"
   },
   "repository": {
     "type": "git",

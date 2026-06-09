@@ -1,4 +1,4 @@
-import { describe, expect, test, jest, it } from "@jest/globals";
+import { describe, expect, test } from "@jest/globals";
 import { generateColumnName } from "../../../src/utils/generate-column-name";
 const cols: string[] = [
   "A",

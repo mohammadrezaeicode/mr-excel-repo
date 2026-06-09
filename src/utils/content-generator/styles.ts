@@ -1,5 +1,11 @@
 import { type StyleMapper } from "../../data-model/excel-table";
 
+/**
+ * styleGenerator - generates XML for the styles of an Excel file, including fonts, fills, borders, and conditional formatting.
+ * @param {StyleMapper} styles - The style configurations.
+ * @param {boolean} addCF - Whether to include conditional formatting.
+ * @returns {string} - The XML string for the styles.
+ */
 export function styleGenerator(styles: StyleMapper, addCF: boolean) {
   return (
     '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +

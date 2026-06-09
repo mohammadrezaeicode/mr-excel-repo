@@ -1,12 +1,14 @@
 # MR Excel
-
-![Test](https://github.com/mohammadrezaeicode/github-action/actions/workflows/test.yml/badge.svg) [![Release & Publish](https://github.com/mohammadrezaeicode/mr-excel-repo/actions/workflows/release.yml/badge.svg)](https://github.com/mohammadrezaeicode/mr-excel-repo/actions/workflows/manually-release-publish.yml)
+[![Test](https://github.com/mohammadrezaeicode/mr-excel-repo/actions/workflows/test.yml/badge.svg)](https://github.com/mohammadrezaeicode/mr-excel-repo/actions/workflows/test.yml) ![Release & Publish](https://github.com/mohammadrezaeicode/mr-excel-repo/actions/workflows/release-publish.yml/badge.svg) ![E2E & Functional Tests](https://github.com/mohammadrezaeicode/mr-excel-example-gallery/actions/workflows/e2e+func.yml/badge.svg)
 
 `MR-Excel` is a powerful JavaScript library designed for reading and writing Excel files. It enables users to extract data seamlessly from Excel documents while providing an array of advanced writing features. These include commenting, styling, applying formulas, merging cells, inserting images into cells, adding background images, grouping rows, and implementing conditional formatting. Additionally, the library supports multi-style values and offers functions for cell merging and styling, as well as commenting features.
 
-For front-end-specific tasks, the library includes functions such as `excelToNode` and `convertTableToExcel`, which facilitate reading and inserting nodes into the DOM.This library also supports the generation of CSV and text file formats, enhancing its versatility for various data handling needs.
+For front-end-specific tasks, the library includes functions such as `excelToNode` and `convertTableToExcel`, which facilitate reading and inserting nodes into the DOM. This library also supports the generation of CSV and text file formats, enhancing its versatility for various data handling needs.
 
-important functions of library that are defined with specific use cases as follows:
+Starting with version 8, end-to-end (E2E) and functional tests are available in the ["**_`mr-excel-example-gallery`_**"](https://github.com/mohammadrezaeicode/mr-excel-example-gallery) repository. For additional details on the test setup and available test cases, see the repository.!["workflow"](https://github.com/mohammadrezaeicode/mr-excel-example-gallery/blob/main/workflow.png?raw=true)
+
+
+Important functions of the library are defined with specific use cases as follows:
 
 <a id="generate-excel"></a>
 
@@ -34,15 +36,15 @@ important functions of library that are defined with specific use cases as follo
 
 <a id="excel-to-node"></a>
 
-- **` excelToNode`**: This function reads an uploaded Excel file and generates a representation of the tables from its sheets. It can either return the table directly or insert it into a specified container node provided as input.
+- **`excelToNode`**: This function reads an uploaded Excel file and generates a representation of the tables from its sheets. It can either return the table directly or insert it into a specified container node provided as input.
 
 <a id="excel-to-json"></a>
 
-- **` excelToJson`**: This function reads an Excel file and returns a JSON object that represents the data contained in the file.
+- **`excelToJson`**: This function reads an Excel file and returns a JSON object that represents the data contained in the file.
 
 <a id="replace-in-excel"></a>
 
-- **`🆕replaceInExcel`**: This function is used to replace data based on a defined flag, such as {{FLAG}}, in Excel.
+- **`replaceInExcel`**: This function is used to replace data based on a defined flag, such as {{FLAG}}, in Excel.
 
 The example has been moved to a separate repository for easier updates. You can find it in the ["**_`mr-excel-example-gallery`_**"](https://github.com/mohammadrezaeicode/mr-excel-example-gallery)([**_link_**](https://github.com/mohammadrezaeicode/mr-excel-example-gallery))
 
@@ -50,9 +52,9 @@ The example has been moved to a separate repository for easier updates. You can 
 
 The following list includes new repositories related to this project. Documentation and improvements for these projects can be found in the repositories below.
 
-- **`MR Excel Java`**:A similar project using Java is in development. The release version is coming soon; currently, it is available as a snapshot version.["`repository`"](https://github.com/mohammadrezaeicode/mr-excel-java)
+- **`MR Excel Java`**: A similar project using Java is in development. The release version is coming soon; currently, it is available as a snapshot version. ["repository"](https://github.com/mohammadrezaeicode/mr-excel-java)
 
-- **`MR Excel Editor`**: An editor that utilizes the library is currently under development. At present, it only generates simple results.["`repository`"](https:///github.com/mohammadrezaeicode/mr-excel-editor)["`Demo`"](https://mohammadrezaeicode.github.io/mr-excel-editor/)
+- **`MR Excel Editor`**: An editor that utilizes the library is currently under development. At present, it only generates simple results. ["repository"](https://github.com/mohammadrezaeicode/mr-excel-editor) ["Demo"](https://mohammadrezaeicode.github.io/mr-excel-editor/) 
 
 ## Table of Contents
 
@@ -90,6 +92,8 @@ The following list includes new repositories related to this project. Documentat
   - [**`View Option`**](#view-option)
   - [**`Page Break`**](#page-break-option)
   - [**`As Table`**](#as-table-option)
+  - [**`🆕 Data Validation`**](#data-validation)
+  - [**`🆕 V8 new Properties`**](#v8-new-properties)
 - [**`convertTableToExcel`**](#convert-table-to-excel)
   - [**`How to use convertTableToExcel`**](#convert-table-to-excel-usage)
 - [**`sideBySideLineByLine`**](#side-by-side-line-by-line)
@@ -100,14 +104,15 @@ The following list includes new repositories related to this project. Documentat
   - [**`How to use extractExcelData`**](#extract-excel-data-usage)
 - [**`generateCSV && generateText`**](#generate-csv-txt)
   - [**`How to use generateCSV && generateText`**](#generate-csv-txt-usage)
-- [**` excelToNode`**](#excel-to-node)
-  - [**` How to use excelToNode`**](#excel-to-node-usage)
-- [**` excelToJson`**](#excel-to-json)
-  - [**` How to use excelToJson`**](#excel-to-json-usage)
-- [**`🆕 replaceInExcel`**](#replace-in-excel)
-  - [**`🆕 How to use replaceInExcel`**](#replace-in-excel-usage)
+- [**`excelToNode`**](#excel-to-node)
+  - [**`How to use excelToNode`**](#excel-to-node-usage)
+- [**`excelToJson`**](#excel-to-json)
+  - [**`How to use excelToJson`**](#excel-to-json-usage)
+- [**`replaceInExcel`**](#replace-in-excel)
+  - [**`How to use replaceInExcel`**](#replace-in-excel-usage)
 - [**`interface`**](#interface)
 - [**`Migrate Version`**](#migrate)
+  - [**`Migrating from 7 to 8`**](#migrating-7)
   - [**`Migrating from 6 to 7`**](#migrating-6)
   - [**`Migrating from 5 to 6`**](#migrating-5)
   - [**`Migrating from 4 to 5`**](#migrating-4)
@@ -506,7 +511,7 @@ ExcelTable.convertTableToExcel("#table", null, {
 
 <details>
 
-<summary>result of Example in  https://github.com/mohammadrezaeicode/mr-excel-example-gallery/blob/main/conv1.html</summary>
+<summary>result of Example in https://github.com/mohammadrezaeicode/mr-excel-example-gallery/blob/main/conv1.html</summary>
 
 ![ex](https://github.com/mohammadrezaeicode/mr-excel-example-gallery/blob/main/ex13.PNG)
 
@@ -661,7 +666,7 @@ ExcelTable.generateText(data, true);
 
 <a id="excel-to-node-usage"></a>
 
-### 🆕 How to use excelToNode
+### How to use excelToNode
 
 <details>
 
@@ -677,7 +682,7 @@ ExcelTable.excelToNode(uri, queryForTable, containerElement, config)
 
 <a id="replace-in-excel-usage"></a>
 
-### 🆕 How to use replaceInExcel
+### How to use replaceInExcel
 
 To use this function, you should provide {{FLAG}} in Excel. Change the relevant cells to represent the flag ({{name}}, e.g.) and pass them to the function. Additionally, you should supply the data that will replace the flag. Here’s an example for clarification:
 [Excel that used for example](https://github.com/mohammadrezaeicode/mr-excel-page-repo/blob/main/public/replacer.xlsx?raw=true)
@@ -698,7 +703,7 @@ ExcelTable.replaceInExcel("./replacer.xlsx", {
 
 </details>
 
-![result imag](https://github.com/mohammadrezaeicode/mr-excel-page-repo/blob/main/public/img/replacer.png?raw=true)
+![result image](https://github.com/mohammadrezaeicode/mr-excel-page-repo/blob/main/public/img/replacer.png?raw=true)
 
 <a id="excel-to-json-usage"></a>
 
@@ -6517,236 +6522,131 @@ ExcelTable.generateExcel(data);
 <summary>Display Code - 8</summary>
 
 ```javascript
-const colorPalette = {
-  c1: "561C24",
-  c2: "6D2932",
-  c3: "C7B7A3",
-  c4: "E8D8C4",
-};
-const first = {
-  type: "HF",
-  backgroundColor: colorPalette.c2,
-  fontFamily: "Times New Roman",
-  color: colorPalette.c4,
-};
-const second = {
-  type: "HF",
-  backgroundColor: colorPalette.c4,
-  fontFamily: "Times New Roman",
-  color: colorPalette.c2,
-};
 const data = {
-  creator: "mr",
-  styles: {
-    first,
-    second,
-  },
-  sheet: [
-    {
-      viewOption: {
-        splitOption: {
-          type: "B", //or "BOTH"
-          split: {
-            x: 10000,
-            y: 5000,
-          },
-          startAt: {
-            one: "A15",
-            two: "A7",
-          },
+        creator: 'MR Excel',
+        fileName: "ex43",
+        styles: {
+            headerStyle: {
+                backgroundColor: colorPalette.c1,
+                fontFamily: "Times New Roman",
+                color: colorPalette.c2,
+            },
+            customFormulaStyle: {
+                backgroundColor: colorPalette.c2,
+                fontFamily: "Times New Roman",
+                color: colorPalette.c1,
+                size: 15,
+                border: {
+                    full: {
+                        color: colorPalette.c4,
+                        style: "dashDot",
+                    },
+                },
+            },
+            formulaStyle: {
+                backgroundColor: colorPalette.c1,
+                fontFamily: "Times New Roman",
+                color: colorPalette.c2,
+                size: 15,
+                border: {
+                    full: {
+                        color: colorPalette.c3,
+                        style: "medium",
+                    },
+                },
+            },
         },
-      },
-      headers: [
-        { label: "id", text: "ID" },
-        { label: "name", text: "Name" },
-        { label: "surname", text: "Surname" },
-        { label: "parentId", text: "Parent Id" },
-        { label: "work", text: "Work" },
-        { label: "id", text: "ID" },
-        { label: "name", text: "Name" },
-        { label: "surname", text: "Surname" },
-        { label: "parentId", text: "Parent Id" },
-        { label: "work", text: "Work" },
-        { label: "id", text: "ID" },
-        { label: "name", text: "Name" },
-        { label: "surname", text: "Surname" },
-        { label: "parentId", text: "Parent Id" },
-        { label: "work", text: "Work" },
-        { label: "parentId", text: "Parent Id" },
-        { label: "work", text: "Work" },
-        { label: "id", text: "ID" },
-        { label: "name", text: "Name" },
-        { label: "surname", text: "Surname" },
-        { label: "parentId", text: "Parent Id" },
-        { label: "work", text: "Work" },
-        { label: "birthDate", text: "Birth Date", size: 40 },
-        { label: "id", text: "ID" },
-        { label: "name", text: "Name" },
-        { label: "surname", text: "Surname" },
-        { label: "parentId", text: "Parent Id" },
-        { label: "work", text: "Work" },
-        { label: "birthDate", text: "Birth Date", size: 40 },
-      ],
-      data: [
-        {
-          id: 1525528872576,
-          name: "Declan",
-          surname: "Bright",
-          parentId: 9193814686664,
-          work: "National Park Service ranger",
-          birthDate: "1854-02-28T22:39:49.028Z",
-        },
-        {
-          id: 1933819177102,
-          name: "Phoebe",
-          surname: "Austin",
-          parentId: 7377315170005,
-          work: "Director of audience services",
-          birthDate: "1852-04-18T10:17:54.557Z",
-        },
-        {
-          id: 9541178576629,
-          name: "Waite",
-          surname: "Aveyard",
-          parentId: 8770728211947,
-          work: "Retired",
-          birthDate: "1854-12-11T17:36:40.765Z",
-        },
-        {
-          id: 2473638123843,
-          name: "Kaitlin",
-          surname: "Courtney",
-          parentId: 3076331620534,
-          work: "Maintenance engineering",
-          birthDate: "1854-03-04T01:50:50.209Z",
-        },
-        {
-          id: 7140741364134,
-          name: "Tristan",
-          surname: "King",
-          parentId: 4674378612151,
-          work: "Japanese idol",
-          birthDate: "1853-12-08T21:09:19.672Z",
-        },
-        {
-          id: 8756865627934,
-          name: "Egerton",
-          surname: "Mendenhall",
-          parentId: 4218847452166,
-          work: "Japanese idol",
-          birthDate: "1854-10-24T12:41:51.902Z",
-        },
-        {
-          id: 5098636603452,
-          name: "Adele",
-          surname: "Monroe",
-          parentId: 9762225632557,
-          work: "Unemployed",
-          birthDate: "1852-10-11T09:48:24.128Z",
-        },
-        {
-          id: 6700176094055,
-          name: "Katey",
-          surname: "Lewis",
-          parentId: 7938892587472,
-          work: "work from home",
-          birthDate: "1852-05-19T09:36:47.969Z",
-        },
-        {
-          id: 6869885121153,
-          name: "Rodney",
-          surname: "Saxby",
-          parentId: 576630955195,
-          work: "Cardiovascular Technologist",
-          birthDate: "1852-11-07T03:33:46.973Z",
-        },
-        {
-          id: 1389127579072,
-          name: "Dare",
-          surname: "Kenny",
-          parentId: 4017546822023,
-          work: "Engineering technologist",
-          birthDate: "1852-10-25T23:36:29.109Z",
-        },
-        {
-          id: 6801196917678,
-          name: "Potter",
-          surname: "Bradbury",
-          parentId: 3750611241942,
-          work: "Petroleum geologist",
-          birthDate: "1852-10-12T06:59:33.426Z",
-        },
-        {
-          id: 1981219057492,
-          name: "Charlene",
-          surname: "Stuttaford",
-          parentId: 5645329253708,
-          work: "Harlequin",
-          birthDate: "1853-11-22T01:25:50.328Z",
-        },
-        {
-          id: 8447379393015,
-          name: "Molly",
-          surname: "Lawrenson",
-          parentId: 7440555772320,
-          work: "Healthcare science",
-          birthDate: "1853-01-20T19:18:17.595Z",
-        },
-        {
-          id: 1421335493979,
-          name: "Tyson",
-          surname: "Grennan",
-          parentId: 1518948755485,
-          work: "Pilot",
-          birthDate: "1852-09-04T12:05:31.252Z",
-        },
-        {
-          id: 5260799325935,
-          name: "Sophia",
-          surname: "Buckley",
-          parentId: 8474979566542,
-          work: "Stunt performer",
-          birthDate: "1853-01-05T04:12:27.037Z",
-        },
-        {
-          id: 2231363435720,
-          name: "Melody",
-          surname: "Humpherys",
-          parentId: 2317759882951,
-          work: "work from home",
-          birthDate: "1853-01-12T00:39:05.356Z",
-        },
-        {
-          id: 9555420460973,
-          name: "Kristi",
-          surname: "Adkins",
-          parentId: 9735997282913,
-          work: "Upholsterer",
-          birthDate: "1853-10-19T15:26:25.022Z",
-        },
-        {
-          id: 1613978413981,
-          name: "Paul",
-          surname: "Cook",
-          parentId: 202934661757,
-          work: "Pipefitter",
-          birthDate: "1853-02-21T08:46:25.185Z",
-        },
-        {
-          id: 6752497709181,
-          name: "Kayden",
-          surname: "Woodcock",
-          parentId: 2850592397073,
-          work: "Arborist",
-          birthDate: "1854-03-05T02:17:31.620Z",
-        },
-      ],
-    },
-  ],
-};
-ExcelTable.generateExcel(data);
+        sheet: [
+            {
+                dataValidations: [
+                    {
+                        type: "whole",
+                        value: {
+                            min: 1,
+                            max: 50,
+                        },
+                        start: "A1",
+                        end: "C17",
+                    },
+                    {
+                        type: "list",
+                        start: "E3",
+                        end: "F5",
+                        value: {
+                            start: "D5",
+                            end: "F5"
+                        }
+                    }
+                ],
+                headers: [
+                    { label: "Date", text: "Date" },
+                    {
+                        label: "Column 1",
+                        text: "Column 1",
+                    },
+                    {
+                        label: "Column 2",
+                        text: "Column 2",
+                    },
+                    {
+                        label: "Column 3",
+                        text: "Column 3",
+                    },
+                    {
+                        label: "Column 4",
+                        text: "Column 4",
+                    },
+                    {
+                        label: "Column 5",
+                        text: "Column 5",
+                    },
+                ],
+                data: [
+                    {
+                        Date: "2023-08-01",
+                        "Column 1": 5,
+                        "Column 2": 10,
+                        "Column 3": 15,
+                        "Column 4": 20,
+                        "Column 5": 25,
+                    },
+                    {
+                        Date: "2023-08-02",
+                        "Column 1": 7,
+                        "Column 2": 14,
+                        "Column 3": 21,
+                        "Column 4": 28,
+                        "Column 5": 35,
+                    },
+                    {
+                        Date: "2023-08-03",
+                        "Column 1": 3,
+                        "Column 2": 6,
+                        "Column 3": 9,
+                        "Column 4": 12,
+                        "Column 5": 15,
+                    },
+                    {
+                        Date: "2023-08-04",
+                        "Column 1": 12,
+                        "Column 2": 24,
+                        "Column 3": 36,
+                        "Column 4": 48,
+                        "Column 5": 60,
+                    },
+                    {
+                        Date: "2023-08-05",
+                        "Column 1": 8,
+                        "Column 2": 16,
+                        "Column 3": 24,
+                        "Column 4": 32,
+                        "Column 5": 40,
+                    },
+                ],
+            },
+        ],
+    };
 ```
-
 </details>
 
 <details>
@@ -7185,6 +7085,461 @@ ExcelTable.generateExcel(data);
 
 </details>
 
+
+<a id="data-validation"></a>
+
+## 🆕 Data Validation [⬆️](#table-of-contents)
+
+The `dataValidations` property corresponds to Excel's **Data Validation** feature (**Data** → **Data Validation**). It allows you to define validation rules for cells based on a specified range, value, or reference. The following examples demonstrate common use cases and configurations for this feature.
+
+<details>
+
+<summary>Display Code</summary>
+
+```javascript
+const data = {
+  creator: "mr",
+  sheet: [
+    {
+      asTable: {},
+      headers: [
+        { label: "id", text: "ID" },
+        { label: "name", text: "Name" },
+        { label: "surname", text: "Surname" },
+        { label: "parentId", text: "Parent Id" },
+        { label: "work", text: "Work" },
+        { label: "birthDate", text: "Birth Date", size: 40 },
+      ],
+      data: [
+        {
+          id: 1525528872576,
+          name: "Declan",
+          surname: "Bright",
+          parentId: 9193814686664,
+          work: "National Park Service ranger",
+          birthDate: "1854-02-28T22:39:49.028Z",
+        },
+        {
+          id: 1933819177102,
+          name: "Phoebe",
+          surname: "Austin",
+          parentId: 7377315170005,
+          work: "Director of audience services",
+          birthDate: "1852-04-18T10:17:54.557Z",
+        },
+        {
+          id: 9541178576629,
+          name: "Waite",
+          surname: "Aveyard",
+          parentId: 8770728211947,
+          work: "Retired",
+          birthDate: "1854-12-11T17:36:40.765Z",
+        },
+        {
+          id: 2473638123843,
+          name: "Kaitlin",
+          surname: "Courtney",
+          parentId: 3076331620534,
+          work: "Maintenance engineering",
+          birthDate: "1854-03-04T01:50:50.209Z",
+        },
+        {
+          id: 7140741364134,
+          name: "Tristan",
+          surname: "King",
+          parentId: 4674378612151,
+          work: "Japanese idol",
+          birthDate: "1853-12-08T21:09:19.672Z",
+        },
+        {
+          id: 8756865627934,
+          name: "Egerton",
+          surname: "Mendenhall",
+          parentId: 4218847452166,
+          work: "Japanese idol",
+          birthDate: "1854-10-24T12:41:51.902Z",
+        },
+        {
+          id: 5098636603452,
+          name: "Adele",
+          surname: "Monroe",
+          parentId: 9762225632557,
+          work: "Unemployed",
+          birthDate: "1852-10-11T09:48:24.128Z",
+        },
+        {
+          id: 6700176094055,
+          name: "Katey",
+          surname: "Lewis",
+          parentId: 7938892587472,
+          work: "work from home",
+          birthDate: "1852-05-19T09:36:47.969Z",
+        },
+        {
+          id: 6869885121153,
+          name: "Rodney",
+          surname: "Saxby",
+          parentId: 576630955195,
+          work: "Cardiovascular Technologist",
+          birthDate: "1852-11-07T03:33:46.973Z",
+        },
+        {
+          id: 1389127579072,
+          name: "Dare",
+          surname: "Kenny",
+          parentId: 4017546822023,
+          work: "Engineering technologist",
+          birthDate: "1852-10-25T23:36:29.109Z",
+        },
+        {
+          id: 6801196917678,
+          name: "Potter",
+          surname: "Bradbury",
+          parentId: 3750611241942,
+          work: "Petroleum geologist",
+          birthDate: "1852-10-12T06:59:33.426Z",
+        },
+        {
+          id: 1981219057492,
+          name: "Charlene",
+          surname: "Stuttaford",
+          parentId: 5645329253708,
+          work: "Harlequin",
+          birthDate: "1853-11-22T01:25:50.328Z",
+        },
+        {
+          id: 8447379393015,
+          name: "Molly",
+          surname: "Lawrenson",
+          parentId: 7440555772320,
+          work: "Healthcare science",
+          birthDate: "1853-01-20T19:18:17.595Z",
+        },
+        {
+          id: 1421335493979,
+          name: "Tyson",
+          surname: "Grennan",
+          parentId: 1518948755485,
+          work: "Pilot",
+          birthDate: "1852-09-04T12:05:31.252Z",
+        },
+        {
+          id: 5260799325935,
+          name: "Sophia",
+          surname: "Buckley",
+          parentId: 8474979566542,
+          work: "Stunt performer",
+          birthDate: "1853-01-05T04:12:27.037Z",
+        },
+        {
+          id: 2231363435720,
+          name: "Melody",
+          surname: "Humpherys",
+          parentId: 2317759882951,
+          work: "work from home",
+          birthDate: "1853-01-12T00:39:05.356Z",
+        },
+        {
+          id: 9555420460973,
+          name: "Kristi",
+          surname: "Adkins",
+          parentId: 9735997282913,
+          work: "Upholsterer",
+          birthDate: "1853-10-19T15:26:25.022Z",
+        },
+        {
+          id: 1613978413981,
+          name: "Paul",
+          surname: "Cook",
+          parentId: 202934661757,
+          work: "Pipefitter",
+          birthDate: "1853-02-21T08:46:25.185Z",
+        },
+        {
+          id: 6752497709181,
+          name: "Kayden",
+          surname: "Woodcock",
+          parentId: 2850592397073,
+          work: "Arborist",
+          birthDate: "1854-03-05T02:17:31.620Z",
+        },
+      ],
+    },
+  ],
+};
+ExcelTable.generateExcel(data);
+```
+
+</details>
+
+<a id="interface"></a>
+
+<a id="v8-new-properties"></a>
+
+## 🆕 V8 new Properties [⬆️](#table-of-contents)
+
+Version 8 adds several new configuration options: `hidden` to hide worksheets, `zoomScale` to control the worksheet zoom level, `useCompression` to manage data compression (enabled by default), and `mainFontFamily` to define the workbook's default font family.
+
+<details>
+
+<summary>Display Code</summary>
+
+```javascript
+const colorPalette = {
+    c1: "2B2E4A",
+    c2: "E84545",
+    c3: "903749",
+    c4: "53354A",
+};
+const data = {
+    creator: 'MR Excel',
+    fileName: "ex45",
+    mainFontFamily: "Cambria",
+    sheet: [
+        {
+            zoomScale: {
+                scale: 200
+            },
+            dataValidations: [
+                {
+                    type: "whole",
+                    value: {
+                        min: 1,
+                        max: 50
+                    },
+                    start: "A1",
+                    end: "C17",
+                },
+                {
+                    type: "list",
+                    start: "E3",
+                    end: "F5",
+                    value: {
+                        start: "D5",
+                        end: "F5",
+                    },
+                },
+            ],
+            headers: [
+                { label: "Date", text: "Date" },
+                {
+                    label: "Column 1",
+                    text: "Column 1",
+                },
+                {
+                    label: "Column 2",
+                    text: "Column 2",
+                },
+                {
+                    label: "Column 3",
+                    text: "Column 3",
+                },
+                {
+                    label: "Column 4",
+                    text: "Column 4",
+                },
+                {
+                    label: "Column 5",
+                    text: "Column 5",
+                },
+            ],
+            data: [
+                {
+                    Date: "2023-08-01",
+                    "Column 1": 5,
+                    "Column 2": 10,
+                    "Column 3": 15,
+                    "Column 4": 20,
+                    "Column 5": 25,
+                },
+                {
+                    Date: "2023-08-02",
+                    "Column 1": 7,
+                    "Column 2": 14,
+                    "Column 3": 21,
+                    "Column 4": 28,
+                    "Column 5": 35,
+                },
+                {
+                    Date: "2023-08-03",
+                    "Column 1": 3,
+                    "Column 2": 6,
+                    "Column 3": 9,
+                    "Column 4": 12,
+                    "Column 5": 15,
+                },
+                {
+                    Date: "2023-08-04",
+                    "Column 1": 12,
+                    "Column 2": 24,
+                    "Column 3": 36,
+                    "Column 4": 48,
+                    "Column 5": 60,
+                },
+                {
+                    Date: "2023-08-05",
+                    "Column 1": 8,
+                    "Column 2": 16,
+                    "Column 3": 24,
+                    "Column 4": 32,
+                    "Column 5": 40,
+                },
+            ],
+        },
+    ],
+};
+ExcelTable.generateExcel(data);
+```
+
+</details>
+
+
+<details>
+
+<summary>Display Code(hidden)</summary>
+
+```javascript
+const colorPalette = {
+    c1: "2B2E4A",
+    c2: "E84545",
+    c3: "903749",
+    c4: "53354A",
+};
+const data = {
+    creator: 'MR Excel',
+    fileName: "ex47",
+    mainFontFamily: "Cambria",
+    hidden: true,
+    styles: {
+        headerStyle: {
+            backgroundColor: colorPalette.c1,
+            fontFamily: "Times New Roman",
+            color: colorPalette.c2,
+        },
+        customFormulaStyle: {
+            backgroundColor: colorPalette.c2,
+            fontFamily: "Times New Roman",
+            color: colorPalette.c1,
+            size: 15,
+            border: {
+                full: {
+                    color: colorPalette.c4,
+                    style: "dashDot",
+                },
+            },
+        },
+        formulaStyle: {
+            backgroundColor: colorPalette.c1,
+            fontFamily: "Times New Roman",
+            color: colorPalette.c2,
+            size: 15,
+            border: {
+                full: {
+                    color: colorPalette.c3,
+                    style: "medium",
+                },
+            },
+        },
+    },
+    sheet: [
+        {
+            zoomScale: {
+                scale: 200,
+                startAt: "F8"
+            },
+            dataValidations: [
+                {
+                    type: "whole",
+                    value: {
+                        min: 1,
+                        max: 50
+                    },
+                    start: "A1",
+                    end: "C17",
+                },
+                {
+                    type: "list",
+                    start: "E3",
+                    end: "F5",
+                    value: {
+                        start: "D5",
+                        end: "F5",
+                    },
+                },
+            ],
+            headers: [
+                { label: "Date", text: "Date" },
+                {
+                    label: "Column 1",
+                    text: "Column 1",
+                },
+                {
+                    label: "Column 2",
+                    text: "Column 2",
+                },
+                {
+                    label: "Column 3",
+                    text: "Column 3",
+                },
+                {
+                    label: "Column 4",
+                    text: "Column 4",
+                },
+                {
+                    label: "Column 5",
+                    text: "Column 5",
+                },
+            ],
+            data: [
+                {
+                    Date: "2023-08-01",
+                    "Column 1": 5,
+                    "Column 2": 10,
+                    "Column 3": 15,
+                    "Column 4": 20,
+                    "Column 5": 25,
+                },
+                {
+                    Date: "2023-08-02",
+                    "Column 1": 7,
+                    "Column 2": 14,
+                    "Column 3": 21,
+                    "Column 4": 28,
+                    "Column 5": 35,
+                },
+                {
+                    Date: "2023-08-03",
+                    "Column 1": 3,
+                    "Column 2": 6,
+                    "Column 3": 9,
+                    "Column 4": 12,
+                    "Column 5": 15,
+                },
+                {
+                    Date: "2023-08-04",
+                    "Column 1": 12,
+                    "Column 2": 24,
+                    "Column 3": 36,
+                    "Column 4": 48,
+                    "Column 5": 60,
+                },
+                {
+                    Date: "2023-08-05",
+                    "Column 1": 8,
+                    "Column 2": 16,
+                    "Column 3": 24,
+                    "Column 4": 32,
+                    "Column 5": 40,
+                },
+            ],
+        },
+    ],
+};
+ExcelTable.generateExcel(data);
+```
+
+</details>
+
 <a id="interface"></a>
 
 ## interface [⬆️](#table-of-contents)
@@ -7196,6 +7551,16 @@ The primary interface of the library is located in the excel-table.d.ts file. [C
 ## Migrate Version [⬆️](#table-of-contents)
 
 In this section, we define the significant changes that require migration for the upcoming version.
+
+<a id="migrating-7"></a>
+
+## Migrating from 7 to 8 [⬆️](#table-of-contents)
+
+Version 8 updates the build tools, development dependencies, Node.js version requirements, and some TypeScript configuration settings.
+
+The ExcelTable interface now supports generic types and should be declared as `ExcelTable<T>`. Apart from this change, existing APIs, interfaces, and schema definitions remain backward compatible.
+
+Additionally, the styleKey parameter has been removed from generateExcel.
 
 <a id="migrating-6"></a>
 
@@ -7288,6 +7653,34 @@ To migrate from Version 2 to Version 3, you need to follow the steps below:
 <a id="release-note"></a>
 
 ## Release Notes [⬆️](#table-of-contents)
+
+### Version 8.0.0 (2026-06-09)
+
+#### Improvements
+
+- Added a compression option to reduce generated file sizes.
+- Updated package dependencies and Node.js versions to address known vulnerabilities.
+- Added end-to-end (E2E) and functional testing.
+- Improved unit test coverage.
+- Started work on API and documentation extraction.
+- Added generic type support for data models.
+- Enabled stricter TypeScript type checking.
+
+
+#### New Features
+
+- `mainFontFamily` — Sets the default font family for the workbook.
+- `hidden` — Hides all sheet data.
+- `useCompression` — Controls data compression. Compression is enabled by default starting with version 8.
+- `dataValidations` — Defines validation rules for worksheet cells.
+- `zoomScale` — Sets the worksheet zoom level.
+
+#### Bug Fixes
+
+- Resolved file reading issues.
+- Enhanced type safety for `themeBaseGenerate`.
+- Fixed CSV generation issues in `generateCSV`.
+- Resolved issues when creating Excel tables with `createExcelTableBaseOnDomElement`.
 
 ### Version 7.0.1 (2025-03-13)
 

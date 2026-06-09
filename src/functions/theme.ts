@@ -38,7 +38,7 @@ function createHeaderBaseOnObject(obj: Object, filterKeys: string[]): Header[] {
   }, init);
   return headers;
 }
-const defaultColor: ThemeOption = {
+const defaultColor = {
   fileName: "MR-Excel",
   headerBackgroundColor: "#393E46",
   headerColor: "#EEEEEE",
@@ -47,23 +47,29 @@ const defaultColor: ThemeOption = {
   rowColor: "#393E46",
   filterKeys: [],
 };
-export const themeGenerator = function (
-  inputData: ExcelTable | Data[] | Data[][],
-  option: ThemeOption = {
-    ...defaultColor,
+export function themeGenerator<T extends object = object>(
+  inputData: ExcelTable<T> | Data<T>[] | Data<object>[][],
+  option: ThemeOption | null = {
+    ...(defaultColor as ThemeOption),
+  },
+): ExcelTable<T> {
+  if (typeof inputData !== "object") {
+    throw "typeof Object should be ExcelTable";
   }
-): ExcelTable {
-  let data: ExcelTable;
-  if (typeof inputData == "object" && Array.isArray(inputData)) {
+  let data: ExcelTable<T>;
+
+  if (typeof inputData === "object" && Array.isArray(inputData)) {
     if (inputData.length > 0) {
+      /* handle 2 dimension array Data[][] */
       if (Array.isArray(inputData[0])) {
-        let sheet: Sheet[] = [];
+        let sheet: Sheet<T>[] = [];
         for (let index = 0; index < inputData.length; index++) {
-          const element = inputData[index] as Data[];
+          const element = inputData[index] as Data<T>[];
           if (element.length > 0) {
+            //checked in condition
             const headers = createHeaderBaseOnObject(
-              element[0],
-              Array.isArray(option.filterKeys) ? option.filterKeys : []
+              element[0]!,
+              Array.isArray(option?.filterKeys) ? option.filterKeys : [],
             );
             sheet.push({
               headers,
@@ -75,24 +81,18 @@ export const themeGenerator = function (
           sheet,
         };
       } else {
-        if (inputData.length > 0) {
-          const headers = createHeaderBaseOnObject(
-            inputData[0],
-            Array.isArray(option.filterKeys) ? option.filterKeys : []
-          );
-          data = {
-            sheet: [
-              {
-                headers,
-                data: inputData,
-              },
-            ],
-          };
-        } else {
-          data = {
-            sheet: [],
-          };
-        }
+        const headers = createHeaderBaseOnObject(
+          inputData[0] ?? [],
+          Array.isArray(option?.filterKeys) ? option?.filterKeys : [],
+        );
+        data = {
+          sheet: [
+            {
+              headers,
+              data: inputData as Data<T>[],
+            },
+          ],
+        };
       }
     } else {
       data = {
@@ -102,50 +102,48 @@ export const themeGenerator = function (
   } else {
     data = inputData;
   }
-  let headerColor =
-    option && option.headerBackgroundColor
+  const headerColor: string =
+    option && !!option.headerBackgroundColor
       ? option.headerBackgroundColor
-      : defaultColor.headerBackgroundColor!;
+      : defaultColor.headerBackgroundColor;
 
-  let rowColor =
-    option && option.rowBackgroundColor
+  const rowColor: string =
+    option && !!option.rowBackgroundColor
       ? option.rowBackgroundColor
-      : defaultColor.rowBackgroundColor!;
+      : defaultColor.rowBackgroundColor;
 
-  let headerColorText =
+  const headerColorText =
     option && option.negativeColor
       ? hexToRgbNegative(headerColor)
       : option && !!option.headerColor
-      ? option.headerColor
-      : generateContrastTextColor(headerColor);
+        ? option.headerColor
+        : generateContrastTextColor(headerColor);
 
-  let rowColorText =
+  const rowColorText =
     option && option.negativeColor
       ? hexToRgbNegative(rowColor)
       : option && !!option.rowColor
-      ? option.rowColor
-      : generateContrastTextColor(rowColor);
+        ? option.rowColor
+        : generateContrastTextColor(rowColor);
 
-  if (typeof data.styles == "undefined") {
-    data.styles = {};
-  }
+  data.styles = data.styles ?? {};
+
   data.styles["themeStyleHeader"] = {
     backgroundColor: headerColor,
-    color: headerColorText,
+    color: headerColorText ?? hexToRgbNegative(headerColor),
   };
   data.styles["themeStyleBody"] = {
     backgroundColor: rowColor,
-    color: rowColorText,
+    color: rowColorText ?? hexToRgbNegative(rowColor),
   };
-  const shLength = data.sheet.length;
-  for (let index = 0; index < shLength; index++) {
-    data.sheet[index].styleCellCondition = function (
-      data,
-      object,
-      rowIndex,
-      colIndex,
-      fromHeader,
-      styleKeys
+  data.sheet.forEach((sheet) => {
+    sheet.styleCellCondition = function (
+      _data: Header | string | number | undefined,
+      _object: Header | Data<T>,
+      _rowIndex: number,
+      _colIndex: number,
+      fromHeader: boolean,
+      _styleKeys: string[],
     ) {
       if (fromHeader) {
         return "themeStyleHeader";
@@ -153,13 +151,13 @@ export const themeGenerator = function (
         return "themeStyleBody";
       }
     };
-  }
+  });
 
   if (typeof option?.fileName == "string") {
     data.fileName = option.fileName;
   }
   return data;
-};
+}
 
 export const exportedForTesting = {
   titleCase,

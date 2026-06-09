@@ -15,14 +15,14 @@ let proxy = new Proxy(target, {
       return {};
     }
   },
-  set(target, property, value, receiver) {
+  set(target, property, value, _receiver) {
     target[property] = value;
     return true;
   },
 });
 
 /**
- * Adds global options to the proxy.
+ * addGlobalOptions -Adds global options to the proxy.
  * @param {string} key - The key for the global option.
  * @param {string} path - The path for the global option.
  * @param {any} data - The data for the global option.
@@ -53,7 +53,7 @@ function generatePathRecursive(key: string, path: string, data: object) {
 }
 
 /**
- * Adds global options from an Excel table.
+ * addGlobalOptionFromExcelTable - Adds global options from an Excel table.
  * @param {string} key - The key for the global option.
  * @param {ExcelTable} data - The Excel table data.
  */
@@ -67,7 +67,10 @@ export function addGlobalOptionFromExcelTable(key: string, data: ExcelTable) {
  * @param {ExcelTable} data - The Excel table data.
  * @returns {ExcelTable} The updated Excel table.
  */
-export function applyConfig(key: string, data: ExcelTable): ExcelTable {
+export function applyConfig<T extends object>(
+  key: string,
+  data: ExcelTable<T>,
+): ExcelTable<T> {
   let data2 = data as any;
   let proxy2 = proxy[key];
   let keys = Object.keys(proxy2);
@@ -77,6 +80,9 @@ export function applyConfig(key: string, data: ExcelTable): ExcelTable {
     let value = proxy2[keyP];
     for (let index = 0; index < path.length; index++) {
       const p = path[index];
+      if (!p) {
+        continue;
+      }
       if (dataC[p]) {
         dataC = dataC[p];
       } else {

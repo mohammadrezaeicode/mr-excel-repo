@@ -1,4 +1,4 @@
-import { describe, expect, test, jest } from "@jest/globals";
+import { describe, expect, test } from "@jest/globals";
 import { contentTypeGenerator } from "../../../../src/utils/content-generator/content-types";
 
 describe("contentTypeGenerator function tests", () => {

@@ -2,9 +2,9 @@
  * @jest-environment jsdom
  * @jest-environment-options {"url": "https://jestjs.io/"}
  */
-import { describe, expect, test, jest, it } from "@jest/globals";
+import { describe, expect, test } from "@jest/globals";
 import { createExcelTableBaseOnDomElement } from "../../../src/functions/create-excel-data";
-import { Data, ExcelTable, Header } from "../../../src/data-model/excel-table";
+import { ExcelTable, Header } from "../../../src/data-model/excel-table";
 describe("createExcelTableBaseOnDomElement function test", () => {
   test("input via queryString - col span", () => {
     document.body.innerHTML = `
@@ -32,84 +32,75 @@ describe("createExcelTableBaseOnDomElement function test", () => {
     </table>
     `;
     createExcelTableBaseOnDomElement("#table");
-    let expectedResult: ExcelTable = {
+    let expectedResult: ExcelTable<any> = {
       styles: {
         "0-0": {
           alignment: {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
         },
         "0-1": {
           alignment: {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
         },
         "0-2": {
           alignment: {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
         },
         "0-3": {
           alignment: {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
         },
         "1-0": {
           alignment: {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
         },
         "1-1": {
           alignment: {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
         },
         "1-2": {
           alignment: {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
+          backgroundColor: "FF0000",
         },
         "1-3": {
           alignment: {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
         },
         "2-0": {
           alignment: {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
         },
         "2-2": {
           //   alignment: {
           //     ltr: true,
           //     vertical: "center",
           //   },
-          //   bold: false,
+
           // },
           // "2-3": {
           alignment: {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
         },
       },
       sheet: [
@@ -169,11 +160,11 @@ describe("createExcelTableBaseOnDomElement function test", () => {
         },
       ],
     };
-    let result = createExcelTableBaseOnDomElement("#table", null, true);
+    let result = createExcelTableBaseOnDomElement("#table", null, true) as any;
     expect(result.sheet[0].data[0].mergeValue[0][0]).toBe(1);
     const funcStyle = result.sheet[0].styleCellCondition;
     if (funcStyle) {
-      result.sheet[0].headers.forEach((v, i) => {
+      result.sheet[0].headers.forEach((v: Header, i: number) => {
         expect(
           funcStyle(
             v as Header,
@@ -181,12 +172,12 @@ describe("createExcelTableBaseOnDomElement function test", () => {
             1,
             i,
             true,
-            Object.keys(result.styles!)
-          )
+            Object.keys(result.styles!),
+          ),
         ).toBe("0-" + i);
       });
 
-      result.sheet[0].data.forEach((v, i) => {
+      result.sheet[0].data.forEach((v: any, i: number) => {
         for (let index = 0; index < 4; index++) {
           if (
             index == 1 ||
@@ -204,8 +195,8 @@ describe("createExcelTableBaseOnDomElement function test", () => {
               2 + i,
               index,
               false,
-              Object.keys(result.styles!)
-            )
+              Object.keys(result.styles!),
+            ),
           ).toBe(1 + i + "-" + index);
         }
       });
@@ -241,84 +232,74 @@ describe("createExcelTableBaseOnDomElement function test", () => {
     </table>
     `;
     createExcelTableBaseOnDomElement("#table");
-    let expectedResult: ExcelTable = {
+    let expectedResult: ExcelTable<any> = {
       styles: {
         "0-0": {
           alignment: {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
         },
         "0-1": {
           alignment: {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
         },
         "0-2": {
           alignment: {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
         },
         "0-3": {
           alignment: {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
         },
         "1-0": {
           alignment: {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
         },
         "1-1": {
           alignment: {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
         },
         "1-2": {
           alignment: {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
+          backgroundColor: "FF0000",
         },
         "1-3": {
           alignment: {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
         },
         "2-0": {
           alignment: {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
         },
         "2-2": {
           alignment: {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
         },
         "2-3": {
           alignment: {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
         },
       },
       sheet: [
@@ -365,11 +346,11 @@ describe("createExcelTableBaseOnDomElement function test", () => {
         },
       ],
     };
-    let result = createExcelTableBaseOnDomElement("#table", null, true);
+    let result = createExcelTableBaseOnDomElement("#table", null, true) as any;
     expect(result.sheet[0].data[0].mergeValue[0][0]).toBe(1);
     const funcStyle = result.sheet[0].styleCellCondition;
     if (funcStyle) {
-      result.sheet[0].headers.forEach((v, i) => {
+      result.sheet[0].headers.forEach((v: any, i: number) => {
         expect(
           funcStyle(
             v as Header,
@@ -377,11 +358,11 @@ describe("createExcelTableBaseOnDomElement function test", () => {
             1,
             i,
             true,
-            Object.keys(result.styles!)
-          )
+            Object.keys(result.styles!),
+          ),
         ).toBe("0-" + i);
       });
-      result.sheet[0].data.forEach((v, i) => {
+      result.sheet[0].data.forEach((v: any, i: number) => {
         for (let index = 0; index < 4; index++) {
           if (index == 1) {
             continue;
@@ -393,8 +374,8 @@ describe("createExcelTableBaseOnDomElement function test", () => {
               2 + i,
               index,
               false,
-              Object.keys(result.styles!)
-            )
+              Object.keys(result.styles!),
+            ),
           ).toBe(1 + i + "-" + index);
         }
       });
@@ -430,84 +411,74 @@ describe("createExcelTableBaseOnDomElement function test", () => {
     </table>
     `;
     createExcelTableBaseOnDomElement("#table");
-    let expectedResult: ExcelTable = {
+    let expectedResult: ExcelTable<any> = {
       styles: {
         "0-0": {
           alignment: {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
         },
         "0-1": {
           alignment: {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
         },
         "0-2": {
           alignment: {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
         },
         "0-3": {
           alignment: {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
         },
         "1-0": {
           alignment: {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
         },
         "1-1": {
           alignment: {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
         },
         "1-2": {
           alignment: {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
+          backgroundColor: "FF0000",
         },
         "1-3": {
           alignment: {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
         },
         "2-0": {
           alignment: {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
         },
         "2-2": {
           alignment: {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
         },
         "2-3": {
           alignment: {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
         },
       },
       sheet: [
@@ -557,12 +528,12 @@ describe("createExcelTableBaseOnDomElement function test", () => {
     let result = createExcelTableBaseOnDomElement(
       null,
       document.querySelector("#table") as HTMLTableElement,
-      true
-    );
+      true,
+    ) as any;
     expect(result.sheet[0].data[0].mergeValue[0][0]).toBe(1);
     const funcStyle = result.sheet[0].styleCellCondition;
     if (funcStyle) {
-      result.sheet[0].headers.forEach((v, i) => {
+      result.sheet[0].headers.forEach((v: any, i: number) => {
         expect(
           funcStyle(
             v as Header,
@@ -570,11 +541,11 @@ describe("createExcelTableBaseOnDomElement function test", () => {
             1,
             i,
             true,
-            Object.keys(result.styles!)
-          )
+            Object.keys(result.styles!),
+          ),
         ).toBe("0-" + i);
       });
-      result.sheet[0].data.forEach((v, i) => {
+      result.sheet[0].data.forEach((v: any, i: number) => {
         for (let index = 0; index < 4; index++) {
           if (index == 1) {
             continue;
@@ -586,8 +557,8 @@ describe("createExcelTableBaseOnDomElement function test", () => {
               2 + i,
               index,
               false,
-              Object.keys(result.styles!)
-            )
+              Object.keys(result.styles!),
+            ),
           ).toBe(1 + i + "-" + index);
         }
       });
@@ -623,14 +594,13 @@ describe("createExcelTableBaseOnDomElement function test", () => {
     </table>
     `;
     createExcelTableBaseOnDomElement("#table");
-    let expectedResult: ExcelTable = {
+    let expectedResult: ExcelTable<any> = {
       styles: {
         "0-0": {
           alignment: {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
           border: {
             right: {
               color: "000000",
@@ -643,7 +613,7 @@ describe("createExcelTableBaseOnDomElement function test", () => {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
+
           border: {
             left: {
               color: "000000",
@@ -656,7 +626,7 @@ describe("createExcelTableBaseOnDomElement function test", () => {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
+
           border: {
             top: {
               color: "000000",
@@ -669,7 +639,7 @@ describe("createExcelTableBaseOnDomElement function test", () => {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
+
           border: {
             bottom: {
               color: "000000",
@@ -682,7 +652,7 @@ describe("createExcelTableBaseOnDomElement function test", () => {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
+
           border: {
             right: {
               color: "000000",
@@ -695,7 +665,7 @@ describe("createExcelTableBaseOnDomElement function test", () => {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
+
           border: {
             left: {
               color: "000000",
@@ -708,7 +678,6 @@ describe("createExcelTableBaseOnDomElement function test", () => {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
           border: {
             top: {
               color: "000000",
@@ -721,7 +690,7 @@ describe("createExcelTableBaseOnDomElement function test", () => {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
+
           border: {
             bottom: {
               color: "000000",
@@ -734,21 +703,18 @@ describe("createExcelTableBaseOnDomElement function test", () => {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
         },
         "2-2": {
           alignment: {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
         },
         "2-3": {
           alignment: {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
         },
       },
       sheet: [
@@ -798,12 +764,12 @@ describe("createExcelTableBaseOnDomElement function test", () => {
     let result = createExcelTableBaseOnDomElement(
       null,
       document.querySelector("#table") as HTMLTableElement,
-      true
-    );
+      true,
+    ) as any;
     expect(result.sheet[0].data[0].mergeValue[0][0]).toBe(1);
     const funcStyle = result.sheet[0].styleCellCondition;
     if (funcStyle) {
-      result.sheet[0].headers.forEach((v, i) => {
+      result.sheet[0].headers.forEach((v: any, i: number) => {
         expect(
           funcStyle(
             v as Header,
@@ -811,11 +777,11 @@ describe("createExcelTableBaseOnDomElement function test", () => {
             1,
             i,
             true,
-            Object.keys(result.styles!)
-          )
+            Object.keys(result.styles!),
+          ),
         ).toBe("0-" + i);
       });
-      result.sheet[0].data.forEach((v, i) => {
+      result.sheet[0].data.forEach((v: any, i: number) => {
         for (let index = 0; index < 4; index++) {
           if (index == 1) {
             continue;
@@ -827,8 +793,8 @@ describe("createExcelTableBaseOnDomElement function test", () => {
               2 + i,
               index,
               false,
-              Object.keys(result.styles!)
-            )
+              Object.keys(result.styles!),
+            ),
           ).toBe(1 + i + "-" + index);
         }
       });
@@ -864,14 +830,14 @@ describe("createExcelTableBaseOnDomElement function test", () => {
     </table>
     `;
     createExcelTableBaseOnDomElement("#table");
-    let expectedResult: ExcelTable = {
+    let expectedResult: ExcelTable<any> = {
       styles: {
         "0-0": {
           alignment: {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
+
           border: {
             right: {
               color: "000000",
@@ -884,7 +850,7 @@ describe("createExcelTableBaseOnDomElement function test", () => {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
+
           border: {
             left: {
               color: "000000",
@@ -897,7 +863,7 @@ describe("createExcelTableBaseOnDomElement function test", () => {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
+
           border: {
             top: {
               color: "000000",
@@ -910,7 +876,7 @@ describe("createExcelTableBaseOnDomElement function test", () => {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
+
           border: {
             bottom: {
               color: "000000",
@@ -923,49 +889,43 @@ describe("createExcelTableBaseOnDomElement function test", () => {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
         },
         "1-1": {
           alignment: {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
         },
         "1-2": {
           alignment: {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
+          backgroundColor: "FF0000",
         },
         "1-3": {
           alignment: {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
         },
         "2-0": {
           alignment: {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
         },
         "2-2": {
           alignment: {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
         },
         "2-3": {
           alignment: {
             ltr: true,
             vertical: "center",
           },
-          bold: false,
         },
       },
       sheet: [
@@ -1019,14 +979,14 @@ describe("createExcelTableBaseOnDomElement function test", () => {
       null,
       document.querySelector("#table") as HTMLTableElement,
       true,
-      (data: number, rowIndex: number, fromHeader: boolean) => {
+      (data: number, _rowIndex: number, fromHeader: boolean) => {
         return fromHeader ? data + 30 : 50;
-      }
-    );
+      },
+    ) as any;
     expect(result.sheet[0].data[0].mergeValue[0][0]).toBe(1);
     const funcStyle = result.sheet[0].styleCellCondition;
     if (funcStyle) {
-      result.sheet[0].headers.forEach((v, i) => {
+      result.sheet[0].headers.forEach((v: any, i: number) => {
         expect(
           funcStyle(
             v as Header,
@@ -1034,11 +994,11 @@ describe("createExcelTableBaseOnDomElement function test", () => {
             1,
             i,
             true,
-            Object.keys(result.styles!)
-          )
+            Object.keys(result.styles!),
+          ),
         ).toBe("0-" + i);
       });
-      result.sheet[0].data.forEach((v, i) => {
+      result.sheet[0].data.forEach((v: any, i: number) => {
         for (let index = 0; index < 4; index++) {
           if (index == 1) {
             continue;
@@ -1050,8 +1010,8 @@ describe("createExcelTableBaseOnDomElement function test", () => {
               2 + i,
               index,
               false,
-              Object.keys(result.styles!)
-            )
+              Object.keys(result.styles!),
+            ),
           ).toBe(1 + i + "-" + index);
         }
       });
@@ -1063,7 +1023,7 @@ describe("createExcelTableBaseOnDomElement function test", () => {
 });
 
 describe("createExcelTableBaseOnDomElement assertion test", () => {
-  test("test for assertion", () => {
+  test("test for assertion", async () => {
     document.body.innerHTML = `
     <table class="table table-primary" id="table">
         <thead>
@@ -1090,8 +1050,8 @@ describe("createExcelTableBaseOnDomElement assertion test", () => {
     </table>
     `;
 
-    expect(() => createExcelTableBaseOnDomElement(null)).toThrowError(
-      "Error: One of the function inputs is required."
+    await expect(() => createExcelTableBaseOnDomElement(null)).toThrow(
+      "Error: One of the function inputs is required.",
     );
   });
 });

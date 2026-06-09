@@ -1,9 +1,9 @@
 import type { Data, ExcelTable } from "../data-model/excel-table";
 function converterCSV(text: string | Data): string {
-  if (typeof text == "undefined" || text == null) {
+  if (typeof text === "undefined" || text === null) {
     return "";
   }
-  if (typeof text != "string") {
+  if (typeof text !== "string") {
     text = String(text);
   }
   let result = text;
@@ -29,10 +29,10 @@ function separator(isText: boolean) {
 function nextLine(line: string, spLength: number) {
   return line.substring(0, line.length - spLength) + "\n";
 }
-export async function generateCSV(
-  excelTable: ExcelTable,
+export async function generateCSV<T extends object = object>(
+  excelTable: ExcelTable<T>,
   asZip: boolean = false,
-  isText: boolean = false
+  isText: boolean = false,
 ) {
   const sp = separator(isText);
   const type = isText ? ".txt" : ".csv";
@@ -42,24 +42,27 @@ export async function generateCSV(
     let content = "";
     let line = "";
     const headers = sheet.headers;
-    let keys = [];
+    let keys: string[] = [];
     let length = headers.length;
-    for (let index = 0; index < length; index++) {
-      const hElement = headers[index];
-      keys.push(hElement.label);
+    headers.forEach((header) => {
+      keys.push(header.label);
       if (!sheet.withoutHeader) {
-        line += converterCSV(hElement.text) + sp;
+        line += converterCSV(header.text) + sp;
       }
+    });
+    if (!sheet.withoutHeader) {
+      content += nextLine(line, spLength);
     }
-    content += nextLine(line, spLength);
     length = sheet.data.length;
     for (let index = 0; index < length; index++) {
       line = "";
       const element = sheet.data[index];
-      keys.forEach((key) => {
-        line += converterCSV(element[key]) + sp;
-      });
-      content += nextLine(line, spLength);
+      if (element) {
+        keys.forEach((key) => {
+          line += converterCSV(element[key as keyof object]) + sp;
+        });
+        content += nextLine(line, spLength);
+      }
     }
     contents.push(content);
   });
@@ -68,31 +71,33 @@ export async function generateCSV(
   }
   const saveAs = await import("file-saver").then((module) => module.saveAs);
   if (asZip) {
-    const Zip = await import("jszip").then((m) => m.default);
-    let zip = new Zip();
+    const JSZipModule = (await import("jszip")).default;
+    const zip = new JSZipModule();
     contents.forEach((content, index) => {
       zip.file("sheet" + (index + 1) + type, content);
     });
     const content = await zip
       .generateAsync({ type: "blob" })
-      .then(function (content) {
+      .then(function (content:Blob) {
         return content;
       });
     saveAs(
       content,
-      (excelTable.fileName ? excelTable.fileName : "tableRecord") + ".zip"
+      (excelTable.fileName ? excelTable.fileName : "tableRecord") + ".zip",
     );
-    return "done";
-  }
-  contents.forEach((content) => {
-    var blob = new Blob([content], {
-      type: "text/" + (isText ? "plain" : "csv") + ";charset=utf-8",
+  } else {
+    contents.forEach((content:string) => {
+      var blob = new Blob([content], {
+        type: "text/" + (isText ? "plain" : "csv") + ";charset=utf-8",
+      });
+      saveAs(
+        blob,
+        (excelTable.fileName ? excelTable.fileName : "tableRecord") + type,
+      );
     });
-    saveAs(
-      blob,
-      (excelTable.fileName ? excelTable.fileName : "tableRecord") + type
-    );
-  });
+  }
+
+  return "done";
 }
 export const exportedForTesting = {
   converterCSV,

@@ -3,7 +3,6 @@ import {
   addGlobalOptionFromExcelTable,
   addGlobalOptions,
   applyConfig,
-  exportedForTesting,
 } from "../../src/utils/store";
 import { ExcelTable, StyleBody } from "../../src/data-model/excel-table";
 
@@ -79,7 +78,7 @@ describe("store function tests", () => {
       },
       sheet: [
         {
-          styleCellCondition(data, fullData, rowIndex, colIndex, fromHeader) {
+          styleCellCondition(_data, _fullData, _rowIndex, colIndex, fromHeader) {
             if (fromHeader) {
               return "headerStyle";
             } else {

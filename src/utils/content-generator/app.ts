@@ -1,3 +1,9 @@
+/**
+ * appGenerator - generates XML for the application properties of an Excel file, including information about the number of worksheets and their names.
+ * @param {number} sheetLength - The number of worksheets.
+ * @param {string} sheetNameApp - The names of the worksheets.
+ * @returns {string} - The XML string for the application properties.
+ */
 export function appGenerator(sheetLength: number, sheetNameApp: string) {
   return (
     '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +

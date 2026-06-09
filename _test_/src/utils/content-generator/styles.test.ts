@@ -10,6 +10,7 @@ let styleMap: StyleMapper = {
     count: 2,
     value: "<cell></cell>",
   },
+  styleIndexMap: {},
   commentSyntax: {
     value: {},
   },
@@ -82,7 +83,7 @@ describe("styleGenerator function tests", () => {
         '<cellStyle xfId="0" name="Normal" builtinId="0" />' +
         "</cellStyles> " +
         '<dxfs count="2" ><conditionalFormatting></conditionalFormatting></dxfs>' +
-        "</styleSheet>"
+        "</styleSheet>",
     );
     expect(styleGenerator(styleMap, false)).toEqual(
       '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
@@ -130,7 +131,7 @@ describe("styleGenerator function tests", () => {
         '<cellStyle xfId="0" name="Normal" builtinId="0" />' +
         "</cellStyles> " +
         '<dxfs count="0" />' +
-        "</styleSheet>"
+        "</styleSheet>",
     );
   });
 });

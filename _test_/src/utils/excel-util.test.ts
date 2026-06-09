@@ -1,5 +1,4 @@
-
-import { describe, expect, test, jest, it } from "@jest/globals";
+import { describe, expect, test } from "@jest/globals";
 import { getColRowBaseOnRefString } from "../../../src/utils/excel-util";
 const cols: string[] = [
   "A",
@@ -42,10 +41,43 @@ describe("getColRowBaseOnRefString data tests", () => {
       row: 0,
       col: 28,
     });
+    expect(getColRowBaseOnRefString("ac1", cols)).toEqual({
+      row: 0,
+      col: 28,
+    });
+    expect(getColRowBaseOnRefString("ei1", cols)).toEqual({
+      row: 0,
+      col: 138,
+    });
+    expect(getColRowBaseOnRefString("aBc41", cols)).toEqual({
+      row: 40,
+      col: 730,
+    });
   });
-  test("use invalid reference input", () => {
-    expect(()=>getColRowBaseOnRefString("21", cols)).toThrow("Invalid Column");
-
-    expect(()=>getColRowBaseOnRefString("AA", cols)).toThrow("Invalid Row");
-});
+  test("invalid reference", () => {
+    expect(() => getColRowBaseOnRefString("21", cols)).toThrow(
+      "Invalid Reference",
+    );
+    expect(() => getColRowBaseOnRefString("AA", cols)).toThrow(
+      "Invalid Reference",
+    );
+    expect(() => getColRowBaseOnRefString("1X1", cols)).toThrow(
+      "Invalid Reference",
+    );    
+    expect(() => getColRowBaseOnRefString("😍1", cols)).toThrow(
+      "Invalid Reference",
+    );
+    expect(() => getColRowBaseOnRefString(".1", cols)).toThrow(
+      "Invalid Reference",
+    );
+    expect(() => getColRowBaseOnRefString("", cols)).toThrow(
+      "Invalid Reference",
+    );
+    expect(() => getColRowBaseOnRefString("C", cols)).toThrow(
+      "Invalid Reference",
+    );
+    expect(() => getColRowBaseOnRefString("1", cols)).toThrow(
+      "Invalid Reference",
+    );
+  });
 });

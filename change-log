@@ -1,7 +1,29 @@
-## Version 7.0.1 (2025-03-13)
+## Version 8.0.0 (2026-06-09)
+
+### Improvements
+
+- Added a compression option to reduce generated file sizes.
+- Updated package dependencies and Node.js versions to address known vulnerabilities.
+- Added end-to-end (E2E) and functional testing.
+- Improved unit test coverage.
+- Started work on API and documentation extraction.
+- Added generic type support for data models.
+- Enabled stricter TypeScript type checking.
+
+
+### New Features
+
+- `mainFontFamily` — Sets the default font family for the workbook.
+- `hidden` — Hides all sheet data.
+- `useCompression` — Controls data compression. Compression is enabled by default starting with version 8.
+- `dataValidations` — Defines validation rules for worksheet cells.
+- `zoomScale` — Sets the worksheet zoom level.
 
 ### Bug Fixes
 
-- Related to formating. (more info-PR)[https://github.com/mohammadrezaeicode/mr-excel-repo/pull/5/] (by [Sergio Fernández](https://github.com/xergiodf))
-- Data range error.
+- Resolved file reading issues.
+- Enhanced type safety for `themeBaseGenerate`.
+- Fixed CSV generation issues in `generateCSV`.
+- Resolved issues when creating Excel tables with `createExcelTableBaseOnDomElement`.
+
 

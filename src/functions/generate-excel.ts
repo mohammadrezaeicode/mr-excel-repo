@@ -1,15 +1,19 @@
-import {
-  type AlignmentOptionKey,
-  type AsTableOption,
-  type ConditionalFormatting,
-  type ExcelTable,
-  type Formula,
-  type HeaderFooterOption,
-  type MergeRowConditionMap,
-  type ProtectionOptionKey,
-  type RowMap,
-  type StyleMapper,
-  type Buffer,
+import type {
+  AsTableOption,
+  ConditionalFormatting,
+  ExcelTable,
+  Formula,
+  HeaderFooterOption,
+  MergeRowConditionMap,
+  ProtectionOptionKey,
+  RowMap,
+  StyleMapper,
+  Buffer,
+  SheetProcessResult,
+  CellStrReference,
+  ShapeRC,
+  Data,
+  ExcelTableReturnType,
 } from "../data-model/excel-table";
 import { generateColumnName } from "../utils/generate-column-name";
 import { styleGenerator } from "../utils/content-generator/styles";
@@ -30,16 +34,12 @@ import {
 import { toDataURL2 } from "../utils/image";
 import { getColRowBaseOnRefString } from "../utils/excel-util";
 import { specialCharacterConverter } from "../utils/special-character";
-import { applyConfig } from "../utils/store";
 import type JSZip from "jszip";
 import { generateDropDown } from "../utils/drop-down-utils";
-export async function generateExcel(
-  data: ExcelTable,
-  styleKey: string = ""
-): Promise<string | number[] | Blob | Buffer | undefined> {
-  if (typeof styleKey == "string" && styleKey.length > 0) {
-    data = applyConfig(styleKey, data);
-  }
+import { processDataValidation } from "../utils/data-validation.utils";
+export async function generateExcel<T extends object = object>(
+  data: ExcelTable<T>
+): ExcelTableReturnType {
   if (typeof data.creator == "string" && data.creator.trim().length <= 0) {
     throw 'length of "creator" most be bigger then 0';
   }
@@ -74,36 +74,31 @@ export async function generateExcel(
   if (data.numberOfColumn && data.numberOfColumn > 25) {
     cols = generateColumnName(cols, data.numberOfColumn);
   }
-  const module = await import("jszip");
-  const JSZip1 = module.default;
-  let zip = new JSZip1();
-  if (!data.sheet) {
-    data.sheet = [
-      {
-        headers: [],
-        data: [],
-      },
-    ];
-  }
-  const sheetLength = data.sheet.length;
+  const JSZipModule = (await import("jszip")).default;
+  let zip = new JSZipModule();
+  const sheetsData = data.sheet ?? [
+    {
+      headers: [],
+      data: [],
+    },
+  ];
+  const sheetLength = sheetsData.length;
   // xl
-  let xlFolder = zip.folder("xl");
+  const xlFolder: JSZip | null = zip.folder("xl");
   let xl_media_Folder: JSZip | null | undefined = null;
 
   let xl_drawingsFolder: JSZip | null | undefined = null;
   let xl_drawings_relsFolder: JSZip | null | undefined = null;
-  if (!data.styles) {
-    data.styles = {};
-  }
+  const inputStyle = { ...(data.styles ?? {}) };
   if (data.addDefaultTitleStyle) {
-    data.styles["titleStyle"] = {
+    inputStyle["titleStyle"] = {
       alignment: {
         horizontal: "center",
         vertical: "center",
       },
     };
   }
-  const styleKeys = Object.keys(data.styles);
+  const styleKeys = Object.keys(inputStyle);
   const defaultCommentStyle = defaultCellCommentStyle;
   const addCF = data.activateConditionalFormatting
     ? data.activateConditionalFormatting
@@ -111,10 +106,10 @@ export async function generateExcel(
   const headerFooterStyle: Record<string, string> = {};
   const cFMapIndex: Record<string, number> = {};
   let styleMapper: StyleMapper = styleKeys.reduce(
-    (res: StyleMapper, cur, index) => {
-      const styleObject = data.styles![cur];
+    (res: StyleMapper, cur) => {
+      const styleObject = inputStyle[cur];
       if (
-        styleObject.type &&
+        styleObject?.type &&
         (styleObject.type == "headerFooter" || styleObject.type == "HF")
       ) {
         let result = "";
@@ -155,7 +150,7 @@ export async function generateExcel(
       }
       if (
         addCF &&
-        typeof styleObject.type == "string" &&
+        typeof styleObject?.type === "string" &&
         styleObject.type &&
         (styleObject.type == "conditionalFormatting" ||
           styleObject.type.toUpperCase() == "CF")
@@ -178,7 +173,7 @@ export async function generateExcel(
         borderIndex: 0,
         formatIndex: 0,
       };
-      if (styleObject.backgroundColor) {
+      if (styleObject?.backgroundColor) {
         let fgConvertor = convertToHex(styleObject.backgroundColor, isBackend);
         indexes.fillIndex = res.fill.count;
         res.fill.count++;
@@ -193,13 +188,13 @@ export async function generateExcel(
           "</fill>";
       }
       if (
-        styleObject.color ||
-        styleObject.fontFamily ||
-        styleObject.size ||
-        styleObject.bold ||
-        styleObject.italic ||
-        styleObject.underline ||
-        styleObject.doubleUnderline
+        styleObject?.color ||
+        styleObject?.fontFamily ||
+        styleObject?.size ||
+        styleObject?.bold ||
+        styleObject?.italic ||
+        styleObject?.underline ||
+        styleObject?.doubleUnderline
       ) {
         const colors = convertToHex(styleObject.color, isBackend);
 
@@ -240,34 +235,43 @@ export async function generateExcel(
           "</rPr>";
       }
       let endPart = "/>";
-      if (styleObject.alignment) {
-        if (styleObject.alignment.rtl) {
-          styleObject.alignment["readingOrder"] = 2;
-        }
-        delete styleObject.alignment.rtl;
-        if (styleObject.alignment.ltr) {
-          styleObject.alignment["readingOrder"] = 1;
-        }
-        delete styleObject.alignment.ltr;
+      if (styleObject?.alignment) {
+        let directionHasBeenSet = false;
         endPart =
           ' applyAlignment="1">' +
           "<alignment " +
-          Object.keys(styleObject.alignment).reduce((al, alignmentOption) => {
-            return (
-              al +
-              " " +
-              alignmentOption +
-              '="' +
-              styleObject.alignment![alignmentOption! as AlignmentOptionKey] +
-              '" '
-            );
-          }, "") +
+          Object.entries(styleObject.alignment).reduce(
+            (al, [alignmentOptionName, alignmentOptionValue]) => {
+              if (alignmentOptionName === "rtl") {
+                alignmentOptionName = "readingOrder";
+                alignmentOptionValue = 2;
+              } else if (alignmentOptionName === "ltr") {
+                alignmentOptionName = "readingOrder";
+                alignmentOptionValue = 1;
+              }
+              if (alignmentOptionName === "readingOrder") {
+                directionHasBeenSet = true;
+              }
+              if (directionHasBeenSet) {
+                return al;
+              }
+              return (
+                al +
+                " " +
+                alignmentOptionName +
+                '="' +
+                alignmentOptionValue +
+                '" '
+              );
+            },
+            "",
+          ) +
           " />" +
           "</xf>";
       }
-      const borderObj = styleObject.border;
+      const borderObj = styleObject?.border;
       let borderStr = "";
-      if (typeof borderObj == "object") {
+      if (typeof borderObj === "object") {
         if (borderObj.left || borderObj.full) {
           borderStr +=
             '<left style="' +
@@ -276,7 +280,7 @@ export async function generateExcel(
             '<color rgb="' +
             convertToHex(
               (borderObj.left || borderObj.full)!.color,
-              isBackend
+              isBackend,
             )!.replace("#", "") +
             '" />' +
             "</left>";
@@ -289,7 +293,7 @@ export async function generateExcel(
             '<color rgb="' +
             convertToHex(
               (borderObj.right || borderObj.full)!.color,
-              isBackend
+              isBackend,
             )!.replace("#", "") +
             '" />' +
             "</right>";
@@ -302,7 +306,7 @@ export async function generateExcel(
             '<color rgb="' +
             convertToHex(
               (borderObj.top || borderObj.full)!.color,
-              isBackend
+              isBackend,
             )!.replace("#", "") +
             '" />' +
             "</top>";
@@ -315,7 +319,7 @@ export async function generateExcel(
             '<color rgb="' +
             convertToHex(
               (borderObj.bottom || borderObj.full)!.color,
-              isBackend
+              isBackend,
             )!.replace("#", "") +
             '" />' +
             "</bottom>";
@@ -325,7 +329,7 @@ export async function generateExcel(
         res.border.value +=
           "<border>" + borderStr + "<diagonal />" + "</border>";
       }
-      if (styleObject.format) {
+      if (styleObject?.format) {
         const format = formatMap[styleObject.format];
         if (format) {
           indexes.formatIndex = format.key;
@@ -352,7 +356,7 @@ export async function generateExcel(
         (indexes.fontIndex >= 0 ? ' applyFont="1" ' : "") +
         (indexes.formatIndex > 0 ? ' applyNumberFormat="1" ' : "") +
         endPart;
-      data.styles![cur].index = res.cell.count;
+      res.styleIndexMap[cur] = res.cell.count;
       res.cell.count++;
       return res;
     },
@@ -362,6 +366,7 @@ export async function generateExcel(
         value:
           '<dxf><font><color rgb="FF9C0006"/></font><fill> <patternFill> <bgColor rgb="FFFFC7CE"/></patternFill></fill></dxf>',
       },
+      styleIndexMap: {},
       commentSyntax: {
         value: {},
       },
@@ -385,7 +390,7 @@ export async function generateExcel(
         count: 2,
         value: "",
       },
-    }
+    },
   );
 
   xlFolder?.file("styles.xml", styleGenerator(styleMapper, addCF));
@@ -400,9 +405,7 @@ export async function generateExcel(
     [key: string]: string;
   } = {};
   const mapData: {
-    [k: string]: {
-      [k2: string]: string | number | boolean | object;
-    };
+    [key: string]: SheetProcessResult;
   } = {};
   let sheetNameApp = "";
   let indexId = 4;
@@ -410,10 +413,6 @@ export async function generateExcel(
   let activeTabIndex = -1;
   let arrTypes: string[] = [];
   let imageCounter = 1;
-  interface ShapeRC {
-    row: string | number;
-    col: string | number;
-  }
   const formCtrlMap = {
     checkbox:
       '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
@@ -455,10 +454,13 @@ export async function generateExcel(
   let needCalcChain = false;
   let xl_tableFolder: JSZip | null | undefined = null;
   for (let index = 0; index < sheetLength; index++) {
-    const sheetData = data.sheet[index];
+    const sheetData = sheetsData[index];
+    if (!sheetData) {
+      continue;
+    }
     const sheetDataId = index + 1;
     let rowMap: RowMap = {};
-    let sheetDimensions = {
+    let sheetDimensions: CellStrReference = {
       start: "",
       end: "",
     };
@@ -483,7 +485,7 @@ export async function generateExcel(
     let formulaSheetObj: Formula = Object.assign({}, sheetData.formula);
     let conditionalFormatting: ConditionalFormatting[] = Object.assign(
       [],
-      sheetData.conditionalFormatting
+      sheetData.conditionalFormatting,
     );
     let hasComment = false;
     let commentAuthor: string[] = [];
@@ -496,6 +498,17 @@ export async function generateExcel(
     let sheetHeaderFooter = "";
     let isPortrait = false;
     let sheetBreakLine = "";
+    if (sheetData.zoomScale) {
+      sheetViewProperties +=
+        (sheetData.zoomScale.startAt
+          ? ' topLeftCell="' + sheetData.zoomScale.startAt + '" '
+          : "") +
+        '  zoomScale="' +
+        sheetData.zoomScale.scale +
+        '" zoomScaleNormal="' +
+        sheetData.zoomScale.scale +
+        '"  ';
+    }
     if (sheetData.rtl) {
       sheetViewProperties += ' rightToLeft="1" ';
     }
@@ -513,7 +526,7 @@ export async function generateExcel(
           pageBreak.row.reduce(
             (result, current) =>
               result + '<brk id="' + current + '" max="16383" man="1"/>',
-            ""
+            "",
           ) +
           "</rowBreaks>";
       }
@@ -529,7 +542,7 @@ export async function generateExcel(
           pageBreak.column.reduce(
             (result, current) =>
               result + '<brk id="' + current + '" max="16383" man="1"/>',
-            ""
+            "",
           ) +
           "</colBreaks>";
       }
@@ -695,25 +708,32 @@ export async function generateExcel(
             if (fIndex > cols.length - 1) {
               cols = generateColumnName(cols, fIndex);
             }
+            //TODO
             split = {
               type: "V",
               startAt: {
-                r: cols[fIndex] + 1,
+                r: cols[fIndex]! + 1,
               },
               split: fIndex,
             };
           } else if (frozen.type == "B" || frozen.type == "BOTH") {
             let two = "";
             let splitO;
-            if (typeof frozen.index == "number") {
-              splitO = frozen.index;
-              two = cols[frozen.index] + (frozen.index + 1);
+            if (typeof frozen.index === "number") {
+              splitO = frozen.index as number;
+              if (!cols[splitO]) {
+                cols = generateColumnName(cols, splitO);
+              }
+              two = cols[splitO]! + (frozen.index + 1);
             } else {
               splitO = {
                 y: frozen.index.r,
                 x: frozen.index.c,
               };
-              two = cols[frozen.index.c] + (frozen.index.r + 1);
+              if (!cols[frozen.index.c]) {
+                cols = generateColumnName(cols, frozen.index.c as number);
+              }
+              two = cols[frozen.index.c]! + (frozen.index.r + 1);
             }
             split = {
               startAt: {
@@ -805,7 +825,7 @@ export async function generateExcel(
               cols[linkAddress.col] +
               "$" +
               (linkAddress.row + 1) +
-              '"'
+              '"',
           );
         } else {
           formCtlStr = formCtlStr.replace("**fmlaLink**", "");
@@ -1025,14 +1045,14 @@ export async function generateExcel(
           refString +
             ":" +
             cols[left + consommeCol - 1] +
-            (rowCount + consommeRow + top)
+            (rowCount + consommeRow + top),
         );
         if (typeof commentTitle != "undefined") {
           hasComment = true;
           const commentObj = commentConvertor(
             commentTitle,
             styleMapper.commentSyntax.value,
-            defaultCommentStyle
+            defaultCommentStyle,
           );
           let authorId = commentAuthor.length;
           if (commentObj.hasAuthor && typeof commentObj.author != "undefined") {
@@ -1052,7 +1072,7 @@ export async function generateExcel(
             refString,
             commentObj.commentStr,
             commentObj.commentStyle,
-            authorId
+            authorId,
           );
         }
         if (typeof title.text == "string") {
@@ -1069,8 +1089,8 @@ export async function generateExcel(
               '<c r="' +
               refString +
               '" ' +
-              (data.styles[tStyle]
-                ? ' s="' + data.styles[tStyle].index + '" '
+              (styleMapper.styleIndexMap[tStyle]
+                ? ' s="' + styleMapper.styleIndexMap[tStyle] + '" '
                 : "") +
               ' t="s"><v>' +
               sharedStringIndex +
@@ -1089,8 +1109,8 @@ export async function generateExcel(
             '<c r="' +
             refString +
             '" ' +
-            (data.styles[tStyle]
-              ? ' s="' + data.styles[tStyle].index + '" '
+            (styleMapper.styleIndexMap[tStyle]
+              ? ' s="' + styleMapper.styleIndexMap[tStyle] + '" '
               : "") +
             ' t="s"><v>' +
             sharedStringIndex +
@@ -1102,7 +1122,7 @@ export async function generateExcel(
             sharedString += generateMultiStyleByArray(
               title.multiStyleValue,
               styleMapper.commentSyntax.value,
-              tStyle
+              tStyle,
             );
           } else {
             sharedString +=
@@ -1158,10 +1178,13 @@ export async function generateExcel(
             v,
             null,
             innerIndex,
-            true
+            true,
           );
           if (result === true) {
-            mergeRowConditionMap[cols[innerIndex]] = {
+            if (!cols[innerIndex]) {
+              cols = generateColumnName(cols, innerIndex as number);
+            }
+            mergeRowConditionMap[cols[innerIndex]!] = {
               inProgress: true,
               start: rowCount,
             };
@@ -1178,7 +1201,7 @@ export async function generateExcel(
               rowCount,
               innerIndex,
               true,
-              styleKeys
+              styleKeys,
             ) || headerStyleKey;
         }
         if (v.size && v.size > 0) {
@@ -1202,7 +1225,7 @@ export async function generateExcel(
             v.label,
             rowCount,
             innerIndex,
-            true
+            true,
           );
           if (
             typeof checkCommentCondition == "string" ||
@@ -1217,7 +1240,7 @@ export async function generateExcel(
           const commentObj = commentConvertor(
             v.comment,
             styleMapper.commentSyntax.value,
-            defaultCommentStyle
+            defaultCommentStyle,
           );
           let authorId = commentAuthor.length;
           if (commentObj.hasAuthor && typeof commentObj.author != "undefined") {
@@ -1237,7 +1260,7 @@ export async function generateExcel(
             refString,
             commentObj.commentStr,
             commentObj.commentStyle,
-            authorId
+            authorId,
           );
         }
         const formula = formulaSheetObj && formulaSheetObj[refString];
@@ -1246,7 +1269,7 @@ export async function generateExcel(
             refString,
             formula,
             sheetDataId,
-            data.styles
+            styleMapper.styleIndexMap,
           );
           if (f.needCalcChain) {
             needCalcChain = true;
@@ -1260,8 +1283,8 @@ export async function generateExcel(
             cols[innerIndex] +
             rowCount +
             '" ' +
-            (headerStyleKey && data.styles && data.styles[headerStyleKey]
-              ? ' s="' + data.styles[headerStyleKey].index + '" '
+            (headerStyleKey && styleMapper.styleIndexMap[headerStyleKey]
+              ? ' s="' + styleMapper.styleIndexMap[headerStyleKey] + '" '
               : "") +
             " " +
             't="s"><v>' +
@@ -1274,7 +1297,7 @@ export async function generateExcel(
               v.label,
               rowCount,
               innerIndex,
-              true
+              true,
             );
             if (multi) {
               v.multiStyleValue = multi;
@@ -1284,7 +1307,7 @@ export async function generateExcel(
             sharedString += generateMultiStyleByArray(
               v.multiStyleValue,
               styleMapper.commentSyntax.value,
-              headerStyleKey ? headerStyleKey : ""
+              headerStyleKey ? headerStyleKey : "",
             );
           } else {
             sharedString +=
@@ -1332,26 +1355,34 @@ export async function generateExcel(
         sheetDataString += titleRow;
       }
       if (Array.isArray(sheetData.data)) {
-        const keyOutline =
+        const keyOutline: keyof Data<T> = (
           sheetData.mapSheetDataOption &&
           sheetData.mapSheetDataOption.outlineLevel
             ? sheetData.mapSheetDataOption.outlineLevel
-            : "outlineLevel";
-        const keyHidden =
+            : "outlineLevel"
+        ) as keyof Data<T>;
+        const keyHidden: keyof Data<T> = (
           sheetData.mapSheetDataOption && sheetData.mapSheetDataOption.hidden
             ? sheetData.mapSheetDataOption.hidden
-            : "hidden";
-        const keyHeight =
+            : "hidden"
+        ) as keyof Data<T>;
+        const keyHeight: keyof Data<T> = (
           sheetData.mapSheetDataOption && sheetData.mapSheetDataOption.height
             ? sheetData.mapSheetDataOption.height
-            : "height";
+            : "height"
+        ) as keyof Data<T>;
         const rowLength = sheetData.data.length;
         sheetData.data.forEach((mData, innerIndex) => {
-          if (mData.mergeType) {
-            for (let iIndex = 0; iIndex < mData.mergeType.length; iIndex++) {
-              const mergeType = mData.mergeType[iIndex];
-              const mergeStart = mData.mergeStart[iIndex];
-              const mergeValue = mData.mergeValue[index];
+          //TODO
+          if (mData["mergeType" as keyof T]) {
+            for (
+              let iIndex = 0;
+              iIndex < (mData["mergeType" as keyof T] as []).length;
+              iIndex++
+            ) {
+              const mergeType = mData["mergeType" as keyof object][iIndex];
+              const mergeStart = mData["mergeStart" as keyof object][iIndex];
+              const mergeValue = mData["mergeValue" as keyof object][index];
               let mergeStr = "";
               if (mergeType == "both") {
                 mergeStr =
@@ -1408,11 +1439,11 @@ export async function generateExcel(
             if (shiftCount) {
               keyIndex += shiftCount;
             }
-            const cellValue = mData[key] * 1;
-            let dataEl =
+            const cellValue = mData[key as keyof object] * 1;
+            let dataEl: number | boolean | string =
               sheetData.convertStringToNumber && !isNaN(cellValue)
                 ? cellValue
-                : mData[key];
+                : mData[key as keyof object];
             if (typeof dataEl === "boolean") {
               dataEl = dataEl + "";
             }
@@ -1428,7 +1459,7 @@ export async function generateExcel(
                   rowCount,
                   keyIndex,
                   false,
-                  styleKeys
+                  styleKeys,
                 ) || rowStyle;
             }
             if (
@@ -1439,9 +1470,12 @@ export async function generateExcel(
                 dataEl,
                 key,
                 keyIndex,
-                false
+                false,
               );
-              const columnKey = cols[keyIndex];
+              if (!cols[keyIndex]) {
+                cols = generateColumnName(cols, keyIndex);
+              }
+              const columnKey = cols[keyIndex]!;
 
               let item = mergeRowConditionMap[columnKey];
               if (result === true) {
@@ -1454,7 +1488,7 @@ export async function generateExcel(
               } else {
                 if (item && item.inProgress) {
                   mergesCellArray.push(
-                    columnKey + item.start + ":" + columnKey + (rowCount - 1)
+                    columnKey + item.start + ":" + columnKey + (rowCount - 1),
                   );
 
                   mergeRowConditionMap[columnKey] = {
@@ -1475,7 +1509,7 @@ export async function generateExcel(
                 key,
                 rowCount,
                 keyIndex,
-                false
+                false,
               );
               if (
                 typeof checkCommentCondition == "string" ||
@@ -1492,9 +1526,9 @@ export async function generateExcel(
               const cellComment = mData.comment[key];
               hasComment = true;
               const commentObj = commentConvertor(
-                cellComment,
+                cellComment ?? "",
                 styleMapper.commentSyntax.value,
-                defaultCommentStyle
+                defaultCommentStyle,
               );
               if (
                 commentObj.hasAuthor &&
@@ -1523,12 +1557,17 @@ export async function generateExcel(
                 refString,
                 commentObj.commentStr,
                 commentObj.commentStyle,
-                authorId
+                authorId,
               );
             }
             const formula = formulaSheetObj && formulaSheetObj[refString];
             if (formula) {
-              const f = generateCellRowCol(refString, formula, sheetDataId);
+              const f = generateCellRowCol(
+                refString,
+                formula,
+                sheetDataId,
+                styleMapper.styleIndexMap,
+              );
               if (f.needCalcChain) {
                 needCalcChain = true;
                 calcChainValue += f.chainCell;
@@ -1543,8 +1582,8 @@ export async function generateExcel(
                   cols[keyIndex] +
                   rowCount +
                   '" t="s" ' +
-                  (cellStyle && data.styles && data.styles[cellStyle]
-                    ? 's="' + data.styles[cellStyle].index + '"'
+                  (cellStyle && styleMapper.styleIndexMap[cellStyle]
+                    ? 's="' + styleMapper.styleIndexMap[cellStyle] + '"'
                     : "") +
                   "><v>" +
                   sharedStringIndex +
@@ -1558,7 +1597,7 @@ export async function generateExcel(
                     key,
                     rowCount,
                     keyIndex,
-                    false
+                    false,
                   );
                   if (multi) {
                     if (
@@ -1579,7 +1618,7 @@ export async function generateExcel(
                   sharedString += generateMultiStyleByArray(
                     mData.multiStyleValue[key],
                     styleMapper.commentSyntax.value,
-                    cellStyle ? cellStyle : ""
+                    cellStyle ? cellStyle : "",
                   );
                 } else {
                   sharedString +=
@@ -1593,8 +1632,8 @@ export async function generateExcel(
                   cols[keyIndex] +
                   rowCount +
                   '" ' +
-                  (cellStyle && data.styles && data.styles[cellStyle]
-                    ? 's="' + data.styles[cellStyle].index + '"'
+                  (cellStyle && styleMapper.styleIndexMap[cellStyle]
+                    ? 's="' + styleMapper.styleIndexMap[cellStyle] + '"'
                     : "") +
                   "><v>" +
                   dataEl +
@@ -1605,11 +1644,9 @@ export async function generateExcel(
             }
           });
           if (rowLength - 1 == innerIndex) {
-            Object.keys(mergeRowConditionMap).forEach((v) => {
-              if (mergeRowConditionMap[v].inProgress) {
-                mergesCellArray.push(
-                  v + mergeRowConditionMap[v].start + ":" + v + rowCount
-                );
+            Object.entries(mergeRowConditionMap).forEach(([key, value]) => {
+              if (value.inProgress) {
+                mergesCellArray.push(key + value.start + ":" + key + rowCount);
               }
             });
           }
@@ -1644,13 +1681,16 @@ export async function generateExcel(
         headerFormula.forEach((v) => {
           const shiftLeftValue = sheetData.shiftLeft ? sheetData.shiftLeft : 0;
           const header = sheetData.headers[v - shiftLeftValue];
+          if (!header?.formula) {
+            return;
+          }
           const columnRef = cols[v];
-          formulaSheetObj![columnRef + "" + rowCount] = {
+          formulaSheetObj[columnRef + "" + rowCount] = {
             start: sheetData.withoutHeader ? columnRef + "1" : columnRef + "2",
             end: columnRef + "" + (rowCount - 1),
-            type: header.formula!.type,
-            ...(header.formula!.styleId
-              ? { styleId: header.formula!.styleId }
+            type: header.formula.type,
+            ...(header.formula.styleId
+              ? { styleId: header.formula.styleId }
               : {}),
           };
         });
@@ -1658,7 +1698,7 @@ export async function generateExcel(
       if (headerConditionalFormatting.length > 0 && addCF) {
         headerConditionalFormatting.forEach((v) => {
           const header = sheetData.headers[v];
-          if (!header.conditionalFormatting) {
+          if (!header?.conditionalFormatting) {
             return;
           }
           conditionalFormatting.push({
@@ -1670,18 +1710,21 @@ export async function generateExcel(
       }
       if (formulaSheetObj) {
         const remindFormulaKey = Object.keys(formulaSheetObj).sort((a, b) =>
-          a > b ? 1 : -1
+          a > b ? 1 : -1,
         );
         if (remindFormulaKey.length) {
           let rF: {
             [row: number]: string;
           } = {};
           remindFormulaKey.forEach((v) => {
+            if (!formulaSheetObj[v]) {
+              return;
+            }
             const f = generateCellRowCol(
               v,
-              formulaSheetObj![v],
+              formulaSheetObj[v],
               sheetDataId,
-              data.styles
+              styleMapper.styleIndexMap,
             );
             if (f.needCalcChain) {
               needCalcChain = true;
@@ -1693,11 +1736,10 @@ export async function generateExcel(
               rF[f.row] += f.cell;
             }
           });
-          Object.keys(rF)
-            .sort((a, b) => (+a > +b ? 1 : -1))
-            .forEach((v) => {
+          Object.entries(rF)
+            .sort((a, b) => (+a[0] > +b[0] ? 1 : -1))
+            .forEach(([v, l]) => {
               const val = v as keyof object;
-              const l = rF[val];
               let rowDataMap = rowMap[val];
               if (rowDataMap) {
                 const body =
@@ -1706,7 +1748,7 @@ export async function generateExcel(
                   l +
                   rowDataMap.endTag;
                 let reg = new RegExp(
-                  rowDataMap.startTag + "[\\n\\s\\S]*?</row>"
+                  rowDataMap.startTag + "[\\n\\s\\S]*?</row>",
                 );
                 sheetDataString = sheetDataString.replace(reg, body);
               } else {
@@ -1848,18 +1890,12 @@ export async function generateExcel(
           result.start.mL = 0;
           result.start.mT = 0;
           if (margin) {
-            if (margin.right || margin.all) {
-              result.end.mR = margin.right || margin.all;
-            }
-            if (margin.bottom || margin.all) {
-              result.end.mB = margin.bottom || margin.all;
-            }
-            if (margin.left || margin.all) {
-              result.start.mL = margin.left || margin.all;
-            }
-            if (margin.top || margin.all) {
-              result.start.mT = margin.top || margin.all;
-            }
+            result.end.mR = margin.right ?? margin.all ?? 0;
+            result.end.mB = margin.bottom ?? margin.all ?? 0;
+
+            result.start.mL = margin.left ?? margin.all ?? 0;
+
+            result.start.mT = margin.top ?? margin.all ?? 0;
           }
 
           if (type == "one") {
@@ -2186,6 +2222,7 @@ export async function generateExcel(
       checkboxSheetContent,
       checkboxShape,
       commentString,
+      sheetValidation: sheetData.dataValidations ?? [],
       commentAuthor,
       shapeCommentRowCol,
       splitOption,
@@ -2208,10 +2245,12 @@ export async function generateExcel(
         : "",
       merges:
         mergesCellArray.length > 0
-          ? mergesCellArray.reduce((mResult, currRef) => {
-              return mResult + ' <mergeCell ref="' + currRef + '" />';
-            }, '<mergeCells count="' + mergesCellArray.length + '">') +
-            " </mergeCells>"
+          ? mergesCellArray.reduce(
+              (mResult, currRef) => {
+                return mResult + ' <mergeCell ref="' + currRef + '" />';
+              },
+              '<mergeCells count="' + mergesCellArray.length + '">',
+            ) + " </mergeCells>"
           : "",
       selectedView: !!sheetData.selected,
       sheetSortFilter,
@@ -2244,7 +2283,7 @@ export async function generateExcel(
       "calcChain.xml",
       '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<calcChain xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
         calcChainValue +
-        "</calcChain>"
+        "</calcChain>",
     );
   }
 
@@ -2264,7 +2303,7 @@ export async function generateExcel(
       ' <Relationship Id="rId1"' +
       '  Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument"' +
       '  Target="xl/workbook.xml" />' +
-      "</Relationships>"
+      "</Relationships>",
   );
 
   let docPropsFolder = zip.folder("docProps");
@@ -2285,7 +2324,7 @@ export async function generateExcel(
           data.modified +
           "</dcterms:modified>"
         : "") +
-      "</cp:coreProperties>"
+      "</cp:coreProperties>",
   );
   docPropsFolder?.file("app.xml", appGenerator(sheetLength, sheetNameApp));
 
@@ -2303,9 +2342,11 @@ export async function generateExcel(
       ' xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac"' +
       ' xmlns:xm="http://schemas.microsoft.com/office/excel/2006/main">' +
       " <workbookPr />" +
-      (selectedAdded
-        ? '<bookViews><workbookView xWindow="3540" yWindow="1365" windowWidth="21600" windowHeight="11325" activeTab="' +
-          activeTabIndex +
+      (selectedAdded || data.hidden
+        ? "<bookViews><workbookView " +
+          (data.hidden ? 'visibility="hidden" ' : "") +
+          'xWindow="3540" yWindow="1365" windowWidth="21600" windowHeight="11325" activeTab="' +
+          (activeTabIndex ?? 0) +
           '"/></bookViews>'
         : "") +
       " <sheets>" +
@@ -2314,7 +2355,7 @@ export async function generateExcel(
       " </sheets>" +
       " <definedNames />" +
       " <calcPr />" +
-      "</workbook>"
+      "</workbook>",
   );
   xlFolder?.file(
     "sharedStrings.xml",
@@ -2326,12 +2367,12 @@ export async function generateExcel(
       '">' +
       " " +
       sharedString +
-      "</sst>"
+      "</sst>",
   );
 
   //xl/_rels
 
-  let xl__relsFolder = xlFolder?.folder("_rels");
+  const xl__relsFolder = xlFolder?.folder("_rels");
   xl__relsFolder?.file(
     "workbook.xml.rels",
     '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
@@ -2348,7 +2389,7 @@ export async function generateExcel(
       " " +
       workbookRelString +
       " " +
-      "</Relationships>"
+      "</Relationships>",
   );
 
   //xl/theme
@@ -2356,7 +2397,13 @@ export async function generateExcel(
   xl_themeFolder?.file(
     "theme1.xml",
     '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
-      '<a:theme xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"  name="Office Theme"><a:themeElements><a:clrScheme name="Office"><a:dk1><a:sysClr val="windowText" lastClr="000000"/></a:dk1><a:lt1><a:sysClr val="window" lastClr="FFFFFF"/></a:lt1><a:dk2><a:srgbClr val="44546A"/></a:dk2><a:lt2><a:srgbClr val="E7E6E6"/></a:lt2><a:accent1><a:srgbClr val="5B9BD5"/></a:accent1><a:accent2><a:srgbClr val="ED7D31"/></a:accent2><a:accent3><a:srgbClr val="A5A5A5"/></a:accent3><a:accent4><a:srgbClr val="FFC000"/></a:accent4><a:accent5><a:srgbClr val="4472C4"/></a:accent5><a:accent6><a:srgbClr val="70AD47"/></a:accent6><a:hlink><a:srgbClr val="0563C1"/></a:hlink><a:folHlink><a:srgbClr val="954F72"/></a:folHlink></a:clrScheme><a:fontScheme name="Office"><a:majorFont><a:latin typeface="Calibri Light" panose="020F0302020204030204"/><a:ea typeface=""/><a:cs typeface=""/><a:font script="Jpan" typeface="游ゴシック Light"/><a:font script="Hang" typeface="맑은 고딕"/><a:font script="Hans" typeface="等线 Light"/><a:font script="Hant" typeface="新細明體"/><a:font script="Arab" typeface="Times New Roman"/><a:font script="Hebr" typeface="Times New Roman"/><a:font script="Thai" typeface="Tahoma"/><a:font script="Ethi" typeface="Nyala"/><a:font script="Beng" typeface="Vrinda"/><a:font script="Gujr" typeface="Shruti"/><a:font script="Khmr" typeface="MoolBoran"/><a:font script="Knda" typeface="Tunga"/><a:font script="Guru" typeface="Raavi"/><a:font script="Cans" typeface="Euphemia"/><a:font script="Cher" typeface="Plantagenet Cherokee"/><a:font script="Yiii" typeface="Microsoft Yi Baiti"/><a:font script="Tibt" typeface="Microsoft Himalaya"/><a:font script="Thaa" typeface="MV Boli"/><a:font script="Deva" typeface="Mangal"/><a:font script="Telu" typeface="Gautami"/><a:font script="Taml" typeface="Latha"/><a:font script="Syrc" typeface="Estrangelo Edessa"/><a:font script="Orya" typeface="Kalinga"/><a:font script="Mlym" typeface="Kartika"/><a:font script="Laoo" typeface="DokChampa"/><a:font script="Sinh" typeface="Iskoola Pota"/><a:font script="Mong" typeface="Mongolian Baiti"/><a:font script="Viet" typeface="Times New Roman"/><a:font script="Uigh" typeface="Microsoft Uighur"/><a:font script="Geor" typeface="Sylfaen"/></a:majorFont><a:minorFont><a:latin typeface="Calibri" panose="020F0502020204030204"/><a:ea typeface=""/><a:cs typeface=""/><a:font script="Jpan" typeface="游ゴシック"/><a:font script="Hang" typeface="맑은 고딕"/><a:font script="Hans" typeface="等线"/><a:font script="Hant" typeface="新細明體"/><a:font script="Arab" typeface="Arial"/><a:font script="Hebr" typeface="Arial"/><a:font script="Thai" typeface="Tahoma"/><a:font script="Ethi" typeface="Nyala"/><a:font script="Beng" typeface="Vrinda"/><a:font script="Gujr" typeface="Shruti"/><a:font script="Khmr" typeface="DaunPenh"/><a:font script="Knda" typeface="Tunga"/><a:font script="Guru" typeface="Raavi"/><a:font script="Cans" typeface="Euphemia"/><a:font script="Cher" typeface="Plantagenet Cherokee"/><a:font script="Yiii" typeface="Microsoft Yi Baiti"/><a:font script="Tibt" typeface="Microsoft Himalaya"/><a:font script="Thaa" typeface="MV Boli"/><a:font script="Deva" typeface="Mangal"/><a:font script="Telu" typeface="Gautami"/><a:font script="Taml" typeface="Latha"/><a:font script="Syrc" typeface="Estrangelo Edessa"/><a:font script="Orya" typeface="Kalinga"/><a:font script="Mlym" typeface="Kartika"/><a:font script="Laoo" typeface="DokChampa"/><a:font script="Sinh" typeface="Iskoola Pota"/><a:font script="Mong" typeface="Mongolian Baiti"/><a:font script="Viet" typeface="Arial"/><a:font script="Uigh" typeface="Microsoft Uighur"/><a:font script="Geor" typeface="Sylfaen"/></a:minorFont></a:fontScheme><a:fmtScheme name="Office"><a:fillStyleLst><a:solidFill><a:schemeClr val="phClr"/></a:solidFill><a:gradFill rotWithShape="1"><a:gsLst><a:gs pos="0"><a:schemeClr val="phClr"><a:lumMod val="110000"/><a:satMod val="105000"/><a:tint val="67000"/></a:schemeClr></a:gs><a:gs pos="50000"><a:schemeClr val="phClr"><a:lumMod val="105000"/><a:satMod val="103000"/><a:tint val="73000"/></a:schemeClr></a:gs><a:gs pos="100000"><a:schemeClr val="phClr"><a:lumMod val="105000"/><a:satMod val="109000"/><a:tint val="81000"/></a:schemeClr></a:gs></a:gsLst><a:lin ang="5400000" scaled="0"/></a:gradFill><a:gradFill rotWithShape="1"><a:gsLst><a:gs pos="0"><a:schemeClr val="phClr"><a:satMod val="103000"/><a:lumMod val="102000"/><a:tint val="94000"/></a:schemeClr></a:gs><a:gs pos="50000"><a:schemeClr val="phClr"><a:satMod val="110000"/><a:lumMod val="100000"/><a:shade val="100000"/></a:schemeClr></a:gs><a:gs pos="100000"><a:schemeClr val="phClr"><a:lumMod val="99000"/><a:satMod val="120000"/><a:shade val="78000"/></a:schemeClr></a:gs></a:gsLst><a:lin ang="5400000" scaled="0"/></a:gradFill></a:fillStyleLst><a:lnStyleLst><a:ln w="6350" cap="flat" cmpd="sng" algn="ctr"><a:solidFill><a:schemeClr val="phClr"/></a:solidFill><a:prstDash val="solid"/><a:miter lim="800000"/></a:ln><a:ln w="12700" cap="flat" cmpd="sng" algn="ctr"><a:solidFill><a:schemeClr val="phClr"/></a:solidFill><a:prstDash val="solid"/><a:miter lim="800000"/></a:ln><a:ln w="19050" cap="flat" cmpd="sng" algn="ctr"><a:solidFill><a:schemeClr val="phClr"/></a:solidFill><a:prstDash val="solid"/><a:miter lim="800000"/></a:ln></a:lnStyleLst><a:effectStyleLst><a:effectStyle><a:effectLst/></a:effectStyle><a:effectStyle><a:effectLst/></a:effectStyle><a:effectStyle><a:effectLst><a:outerShdw blurRad="57150" dist="19050" dir="5400000" algn="ctr" rotWithShape="0"><a:srgbClr val="000000"><a:alpha val="63000"/></a:srgbClr></a:outerShdw></a:effectLst></a:effectStyle></a:effectStyleLst><a:bgFillStyleLst><a:solidFill><a:schemeClr val="phClr"/></a:solidFill><a:solidFill><a:schemeClr val="phClr"><a:tint val="95000"/><a:satMod val="170000"/></a:schemeClr></a:solidFill><a:gradFill rotWithShape="1"><a:gsLst><a:gs pos="0"><a:schemeClr val="phClr"><a:tint val="93000"/><a:satMod val="150000"/><a:shade val="98000"/><a:lumMod val="102000"/></a:schemeClr></a:gs><a:gs pos="50000"><a:schemeClr val="phClr"><a:tint val="98000"/><a:satMod val="130000"/><a:shade val="90000"/><a:lumMod val="103000"/></a:schemeClr></a:gs><a:gs pos="100000"><a:schemeClr val="phClr"><a:shade val="63000"/><a:satMod val="120000"/></a:schemeClr></a:gs></a:gsLst><a:lin ang="5400000" scaled="0"/></a:gradFill></a:bgFillStyleLst></a:fmtScheme></a:themeElements><a:objectDefaults/><a:extraClrSchemeLst/></a:theme>'
+      '<a:theme xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"  name="Office Theme"><a:themeElements><a:clrScheme name="Office"><a:dk1><a:sysClr val="windowText" lastClr="000000"/></a:dk1><a:lt1><a:sysClr val="window" lastClr="FFFFFF"/></a:lt1><a:dk2><a:srgbClr val="44546A"/></a:dk2><a:lt2><a:srgbClr val="E7E6E6"/></a:lt2><a:accent1><a:srgbClr val="5B9BD5"/></a:accent1><a:accent2><a:srgbClr val="ED7D31"/></a:accent2><a:accent3><a:srgbClr val="A5A5A5"/></a:accent3><a:accent4><a:srgbClr val="FFC000"/></a:accent4><a:accent5><a:srgbClr val="4472C4"/></a:accent5><a:accent6><a:srgbClr val="70AD47"/></a:accent6><a:hlink><a:srgbClr val="0563C1"/></a:hlink><a:folHlink><a:srgbClr val="954F72"/></a:folHlink></a:clrScheme><a:fontScheme name="' +
+      (data.mainFontFamily ?? "Office") +
+      '"><a:majorFont><a:latin typeface="' +
+      (data.mainFontFamily ?? "Calibri Light") +
+      '" panose="020F0302020204030204"/><a:ea typeface=""/><a:cs typeface=""/><a:font script="Jpan" typeface="游ゴシック Light"/><a:font script="Hang" typeface="맑은 고딕"/><a:font script="Hans" typeface="等线 Light"/><a:font script="Hant" typeface="新細明體"/><a:font script="Arab" typeface="Times New Roman"/><a:font script="Hebr" typeface="Times New Roman"/><a:font script="Thai" typeface="Tahoma"/><a:font script="Ethi" typeface="Nyala"/><a:font script="Beng" typeface="Vrinda"/><a:font script="Gujr" typeface="Shruti"/><a:font script="Khmr" typeface="MoolBoran"/><a:font script="Knda" typeface="Tunga"/><a:font script="Guru" typeface="Raavi"/><a:font script="Cans" typeface="Euphemia"/><a:font script="Cher" typeface="Plantagenet Cherokee"/><a:font script="Yiii" typeface="Microsoft Yi Baiti"/><a:font script="Tibt" typeface="Microsoft Himalaya"/><a:font script="Thaa" typeface="MV Boli"/><a:font script="Deva" typeface="Mangal"/><a:font script="Telu" typeface="Gautami"/><a:font script="Taml" typeface="Latha"/><a:font script="Syrc" typeface="Estrangelo Edessa"/><a:font script="Orya" typeface="Kalinga"/><a:font script="Mlym" typeface="Kartika"/><a:font script="Laoo" typeface="DokChampa"/><a:font script="Sinh" typeface="Iskoola Pota"/><a:font script="Mong" typeface="Mongolian Baiti"/><a:font script="Viet" typeface="Times New Roman"/><a:font script="Uigh" typeface="Microsoft Uighur"/><a:font script="Geor" typeface="Sylfaen"/></a:majorFont><a:minorFont><a:latin typeface="' +
+      (data.mainFontFamily ?? "Calibri") +
+      '" panose="020F0502020204030204"/><a:ea typeface=""/><a:cs typeface=""/><a:font script="Jpan" typeface="游ゴシック"/><a:font script="Hang" typeface="맑은 고딕"/><a:font script="Hans" typeface="等线"/><a:font script="Hant" typeface="新細明體"/><a:font script="Arab" typeface="Arial"/><a:font script="Hebr" typeface="Arial"/><a:font script="Thai" typeface="Tahoma"/><a:font script="Ethi" typeface="Nyala"/><a:font script="Beng" typeface="Vrinda"/><a:font script="Gujr" typeface="Shruti"/><a:font script="Khmr" typeface="DaunPenh"/><a:font script="Knda" typeface="Tunga"/><a:font script="Guru" typeface="Raavi"/><a:font script="Cans" typeface="Euphemia"/><a:font script="Cher" typeface="Plantagenet Cherokee"/><a:font script="Yiii" typeface="Microsoft Yi Baiti"/><a:font script="Tibt" typeface="Microsoft Himalaya"/><a:font script="Thaa" typeface="MV Boli"/><a:font script="Deva" typeface="Mangal"/><a:font script="Telu" typeface="Gautami"/><a:font script="Taml" typeface="Latha"/><a:font script="Syrc" typeface="Estrangelo Edessa"/><a:font script="Orya" typeface="Kalinga"/><a:font script="Mlym" typeface="Kartika"/><a:font script="Laoo" typeface="DokChampa"/><a:font script="Sinh" typeface="Iskoola Pota"/><a:font script="Mong" typeface="Mongolian Baiti"/><a:font script="Viet" typeface="Arial"/><a:font script="Uigh" typeface="Microsoft Uighur"/><a:font script="Geor" typeface="Sylfaen"/></a:minorFont></a:fontScheme><a:fmtScheme name="Office"><a:fillStyleLst><a:solidFill><a:schemeClr val="phClr"/></a:solidFill><a:gradFill rotWithShape="1"><a:gsLst><a:gs pos="0"><a:schemeClr val="phClr"><a:lumMod val="110000"/><a:satMod val="105000"/><a:tint val="67000"/></a:schemeClr></a:gs><a:gs pos="50000"><a:schemeClr val="phClr"><a:lumMod val="105000"/><a:satMod val="103000"/><a:tint val="73000"/></a:schemeClr></a:gs><a:gs pos="100000"><a:schemeClr val="phClr"><a:lumMod val="105000"/><a:satMod val="109000"/><a:tint val="81000"/></a:schemeClr></a:gs></a:gsLst><a:lin ang="5400000" scaled="0"/></a:gradFill><a:gradFill rotWithShape="1"><a:gsLst><a:gs pos="0"><a:schemeClr val="phClr"><a:satMod val="103000"/><a:lumMod val="102000"/><a:tint val="94000"/></a:schemeClr></a:gs><a:gs pos="50000"><a:schemeClr val="phClr"><a:satMod val="110000"/><a:lumMod val="100000"/><a:shade val="100000"/></a:schemeClr></a:gs><a:gs pos="100000"><a:schemeClr val="phClr"><a:lumMod val="99000"/><a:satMod val="120000"/><a:shade val="78000"/></a:schemeClr></a:gs></a:gsLst><a:lin ang="5400000" scaled="0"/></a:gradFill></a:fillStyleLst><a:lnStyleLst><a:ln w="6350" cap="flat" cmpd="sng" algn="ctr"><a:solidFill><a:schemeClr val="phClr"/></a:solidFill><a:prstDash val="solid"/><a:miter lim="800000"/></a:ln><a:ln w="12700" cap="flat" cmpd="sng" algn="ctr"><a:solidFill><a:schemeClr val="phClr"/></a:solidFill><a:prstDash val="solid"/><a:miter lim="800000"/></a:ln><a:ln w="19050" cap="flat" cmpd="sng" algn="ctr"><a:solidFill><a:schemeClr val="phClr"/></a:solidFill><a:prstDash val="solid"/><a:miter lim="800000"/></a:ln></a:lnStyleLst><a:effectStyleLst><a:effectStyle><a:effectLst/></a:effectStyle><a:effectStyle><a:effectLst/></a:effectStyle><a:effectStyle><a:effectLst><a:outerShdw blurRad="57150" dist="19050" dir="5400000" algn="ctr" rotWithShape="0"><a:srgbClr val="000000"><a:alpha val="63000"/></a:srgbClr></a:outerShdw></a:effectLst></a:effectStyle></a:effectStyleLst><a:bgFillStyleLst><a:solidFill><a:schemeClr val="phClr"/></a:solidFill><a:solidFill><a:schemeClr val="phClr"><a:tint val="95000"/><a:satMod val="170000"/></a:schemeClr></a:solidFill><a:gradFill rotWithShape="1"><a:gsLst><a:gs pos="0"><a:schemeClr val="phClr"><a:tint val="93000"/><a:satMod val="150000"/><a:shade val="98000"/><a:lumMod val="102000"/></a:schemeClr></a:gs><a:gs pos="50000"><a:schemeClr val="phClr"><a:tint val="98000"/><a:satMod val="130000"/><a:shade val="90000"/><a:lumMod val="103000"/></a:schemeClr></a:gs><a:gs pos="100000"><a:schemeClr val="phClr"><a:shade val="63000"/><a:satMod val="120000"/></a:schemeClr></a:gs></a:gsLst><a:lin ang="5400000" scaled="0"/></a:gradFill></a:bgFillStyleLst></a:fmtScheme></a:themeElements><a:objectDefaults/><a:extraClrSchemeLst/></a:theme>',
   );
 
   // xl/worksheets
@@ -2365,8 +2412,11 @@ export async function generateExcel(
 
   let tableRef: string[] = [];
   let sheetDrawings: string[] = [];
-  sheetKeys.forEach((k, iCo) => {
-    const sh = mapData[k];
+  sheetKeys.forEach((sheetProcessResult, iCo) => {
+    const sh = mapData[sheetProcessResult];
+    if (!sh) {
+      return;
+    }
     let sheetRelContentStr = "";
     let sheetRelSeenFlag = {
       form: false,
@@ -2411,7 +2461,7 @@ export async function generateExcel(
           (asTableOption.rowStripes ? asTableOption.rowStripes : "1") +
           '" showColumnStripes="' +
           (asTableOption.columnStripes ? asTableOption.columnStripes : "0") +
-          '"/></table>'
+          '"/></table>',
       );
       sheetRelContentStr +=
         '<Relationship Id="rId15" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/table" Target="../tables/table' +
@@ -2424,7 +2474,7 @@ export async function generateExcel(
       sheetRelSeenFlag.sheetDrawingsPushed = true;
       xl_drawings_relsFolder?.file(
         drawerName + ".rels",
-        sh.drawersRels.toString()
+        sh.drawersRels.toString(),
       );
       sheetRelSeenFlag.drawing = true;
       sheetRelContentStr +=
@@ -2468,7 +2518,7 @@ export async function generateExcel(
           ' xmlns:sle15="http://schemas.microsoft.com/office/drawing/2012/slicer">' +
           (sh.hasImages ? sh.drawersContent : "") +
           (sh.hasCheckbox ? sh.checkboxDrawingContent : "") +
-          "</xdr:wsDr>"
+          "</xdr:wsDr>",
       );
     }
     if (sh.hasComment) {
@@ -2484,14 +2534,14 @@ export async function generateExcel(
           (Array.isArray(aurt) && aurt.length > 0
             ? aurt.reduce(
                 (res, currr) => res + "<author>" + currr + "</author>",
-                ""
+                "",
               )
             : "<author></author>") +
           "</authors>" +
           "<commentList>" +
           sh.commentString +
           "</commentList>" +
-          "</comments>"
+          "</comments>",
       );
       sheetRelContentStr +=
         '<Relationship Id="rId1" ' +
@@ -2548,7 +2598,7 @@ export async function generateExcel(
                 );
               }, "")
             : "") +
-          "</xml>"
+          "</xml>",
       );
     }
     if (<number>sh.backgroundImageRef > 0) {
@@ -2570,7 +2620,7 @@ export async function generateExcel(
         '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' +
           '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"> ' +
           sheetRelContentStr +
-          "</Relationships>"
+          "</Relationships>",
       );
     }
     let sheetViews = "";
@@ -2631,6 +2681,9 @@ export async function generateExcel(
             sh.checkboxSheetContent +
             "</controls></mc:Choice></mc:AlternateContent>"
           : "") +
+        (Array.isArray(sh.sheetValidation) && sh.sheetValidation.length
+          ? processDataValidation(sh.sheetValidation)
+          : "") +
         sh.sheetMargin +
         (sh.isPortrait || (<string>sh.sheetBreakLine).length > 0
           ? '<pageSetup orientation="portrait" r:id="rId' + (iCo + 1) + '"/>'
@@ -2641,7 +2694,7 @@ export async function generateExcel(
         (sheetDataTableColumns.length > 0
           ? '<tableParts count="1"> <tablePart r:id="rId15"/></tableParts>'
           : "") +
-        "</worksheet>"
+        "</worksheet>",
     );
   });
   if (checkboxForm.length > 0) {
@@ -2660,36 +2713,68 @@ export async function generateExcel(
       sheetDrawings,
       checkboxForm,
       needCalcChain,
-      tableRef
-    )
+      tableRef,
+    ),
   );
   if (isBackend) {
     return zip
       .generateAsync({
         type: data.generateType ? data.generateType : "nodebuffer",
+        ...(data.useCompression
+          ? {
+              compression: "DEFLATE",
+              compressionOptions: {
+                level: 9,
+              },
+            }
+          : {}),
       })
       .then((content) => {
         return content as string | number[] | Buffer;
       });
   } else {
     if (data.notSave) {
-      return zip.generateAsync({ type: "blob" }).then((content) => {
-        return content.slice(
-          0,
-          content.size,
-          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        );
-      });
-    } else {
-      zip.generateAsync({ type: "blob" }).then(function (content) {
-        import("file-saver").then((module) => {
-          const { saveAs } = module;
-          saveAs(
-            content,
-            (data.fileName ? data.fileName : "tableRecord") + ".xlsx"
+      return zip
+        .generateAsync({
+          type: "blob",
+          ...(data.useCompression
+            ? {
+                compression: "DEFLATE",
+                compressionOptions: {
+                  level: 9,
+                },
+              }
+            : {}),
+        })
+        .then((content) => {
+          return content.slice(
+            0,
+            content.size,
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
           );
         });
-      });
+    } else {
+      zip
+        .generateAsync({
+          type: "blob",
+          ...(data.useCompression
+            ? {
+                compression: "DEFLATE",
+                compressionOptions: {
+                  level: 9,
+                },
+              }
+            : {}),
+        })
+        .then(function (content) {
+          import("file-saver").then((module) => {
+            const { saveAs } = module;
+            saveAs(
+              content,
+              (data.fileName ? data.fileName : "tableRecord") + ".xlsx",
+            );
+          });
+        });
     }
   }
 }

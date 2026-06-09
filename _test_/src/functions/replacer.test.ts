@@ -1,10 +1,8 @@
-import { beforeEach, describe, expect, it, jest, test } from "@jest/globals";
+import { beforeEach, describe, expect, jest, test } from "@jest/globals";
 import { saveAs } from "file-saver";
-// import JSZip from "jszip";
 jest.mock("file-saver");
-import { myFunction, replaceInExcel } from "../../../src/functions/replacer";
-import { callApi, callApiReturnMockBlob, callApiReturnNull, mockBlob } from "../utils/call-api";
-import { readFileSync } from "fs";
+import { replaceInExcel } from "../../../src/functions/replacer";
+import { callApi, callApiReturnNull } from "../utils/call-api";
 // This will use the mock we created
 
 describe("replaceInExcel tests", () => {
@@ -50,10 +48,26 @@ describe("replaceInExcel tests", () => {
         notSave: false,
       }
     );
-    expect(typeof val).toBe("undefined");
+    expect(typeof val).toBe('string');
     expect(saveAs).toHaveBeenCalledTimes(1);
     // expect(val.length).toBeGreaterThan(1000);
   }, 120000);
+    test("should be function mock", async () => {
+      const val = await replaceInExcel(
+        "https://github.com/mohammadrezaeicode/mr-excel-page-repo/blob/main/public/x.xlsx?raw=true",
+        {},
+        {
+          backend: false,
+          fetch: callApi,
+          generateType: "array",
+          notSave: false,
+          fileName:"test-Records"
+        },
+      );
+      expect(typeof val).toBe("string");
+      expect(saveAs).toHaveBeenCalledTimes(1);
+      // expect(val.length).toBeGreaterThan(1000);
+    }, 120000);
   test("should be function", async () => {
     const val = (await replaceInExcel(
       "https://github.com/mohammadrezaeicode/mr-excel-page-repo/blob/main/public/x.xlsx?raw=true",
@@ -104,7 +118,7 @@ describe("replaceInExcel tests", () => {
         fetch: callApi,
         generateType: "array",
       }
-    ).catch((e) => {
+    ).catch((_e) => {
     });
   }, 120000);
   test("should be function 3", async () => {
@@ -122,16 +136,16 @@ describe("replaceInExcel tests", () => {
   }, 120000);
 });
 // myFile.test.ts
-describe("Your test suite", () => {
-  beforeEach(() => {
-    jest.clearAllMocks(); // Reset the mock status before each test
-  });
+// describe("Your test suite", () => {
+//   beforeEach(() => {
+//     jest.clearAllMocks(); // Reset the mock status before each test
+//   });
 
-  it("should call saveAs with the correct arguments", async () => {
-    // Assuming the function you are testing looks something like this
+//   // it("should call saveAs with the correct arguments", async () => {
+//   //   // Assuming the function you are testing looks something like this
 
-    await myFunction();
+//   //   await myFunction();
 
-    expect(saveAs).toBeCalledTimes(1);
-  });
-});
+//   //   expect(saveAs).toHaveBeenCalledTimes(1);
+//   // });
+// });

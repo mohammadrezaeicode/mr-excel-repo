@@ -17,14 +17,14 @@ describe("toDataURL2 data tests", () => {
       "https://github.com/mohammadrezaeicode/mr-excel-page-repo/blob/main/public/x.xlsx?raw=true",
       true,
       callApi
-    ).then((res: any) => {
+    ).then((res: any) => {      
       let resp = <ResponseApi>res;
       expect(typeof resp).toBe("object");
       expect(Array.isArray(resp)).toBeFalsy();
       expect(typeof resp.data).toBe("object");
       expect(typeof resp.sheetName).toBe("object");
       expect(Object.keys(resp.data).length).toBe(2);
-      let firstSheet;
+      let firstSheet: any;
       if (resp.data["family record"]) {
         firstSheet = resp.data["family record"];
       } else {
@@ -34,7 +34,7 @@ describe("toDataURL2 data tests", () => {
       expect(firstSheet[0].length).toBe(6);
       expect(firstSheet[0][0]).toBe("ID");
       expect(firstSheet[10][5]).toBe("1852-12-22T20:12:13.237Z");
-      let secondSheet;
+      let secondSheet:any;
       if (resp.data["Sheet 2"]) {
         secondSheet = resp.data["Sheet 2"];
       } else {
@@ -61,7 +61,7 @@ describe("toDataURL2 data tests", () => {
       expect(typeof resp.data).toBe("object");
       expect(typeof resp.sheetName).toBe("object");
       expect(Object.keys(resp.data).length).toBe(1);
-      let firstSheet;
+      let firstSheet:any;
       if (resp.data["Sheet1"]) {
         firstSheet = resp.data["Sheet1"];
       } else {

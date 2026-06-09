@@ -5,6 +5,14 @@ type ExtractedData = (string | null)[][];
 interface ExtractResult {
   [sheetName: string]: ExtractedData;
 }
+export interface ResponseApi {
+  data: {
+    [sheetName: string]: string[][];
+  };
+  sheetName: Object;
+  fileList: string[];
+  styleValue:string
+}
 function hasTBeforeV(element: string) {
   const regex = /t="s".*?<v/;
   return regex.test(element);
@@ -35,7 +43,7 @@ function getRValue(element: string) {
 }
 export async function readGeneratedFile(
   data: unknown,
-  isBackend: boolean = false
+  isBackend: boolean = false,
 ) {
   let queueSheet: {
     filename: string;
@@ -44,10 +52,11 @@ export async function readGeneratedFile(
   let nameMap = new Map<string, string>();
   let sharedStrings: string[] = [];
   let fileList: string[] = [];
+  let styleValue: string = "";
   let sheetResultData: ExtractResult = {};
   let seenShardString = false;
   function generateDataArray(filename: string, fileData: any) {
-    let resultData: ExtractedData = [];
+    let resultData: any = [];
     let rows = fileData.match(/<c[\s\S\n]*?<\/c>/g);
     if (Array.isArray(rows)) {
       rows.forEach((v) => {
@@ -60,7 +69,9 @@ export async function readGeneratedFile(
         if (typeof resultData[rC.row] == "undefined") {
           resultData[rC.row] = [];
         }
-        resultData[rC.row][rC.col] = value;
+        if (resultData[rC.row]) {
+          resultData[rC.row][rC.col] = value;
+        }
       });
     }
     if (filename.indexOf("xl/worksheets/sheet") == 0) {
@@ -79,14 +90,41 @@ export async function readGeneratedFile(
         throw "response is null";
       }
       if (isBackend) {
+        if (typeof Buffer !== "undefined" && Buffer.isBuffer(res)) {
+          return new Uint8Array(res);
+        }
+        if (res && typeof res.arrayBuffer === "function") {
+          return res.arrayBuffer().then((buffer: ArrayBuffer) => new Uint8Array(buffer));
+        }
         return res;
       }
-      return res.blob();
+      if (res && typeof res.arrayBuffer === "function") {
+        return res.arrayBuffer();
+      }
+      if (res && typeof res.blob === "function") {
+        return res.blob().then((blob: any) =>
+          typeof blob.arrayBuffer === "function"
+            ? blob.arrayBuffer()
+            : new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result as ArrayBuffer);
+                reader.onerror = reject;
+                reader.readAsArrayBuffer(blob);
+              }),
+        );
+      }
+      if (typeof Buffer !== "undefined" && Buffer.isBuffer(res)) {
+        return new Uint8Array(res).buffer;
+      }
+      if (res instanceof Uint8Array) {
+        return res.buffer;
+      }
+      return res;
     })
     .then(async (res) => {
       let fileCounter = 0;
-      return await new Promise((resolve, reject) => {
-        JSZip.loadAsync(res).then(function (zip) {
+      return await new Promise((resolve, _reject) => {
+        JSZip.loadAsync(res).then(function (zip: any) {
           const keys = Object.keys(zip.files);
           fileList = [...keys];
           fileCounter = keys.length;
@@ -111,22 +149,26 @@ export async function readGeneratedFile(
                       data: sheetResultData,
                       sheetName: nameMap.entries(),
                       fileList,
+                      styleValue,
                     });
                   }
                 }
                 return true;
               },
-              get(target, prop, receiver) {
+              get(target, prop, _receiver) {
                 if (prop === "isNameSet") {
                   return target.isNameSet;
                 }
 
                 return target.counter;
               },
-            }
+            },
           );
           keys.forEach(function (filename) {
-            zip.files[filename].async("string").then(function (fileData) {
+            zip.files[filename].async("string").then(function (fileData: any) {
+              if (filename.endsWith("styles.xml")) {
+                styleValue = fileData;
+              }
               if (filename.indexOf("sharedStrings") >= 0) {
                 let rows = fileData.match(/<si[\s\S\n]*?<\/si>/g);
                 if (Array.isArray(rows)) {
@@ -161,15 +203,15 @@ export async function readGeneratedFile(
               if (filename.indexOf("workbook") >= 0) {
                 const sheetsTag = fileData.replace(
                   /(.*[\n\s\S]*)(<sheets[\n\s\S]*?sheets>)(.*[\n\s\S]*)/,
-                  "$2"
+                  "$2",
                 );
                 const sheets = sheetsTag.split("<sheet ").slice(1);
-                sheets.forEach((v, i) => {
+                sheets.forEach((v: any, i: number) => {
                   let name = "Sheet 1";
                   if (v.indexOf("name=") > 0) {
                     name = v.replace(
                       /(.*[\n\s\S]*?)name="([^"]*)"(.*[\n\s\S]*)/,
-                      "$2"
+                      "$2",
                     );
                   }
                   let id = i + 1;
@@ -177,8 +219,8 @@ export async function readGeneratedFile(
                     id = Number(
                       v.replace(
                         /(.*[\n\s\S]*?)sheetId="([^"]*)"(.*[\n\s\S]*)/,
-                        "$2"
-                      )
+                        "$2",
+                      ),
                     );
                     if (isNaN(id)) {
                       id = i + 1;
@@ -200,7 +242,6 @@ export async function readGeneratedFile(
 }
 export async function readSheet1(data: any) {
   return await JSZip.loadAsync(data as any).then(async (zip: JSZip) => {
-    const keys = Object.keys(zip.files);
-    return await zip.files["xl/worksheets/sheet1.xml"].async("string");
+    return await zip.files["xl/worksheets/sheet1.xml"]!.async("string");
   });
 }

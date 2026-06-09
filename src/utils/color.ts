@@ -12,19 +12,29 @@ function extendHexValue(hex: string) {
     return hex;
   }
 }
-export function hexToRgbArray(hex: string): number[] {
+/**
+ * hexToRgbArray - converts a hex color value to an RGB array.
+ * @param {any} hex - The hex color value.
+ * @returns {any} - The RGB array.
+ */
+export function hexToRgbArray(hex: string): [number, number, number] {
   if (/^#?([a-f\d]{3})$/i.test(hex)) {
     hex = extendHexValue(hex);
   }
   var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result
     ? [
-        parseInt(result[1], 16),
-        parseInt(result[2], 16),
-        parseInt(result[3], 16),
+        parseInt(result[1] ?? "00", 16),
+        parseInt(result[2] ?? "00", 16),
+        parseInt(result[3] ?? "00", 16),
       ]
     : [0, 0, 0];
 }
+/**
+ * generateContrastTextColor - generates a contrasting text color based on the background color.
+ * @param {any} b - The background color in hex format.
+ * @returns {any} - The contrasting text color in rgb format.
+ */
 export function generateContrastTextColor(b: string) {
   const background = hexToRgbArray(b);
   if (background == null) {
@@ -40,7 +50,12 @@ export function generateContrastTextColor(b: string) {
 
   return textColor;
 }
-export function hexToRgbNegative(hex: string) {
+/**
+ * hexToRgbNegative - converts a hex color value to its negative (complementary) RGB array.
+ * @param {any} hex - The hex color value.
+ * @returns {any} - The negative RGB array.
+ */
+export function hexToRgbNegative(hex: string):string {
   // /(^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$)|(^#?([a-f\d]{3})$)/i;
   if (/^#?([a-f\d]{3})$/i.test(hex)) {
     hex = extendHexValue(hex);
@@ -48,11 +63,11 @@ export function hexToRgbNegative(hex: string) {
   var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result
     ? "rgb(" +
-        (255 - parseInt(result[1], 16)) +
+        (255 - parseInt(result[1] ?? "255", 16)) +
         "," +
-        (255 - parseInt(result[2], 16)) +
+        (255 - parseInt(result[2] ?? "255", 16)) +
         "," +
-        (255 - parseInt(result[3], 16)) +
+        (255 - parseInt(result[3] ?? "255", 16)) +
         ")"
     : "rgb(0,0,0)";
 }
@@ -62,6 +77,11 @@ function valueToHex(c: number | string): string {
   var hex = c.toString(16);
   return hex.length == 1 ? "0" + hex : hex;
 }
+/**
+ * rgbToHex - converts an RGB color value to its hexadecimal representation.
+ * @param {any} rgb - The RGB color value.
+ * @returns {any} - The hexadecimal representation.
+ */
 export function rgbToHex(rgb: string): string | null {
   rgb = removeSpace(rgb);
   let spResult =
@@ -79,9 +99,9 @@ export function rgbToHex(rgb: string): string | null {
     return null;
   }
   return (
-    valueToHex(spResult[0]) +
-    valueToHex(spResult[1]) +
-    valueToHex(spResult[2])
+    valueToHex(spResult[0] ?? "0") +
+    valueToHex(spResult[1] ?? "0") +
+    valueToHex(spResult[2] ?? "0")
   ).toUpperCase();
 }
 

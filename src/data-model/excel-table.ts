@@ -1,15 +1,17 @@
 /**
- * Represents an Excel table with options and sheets.
+ * ExcelTable - Represents an Excel table with options and sheets.
  * @interface
  * @extends {ExcelTableOption}
  */
-export interface ExcelTable extends ExcelTableOption {
+export interface ExcelTable<
+  T extends ObjectLiteral = ObjectLiteral,
+> extends ExcelTableOption {
   /** Array of sheets in the Excel table. */
-  sheet: Sheet[];
+  sheet: Sheet<T>[];
 }
 
 /**
- * Options for configuring an Excel table.
+ * ExcelTableOption - Options for configuring an Excel table.
  * @interface
  */
 export interface ExcelTableOption {
@@ -41,24 +43,34 @@ export interface ExcelTableOption {
   styles?: Styles;
   /** Format map for the Excel. */
   formatMap?: FormatMap;
+  /** Specify the default font family  */
+  mainFontFamily?: string;
+  /** hide sheets */
+  hidden?: boolean;
+  /* use compression for generate result file */
+  useCompression?: boolean;
 }
 /**
- * Represents a sheet in the Excel.
+ * Sheet - Represents a sheet in the Excel.
  * @interface
  * @extends {SheetOption}
  */
-export interface Sheet extends SheetOption {
+export interface Sheet<
+  T extends ObjectLiteral = ObjectLiteral,
+> extends SheetOption<T> {
   /** Array of headers in the sheet. */
   headers: Header[];
   /** Array of data in the sheet. */
-  data: Data[];
+  data: Data<T>[];
 }
 
 /**
- * Options for configuring a sheet.
+ * SheetOption - Options for configuring a sheet.
  * @interface
  */
-export interface SheetOption {
+export interface SheetOption<T extends ObjectLiteral = ObjectLiteral> {
+  /** data validation for sheet  */
+  dataValidations?: DataValidation[];
   /** Indicates if the sheet should be without a header. */
   withoutHeader?: boolean;
   /** Options for configure property name that maybe provide for apply outlineLevel, hidden, height option of row*/
@@ -78,7 +90,7 @@ export interface SheetOption {
   /** Array of conditional formatting rules. */
   conditionalFormatting?: ConditionalFormatting[];
   /** Function for multi-style condition. */
-  multiStyleCondition?: MultiStyleConditionFunction;
+  multiStyleCondition?: MultiStyleConditionFunction<T>;
   /** Indicates if the sheet should use split based on match. */
   useSplitBaseOnMatch?: boolean;
   /** Indicates if strings should be converted to numbers Automatically. */
@@ -103,14 +115,14 @@ export interface SheetOption {
   tabColor?: string;
   /** Array of merge ranges in the sheet. */
   merges?: string[];
-  /** Key for the header style. */
+  /** Key(Id) for the header style. */
   headerStyleKey?: string;
   /** Function for merge row data base on condition. */
   mergeRowDataCondition?: MergeRowDataConditionFunction;
   /** Function for style cell base on condition. */
-  styleCellCondition?: StyleCellConditionFunction;
+  styleCellCondition?: StyleCellConditionFunction<T>;
   /** Function for comment base on condition. */
-  commentCondition?: CommentConditionFunction;
+  commentCondition?: CommentConditionFunction<T>;
   /** Sort and filter options for the sheet. */
   sortAndFilter?: SortAndFilter;
   /** State of the sheet (hidden or visible). */
@@ -133,9 +145,75 @@ export interface SheetOption {
   asTable?: AsTableOption;
   /** Array of dropdowns in the sheet. */
   dropDowns?: DropDown[];
+  /** increase zoom scale  */
+  zoomScale?: {
+    scale: number;
+    startAt: string;
+  };
 }
 /**
- * Options for displaying the sheet as a table.
+ * DataValidation - Options for add data validation to cells.
+ * @interface
+ */
+export interface DataValidation {
+  /** type of data validation - {@link DataValidationType}  */
+  type: DataValidationType;
+  /** allow blank cell- default:true*/
+  allowBlank?: boolean;
+  /** show input message- default:true*/
+  showInputMessage?: boolean;
+  /** show Drop Down for list type */
+  showDropDown?: boolean;
+  /** show error message- default:true*/
+  showErrorMessage?: boolean;
+  /** cell start  */
+  start: string;
+  /** cell end  */
+  end: string;
+  /** operator of data validation - {@link DataValidationOperator}  */
+  operator?: DataValidationOperator;
+  /** starting value for operation  */
+  value: CellStrReference | CellNumReference | string | number;
+  // /** starting value for operation is needed - required for type between, notBetween   */
+  // value2?: string | number;
+}
+/** possible type for data validation */
+export type DataValidationType =
+  | "whole"
+  | "decimal"
+  | "time"
+  | "list"
+  | "custom";
+/**  possible type for data validation operator  */
+export type DataValidationOperator =
+  | "between"
+  | "notBetween"
+  | "equal"
+  | "notEqual"
+  | "greaterThan"
+  | "lessThan"
+  | "greaterThanOrEqual"
+  | "lessThanOrEqual";
+
+/**
+ * CellStrReference - use for reference range cell(Sheet A1-...)
+ * @interface
+ */
+export interface CellStrReference {
+  start: string;
+  end: string;
+}
+/**
+ * CellNumReference - use for reference range cell(Sheet A1-...)
+ * @interface
+ */
+export interface CellNumReference {
+  min: number;
+  max: number;
+}
+
+/**
+ * AsTableOption - Options for displaying the sheet as a table.
  * @interface
  */
 export interface AsTableOption {
@@ -154,7 +232,7 @@ export interface AsTableOption {
 }
 
 /**
- * Options for page breaks in the sheet.
+ * PageBreak - Options for page breaks in the sheet.
  * @interface
  */
 export interface PageBreak {
@@ -165,7 +243,7 @@ export interface PageBreak {
 }
 
 /**
- * Options for the start of the view.
+ * ViewStart - Options for the start of the view.
  * @interface
  */
 export interface ViewStart {
@@ -178,7 +256,7 @@ export interface ViewStart {
 }
 
 /**
- * Options for configuring the view of the sheet.
+ * ViewOption - Options for configuring the view of the sheet.
  * @interface
  */
 export interface ViewOption {
@@ -219,7 +297,7 @@ export interface ViewOption {
 }
 
 /**
- * Options for header and footer.
+ * HeaderFooterOption - Options for header and footer.
  * @interface
  */
 export interface HeaderFooterOption {
@@ -230,7 +308,7 @@ export interface HeaderFooterOption {
 }
 
 /**
- * Location map for header and footer options.l:Left, c:Center, r:Right
+ * HeaderFooterLocationMap - Location map for header and footer options.l:Left, c:Center, r:Right
  * @interface
  */
 export interface HeaderFooterLocationMap {
@@ -240,7 +318,7 @@ export interface HeaderFooterLocationMap {
 }
 
 /**
- * Types of header and footer in page(odd page, even page,first page).
+ * HeaderFooterTypes - Types of header and footer in page(odd page, even page,first page).
  * @interface
  */
 export interface HeaderFooterTypes {
@@ -250,7 +328,7 @@ export interface HeaderFooterTypes {
 }
 
 /**
- * Options for configuring the page.
+ * PageOption - Options for configuring the page.
  * @interface
  */
 export interface PageOption {
@@ -271,7 +349,7 @@ export interface PageOption {
   isPortrait: boolean;
 }
 /**
- * Represents a header in the sheet.
+ * Header - Represents a header in the sheet.
  * @interface
  * @extends {HeaderOption}
  */
@@ -283,7 +361,7 @@ export interface Header extends HeaderOption {
 }
 
 /**
- * Options for configuring a header.
+ * HeaderOption - Options for configuring a header.
  * @interface
  */
 export interface HeaderOption {
@@ -304,25 +382,22 @@ export interface HeaderOption {
   };
 }
 /**
- * Types of styles that can be applied(not value for cell, CF/conditionalFormatting for conditionalFormatting option and HF/headerFooter for headerFooter option).
+ * StyleType - Types of styles that can be applied(not value for cell, CF/conditionalFormatting for conditionalFormatting option and HF/headerFooter for headerFooter option).
  * @typedef {"conditionalFormatting" | "CF" | "headerFooter" | "HF"} StyleType
  */
-
 export type StyleType = "conditionalFormatting" | "CF" | "headerFooter" | "HF";
 
 /**
- * Represents the body of a style.
+ * StyleBody - Represents the body of a style.
  * @interface
  */
-export interface StyleBody {
+export type StyleBody = {
   /** The font family of the text. */
   fontFamily?: string;
   /** The type of the style.(if not define used for cells, for other type should be define) */
   type?: StyleType;
   /** The size of the font. */
   size?: number;
-  /** The index of the style(!!it's will override by process,Don't set value for it). */
-  index?: number;
   /** The alignment options of the text. */
   alignment?: AlignmentOption;
   /** The border options. */
@@ -330,49 +405,57 @@ export interface StyleBody {
   /** The format of the text. */
   format?: string;
   /** Indicates if the style is bold. */
-  bold?: boolean;
-  /** Indicates if the style is underlined. */
-  underline?: boolean;
+  bold?: true;
   /** Indicates if the style is italic. */
-  italic?: boolean;
-  /** Indicates if the style has double underline. */
-  doubleUnderline?: boolean;
+  italic?: true;
   /** The color of the style. */
   color?: string;
   /** The background color of the style. */
   backgroundColor?: string;
-}
+} & UnderlineType;
 
 /**
- * Represents a collection of styles.
+ * SingleUnderline - underline style for the text.
+ */
+export type SingleUnderline = {
+  /** Indicates if the style is underlined. */
+  underline?: true;
+};
+
+/**
+ * DoubleUnderline - double underline style for the text.
+ */
+export type DoubleUnderline = {
+  /** Indicates if the style has double underline. */
+  doubleUnderline?: true;
+};
+
+/**
+ * UnderlineType - underline type for the text, can be either single or double underline, but not both at the same time.
+ */
+export type UnderlineType =
+  | (SingleUnderline & { doubleUnderline?: never })
+  | (DoubleUnderline & { underline?: never });
+
+/**
+ * Styles - Represents a collection of styles.
  * @interface
  */
 export interface Styles {
   [key: string]: StyleBody;
 }
 /**
- * Represents data in the sheet.
+ * Data - Represents data in the sheet.
  * @interface
- * @extends {DataOptions}
+ * @extends {object, DataOptions}
  */
-export interface Data extends DataOptions {
-  [key: string]: string | number | any | undefined;
-}
+export type Data<T extends ObjectLiteral = ObjectLiteral> = T & DataOptions;
 
 /**
- * Options for configuring data in the sheet.
+ * DataOptions - Options for configuring data in the sheet.
  * @interface
  */
 export interface DataOptions {
-  [key: string]:
-    | "0"
-    | "1"
-    | number
-    | string
-    | undefined
-    | MapComment
-    /** Array of multi-style values for the data. */
-    | MapMultiStyleValue;
   outlineLevel?: number;
   hidden?: "0" | "1" | number;
   rowStyle?: string;
@@ -382,7 +465,7 @@ export interface DataOptions {
 }
 
 /**
- * Represents a dropdown in the sheet.
+ * DropDown - Represents a dropdown in the sheet.
  * @interface
  */
 export interface DropDown {
@@ -393,7 +476,7 @@ export interface DropDown {
 }
 
 /**
- * Represents a map of rows in the sheet.
+ * RowMap -Represents a map of rows in the sheet.
  * @interface
  */
 export interface RowMap {
@@ -405,7 +488,7 @@ export interface RowMap {
 }
 
 /**
- * Represents protection options for the sheet.
+ * ProtectionOption - Represents protection options for the sheet.
  * @typedef {Object} ProtectionOption
  * @property {"0" | "1" | 0 | 1} sheet - Protect the sheet.
  * @property {"0" | "1" | 0 | 1} formatCells - Allow formatting cells.
@@ -425,7 +508,7 @@ export type ProtectionOption = {
 };
 
 /**
- * Keys for protection options.
+ * ProtectionOptionKey - Keys for protection options.
  * @typedef {"sheet" | "formatCells" | "formatColumns" | "formatRows" | "insertColumns" | "insertRows" | "insertHyperlinks" | "deleteColumns" | "deleteRows" | "sort" | "autoFilter" | "pivotTables"} ProtectionOptionKey
  */
 export type ProtectionOptionKey =
@@ -443,7 +526,7 @@ export type ProtectionOptionKey =
   | "pivotTables";
 
 /**
- * Operations for conditional formatting cells.
+ * ConditionalFormattingCellsOperation - Operations for conditional formatting cells.
  * @typedef {"lt" | "gt" | "between" | "eq" | "ct"} ConditionalFormattingCellsOperation
  */
 export type ConditionalFormattingCellsOperation =
@@ -454,7 +537,7 @@ export type ConditionalFormattingCellsOperation =
   | "ct";
 
 /**
- * Operations for conditional formatting icon sets.
+ * ConditionalFormattingIconSetOperation - Operations for conditional formatting icon sets.
  * @typedef {"3Arrows" | "4Arrows" | "5Arrows" | "5ArrowsGray" | "4ArrowsGray" | "3ArrowsGray"} ConditionalFormattingIconSetOperation
  */
 export type ConditionalFormattingIconSetOperation =
@@ -466,13 +549,13 @@ export type ConditionalFormattingIconSetOperation =
   | "3ArrowsGray";
 
 /**
- * Operations for conditional formatting top values.
+ * ConditionalFormattingTopOperation - Operations for conditional formatting top values.
  * @typedef {"belowAverage" | "aboveAverage"} ConditionalFormattingTopOperation
  */
 export type ConditionalFormattingTopOperation = "belowAverage" | "aboveAverage";
 
 /**
- * Options for conditional formatting.
+ * ConditionalFormattingOption - Options for conditional formatting.
  * @interface
  */
 export interface ConditionalFormattingOption {
@@ -499,7 +582,7 @@ export interface ConditionalFormattingOption {
 }
 
 /**
- * Represents conditional formatting in the sheet.
+ * ConditionalFormatting - Represents conditional formatting in the sheet.
  * @interface
  * @extends {ConditionalFormattingOption}
  */
@@ -511,7 +594,7 @@ export interface ConditionalFormatting extends ConditionalFormattingOption {
 }
 
 /**
- * Represents an image in the sheet.
+ * ImageTypes - Represents an image in the sheet.
  * @interface
  */
 export interface ImageTypes {
@@ -533,20 +616,20 @@ export interface ImageTypes {
 }
 
 /**
- * Represents side-by-side data in the sheet.
+ * SideBySide - Represents side-by-side data in the sheet.
  * @interface
  */
-export interface SideBySide {
+export interface SideBySide<T extends ObjectLiteral = ObjectLiteral> {
   sheetName?: string;
   spaceX?: number;
   spaceY?: number;
   headers: { label: string; text: string }[];
-  data: Data[];
+  data: Data<T>[];
   headerIndex?: number;
 }
 
 /**
- * Keys for alignment options.
+ * AlignmentOptionKey - Keys for alignment options.
  * @typedef {"horizontal" | "vertical" | "wrapText" | "shrinkToFit" | "readingOrder" | "textRotation" | "indent"} AlignmentOptionKey
  */
 export type AlignmentOptionKey =
@@ -559,41 +642,51 @@ export type AlignmentOptionKey =
   | "indent";
 
 /**
- * Horizontal alignment options.
+ * AlignmentHorizontal - Horizontal alignment options.
  * @typedef {"center" | "left" | "right"} AlignmentHorizontal
  */
 export type AlignmentHorizontal = "center" | "left" | "right";
 
 /**
- * Vertical alignment options.
+ * AlignmentVertical - Vertical alignment options.
  * @typedef {"center" | "top" | "bottom"} AlignmentVertical
  */
 export type AlignmentVertical = "center" | "top" | "bottom";
 
 /**
- * Options for configuring alignment.
+ * AlignmentOption - Options for configuring alignment.
  * @interface
  */
-export interface AlignmentOption {
+export type AlignmentOption = {
   horizontal?: AlignmentHorizontal;
   vertical?: AlignmentVertical;
   wrapText?: "0" | "1" | 0 | 1;
   shrinkToFit?: "0" | "1" | 0 | 1;
-  readingOrder?: "1" | "2" | 2 | 1;
   textRotation?: number;
   indent?: number;
-  rtl?: boolean;
-  ltr?: boolean;
-}
+} & SheetDirection;
+type RTLDirection = {
+  rtl?: true;
+};
+type LTRDirection = {
+  ltr?: true;
+};
+type ReadingOrder = {
+  readingOrder?: "1" | "2" | 2 | 1;
+};
+type SheetDirection =
+  | (RTLDirection & { ltr?: never; readingOrder?: never })
+  | (LTRDirection & { rtl?: never; readingOrder?: never })
+  | (ReadingOrder & { rtl?: never; ltr?: never });
 
 /**
- * Directions for border options.
+ * BorderDirection - Directions for border options.
  * @typedef {"full" | "top" | "left" | "right" | "bottom"} BorderDirection
  */
 export type BorderDirection = "full" | "top" | "left" | "right" | "bottom";
 
 /**
- * Options for configuring borders.
+ * BorderOption - Options for configuring borders.
  * @interface
  */
 export type BorderOption = {
@@ -616,7 +709,7 @@ export type BorderOption = {
 };
 
 /**
- * Represents a map of multi-style values.
+ * MapMultiStyleValue - Represents a map of multi-style values.
  * @interface
  */
 export interface MapMultiStyleValue {
@@ -624,7 +717,7 @@ export interface MapMultiStyleValue {
 }
 
 /**
- * Represents a multi-style value.
+ * MultiStyleValue - Represents a multi-style value.
  * @interface
  */
 export interface MultiStyleValue {
@@ -633,7 +726,7 @@ export interface MultiStyleValue {
 }
 
 /**
- * Represents a multi-style regex value.
+ * MultiStyleRexValue - Represents a multi-style regex value.
  * @interface
  */
 export interface MultiStyleRexValue {
@@ -642,7 +735,7 @@ export interface MultiStyleRexValue {
 }
 
 /**
- * Represents a comment in the sheet.
+ * Comment - Represents a comment in the sheet.
  * @interface
  */
 export interface Comment {
@@ -652,7 +745,7 @@ export interface Comment {
 }
 
 /**
- * Represents a map of merge row conditions.
+ * MergeRowConditionMap - Represents a map of merge row conditions.
  * @interface
  */
 export interface MergeRowConditionMap {
@@ -663,7 +756,7 @@ export interface MergeRowConditionMap {
 }
 
 /**
- * Function type for multi-style condition.
+ * MultiStyleConditionFunction - Function type for multi-style condition.
  * @callback MultiStyleConditionFunction
  * @param {Header | string | number | undefined} data - The data to apply the condition to.
  * @param {null | Data} object - The data object.
@@ -673,17 +766,19 @@ export interface MergeRowConditionMap {
  * @param {boolean} fromHeader - Indicates if the condition is from the header.
  * @returns {MultiStyleValue[] | null} The multi-style values or null.
  */
-export type MultiStyleConditionFunction = (
+export type MultiStyleConditionFunction<
+  T extends ObjectLiteral = ObjectLiteral,
+> = (
   data: Header | string | number | undefined,
-  object: null | Data,
+  object: null | Data<T>,
   headerKey: string,
   rowIndex: number,
   colIndex: number,
-  fromHeader: boolean
+  fromHeader: boolean,
 ) => MultiStyleValue[] | null;
 
 /**
- * Function type for comment condition.
+ * CommentConditionFunction - Function type for comment condition.
  * @callback CommentConditionFunction
  * @param {Header | string | number | undefined} data - The data to apply the condition to.
  * @param {null | Data} object - The data object.
@@ -693,17 +788,18 @@ export type MultiStyleConditionFunction = (
  * @param {boolean} fromHeader - Indicates if the condition is from the header.
  * @returns {Comment | string | false | undefined | null} The comment or null.
  */
-export type CommentConditionFunction = (
-  data: Header | string | number | undefined,
-  object: null | Data,
-  headerKey: string,
-  rowIndex: number,
-  colIndex: number,
-  fromHeader: boolean
-) => Comment | string | false | undefined | null;
+export type CommentConditionFunction<T extends ObjectLiteral = ObjectLiteral> =
+  (
+    data: Header | string | number | undefined,
+    object: null | Data<T>,
+    headerKey: string,
+    rowIndex: number,
+    colIndex: number,
+    fromHeader: boolean,
+  ) => Comment | string | false | undefined | null;
 
 /**
- * Function type for style cell condition.
+ * StyleCellConditionFunction - Function type for style cell condition.
  * @callback StyleCellConditionFunction
  * @param {Header | string | number | undefined} data - The data to apply the condition to.
  * @param {Header | Data} object - The data object.
@@ -713,17 +809,19 @@ export type CommentConditionFunction = (
  * @param {string[]} styleKeys - The style keys.
  * @returns {string | null} The style key or null.
  */
-export type StyleCellConditionFunction = (
+export type StyleCellConditionFunction<
+  T extends ObjectLiteral = ObjectLiteral,
+> = (
   data: Header | string | number | undefined,
-  object: Header | Data,
+  object: Header | Data<T>,
   rowIndex: number,
   colIndex: number,
   fromHeader: boolean,
-  styleKeys: string[]
+  styleKeys: string[],
 ) => string | null;
 
 /**
- * Function type for merge row data condition.
+ * MergeRowDataConditionFunction - Function type for merge row data condition.
  * @callback MergeRowDataConditionFunction
  * @param {Header | string | number | undefined} data - The data to apply the condition to.
  * @param {string | null} key - The key.
@@ -735,11 +833,11 @@ export type MergeRowDataConditionFunction = (
   data: Header | string | number | undefined,
   key: string | null,
   index: number,
-  fromHeader: boolean
+  fromHeader: boolean,
 ) => boolean;
 
 /**
- * Represents sort and filter options.
+ * SortAndFilter - Represents sort and filter options.
  * @interface
  */
 export interface SortAndFilter {
@@ -748,7 +846,7 @@ export interface SortAndFilter {
 }
 
 /**
- * Represents the title of the sheet.
+ * Title - Represents the title of the sheet.
  * @interface
  */
 export interface Title {
@@ -764,7 +862,7 @@ export interface Title {
 }
 
 /**
- * Options for the header row.
+ * HeaderRowOption - Options for the header row.
  * @interface
  */
 export interface HeaderRowOption {
@@ -772,7 +870,7 @@ export interface HeaderRowOption {
 }
 
 /**
- * Represents a checkbox in the sheet.
+ * Checkbox - Represents a checkbox in the sheet.
  * @interface
  */
 export interface Checkbox {
@@ -788,7 +886,7 @@ export interface Checkbox {
 }
 
 /**
- * Types of no-argument formulas.
+ * NoArgFormulaType - Types of no-argument formulas.
  * @typedef {"NOW" | "TODAY" | "HOUR" | "NOW_YEAR" | "NOW_HOUR" | "NOW_SECOND" | "NOW_MIN" | "NOW_MONTH" | "NOW_DAY" | "NOW_WEEKDAY" | "NOW_MINUTE"} NoArgFormulaType
  */
 export type NoArgFormulaType =
@@ -805,13 +903,13 @@ export type NoArgFormulaType =
   | "NOW_MINUTE";
 
 /**
- * Types of formulas.
+ * FormulaType - Types of formulas.
  * @typedef {"AVERAGE" | "SUM" | "COUNT" | "MAX" | "MIN"} FormulaType
  */
 export type FormulaType = "AVERAGE" | "SUM" | "COUNT" | "MAX" | "MIN";
 
 /**
- * Types of single-reference formulas.
+ * SingleRefFormulaType - Types of single-reference formulas.
  * @typedef {"LEN" | "MODE" | "UPPER" | "LOWER" | "PROPER" | "RIGHT" | "LEFT" | "ABS" | "POWER" | "MOD" | "FLOOR" | "CEILING" | "ROUND" | "SQRT" | "COS" | "SIN" | "TAN" | "COT" | "COUNTIF" | "SUMIF" | "TRIM"} SingleRefFormulaType
  */
 export type SingleRefFormulaType =
@@ -838,7 +936,7 @@ export type SingleRefFormulaType =
   | "TRIM";
 
 /**
- * Represents a format map.
+ * FormatMap - Represents a format map.
  * @interface
  */
 export interface FormatMap {
@@ -849,7 +947,7 @@ export interface FormatMap {
 }
 
 /**
- * Represents a formula in the sheet.
+ * Formula - Represents a formula in the sheet.
  * @interface
  */
 export interface Formula {
@@ -861,7 +959,7 @@ export interface Formula {
 }
 
 /**
- * Represents a formula setting.
+ * FormulaSetting - Represents a formula setting.
  * @interface
  */
 export interface FormulaSetting {
@@ -872,7 +970,7 @@ export interface FormulaSetting {
 }
 
 /**
- * Represents a custom formula setting.
+ * CustomFormulaSetting - Represents a custom formula setting.
  * @interface
  */
 export interface CustomFormulaSetting {
@@ -884,7 +982,7 @@ export interface CustomFormulaSetting {
 }
 
 /**
- * Represents a single-reference formula setting.
+ * SingleRefFormulaSetting - Represents a single-reference formula setting.
  * @interface
  */
 export interface SingleRefFormulaSetting {
@@ -895,7 +993,7 @@ export interface SingleRefFormulaSetting {
 }
 
 /**
- * Represents a no-argument formula setting.
+ * NoArgFormulaSetting - Represents a no-argument formula setting.
  * @interface
  */
 export interface NoArgFormulaSetting {
@@ -904,7 +1002,7 @@ export interface NoArgFormulaSetting {
 }
 
 /**
- * Represents a style mapper.
+ * StyleMapper - Represents a style mapper.
  * @interface
  */
 export interface StyleMapper {
@@ -912,6 +1010,7 @@ export interface StyleMapper {
     count: number;
     value: string;
   };
+  styleIndexMap: Record<string, number>;
   commentSyntax: {
     value: {
       [key: string]: string;
@@ -940,7 +1039,7 @@ export interface StyleMapper {
 }
 
 /**
- * Represents a map of comments.
+ * MapComment - Represents a map of comments.
  * @interface
  */
 export interface MapComment {
@@ -948,7 +1047,7 @@ export interface MapComment {
 }
 
 /**
- * Represents theme options.
+ * ThemeOption - Represents theme options.
  * @interface
  */
 export interface ThemeOption {
@@ -961,14 +1060,15 @@ export interface ThemeOption {
   filterKeys?: string[];
 }
 
+
 /**
- * Represents extracted data.
+ * ExtractedData - Represents extracted data.
  * @typedef {(string | null | undefined)[][]} ExtractedData
  */
 export type ExtractedData = (string | null | undefined)[][];
 
 /**
- * Represents the result of data extraction.
+ * ExtractResult - Represents the result of data extraction.
  * @interface
  */
 export interface ExtractResult {
@@ -976,7 +1076,7 @@ export interface ExtractResult {
 }
 
 /**
- * Represents the result of reading data.
+ * ReadResult - Represents the result of reading data.
  * @interface
  */
 export interface ReadResult {
@@ -987,7 +1087,7 @@ export interface ReadResult {
 }
 
 /**
- * Represents a buffer.
+ * Buffer - Represents a buffer.
  * @class
  * @extends {Uint8Array}
  */
@@ -1000,12 +1100,12 @@ export declare class Buffer extends Uint8Array {
   static alloc(
     size: number,
     fill?: string | Buffer | number,
-    encoding?: string
+    encoding?: string,
   ): Buffer;
   static from(
     arrayBuffer: ArrayBuffer,
     byteOffset?: number,
-    length?: number
+    length?: number,
   ): Buffer;
   static from(data: number[]): Buffer;
   static from(str: string, encoding?: string): Buffer;
@@ -1014,7 +1114,7 @@ export declare class Buffer extends Uint8Array {
     string: string,
     offset?: number,
     length?: number,
-    encoding?: string
+    encoding?: string,
   ): number;
   toString(encoding?: string, start?: number, end?: number): string;
   slice(start?: number, end?: number): Buffer;
@@ -1025,7 +1125,7 @@ export declare class Buffer extends Uint8Array {
 }
 
 /**
- * Represents options for the replacer.
+ * ReplacerOption - Represents options for the replacer.
  * @interface
  */
 export interface ReplacerOption {
@@ -1038,7 +1138,7 @@ export interface ReplacerOption {
 }
 
 /**
- * Represents configuration options for Excel to Node.
+ * ExcelToNodeConfig - Represents configuration options for Excel to Node.
  * @interface
  */
 export interface ExcelToNodeConfig {
@@ -1054,3 +1154,67 @@ export interface ExcelToNodeConfig {
   buttonStyle?: object;
   activeButtonStyle?: object;
 }
+
+/**
+ * SheetProcessResult - interface for representing the result of sheet processing.
+ */
+export interface SheetProcessResult {
+  indexId: number;
+  key: string;
+  sheetName: string;
+  sheetDataTableColumns: string;
+  backgroundImageRef: number;
+  sheetDimensions: CellStrReference;
+  asTable: AsTableOption | boolean;
+  sheetDataString: string;
+  sheetDropDown: string;
+  sheetBreakLine: string;
+  viewType: string;
+  hasComment: boolean;
+  drawersContent: string;
+  cFDataString: string;
+  sheetMargin: string;
+  sheetHeaderFooter: string;
+  isPortrait: boolean;
+  drawersRels: string;
+  hasImages: boolean;
+  hasCheckbox: boolean;
+  formRel: string;
+  checkboxDrawingContent: string;
+  checkboxForm: string[];
+  checkboxSheetContent: string;
+  checkboxShape: string;
+  commentString: string;
+  sheetValidation: DataValidation[];
+  commentAuthor: string[];
+  shapeCommentRowCol: ShapeRC[];
+  splitOption: string;
+  sheetViewProperties: string;
+  sheetSizeString: string;
+  protectionOption: string;
+  merges: string;
+  selectedView: boolean;
+  sheetSortFilter: string;
+  tabColor: string;
+}
+/**
+ * ShapeRC - interface for representing a shape's row and column coordinates.
+ */
+export interface ShapeRC {
+  row: string | number;
+  col: string | number;
+}
+
+/**
+ * ObjectLiteral - ObjectLiteral - interface for representing an object with literal keys.
+ */
+export interface ObjectLiteral {
+  [key: string]: any;
+}
+
+/**
+ * ExcelTableReturnType - interface for representing the return type of Excel table operations.
+ */
+export type ExcelTableReturnType = Promise<
+  string | number[] | Blob | Buffer | undefined | void
+>;
