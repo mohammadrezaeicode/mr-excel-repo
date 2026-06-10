@@ -3,6 +3,7 @@
 ## Summary
 
 Please include a summary of the changes and the motivation behind them.
+
 ## Type of Change  
 
 Please select the type(s) of changes made in your pull request:  
