@@ -1,7 +1,12 @@
 name: E2E+Functional Test
-on: push
-  # release:
-  #   types: [created]
+on: 
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
 
 jobs:
   trigger:
