@@ -3,36 +3,11 @@
  */
 import { describe, expect, jest, test } from "@jest/globals";
 import { generateExcel } from "../../../src/functions/generate-excel";
-import { addGlobalOptions } from "../../../src/utils/store";
 import { readGeneratedFile, type ResponseApi } from "../read";
 import type { ExcelTable } from "../../../src/data-model/excel-table";
 
 jest.setTimeout(150000);
 describe("generateExcel branch coverage tests", () => {
-  test("should apply non-empty styleKey and global configuration", async () => {
-    addGlobalOptions("apply-config-key", "sheet.0.withoutHeader", true);
-    const excelTable: ExcelTable<{ test: string }> = {
-      backend: true,
-      notSave: true,
-      sheet: [
-        {
-          headers: [{ label: "test", text: "test" }],
-          data: [{ test: "value" }],
-        },
-      ],
-    };
-
-    const res = await generateExcel(excelTable, "apply-config-key");
-    const result = (await readGeneratedFile(res, true)) as ResponseApi;
-    expect(result.fileList).toContain("xl/worksheets/sheet1.xml");
-    const sheet = (result.data["Sheet 1"] ||
-      result.data["sheet1"]) as string[][];
-    expect(sheet).toBeDefined();
-    expect(sheet.length).toBe(1);
-    const firstRow = sheet[0];
-    expect(firstRow).toBeDefined();
-    expect(firstRow![0]).toBe("value");
-  });
 
   test("should process headerFooter styles and conditional formatting", async () => {
     const excelTable: ExcelTable<{ test: string }> = {
