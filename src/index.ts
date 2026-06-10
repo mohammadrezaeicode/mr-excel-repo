@@ -104,7 +104,7 @@ export function extractExcelData(
 
 /**
  * Generates a CSV file from an Excel table Object.
- * @param {ExcelTable} excelTable - The Excel table.
+ * @param {ExcelTable} excelTable - The Excel table. See {@link ExcelTable}.
  * @param {boolean} [asZip=false] - Whether to generate the CSV as a ZIP file.
  * @returns {Promise<string[] | "done" | undefined>} The generated CSV file.
  */

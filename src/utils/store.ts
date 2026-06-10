@@ -22,17 +22,10 @@ let proxy = new Proxy(target, {
 });
 
 /**
- * Adds global options to the proxy.
+ * addGlobalOptions -Adds global options to the proxy.
  * @param {string} key - The key for the global option.
  * @param {string} path - The path for the global option.
  * @param {any} data - The data for the global option.
- */
-/**
- * addGlobalOptions - TODO: describe this function.
- * @param {any} key - 
- * @param {any} path - 
- * @param {any} data - 
- * @returns {any} - TODO: return description.
  */
 export function addGlobalOptions(key: string, path: string, data: any) {
   proxy[key];
@@ -60,15 +53,9 @@ function generatePathRecursive(key: string, path: string, data: object) {
 }
 
 /**
- * Adds global options from an Excel table.
+ * addGlobalOptionFromExcelTable - Adds global options from an Excel table.
  * @param {string} key - The key for the global option.
  * @param {ExcelTable} data - The Excel table data.
- */
-/**
- * addGlobalOptionFromExcelTable - TODO: describe this function.
- * @param {any} key - 
- * @param {any} data - 
- * @returns {any} - TODO: return description.
  */
 export function addGlobalOptionFromExcelTable(key: string, data: ExcelTable) {
   generatePathRecursive(key, "", data);

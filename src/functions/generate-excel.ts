@@ -34,17 +34,12 @@ import {
 import { toDataURL2 } from "../utils/image";
 import { getColRowBaseOnRefString } from "../utils/excel-util";
 import { specialCharacterConverter } from "../utils/special-character";
-import { applyConfig } from "../utils/store";
-import type  JSZip from "jszip";
+import type JSZip from "jszip";
 import { generateDropDown } from "../utils/drop-down-utils";
 import { processDataValidation } from "../utils/data-validation.utils";
 export async function generateExcel<T extends object = object>(
-  data: ExcelTable<T>,
-  styleKey: string = "",
+  data: ExcelTable<T>
 ): ExcelTableReturnType {
-  if (typeof styleKey == "string" && styleKey.length > 0) {
-    data = applyConfig<T>(styleKey, data);
-  }
   if (typeof data.creator == "string" && data.creator.trim().length <= 0) {
     throw 'length of "creator" most be bigger then 0';
   }

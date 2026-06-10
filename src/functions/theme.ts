@@ -144,12 +144,6 @@ export function themeGenerator<T extends object = object>(
       _colIndex: number,
       fromHeader: boolean,
       _styleKeys: string[],
-      // _data,
-      // _object,
-      // _rowIndex,
-      // _colIndex,
-      // fromHeader,
-      // _styleKeys,
     ) {
       if (fromHeader) {
         return "themeStyleHeader";

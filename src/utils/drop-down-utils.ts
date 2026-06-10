@@ -1,8 +1,8 @@
 import { DropDown } from "../data-model/excel-table";
 /**
- * generateDropDown - TODO: describe this function.
- * @param {any} dropDowns - 
- * @returns {any} - TODO: return description.
+ * generateDropDown - generates XML for drop-down lists in an Excel sheet based on the provided drop-down configurations.
+ * @param {DropDown[] | undefined} dropDowns - An array of drop-down configurations.
+ * @returns {string} - The XML string for the drop-down lists.
  */
 export function generateDropDown(dropDowns: DropDown[] | undefined) {
   if (!Array.isArray(dropDowns) || !dropDowns.length) {

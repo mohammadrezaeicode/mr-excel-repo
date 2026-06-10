@@ -1,6 +1,6 @@
 {
   "name": "mr-excel",
-  "version": "7.0.1",
+  "version": "8.0.0",
   "type": "module",
   "main": "dist/excel-table.cjs",
   "module": "dist/excel-table.js",
@@ -25,7 +25,7 @@
     "postbuild": "npm run api-documenter:markdown && echo build DONE!",
     "dev": "tsc -w",
     "api-extractor": "api-extractor",
-    "api-extractor:run":"api-extractor run",
+    "api-extractor:run":"api-extractor run --local",
     "preapi-documenter:markdown":"npm run api-extractor:run",
     "api-documenter:markdown":"api-documenter markdown -i temp -o docs",
     "test": "jest",

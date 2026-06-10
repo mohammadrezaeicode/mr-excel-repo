@@ -13,9 +13,9 @@ function extendHexValue(hex: string) {
   }
 }
 /**
- * hexToRgbArray - TODO: describe this function.
- * @param {any} hex - 
- * @returns {any} - TODO: return description.
+ * hexToRgbArray - converts a hex color value to an RGB array.
+ * @param {any} hex - The hex color value.
+ * @returns {any} - The RGB array.
  */
 export function hexToRgbArray(hex: string): [number, number, number] {
   if (/^#?([a-f\d]{3})$/i.test(hex)) {
@@ -31,9 +31,9 @@ export function hexToRgbArray(hex: string): [number, number, number] {
     : [0, 0, 0];
 }
 /**
- * generateContrastTextColor - TODO: describe this function.
- * @param {any} b - 
- * @returns {any} - TODO: return description.
+ * generateContrastTextColor - generates a contrasting text color based on the background color.
+ * @param {any} b - The background color in hex format.
+ * @returns {any} - The contrasting text color in rgb format.
  */
 export function generateContrastTextColor(b: string) {
   const background = hexToRgbArray(b);
@@ -51,9 +51,9 @@ export function generateContrastTextColor(b: string) {
   return textColor;
 }
 /**
- * hexToRgbNegative - TODO: describe this function.
- * @param {any} hex - 
- * @returns {any} - TODO: return description.
+ * hexToRgbNegative - converts a hex color value to its negative (complementary) RGB array.
+ * @param {any} hex - The hex color value.
+ * @returns {any} - The negative RGB array.
  */
 export function hexToRgbNegative(hex: string):string {
   // /(^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$)|(^#?([a-f\d]{3})$)/i;
@@ -78,9 +78,9 @@ function valueToHex(c: number | string): string {
   return hex.length == 1 ? "0" + hex : hex;
 }
 /**
- * rgbToHex - TODO: describe this function.
- * @param {any} rgb - 
- * @returns {any} - TODO: return description.
+ * rgbToHex - converts an RGB color value to its hexadecimal representation.
+ * @param {any} rgb - The RGB color value.
+ * @returns {any} - The hexadecimal representation.
  */
 export function rgbToHex(rgb: string): string | null {
   rgb = removeSpace(rgb);

@@ -43,7 +43,7 @@ describe("generateExcel image and style branches", () => {
           title: {
             text: "T",
             styleId: "hfStyle",
-            height: 20, // TODO: why height not added
+            height: 20,
             consommeRow: 1,
           } as Title,
           headers: [{ label: "a", text: "a" }],
@@ -118,7 +118,7 @@ describe("generateExcel image and style branches", () => {
           title: {
             text: "T",
             styleId: "hfStyle",
-            height: 20, // TODO: why height not added
+            height: 20,
             consommeRow: 1,
           } as Title,
           headers: [{ label: "a", text: "a" }],

@@ -7,7 +7,7 @@
 **Signature:**
 
 ```typescript
-export declare function replaceInExcel(url: string | null | undefined, replaceData: Record<string, string | number | boolean>, option?: ReplacerOption): Promise<string | number[] | Blob | Buffer<ArrayBufferLike>>;
+export declare function replaceInExcel(url: string | null | undefined, replaceData: Record<string, string | number | boolean>, option?: ReplacerOption): Promise<string | number[] | Buffer_2 | Blob>;
 ```
 
 ## Parameters
@@ -76,5 +76,5 @@ _(Optional)_
 
 **Returns:**
 
-Promise&lt;string \| number\[\] \| Blob \| Buffer&lt;ArrayBufferLike&gt;&gt;
+Promise&lt;string \| number\[\] \| Buffer\_2 \| Blob&gt;
 

@@ -7,10 +7,7 @@ export async function replaceInExcel(
 ) {
   let result: Record<string, string> = {};
   const module = await import("jszip");
-  let JSZip = module;
-  if ("default" in JSZip) {
-    JSZip = (JSZip as any)?.default;
-  }
+  const JSZip = module.default;
   let data;
   if (typeof url == "string" && url.length) {
     let apiCaller: Function;

@@ -5,9 +5,9 @@ import type {
 } from "../data-model/excel-table";
 
 /**
- * processDataValidation - TODO: describe this function.
- * @param {any} dataValidations - 
- * @returns {any} - TODO: return description.
+ * processDataValidation - generates XML for data validation rules in an Excel sheet.
+ * @param {DataValidation[]} dataValidations - An array of data validation rules.
+ * @returns {string} - The XML string for the data validation rules.
  */
 export function processDataValidation(dataValidations: DataValidation[]) {
   return (

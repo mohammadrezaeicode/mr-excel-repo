@@ -7,7 +7,7 @@
 **Signature:**
 
 ```typescript
-export declare function generateExcel<T extends object = object>(data: ExcelTable<T>, styleKey?: string): ExcelTableReturnType;
+export declare function generateExcel<T extends object = object>(data: ExcelTable<T>): ExcelTableReturnType;
 ```
 
 ## Parameters
@@ -39,22 +39,6 @@ ExcelTable&lt;T&gt;
 
 
 </td><td>
-
-
-</td></tr>
-<tr><td>
-
-styleKey
-
-
-</td><td>
-
-string
-
-
-</td><td>
-
-_(Optional)_
 
 
 </td></tr>

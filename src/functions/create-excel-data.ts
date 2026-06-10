@@ -71,7 +71,8 @@ function generateRowsBaseOnColAndRowSpan(
   return rows;
 }
 /**
- * RowHeightScaleFunction - TODO: describe this type.
+ * RowHeightScaleFunction - Set the height of a row based on its index and data.
+ * @interface
  */
 export type RowHeightScaleFunction = (
   data: number,
@@ -79,7 +80,8 @@ export type RowHeightScaleFunction = (
   fromHeader: boolean,
 ) => number;
 /**
- * ColWidthScaleFunction - TODO: describe this type.
+ * ColWidthScaleFunction - Set the width of a column based on its index and data.
+ * @interface
  */
 export type ColWidthScaleFunction = (data: number, colIndex: number) => number;
 export function createExcelTableBaseOnDomElement(

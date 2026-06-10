@@ -40,9 +40,11 @@ export function commentConvertor(
   };
 }
 /**
- * splitBaseOnBreakLine - TODO: describe this function.
- * @param {any} str - 
- * @returns {any} - TODO: return description.
+ * splitBaseOnBreakLine - splits a string into an array of strings based on line breaks.
+ * @function
+ * @name splitBaseOnBreakLine
+ * @param {string} str - The string to be split.
+ * @returns {string[]} An array of strings split based on line breaks.
  */
 export function splitBaseOnBreakLine(str: string): string[] {
   // Split the string on \n or \r characters

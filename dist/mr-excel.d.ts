@@ -1,56 +1,31 @@
 export declare const addGlobalOptionFromExcelTable: typeof addGlobalOptionFromExcelTable_2;
 
 /**
- * Adds global options from an Excel table.
+ * addGlobalOptionFromExcelTable - Adds global options from an Excel table.
  * @param {string} key - The key for the global option.
  * @param {ExcelTable} data - The Excel table data.
- */
-/**
- * addGlobalOptionFromExcelTable - TODO: describe this function.
- * @param {any} key -
- * @param {any} data -
- * @returns {any} - TODO: return description.
  */
 declare function addGlobalOptionFromExcelTable_2(key: string, data: ExcelTable): void;
 
 export declare const addGlobalOptions: typeof addGlobalOptions_2;
 
 /**
- * Adds global options to the proxy.
+ * addGlobalOptions -Adds global options to the proxy.
  * @param {string} key - The key for the global option.
  * @param {string} path - The path for the global option.
  * @param {any} data - The data for the global option.
  */
-/**
- * addGlobalOptions - TODO: describe this function.
- * @param {any} key -
- * @param {any} path -
- * @param {any} data -
- * @returns {any} - TODO: return description.
- */
 declare function addGlobalOptions_2(key: string, path: string, data: any): void;
 
 /**
- * Horizontal alignment options.
+ * AlignmentHorizontal - Horizontal alignment options.
  * @typedef {"center" | "left" | "right"} AlignmentHorizontal
- */
-/**
- * AlignmentHorizontal - TODO: describe this type.
- */
-/**
- * AlignmentHorizontal - TODO: describe this type.
  */
 declare type AlignmentHorizontal = "center" | "left" | "right";
 
 /**
- * Options for configuring alignment.
+ * AlignmentOption - Options for configuring alignment.
  * @interface
- */
-/**
- * AlignmentOption - TODO: describe this type.
- */
-/**
- * AlignmentOption - TODO: describe this type.
  */
 declare type AlignmentOption = {
     horizontal?: AlignmentHorizontal;
@@ -62,26 +37,14 @@ declare type AlignmentOption = {
 } & SheetDirection;
 
 /**
- * Vertical alignment options.
+ * AlignmentVertical - Vertical alignment options.
  * @typedef {"center" | "top" | "bottom"} AlignmentVertical
- */
-/**
- * AlignmentVertical - TODO: describe this type.
- */
-/**
- * AlignmentVertical - TODO: describe this type.
  */
 declare type AlignmentVertical = "center" | "top" | "bottom";
 
 /**
- * Options for displaying the sheet as a table.
+ * AsTableOption - Options for displaying the sheet as a table.
  * @interface
- */
-/**
- * AsTableOption - TODO: describe this interface.
- */
-/**
- * AsTableOption - TODO: describe this interface.
  */
 declare interface AsTableOption {
     /** The type of table style. */
@@ -99,26 +62,14 @@ declare interface AsTableOption {
 }
 
 /**
- * Directions for border options.
+ * BorderDirection - Directions for border options.
  * @typedef {"full" | "top" | "left" | "right" | "bottom"} BorderDirection
- */
-/**
- * BorderDirection - TODO: describe this type.
- */
-/**
- * BorderDirection - TODO: describe this type.
  */
 declare type BorderDirection = "full" | "top" | "left" | "right" | "bottom";
 
 /**
- * Options for configuring borders.
+ * BorderOption - Options for configuring borders.
  * @interface
- */
-/**
- * BorderOption - TODO: describe this type.
- */
-/**
- * BorderOption - TODO: describe this type.
  */
 declare type BorderOption = {
     [key in BorderDirection]?: {
@@ -128,7 +79,7 @@ declare type BorderOption = {
 };
 
 /**
- * Represents a buffer.
+ * Buffer - Represents a buffer.
  * @class
  * @extends {Uint8Array}
  */
@@ -150,14 +101,8 @@ declare class Buffer_2 extends Uint8Array {
 }
 
 /**
- * use for reference range cell(Sheet A1-...)
+ * CellNumReference - use for reference range cell(Sheet A1-...)
  * @interface
- */
-/**
- * CellNumReference - TODO: describe this interface.
- */
-/**
- * CellNumReference - TODO: describe this interface.
  */
 declare interface CellNumReference {
     min: number;
@@ -165,14 +110,8 @@ declare interface CellNumReference {
 }
 
 /**
- * use for reference range cell(Sheet A1-...)
+ * CellStrReference - use for reference range cell(Sheet A1-...)
  * @interface
- */
-/**
- * CellStrReference - TODO: describe this interface.
- */
-/**
- * CellStrReference - TODO: describe this interface.
  */
 declare interface CellStrReference {
     start: string;
@@ -180,14 +119,8 @@ declare interface CellStrReference {
 }
 
 /**
- * Represents a checkbox in the sheet.
+ * Checkbox - Represents a checkbox in the sheet.
  * @interface
- */
-/**
- * Checkbox - TODO: describe this interface.
- */
-/**
- * Checkbox - TODO: describe this interface.
  */
 declare interface Checkbox {
     col: number;
@@ -202,19 +135,14 @@ declare interface Checkbox {
 }
 
 /**
- * ColWidthScaleFunction - TODO: describe this type.
+ * ColWidthScaleFunction - Set the width of a column based on its index and data.
+ * @interface
  */
 declare type ColWidthScaleFunction = (data: number, colIndex: number) => number;
 
 /**
- * Represents a comment in the sheet.
+ * Comment - Represents a comment in the sheet.
  * @interface
- */
-/**
- * Comment - TODO: describe this interface.
- */
-/**
- * Comment - TODO: describe this interface.
  */
 declare interface Comment_2 {
     comment?: string;
@@ -223,7 +151,7 @@ declare interface Comment_2 {
 }
 
 /**
- * Function type for comment condition.
+ * CommentConditionFunction - Function type for comment condition.
  * @callback CommentConditionFunction@callback CommentConditionFunction@callback CommentConditionFunction
  * @param {Header | string | number | undefined} data - The data to apply the condition to.
  * @param {null | Data} object - The data object.
@@ -233,24 +161,12 @@ declare interface Comment_2 {
  * @param {boolean} fromHeader - Indicates if the condition is from the header.
  * @returns {Comment | string | false | undefined | null} The comment or null.
  */
-/**
- * CommentConditionFunction - TODO: describe this type.
- */
-/**
- * CommentConditionFunction - TODO: describe this type.
- */
 declare type CommentConditionFunction<T extends ObjectLiteral = ObjectLiteral> = (data: Header | string | number | undefined, object: null | Data<T>, headerKey: string, rowIndex: number, colIndex: number, fromHeader: boolean) => Comment_2 | string | false | undefined | null;
 
 /**
- * Represents conditional formatting in the sheet.
+ * ConditionalFormatting - Represents conditional formatting in the sheet.
  * @interface
  * @extends {ConditionalFormattingOption}
- */
-/**
- * ConditionalFormatting - TODO: describe this interface.
- */
-/**
- * ConditionalFormatting - TODO: describe this interface.
  */
 declare interface ConditionalFormatting extends ConditionalFormattingOption {
     /** The start cell for the conditional formatting. */
@@ -260,38 +176,20 @@ declare interface ConditionalFormatting extends ConditionalFormattingOption {
 }
 
 /**
- * Operations for conditional formatting cells.
+ * ConditionalFormattingCellsOperation - Operations for conditional formatting cells.
  * @typedef {"lt" | "gt" | "between" | "eq" | "ct"} ConditionalFormattingCellsOperation
- */
-/**
- * ConditionalFormattingCellsOperation - TODO: describe this type.
- */
-/**
- * ConditionalFormattingCellsOperation - TODO: describe this type.
  */
 declare type ConditionalFormattingCellsOperation = "lt" | "gt" | "between" | "eq" | "ct";
 
 /**
- * Operations for conditional formatting icon sets.
+ * ConditionalFormattingIconSetOperation - Operations for conditional formatting icon sets.
  * @typedef {"3Arrows" | "4Arrows" | "5Arrows" | "5ArrowsGray" | "4ArrowsGray" | "3ArrowsGray"} ConditionalFormattingIconSetOperation
- */
-/**
- * ConditionalFormattingIconSetOperation - TODO: describe this type.
- */
-/**
- * ConditionalFormattingIconSetOperation - TODO: describe this type.
  */
 declare type ConditionalFormattingIconSetOperation = "3Arrows" | "4Arrows" | "5Arrows" | "5ArrowsGray" | "4ArrowsGray" | "3ArrowsGray";
 
 /**
- * Options for conditional formatting.
+ * ConditionalFormattingOption - Options for conditional formatting.
  * @interface
- */
-/**
- * ConditionalFormattingOption - TODO: describe this interface.
- */
-/**
- * ConditionalFormattingOption - TODO: describe this interface.
  */
 declare interface ConditionalFormattingOption {
     /** The type of conditional formatting. */
@@ -313,14 +211,8 @@ declare interface ConditionalFormattingOption {
 }
 
 /**
- * Operations for conditional formatting top values.
+ * ConditionalFormattingTopOperation - Operations for conditional formatting top values.
  * @typedef {"belowAverage" | "aboveAverage"} ConditionalFormattingTopOperation
- */
-/**
- * ConditionalFormattingTopOperation - TODO: describe this type.
- */
-/**
- * ConditionalFormattingTopOperation - TODO: describe this type.
  */
 declare type ConditionalFormattingTopOperation = "belowAverage" | "aboveAverage";
 
@@ -341,14 +233,8 @@ export declare function convertTableToExcel(queryForTable?: string, table?: HTML
 }): ExcelTableReturnType;
 
 /**
- * Represents a custom formula setting.
+ * CustomFormulaSetting - Represents a custom formula setting.
  * @interface
- */
-/**
- * CustomFormulaSetting - TODO: describe this interface.
- */
-/**
- * CustomFormulaSetting - TODO: describe this interface.
  */
 declare interface CustomFormulaSetting {
     isArray?: boolean;
@@ -359,21 +245,9 @@ declare interface CustomFormulaSetting {
 }
 
 /**
- * Represents data in the sheet.
+ * Data - Represents data in the sheet.
  * @interface
  * @extends {object, DataOptions}
- */
-/**
- * Data - TODO: describe this interface.
- */
-/**
- * Data - TODO: describe this interface.
- */
-/**
- * Data - TODO: describe this type.
- */
-/**
- * Data - TODO: describe this type.
  */
 declare type Data<T extends ObjectLiteral = ObjectLiteral> = T & DataOptions;
 
@@ -462,14 +336,8 @@ export declare namespace DataModel {
 }
 
 /**
- * Options for configuring data in the sheet.
+ * DataOptions - Options for configuring data in the sheet.
  * @interface
- */
-/**
- * DataOptions - TODO: describe this interface.
- */
-/**
- * DataOptions - TODO: describe this interface.
  */
 declare interface DataOptions {
     outlineLevel?: number;
@@ -481,14 +349,8 @@ declare interface DataOptions {
 }
 
 /**
- * Options for add data validation to cells.
+ * DataValidation - Options for add data validation to cells.
  * @interface
- */
-/**
- * DataValidation - TODO: describe this interface.
- */
-/**
- * DataValidation - TODO: describe this interface.
  */
 declare interface DataValidation {
     /** type of data validation - {@link DataValidationType}  */
@@ -518,10 +380,7 @@ declare type DataValidationOperator = "between" | "notBetween" | "equal" | "notE
 declare type DataValidationType = "whole" | "decimal" | "time" | "list" | "custom";
 
 /**
- * DoubleUnderline - TODO: describe this type.
- */
-/**
- * DoubleUnderline - TODO: describe this type.
+ * DoubleUnderline - double underline style for the text.
  */
 declare type DoubleUnderline = {
     /** Indicates if the style has double underline. */
@@ -529,14 +388,8 @@ declare type DoubleUnderline = {
 };
 
 /**
- * Represents a dropdown in the sheet.
+ * DropDown - Represents a dropdown in the sheet.
  * @interface
- */
-/**
- * DropDown - TODO: describe this interface.
- */
-/**
- * DropDown - TODO: describe this interface.
  */
 declare interface DropDown {
     /** Array of options for the dropdown. */
@@ -546,15 +399,9 @@ declare interface DropDown {
 }
 
 /**
- * Represents an Excel table with options and sheets.
+ * ExcelTable - Represents an Excel table with options and sheets.
  * @interface
  * @extends {ExcelTableOption}
- */
-/**
- * ExcelTable - TODO: describe this interface.
- */
-/**
- * ExcelTable - TODO: describe this interface.
  */
 declare interface ExcelTable<T extends ObjectLiteral = ObjectLiteral> extends ExcelTableOption {
     /** Array of sheets in the Excel table. */
@@ -562,14 +409,8 @@ declare interface ExcelTable<T extends ObjectLiteral = ObjectLiteral> extends Ex
 }
 
 /**
- * Options for configuring an Excel table.
+ * ExcelTableOption - Options for configuring an Excel table.
  * @interface
- */
-/**
- * ExcelTableOption - TODO: describe this interface.
- */
-/**
- * ExcelTableOption - TODO: describe this interface.
  */
 declare interface ExcelTableOption {
     /** Indicates if the Excel should not be saved. */
@@ -608,10 +449,7 @@ declare interface ExcelTableOption {
 }
 
 /**
- * ExcelTableReturnType - TODO: describe this type.
- */
-/**
- * ExcelTableReturnType - TODO: describe this type.
+ * ExcelTableReturnType - interface for representing the return type of Excel table operations.
  */
 declare type ExcelTableReturnType = Promise<string | number[] | Blob | Buffer_2 | undefined | void>;
 
@@ -628,14 +466,8 @@ export declare function excelToJson(uri: string, fetchFunc?: Function, withHeade
 export declare function excelToNode(uri: string, queryForTable?: string | null, containerElement?: HTMLDivElement | null, config?: ExcelToNodeConfig): Promise<HTMLTableElement[] | "Done">;
 
 /**
- * Represents configuration options for Excel to Node.
+ * ExcelToNodeConfig - Represents configuration options for Excel to Node.
  * @interface
- */
-/**
- * ExcelToNodeConfig - TODO: describe this interface.
- */
-/**
- * ExcelToNodeConfig - TODO: describe this interface.
  */
 declare interface ExcelToNodeConfig {
     fetchFunc?: Function;
@@ -661,14 +493,8 @@ declare interface ExcelToNodeConfig {
 export declare function extractExcelData(uri: string, isBackend?: boolean, fetchFunc?: Function): Promise<DataModel.ReadResult>;
 
 /**
- * Represents a format map.
+ * FormatMap - Represents a format map.
  * @interface
- */
-/**
- * FormatMap - TODO: describe this interface.
- */
-/**
- * FormatMap - TODO: describe this interface.
  */
 declare interface FormatMap {
     [format: string]: {
@@ -678,28 +504,16 @@ declare interface FormatMap {
 }
 
 /**
- * Represents a formula in the sheet.
+ * Formula - Represents a formula in the sheet.
  * @interface
- */
-/**
- * Formula - TODO: describe this interface.
- */
-/**
- * Formula - TODO: describe this interface.
  */
 declare interface Formula {
     [insertCell: string]: FormulaSetting | SingleRefFormulaSetting | NoArgFormulaSetting | CustomFormulaSetting;
 }
 
 /**
- * Represents a formula setting.
+ * FormulaSetting - Represents a formula setting.
  * @interface
- */
-/**
- * FormulaSetting - TODO: describe this interface.
- */
-/**
- * FormulaSetting - TODO: describe this interface.
  */
 declare interface FormulaSetting {
     type: FormulaType;
@@ -709,26 +523,20 @@ declare interface FormulaSetting {
 }
 
 /**
- * Types of formulas.
+ * FormulaType - Types of formulas.
  * @typedef {"AVERAGE" | "SUM" | "COUNT" | "MAX" | "MIN"} FormulaType
- */
-/**
- * FormulaType - TODO: describe this type.
- */
-/**
- * FormulaType - TODO: describe this type.
  */
 declare type FormulaType = "AVERAGE" | "SUM" | "COUNT" | "MAX" | "MIN";
 
 /**
  * Generates a CSV file from an Excel table Object.
- * @param {ExcelTable} excelTable - The Excel table.
+ * @param {ExcelTable} excelTable - The Excel table. See {@link ExcelTable}.
  * @param {boolean} [asZip=false] - Whether to generate the CSV as a ZIP file.
  * @returns {Promise<string[] | "done" | undefined>} The generated CSV file.
  */
 export declare function generateCSV<T extends object = object>(excelTable: ExcelTable<T>, asZip?: boolean): Promise<string[] | "done">;
 
-export declare function generateExcel<T extends object = object>(data: ExcelTable<T>, styleKey?: string): ExcelTableReturnType;
+export declare function generateExcel<T extends object = object>(data: ExcelTable<T>): ExcelTableReturnType;
 
 /**
  * Generates a text file from an Excel table Object.
@@ -739,15 +547,9 @@ export declare function generateExcel<T extends object = object>(data: ExcelTabl
 export declare function generateText<T extends object = object>(excelTable: ExcelTable<T>, asZip?: boolean): Promise<string[] | "done">;
 
 /**
- * Represents a header in the sheet.
+ * Header - Represents a header in the sheet.
  * @interface
  * @extends {HeaderOption}
- */
-/**
- * Header - TODO: describe this interface.
- */
-/**
- * Header - TODO: describe this interface.
  */
 declare interface Header extends HeaderOption {
     /** The label of the header. */
@@ -757,14 +559,8 @@ declare interface Header extends HeaderOption {
 }
 
 /**
- * Location map for header and footer options.l:Left, c:Center, r:Right
+ * HeaderFooterLocationMap - Location map for header and footer options.l:Left, c:Center, r:Right
  * @interface
- */
-/**
- * HeaderFooterLocationMap - TODO: describe this interface.
- */
-/**
- * HeaderFooterLocationMap - TODO: describe this interface.
  */
 declare interface HeaderFooterLocationMap {
     l?: HeaderFooterOption;
@@ -773,14 +569,8 @@ declare interface HeaderFooterLocationMap {
 }
 
 /**
- * Options for header and footer.
+ * HeaderFooterOption - Options for header and footer.
  * @interface
- */
-/**
- * HeaderFooterOption - TODO: describe this interface.
- */
-/**
- * HeaderFooterOption - TODO: describe this interface.
  */
 declare interface HeaderFooterOption {
     /** The text of the header or footer. */
@@ -790,14 +580,8 @@ declare interface HeaderFooterOption {
 }
 
 /**
- * Types of header and footer in page(odd page, even page,first page).
+ * HeaderFooterTypes - Types of header and footer in page(odd page, even page,first page).
  * @interface
- */
-/**
- * HeaderFooterTypes - TODO: describe this interface.
- */
-/**
- * HeaderFooterTypes - TODO: describe this interface.
  */
 declare interface HeaderFooterTypes {
     odd?: HeaderFooterLocationMap;
@@ -806,14 +590,8 @@ declare interface HeaderFooterTypes {
 }
 
 /**
- * Options for configuring a header.
+ * HeaderOption - Options for configuring a header.
  * @interface
- */
-/**
- * HeaderOption - TODO: describe this interface.
- */
-/**
- * HeaderOption - TODO: describe this interface.
  */
 declare interface HeaderOption {
     /** The size(width) of the header. */
@@ -834,14 +612,8 @@ declare interface HeaderOption {
 }
 
 /**
- * Represents an image in the sheet.
+ * ImageTypes - Represents an image in the sheet.
  * @interface
- */
-/**
- * ImageTypes - TODO: describe this interface.
- */
-/**
- * ImageTypes - TODO: describe this interface.
  */
 declare interface ImageTypes {
     url: string;
@@ -866,35 +638,23 @@ declare type LTRDirection = {
 };
 
 /**
- * Represents a map of comments.
+ * MapComment - Represents a map of comments.
  * @interface
- */
-/**
- * MapComment - TODO: describe this interface.
- */
-/**
- * MapComment - TODO: describe this interface.
  */
 declare interface MapComment {
     [key: string]: Comment_2 | string;
 }
 
 /**
- * Represents a map of multi-style values.
+ * MapMultiStyleValue - Represents a map of multi-style values.
  * @interface
- */
-/**
- * MapMultiStyleValue - TODO: describe this interface.
- */
-/**
- * MapMultiStyleValue - TODO: describe this interface.
  */
 declare interface MapMultiStyleValue {
     [key: string]: MultiStyleValue[];
 }
 
 /**
- * Function type for merge row data condition.
+ * MergeRowDataConditionFunction - Function type for merge row data condition.
  * @callback MergeRowDataConditionFunction@callback MergeRowDataConditionFunction@callback MergeRowDataConditionFunction
  * @param {Header | string | number | undefined} data - The data to apply the condition to.
  * @param {string | null} key - The key.
@@ -902,16 +662,10 @@ declare interface MapMultiStyleValue {
  * @param {boolean} fromHeader - Indicates if the condition is from the header.
  * @returns {boolean} The result of the condition.
  */
-/**
- * MergeRowDataConditionFunction - TODO: describe this type.
- */
-/**
- * MergeRowDataConditionFunction - TODO: describe this type.
- */
 declare type MergeRowDataConditionFunction = (data: Header | string | number | undefined, key: string | null, index: number, fromHeader: boolean) => boolean;
 
 /**
- * Function type for multi-style condition.
+ * MultiStyleConditionFunction - Function type for multi-style condition.
  * @callback MultiStyleConditionFunction@callback MultiStyleConditionFunction@callback MultiStyleConditionFunction
  * @param {Header | string | number | undefined} data - The data to apply the condition to.
  * @param {null | Data} object - The data object.
@@ -921,23 +675,11 @@ declare type MergeRowDataConditionFunction = (data: Header | string | number | u
  * @param {boolean} fromHeader - Indicates if the condition is from the header.
  * @returns {MultiStyleValue[] | null} The multi-style values or null.
  */
-/**
- * MultiStyleConditionFunction - TODO: describe this type.
- */
-/**
- * MultiStyleConditionFunction - TODO: describe this type.
- */
 declare type MultiStyleConditionFunction<T extends ObjectLiteral = ObjectLiteral> = (data: Header | string | number | undefined, object: null | Data<T>, headerKey: string, rowIndex: number, colIndex: number, fromHeader: boolean) => MultiStyleValue[] | null;
 
 /**
- * Represents a multi-style value.
+ * MultiStyleValue - Represents a multi-style value.
  * @interface
- */
-/**
- * MultiStyleValue - TODO: describe this interface.
- */
-/**
- * MultiStyleValue - TODO: describe this interface.
  */
 declare interface MultiStyleValue {
     value: string | number;
@@ -945,14 +687,8 @@ declare interface MultiStyleValue {
 }
 
 /**
- * Represents a no-argument formula setting.
+ * NoArgFormulaSetting - Represents a no-argument formula setting.
  * @interface
- */
-/**
- * NoArgFormulaSetting - TODO: describe this interface.
- */
-/**
- * NoArgFormulaSetting - TODO: describe this interface.
  */
 declare interface NoArgFormulaSetting {
     noArgType: NoArgFormulaType;
@@ -960,36 +696,21 @@ declare interface NoArgFormulaSetting {
 }
 
 /**
- * Types of no-argument formulas.
+ * NoArgFormulaType - Types of no-argument formulas.
  * @typedef {"NOW" | "TODAY" | "HOUR" | "NOW_YEAR" | "NOW_HOUR" | "NOW_SECOND" | "NOW_MIN" | "NOW_MONTH" | "NOW_DAY" | "NOW_WEEKDAY" | "NOW_MINUTE"} NoArgFormulaType
- */
-/**
- * NoArgFormulaType - TODO: describe this type.
- */
-/**
- * NoArgFormulaType - TODO: describe this type.
  */
 declare type NoArgFormulaType = "NOW" | "TODAY" | "HOUR" | "NOW_YEAR" | "NOW_HOUR" | "NOW_SECOND" | "NOW_MIN" | "NOW_MONTH" | "NOW_DAY" | "NOW_WEEKDAY" | "NOW_MINUTE";
 
 /**
- * ObjectLiteral - TODO: describe this interface.
- */
-/**
- * ObjectLiteral - TODO: describe this interface.
+ * ObjectLiteral - ObjectLiteral - interface for representing an object with literal keys.
  */
 declare interface ObjectLiteral {
     [key: string]: any;
 }
 
 /**
- * Options for page breaks in the sheet.
+ * PageBreak - Options for page breaks in the sheet.
  * @interface
- */
-/**
- * PageBreak - TODO: describe this interface.
- */
-/**
- * PageBreak - TODO: describe this interface.
  */
 declare interface PageBreak {
     /** Array of row indices where page breaks should occur. */
@@ -999,14 +720,8 @@ declare interface PageBreak {
 }
 
 /**
- * Options for configuring the page.
+ * PageOption - Options for configuring the page.
  * @interface
- */
-/**
- * PageOption - TODO: describe this interface.
- */
-/**
- * PageOption - TODO: describe this interface.
  */
 declare interface PageOption {
     /** Margin settings for the page. */
@@ -1027,7 +742,7 @@ declare interface PageOption {
 }
 
 /**
- * Represents protection options for the sheet.
+ * ProtectionOption - Represents protection options for the sheet.
  * @typedef {Object} ProtectionOption@typedef {Object} ProtectionOption
  * @property {"0" | "1" | 0 | 1} sheet - Protect the sheet.
  * @property {"0" | "1" | 0 | 1} formatCells - Allow formatting cells.
@@ -1042,25 +757,13 @@ declare interface PageOption {
  * @property {"0" | "1" | 0 | 1} autoFilter - Allow using auto filter.
  * @property {"0" | "1" | 0 | 1} pivotTables - Allow using pivot tables.
  */
-/**
- * ProtectionOption - TODO: describe this type.
- */
-/**
- * ProtectionOption - TODO: describe this type.
- */
 declare type ProtectionOption = {
     [key in ProtectionOptionKey]: "0" | "1" | 0 | 1;
 };
 
 /**
- * Keys for protection options.
+ * ProtectionOptionKey - Keys for protection options.
  * @typedef {"sheet" | "formatCells" | "formatColumns" | "formatRows" | "insertColumns" | "insertRows" | "insertHyperlinks" | "deleteColumns" | "deleteRows" | "sort" | "autoFilter" | "pivotTables"} ProtectionOptionKey
- */
-/**
- * ProtectionOptionKey - TODO: describe this type.
- */
-/**
- * ProtectionOptionKey - TODO: describe this type.
  */
 declare type ProtectionOptionKey = "sheet" | "formatCells" | "formatColumns" | "formatRows" | "insertColumns" | "insertRows" | "insertHyperlinks" | "deleteColumns" | "deleteRows" | "sort" | "autoFilter" | "pivotTables";
 
@@ -1071,14 +774,8 @@ declare type ReadingOrder = {
 export declare function replaceInExcel(url: string | null | undefined, replaceData: Record<string, string | number | boolean>, option?: ReplacerOption): Promise<string | number[] | Buffer_2 | Blob>;
 
 /**
- * Represents options for the replacer.
+ * ReplacerOption - Represents options for the replacer.
  * @interface
- */
-/**
- * ReplacerOption - TODO: describe this interface.
- */
-/**
- * ReplacerOption - TODO: describe this interface.
  */
 declare interface ReplacerOption {
     fileName?: string;
@@ -1090,7 +787,8 @@ declare interface ReplacerOption {
 }
 
 /**
- * RowHeightScaleFunction - TODO: describe this type.
+ * RowHeightScaleFunction - Set the height of a row based on its index and data.
+ * @interface
  */
 declare type RowHeightScaleFunction = (data: number, rowIndex: number, fromHeader: boolean) => number;
 
@@ -1099,15 +797,9 @@ declare type RTLDirection = {
 };
 
 /**
- * Represents a sheet in the Excel.
+ * Sheet - Represents a sheet in the Excel.
  * @interface
  * @extends {SheetOption}
- */
-/**
- * Sheet - TODO: describe this interface.
- */
-/**
- * Sheet - TODO: describe this interface.
  */
 declare interface Sheet<T extends ObjectLiteral = ObjectLiteral> extends SheetOption<T> {
     /** Array of headers in the sheet. */
@@ -1128,14 +820,8 @@ declare type SheetDirection = (RTLDirection & {
 });
 
 /**
- * Options for configuring a sheet.
+ * SheetOption - Options for configuring a sheet.
  * @interface
- */
-/**
- * SheetOption - TODO: describe this interface.
- */
-/**
- * SheetOption - TODO: describe this interface.
  */
 declare interface SheetOption<T extends ObjectLiteral = ObjectLiteral> {
     /** data validation for sheet  */
@@ -1219,14 +905,8 @@ declare interface SheetOption<T extends ObjectLiteral = ObjectLiteral> {
 }
 
 /**
- * Represents side-by-side data in the sheet.
+ * SideBySide - Represents side-by-side data in the sheet.
  * @interface
- */
-/**
- * SideBySide - TODO: describe this interface.
- */
-/**
- * SideBySide - TODO: describe this interface.
  */
 declare interface SideBySide<T extends ObjectLiteral = ObjectLiteral> {
     sheetName?: string;
@@ -1248,14 +928,8 @@ declare interface SideBySide<T extends ObjectLiteral = ObjectLiteral> {
 export declare function sideBySideLineByLine(data: SideBySide[][]): ExcelTableReturnType;
 
 /**
- * Represents a single-reference formula setting.
+ * SingleRefFormulaSetting - Represents a single-reference formula setting.
  * @interface
- */
-/**
- * SingleRefFormulaSetting - TODO: describe this interface.
- */
-/**
- * SingleRefFormulaSetting - TODO: describe this interface.
  */
 declare interface SingleRefFormulaSetting {
     type: SingleRefFormulaType;
@@ -1265,22 +939,13 @@ declare interface SingleRefFormulaSetting {
 }
 
 /**
- * Types of single-reference formulas.
+ * SingleRefFormulaType - Types of single-reference formulas.
  * @typedef {"LEN" | "MODE" | "UPPER" | "LOWER" | "PROPER" | "RIGHT" | "LEFT" | "ABS" | "POWER" | "MOD" | "FLOOR" | "CEILING" | "ROUND" | "SQRT" | "COS" | "SIN" | "TAN" | "COT" | "COUNTIF" | "SUMIF" | "TRIM"} SingleRefFormulaType
- */
-/**
- * SingleRefFormulaType - TODO: describe this type.
- */
-/**
- * SingleRefFormulaType - TODO: describe this type.
  */
 declare type SingleRefFormulaType = "LEN" | "MODE" | "UPPER" | "LOWER" | "PROPER" | "RIGHT" | "LEFT" | "ABS" | "POWER" | "MOD" | "FLOOR" | "CEILING" | "ROUND" | "SQRT" | "COS" | "SIN" | "TAN" | "COT" | "COUNTIF" | "SUMIF" | "TRIM";
 
 /**
- * SingleUnderline - TODO: describe this type.
- */
-/**
- * SingleUnderline - TODO: describe this type.
+ * SingleUnderline - underline style for the text.
  */
 declare type SingleUnderline = {
     /** Indicates if the style is underlined. */
@@ -1288,14 +953,8 @@ declare type SingleUnderline = {
 };
 
 /**
- * Represents sort and filter options.
+ * SortAndFilter - Represents sort and filter options.
  * @interface
- */
-/**
- * SortAndFilter - TODO: describe this interface.
- */
-/**
- * SortAndFilter - TODO: describe this interface.
  */
 declare interface SortAndFilter {
     mode: "all" | "ref";
@@ -1303,14 +962,8 @@ declare interface SortAndFilter {
 }
 
 /**
- * Represents the body of a style.
+ * StyleBody - Represents the body of a style.
  * @interface
- */
-/**
- * StyleBody - TODO: describe this type.
- */
-/**
- * StyleBody - TODO: describe this type.
  */
 declare type StyleBody = {
     /** The font family of the text. */
@@ -1336,7 +989,7 @@ declare type StyleBody = {
 } & UnderlineType;
 
 /**
- * Function type for style cell condition.
+ * StyleCellConditionFunction - Function type for style cell condition.
  * @callback StyleCellConditionFunction@callback StyleCellConditionFunction@callback StyleCellConditionFunction
  * @param {Header | string | number | undefined} data - The data to apply the condition to.
  * @param {Header | Data} object - The data object.
@@ -1346,37 +999,19 @@ declare type StyleBody = {
  * @param {string[]} styleKeys - The style keys.
  * @returns {string | null} The style key or null.
  */
-/**
- * StyleCellConditionFunction - TODO: describe this type.
- */
-/**
- * StyleCellConditionFunction - TODO: describe this type.
- */
 declare type StyleCellConditionFunction<T extends ObjectLiteral = ObjectLiteral> = (data: Header | string | number | undefined, object: Header | Data<T>, rowIndex: number, colIndex: number, fromHeader: boolean, styleKeys: string[]) => string | null;
 
 /**
- * Represents a collection of styles.
+ * Styles - Represents a collection of styles.
  * @interface
- */
-/**
- * Styles - TODO: describe this interface.
- */
-/**
- * Styles - TODO: describe this interface.
  */
 declare interface Styles {
     [key: string]: StyleBody;
 }
 
 /**
- * Types of styles that can be applied(not value for cell, CF/conditionalFormatting for conditionalFormatting option and HF/headerFooter for headerFooter option).
+ * StyleType - Types of styles that can be applied(not value for cell, CF/conditionalFormatting for conditionalFormatting option and HF/headerFooter for headerFooter option).
  * @typedef {"conditionalFormatting" | "CF" | "headerFooter" | "HF"} StyleType
- */
-/**
- * StyleType - TODO: describe this type.
- */
-/**
- * StyleType - TODO: describe this type.
  */
 declare type StyleType = "conditionalFormatting" | "CF" | "headerFooter" | "HF";
 
@@ -1389,14 +1024,8 @@ declare type StyleType = "conditionalFormatting" | "CF" | "headerFooter" | "HF";
 export declare function themeBaseGenerate<T extends object = object>(data: ExcelTable<T> | Data<T>[] | Data[][], option?: ThemeOption): ExcelTableReturnType;
 
 /**
- * Represents theme options.
+ * ThemeOption - Represents theme options.
  * @interface
- */
-/**
- * ThemeOption - TODO: describe this interface.
- */
-/**
- * ThemeOption - TODO: describe this interface.
  */
 declare interface ThemeOption {
     negativeColor?: boolean;
@@ -1409,14 +1038,8 @@ declare interface ThemeOption {
 }
 
 /**
- * Represents the title of the sheet.
+ * Title - Represents the title of the sheet.
  * @interface
- */
-/**
- * Title - TODO: describe this interface.
- */
-/**
- * Title - TODO: describe this interface.
  */
 declare interface Title {
     shiftTop?: number;
@@ -1431,10 +1054,7 @@ declare interface Title {
 }
 
 /**
- * UnderlineType - TODO: describe this type.
- */
-/**
- * UnderlineType - TODO: describe this type.
+ * UnderlineType - underline type for the text, can be either single or double underline, but not both at the same time.
  */
 declare type UnderlineType = (SingleUnderline & {
     doubleUnderline?: never;
@@ -1452,14 +1072,8 @@ export declare namespace Validator {
 }
 
 /**
- * Options for configuring the view of the sheet.
+ * ViewOption - Options for configuring the view of the sheet.
  * @interface
- */
-/**
- * ViewOption - TODO: describe this interface.
- */
-/**
- * ViewOption - TODO: describe this interface.
  */
 declare interface ViewOption {
     /** The type of view. */
@@ -1495,14 +1109,8 @@ declare interface ViewOption {
 }
 
 /**
- * Options for the start of the view.
+ * ViewStart - Options for the start of the view.
  * @interface
- */
-/**
- * ViewStart - TODO: describe this interface.
- */
-/**
- * ViewStart - TODO: describe this interface.
  */
 declare interface ViewStart {
     t?: string;

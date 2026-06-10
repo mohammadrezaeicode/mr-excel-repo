@@ -125,15 +125,16 @@ export function extractExcelData(uri: string, isBackend?: boolean, fetchFunc?: F
 export function generateCSV<T extends object = object>(excelTable: ExcelTable<T>, asZip?: boolean): Promise<string[] | "done">;
 
 // @public (undocumented)
-export function generateExcel<T extends object = object>(data: ExcelTable<T>, styleKey?: string): ExcelTableReturnType;
+export function generateExcel<T extends object = object>(data: ExcelTable<T>): ExcelTableReturnType;
 
 // @public
 export function generateText<T extends object = object>(excelTable: ExcelTable<T>, asZip?: boolean): Promise<string[] | "done">;
 
 // Warning: (ae-forgotten-export) The symbol "ReplacerOption" needs to be exported by the entry point excel-table.d.ts
+// Warning: (ae-forgotten-export) The symbol "Buffer_2" needs to be exported by the entry point excel-table.d.ts
 //
 // @public (undocumented)
-export function replaceInExcel(url: string | null | undefined, replaceData: Record<string, string | number | boolean>, option?: ReplacerOption): Promise<string | number[] | Blob | Buffer<ArrayBufferLike>>;
+export function replaceInExcel(url: string | null | undefined, replaceData: Record<string, string | number | boolean>, option?: ReplacerOption): Promise<string | number[] | Buffer_2 | Blob>;
 
 // Warning: (ae-forgotten-export) The symbol "SideBySide" needs to be exported by the entry point excel-table.d.ts
 //
@@ -158,8 +159,8 @@ export namespace Validator {
 
 // Warnings were encountered during analysis:
 //
-// dist/excel-table.d.ts:237:5 - (ae-forgotten-export) The symbol "RowHeightScaleFunction" needs to be exported by the entry point excel-table.d.ts
-// dist/excel-table.d.ts:238:5 - (ae-forgotten-export) The symbol "ColWidthScaleFunction" needs to be exported by the entry point excel-table.d.ts
+// dist/excel-table.d.ts:241:5 - (ae-forgotten-export) The symbol "RowHeightScaleFunction" needs to be exported by the entry point excel-table.d.ts
+// dist/excel-table.d.ts:242:5 - (ae-forgotten-export) The symbol "ColWidthScaleFunction" needs to be exported by the entry point excel-table.d.ts
 
 // (No @packageDocumentation comment for this package)
 

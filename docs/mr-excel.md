@@ -72,7 +72,7 @@ Generates a CSV file from an Excel table Object.
 </td></tr>
 <tr><td>
 
-[generateExcel(data, styleKey)](./mr-excel.generateexcel.md)
+[generateExcel(data)](./mr-excel.generateexcel.md)
 
 
 </td><td>

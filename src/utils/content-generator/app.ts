@@ -1,8 +1,8 @@
 /**
- * appGenerator - TODO: describe this function.
- * @param {any} sheetLength - 
- * @param {any} sheetNameApp - 
- * @returns {any} - TODO: return description.
+ * appGenerator - generates XML for the application properties of an Excel file, including information about the number of worksheets and their names.
+ * @param {number} sheetLength - The number of worksheets.
+ * @param {string} sheetNameApp - The names of the worksheets.
+ * @returns {string} - The XML string for the application properties.
  */
 export function appGenerator(sheetLength: number, sheetNameApp: string) {
   return (
